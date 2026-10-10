@@ -185,7 +185,10 @@ def main() -> int:
                    f"model_name_or_path={args.model_path.resolve()}", f"dataset={args.dataset_id}",
                    f"output_dir={output}"]
         if args.smoke:
-            command.append("max_steps=10")
+            # The bundled six-example demo should test ten real optimizer updates
+            # without repeating eighty accumulated microbatches per rank.
+            command += ["max_steps=10", "gradient_accumulation_steps=1",
+                        "logging_steps=1", "save_steps=10"]
         cwd = source
     elif args.model == "sparse4d":
         config = sparse_config(source, output, args.smoke, args.dataset_version)

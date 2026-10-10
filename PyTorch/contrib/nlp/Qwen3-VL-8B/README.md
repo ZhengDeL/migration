@@ -26,7 +26,7 @@ bash PyTorch/contrib/nlp/Qwen3-VL-8B/test/train_2p.sh --smoke
 bash PyTorch/contrib/nlp/Qwen3-VL-8B/test/train_2p.sh --smoke --execute
 ```
 
-`--smoke` 跑 10 次优化迭代；完整训练移除该参数。脚本拒绝用 `mllm_demo` 做完整训练，并检查固定快照版本、模型类型、全部权重分片和数据集注册。`fetch_qwen.py` 对四个分片逐一核对模型发布方在该固定快照的 SHA256。两卡显存占用须在实机确认。
+`--smoke` 跑 10 次优化迭代，临时将梯度累积改为 1、逐步输出 loss，并在第 10 步保存；正式训练移除该参数，使用 YAML 中的梯度累积 8。脚本拒绝用 `mllm_demo` 做完整训练，并检查固定快照版本、模型类型、全部权重分片和数据集注册。`fetch_qwen.py` 对四个分片逐一核对模型发布方在该固定快照的 SHA256。两卡显存占用须在实机确认。
 
 ## 验证和状态
 
