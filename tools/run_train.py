@@ -68,7 +68,8 @@ def main() -> int:
     parser.add_argument("model", choices=NPROC)
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--sdk", type=Path, help="required for BEVFormer and Sparse4D")
-    parser.add_argument("--devices", required=True, help="visible physical device IDs, e.g. 0,1")
+    parser.add_argument("--devices", required=True,
+                        help="visible logical NPU chip IDs, selected from the host npu-smi card/chip mapping")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--smoke", action="store_true", help="ten optimizer steps or one epoch; no validation")
     parser.add_argument("--execute", action="store_true", help="run only after environment and data checks")

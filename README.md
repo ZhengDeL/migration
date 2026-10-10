@@ -38,9 +38,11 @@ python3 tools/prepare.py apollo_visionnet --source sources/Apollo-Vision-Net --a
 
 ## 训练前预检
 
-登录目标容器后先做只读环境检查，例如：
+登录目标容器后先根据宿主机 `npu-smi info` 的 `NPU`（物理卡）和 `Chip Phy-ID`（逻辑芯片）映射选择设备。两卡任务应选分属两张物理卡的两个逻辑 ID，不能仅按连续 ID 推断。例如在已核对 `0`、`2` 分属不同卡的机器上设置 `ASCEND_DEVICES=0,2`；其他机器须重新核对。各 `test/train_*.sh` 要求显式设置此变量。随后做只读环境检查，例如：
 
 ```bash
+export ASCEND_DEVICES=0,2  # 示例；必须先确认当前机器的物理卡映射
+export ASCEND_RT_VISIBLE_DEVICES="$ASCEND_DEVICES"
 python3 tools/check_env.py --model bevformer --nproc 2 --output outputs/bevformer/environment.json
 python3 tools/check_env.py --model sparse4d --nproc 2 --output outputs/sparse4d/environment.json
 python3 tools/check_env.py --model qwen3vl8b --nproc 2 --output outputs/qwen3vl8b/environment.json
@@ -63,9 +65,9 @@ torchrun --standalone --nproc_per_node=2 tools/check_npu_training.py --output-di
 以下命令缺省只打印命令、缺失文件及计划；追加 `--execute` 才会启动。Qwen 的 `missing_data` 也会报告模型目录和数据集注册文件。输出、模型路径和数据集名使用实际目录，脚本不会自动下载权重或数据。
 
 ```bash
-python3 tools/run_train.py bevformer --source sources/BEVFormer --sdk sources/DrivingSDK --devices 0,1 --output-dir outputs/bevformer --smoke
-python3 tools/run_train.py sparse4d --source sources/Sparse4D --sdk sources/DrivingSDK --devices 0,1 --output-dir outputs/sparse4d --smoke
-python3 tools/run_train.py qwen3vl8b --source sources/LLaMA-Factory --devices 0,1 --output-dir outputs/qwen3vl8b --model-path /path/to/Qwen3-VL-8B-Instruct --dataset-id my_multimodal_dataset --smoke
+python3 tools/run_train.py bevformer --source sources/BEVFormer --sdk sources/DrivingSDK --devices "$ASCEND_DEVICES" --output-dir outputs/bevformer --smoke
+python3 tools/run_train.py sparse4d --source sources/Sparse4D --sdk sources/DrivingSDK --devices "$ASCEND_DEVICES" --output-dir outputs/sparse4d --smoke
+python3 tools/run_train.py qwen3vl8b --source sources/LLaMA-Factory --devices "$ASCEND_DEVICES" --output-dir outputs/qwen3vl8b --model-path /path/to/Qwen3-VL-8B-Instruct --dataset-id my_multimodal_dataset --smoke
 ```
 
 先执行 smoke 并核对两个 rank 的前向、反向、有限 loss、参数更新与日志，再去掉 `--smoke` 进行完整训练。4 卡命令同理将 `--devices` 改为四个设备 ID，并将模型改为 `worldengine` 或 `apollo_visionnet`；它们必须完成算子和精度回归后才能进入完整训练。
