@@ -4,9 +4,11 @@
 
 在可信 SSH 主机指纹确认后，先只读采集 DMI 产品型号、`npu-smi info -t board -i 0`、`npu-smi info`、`/etc/os-release`、驱动/固件版本、CANN Toolkit/ops 版本、Python、PyTorch、`torch_npu`、`mx_driving`、容器及可用设备数。将具体产品型号与 [ModelZoo-PyTorch 训练硬件支持表](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/docs/zh/install_guide.md)核对：表中 Atlas A3 训练系列受支持，A3 推理系列标为不支持。`npu-smi info` 应同时核对 `NPU` 与 `Chip Phy-ID`：一张双芯片物理卡可对应两个逻辑设备，双卡任务要选择不同物理卡的逻辑 ID。以实际产品形态、SoC、操作系统和驱动配套选择镜像，不能仅凭任务表中的“910C”安装。服务器地址和登录信息仅在受控环境中保存，不写入公开仓库。
 
+1# 实测 DMI 型号为 Atlas 800I A3，属于推理系列；本仓的双卡 mini 成功是这台机器上的实验性功能证据，不改变上述官方训练支持边界。正式训练硬件验收仍需受支持的训练系列设备或厂商对该型号的明确支持依据。
+
 Docker 只挂载所选设备时，再核对**容器内**的编号。1# 实测将宿主 `/dev/davinci0`、`/dev/davinci2` 挂载进容器后，TorchNPU 看到两个连续设备 `0,1`；容器内设 `ASCEND_RT_VISIBLE_DEVICES=0,1` 时两者均可见，若设为宿主编号 `0,2` 则只可见一个。`run_train.py --devices` 和各启动脚本的 `ASCEND_DEVICES` 填进程/容器内编号。宿主设备映射及当前资源占用仍以宿主 `npu-smi info` 判断。
 
-[DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。本项目 2026-10-10 在 1# 按 linux/arm64 manifest digest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 拉取并导入 Docker。容器内 `torch2.7.1`、`bevformer` 和 `sparse4d` 环境均为 Python 3.10.21、PyTorch 2.7.1、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2；两个模型环境分别预装了相应 OpenMMLab 依赖。宿主驱动、固件、设备挂载以及 NPU 算子仍须由实机检查确认，包版本检查不代表训练通过。
+[DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。本项目 2026-10-10 在 1# 按 linux/arm64 manifest digest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 拉取并导入 Docker，原镜像 ID 为 `sha256:1a63c030ea4036467cfc486bef006acf6f1cfbb1cc3b0dc362d07f86b84349bd`。容器内 `torch2.7.1`、`bevformer` 和 `sparse4d` 环境均为 Python 3.10.21、PyTorch 2.7.1+cpu、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2；`+cpu` 是配套 PyTorch 包版本标记，实际 NPU 计算须单独验证。两个模型环境分别预装了相应 OpenMMLab 依赖。1# 宿主驱动 26.1.1、固件 9.0.0.9.220；实机双 rank 前后向、参数更新与 HCCL，以及变形注意力前后向数值检查已通过。
 
 该官方镜像的两个模型环境同时装有 `opencv-python` 和 `opencv-python-headless` 4.11.0.86；无设备容器内导入 MMCV 时，当前 `cv2` 二进制缺少 `libGL.so.1`。本仓的 [派生镜像 Dockerfile](../docker/DrivingSDK-headless.Dockerfile)只在 `bevformer`、`sparse4d` 环境中保留 SHA256 固定的 ARM64 headless wheel，保留原镜像供回退。先按 Dockerfile 指定的版本下载 wheel 到被 Git 忽略的 `wheelhouse/`，校验 `sha256:6efabcaa9df731f29e5ea9051776715b1bdd1845d7c9530065c7951d2a2899eb`，然后在已导入原镜像的机器上离线构建：
 
@@ -22,7 +24,7 @@ docker build --network none -f docker/DrivingSDK-headless.Dockerfile \
   -t local/migration-drivingsdk:26.1.0-a3-headless-20261010 .
 ```
 
-下载网络及代理由现场配置；Dockerfile 自身不访问网络，也不修改宿主软件。使用派生镜像前仍须做有设备的 `check_env.py`、算子和 HCCL 检查。
+下载网络及代理由现场配置；Dockerfile 自身不访问网络，也不修改宿主软件。1# 实际构建的派生镜像标签为 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`，镜像 ID 为 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。BEVFormer 与 Sparse4D 使用该镜像完成了双卡 mini 功能训练。两套容器的 `check_env.py` 均报告 `pass_with_warnings`：包、NPU 数量和算子导入通过；容器内 `npu-smi info` 返回 211/`-9005`，宿主机 `npu-smi info` 正常。容器管理面告警与实际计算结果须分别留证。
 
 Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。与本仓锁定的 LLaMA-Factory 源码同一提交的镜像说明列出 CANN 9.1.0、Python 3.12、PyTorch 2.10.0 和 TorchNPU 2.10.0.post2；`latest-a3-openeuler` 是会变化的标签，不能直接作为可复现版本。Qwen 镜像尚未在本项目机器上拉取或验证，选定后应固定 arm64 digest，再核对容器内实际包版本。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 

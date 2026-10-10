@@ -1,18 +1,18 @@
 # Ascend 910C 训练迁移样例
 
-目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已完成本地静态检查，并在 1# 导入 DrivingSDK 镜像、构建 headless 修正版、应用 BEVFormer/Sparse4D 官方补丁、生成公开 nuScenes mini 标注；基础双 rank NPU 前后向与 HCCL、变形注意力前后向数值检查已通过，尚未完成任何模型的训练验证。
+目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已在 1# 导入固定 digest 的 DrivingSDK 镜像并构建 headless 派生镜像，完成基础双 rank NPU/HCCL、变形注意力数值检查，以及 BEVFormer、Sparse4D 使用公开 nuScenes mini 的双卡模型训练功能试验。该试验不包含完整数据集精度或正式训练硬件支持验收。
 
 ## 范围和状态
 
 | 类别与模型 | 计划卡数 | 本仓范围 | 当前证据 |
 | --- | ---: | --- | --- |
-| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁，FP16 训练 | 上游源码和补丁已在 1# 校验；mini 标注 323 train/81 val 已生成；待空闲 NPU 功能试验 |
-| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁，2 卡 batch、迭代数和学习率 | 上游源码和补丁已在 1# 校验；mini 标注 323 train/81 val、900 锚框已生成；待空闲 NPU 功能试验 |
+| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁与 worker 序列化兼容补丁，FP16 训练 | 1# mini 162 迭代/1 epoch 正常退出，有限 loss、checkpoint 已核验；待完整数据精度 |
+| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁、普通 AdamW/逐参数裁剪兼容覆盖、2 卡配置 | 1# mini 10 迭代正常退出，有限 loss、checkpoint 已核验；待完整数据精度和性能 |
 | [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | YAML 和命令静态检查通过；待权重、业务数据和 NPU 实训 |
 | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 | AlgEngine VADv2 50% 的 NPU 入口与变形注意力补丁 | 补丁可应用、代码可编译；SimEngine 和完整后训练链路未适配 |
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
 
-研究依据和限制见 [社区调研](docs/community_research.md)，环境版本和数据准备见 [环境指南](docs/environment.md)。`sources.lock.json` 是唯一的上游版本清单；各模型目录存放本仓配置和补丁。上游源码、权重、数据、训练输出及服务器地址不纳入本仓。1# 计划使用 2 卡，2# 计划使用 4 卡，具体设备需在训练前确认。
+研究依据和限制见 [社区调研](docs/community_research.md)，环境版本和数据准备见 [环境指南](docs/environment.md)。`sources.lock.json` 是唯一的上游版本清单；各模型目录存放本仓配置和补丁。上游源码、权重、数据、训练输出及服务器地址不纳入本仓。1# 已使用两张物理卡进行功能试验；2# 计划使用 4 卡，设备仍待确认。
 
 ## 本地准备
 
@@ -34,7 +34,7 @@ python3 tools/prepare.py worldengine --source sources/WorldEngine --apply
 python3 tools/prepare.py apollo_visionnet --source sources/Apollo-Vision-Net --apply
 ```
 
-脚本会校验 Git origin、完整提交 SHA、补丁的 LF 规范化 SHA256 和补丁后的逐文件内容；它也会统一 DrivingSDK 补丁的换行格式，对已应用补丁重复运行不会叠加。Sparse4D 另会复制并校验 DrivingSDK 的 `tools/patch.py` 和官方训练脚本。各模型必须使用隔离环境，特别是 Qwen 的 LLaMA-Factory 环境与两个旧版 OpenMMLab 栈。
+脚本会校验 Git origin、完整提交 SHA、补丁的 LF 规范化 SHA256 和补丁后的逐文件内容；它也会统一 DrivingSDK 补丁的换行格式，对已应用补丁重复运行不会叠加。BEVFormer 在官方补丁后应用本仓可审计的 worker 序列化补丁；Sparse4D 在官方 `tools/patch.py` 的固定字节基础上生成普通 AdamW 与逐参数裁剪覆盖并核验生成结果。各模型必须使用隔离环境，特别是 Qwen 的 LLaMA-Factory 环境与两个旧版 OpenMMLab 栈。
 
 ## 训练前预检
 
