@@ -8,6 +8,8 @@
 
 使用隔离的 DrivingSDK/Sparse4D 环境，按官方样例构建 NPU 版 MMCV、mmdet 并安装 mx_driving。训练前执行 `python3 tools/check_env.py --model sparse4d --nproc 2`。需准备 nuScenes、`data/nuscenes_anno_pkls/nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy` 和 `ckpt/resnet50-19c8e357.pth`；数据制作按官方样例执行。
 
+用公开 `v1.0-mini` 做功能试验时，将源码目录的 `data/nuscenes` 链接到解压后的 mini 根目录，在 Sparse4D 源码目录运行 `python3 tools/nuscenes_converter.py --version v1.0-mini --info_prefix data/nuscenes_anno_pkls/nuscenes`，再按[DrivingSDK 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)运行 `tools/anchor_generator.py` 生成 `nuscenes_kmeans900.npy`。mini 生成的锚框只用于功能检查，正式训练须用完整数据重新生成。
+
 ## 快速开始
 
 以下命令从仓库根目录执行；未传 `--execute` 时只打印计划：
@@ -16,9 +18,11 @@
 python3 tools/prepare.py sparse4d --source sources/Sparse4D --sdk sources/DrivingSDK --apply
 bash PyTorch/contrib/cv/detection/Sparse4D/test/train_2p.sh --smoke
 bash PyTorch/contrib/cv/detection/Sparse4D/test/train_2p.sh --smoke --execute
+bash PyTorch/contrib/cv/detection/Sparse4D/test/train_2p.sh --smoke --dataset-version v1.0-mini --execute
 ```
 
 启动器由官方配置生成输出目录中的副本，把 `total_batch_size` 48→2、`num_gpus` 8→2、学习率 `6e-4`→`2.5e-5`，同时按 2 卡重新计算每 epoch 迭代数。`--smoke` 只跑 10 次优化迭代，不覆盖上游配置。
+mini 模式另外将配置副本中的数据集版本改为 `v1.0-mini`，不会改写上游配置；只允许与 `--smoke` 同用。
 
 ## 验证和状态
 

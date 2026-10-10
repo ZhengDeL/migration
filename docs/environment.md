@@ -4,7 +4,7 @@
 
 在可信 SSH 主机指纹确认后，先只读采集 DMI 产品型号、`npu-smi info -t board -i 0`、`npu-smi info`、`/etc/os-release`、驱动/固件版本、CANN Toolkit/ops 版本、Python、PyTorch、`torch_npu`、`mx_driving`、容器及可用设备数。将具体产品型号与 [ModelZoo-PyTorch 训练硬件支持表](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/docs/zh/install_guide.md)核对：表中 Atlas A3 训练系列受支持，A3 推理系列标为不支持。`npu-smi info` 应同时核对 `NPU` 与 `Chip Phy-ID`：一张双芯片物理卡可对应两个逻辑设备，双卡任务要选择不同物理卡的逻辑 ID。以实际产品形态、SoC、操作系统和驱动配套选择镜像，不能仅凭任务表中的“910C”安装。服务器地址和登录信息仅在受控环境中保存，不写入公开仓库。
 
-[DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 候选镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。其中预置 `bevformer`、`sparse4d` 隔离环境；宿主驱动、固件和设备挂载仍须匹配。此标签只是候选，实际使用前须记录所选架构的镜像 digest、容器内版本和 NPU 自检结果。
+[DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。本项目 2026-10-10 在 1# 按 linux/arm64 manifest digest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 拉取并导入 Docker。容器内 `torch2.7.1`、`bevformer` 和 `sparse4d` 环境均为 Python 3.10.21、PyTorch 2.7.1、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2；两个模型环境分别预装了相应 OpenMMLab 依赖。宿主驱动、固件、设备挂载以及 NPU 算子仍须由实机检查确认，包版本检查不代表训练通过。
 
 Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。与本仓锁定的 LLaMA-Factory 源码同一提交的镜像说明列出 CANN 9.1.0、Python 3.12、PyTorch 2.10.0 和 TorchNPU 2.10.0.post2；`latest-a3-openeuler` 是会变化的标签，不能直接作为可复现版本。Qwen 镜像尚未在本项目机器上拉取或验证，选定后应固定 arm64 digest，再核对容器内实际包版本。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 
@@ -25,6 +25,10 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 | Apollo VisionNet | nuScenes、CAN bus、OCC 标注/生成的 train/val pkl、DLA34 预训练权重，参见 [官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/main/docs/prepare_dataset.md)。 |
 
 不要把数据、权重、训练输出或登录凭据提交到 GitHub。大数据通过挂载或符号链接放到上游配置所需的路径。`tools/run_train.py` 的 `missing_data` 输出可检查核心文件；还应人工确认文件完整性和许可证。
+
+### 公开 mini 功能试验
+
+[nuScenes 官方教程](https://www.nuscenes.org/tutorials/nuscenes_tutorial.html)提供无需完整 trainval 归档的 `v1.0-mini.tgz`。下载后校验传输完整性并解压到独立数据目录，再分别在 BEVFormer 和 Sparse4D 源码目录建立 `data/nuscenes` 链接。运行两仓上游转换器时显式选择 `v1.0-mini`；Sparse4D 还需由 mini 标注生成试验用 `nuscenes_kmeans900.npy`。训练入口用 `--smoke --dataset-version v1.0-mini`，其配置只用于功能验证。BEVFormer 缺少单独的 CAN bus 扩展时，上游转换器会把缺失场景的 CAN bus 信息填零，不能由该结果推断完整数据集精度。完整训练应重新准备 trainval、CAN bus、标注和锚框。
 
 ## 执行与留证顺序
 

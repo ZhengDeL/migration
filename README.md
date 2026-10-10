@@ -1,13 +1,13 @@
 # Ascend 910C 训练迁移样例
 
-目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。以下代码截至 2026-10-10 只完成本地静态验证，没有把任何模型标记为 910C 实机训练通过。
+目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已完成本地静态检查，并在 1# 核对 DrivingSDK 镜像环境和应用 BEVFormer、Sparse4D 补丁；尚未完成任何模型的 NPU 训练验证。
 
 ## 范围和状态
 
 | 类别与模型 | 计划卡数 | 本仓范围 | 当前证据 |
 | --- | ---: | --- | --- |
-| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁，FP16 训练 | 补丁逐文件校验和本地命令检查通过；待 NPU 实训 |
-| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁，2 卡 batch、迭代数和学习率 | 补丁逐文件校验、配置生成通过；待 NPU 实训 |
+| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁，FP16 训练 | 上游源码和补丁已在 1# 校验；待 mini 数据和空闲 NPU 功能试验 |
+| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁，2 卡 batch、迭代数和学习率 | 上游源码和补丁已在 1# 校验；待 mini 数据和空闲 NPU 功能试验 |
 | [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | YAML 和命令静态检查通过；待权重、业务数据和 NPU 实训 |
 | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 | AlgEngine VADv2 50% 的 NPU 入口与变形注意力补丁 | 补丁可应用、代码可编译；SimEngine 和完整后训练链路未适配 |
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
@@ -71,6 +71,8 @@ python3 tools/run_train.py qwen3vl8b --source sources/LLaMA-Factory --devices "$
 ```
 
 先执行 smoke 并核对两个 rank 的前向、反向、有限 loss、参数更新与日志，再去掉 `--smoke` 进行完整训练。4 卡命令同理将 `--devices` 改为四个设备 ID，并将模型改为 `worldengine` 或 `apollo_visionnet`；它们必须完成算子和精度回归后才能进入完整训练。
+
+BEVFormer 和 Sparse4D 可在准备好公开 nuScenes `v1.0-mini` 及各自标注后追加 `--smoke --dataset-version v1.0-mini` 做功能试验。该模式只运行有限训练，不执行完整数据集精度验收；转换命令与权重要求见各模型 README。
 
 ## 验收边界
 

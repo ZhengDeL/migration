@@ -39,7 +39,8 @@ DATA_FILES = {
 }
 
 
-def sparse_config(source: Path, output: Path, smoke: bool) -> Path:
+def sparse_config(source: Path, output: Path, smoke: bool,
+                  dataset_version: str = "v1.0-trainval") -> Path:
     original = source / "projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py"
     content = original.read_text(encoding="utf-8")
     substitutions = {
@@ -52,13 +53,19 @@ def sparse_config(source: Path, output: Path, smoke: bool) -> Path:
         if content.count(old) != 1:
             raise RuntimeError(f"Sparse4D config changed: expected one {old!r}")
         content = content.replace(old, new)
+    if dataset_version == "v1.0-mini":
+        old = 'version="v1.0-trainval"'
+        if content.count(old) != 1:
+            raise RuntimeError("Sparse4D config changed: expected one dataset version")
+        content = content.replace(old, 'version="v1.0-mini"')
     if smoke:
         content += "\n# Only ten iterations for environment and backward smoke.\n"
         content += "runner = dict(type='IterBasedRunner', max_iters=10)\n"
         content += "checkpoint_config = dict(interval=100000)\n"
         content += "evaluation = dict(interval=100000, pipeline=vis_pipeline)\n"
     output.mkdir(parents=True, exist_ok=True)
-    path = output / ("sparse4d_2p_smoke.py" if smoke else "sparse4d_2p_full.py")
+    suffix = "mini_smoke" if dataset_version == "v1.0-mini" else ("smoke" if smoke else "full")
+    path = output / f"sparse4d_2p_{suffix}.py"
     path.write_text(content, encoding="utf-8")
     return path
 
@@ -72,10 +79,14 @@ def main() -> int:
                         help="visible logical NPU chip IDs, selected from the host npu-smi card/chip mapping")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--smoke", action="store_true", help="ten optimizer steps or one epoch; no validation")
+    parser.add_argument("--dataset-version", choices=("v1.0-trainval", "v1.0-mini"),
+                        default="v1.0-trainval", help="nuScenes split; mini is for smoke only")
     parser.add_argument("--execute", action="store_true", help="run only after environment and data checks")
     parser.add_argument("--model-path", type=Path, help="local Qwen3-VL-8B checkpoint directory")
     parser.add_argument("--dataset-id", help="LLaMA-Factory dataset name from dataset_info.json")
     args = parser.parse_args()
+    if args.dataset_version == "v1.0-mini" and (not args.smoke or args.model not in ("bevformer", "sparse4d")):
+        parser.error("v1.0-mini is supported only for BEVFormer or Sparse4D --smoke")
 
     source = args.source.resolve(strict=True)
     sdk = args.sdk.resolve(strict=True) if args.sdk else None
@@ -97,6 +108,10 @@ def main() -> int:
     env["OMP_NUM_THREADS"] = env.get("OMP_NUM_THREADS", "8")
 
     missing = [str(source / item) for item in DATA_FILES.get(args.model, ()) if not (source / item).exists()]
+    if args.dataset_version == "v1.0-mini":
+        mini_scene = source / "data/nuscenes/v1.0-mini/scene.json"
+        if not mini_scene.is_file():
+            missing.append(str(mini_scene))
     if args.model == "qwen3vl8b":
         if args.model_path is None or args.dataset_id is None:
             parser.error("Qwen3-VL requires --model-path and --dataset-id")
@@ -160,7 +175,7 @@ def main() -> int:
             command.append("max_steps=10")
         cwd = source
     elif args.model == "sparse4d":
-        config = sparse_config(source, output, args.smoke)
+        config = sparse_config(source, output, args.smoke, args.dataset_version)
         command = ["torchrun", "--standalone", "--nproc_per_node=2", "tools/train.py",
                    str(config), "--launcher", "pytorch", "--work-dir", str(output)]
         if args.smoke:
@@ -190,6 +205,7 @@ def main() -> int:
     report = {"model": args.model, "revision": LOCK[args.model]["revision"],
               "patch_sha256": hashlib.sha256(patch_bytes(patch)).hexdigest() if patch else None,
               "cwd": str(cwd), "devices": args.devices, "command": command,
+              "dataset_version": args.dataset_version if args.model in ("bevformer", "sparse4d") else None,
               "missing_data": missing, "execute": args.execute}
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if not args.execute:
