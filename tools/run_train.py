@@ -78,7 +78,7 @@ def main() -> int:
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--sdk", type=Path, help="required for BEVFormer and Sparse4D")
     parser.add_argument("--devices", required=True,
-                        help="visible logical NPU chip IDs, selected from the host npu-smi card/chip mapping")
+                        help="logical NPU indices inside this process/container; map host physical cards before container launch")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--smoke", action="store_true", help="ten optimizer steps or one epoch; no validation")
     parser.add_argument("--dataset-version", choices=("v1.0-trainval", "v1.0-mini"),

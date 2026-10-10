@@ -1,13 +1,13 @@
 # Ascend 910C 训练迁移样例
 
-目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已完成本地静态检查，并在 1# 核对 DrivingSDK 镜像环境和应用 BEVFormer、Sparse4D 补丁；尚未完成任何模型的 NPU 训练验证。
+目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已完成本地静态检查，并在 1# 导入 DrivingSDK 镜像、构建 headless 修正版、应用 BEVFormer/Sparse4D 官方补丁、生成公开 nuScenes mini 标注；基础双 rank NPU 前后向与 HCCL、变形注意力前后向数值检查已通过，尚未完成任何模型的训练验证。
 
 ## 范围和状态
 
 | 类别与模型 | 计划卡数 | 本仓范围 | 当前证据 |
 | --- | ---: | --- | --- |
-| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁，FP16 训练 | 上游源码和补丁已在 1# 校验；待 mini 数据和空闲 NPU 功能试验 |
-| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁，2 卡 batch、迭代数和学习率 | 上游源码和补丁已在 1# 校验；待 mini 数据和空闲 NPU 功能试验 |
+| [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁，FP16 训练 | 上游源码和补丁已在 1# 校验；mini 标注 323 train/81 val 已生成；待空闲 NPU 功能试验 |
+| [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁，2 卡 batch、迭代数和学习率 | 上游源码和补丁已在 1# 校验；mini 标注 323 train/81 val、900 锚框已生成；待空闲 NPU 功能试验 |
 | [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | YAML 和命令静态检查通过；待权重、业务数据和 NPU 实训 |
 | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 | AlgEngine VADv2 50% 的 NPU 入口与变形注意力补丁 | 补丁可应用、代码可编译；SimEngine 和完整后训练链路未适配 |
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
@@ -38,17 +38,17 @@ python3 tools/prepare.py apollo_visionnet --source sources/Apollo-Vision-Net --a
 
 ## 训练前预检
 
-登录目标容器后先根据宿主机 `npu-smi info` 的 `NPU`（物理卡）和 `Chip Phy-ID`（逻辑芯片）映射选择设备。两卡任务应选分属两张物理卡的两个逻辑 ID，不能仅按连续 ID 推断。例如在已核对 `0`、`2` 分属不同卡的机器上设置 `ASCEND_DEVICES=0,2`；其他机器须重新核对。各 `test/train_*.sh` 要求显式设置此变量。随后做只读环境检查，例如：
+启动目标容器前先根据宿主机 `npu-smi info` 的 `NPU`（物理卡）和 `Chip Phy-ID`（逻辑芯片）映射选择设备。两卡任务应选分属两张物理卡的芯片；例如宿主挂载 `/dev/davinci0` 和 `/dev/davinci2`，容器内实测为连续的逻辑索引 `0,1`，因此在**这个容器内**设置 `ASCEND_DEVICES=0,1`。若直接在宿主环境运行，则按宿主可见编号设置，不能把两种编号混用。还需把数据目录挂载到容器内相同的绝对路径，以保持源码目录的 nuScenes 符号链接有效。各 `test/train_*.sh` 要求显式设置此变量。随后做环境检查，例如：
 
 ```bash
-export ASCEND_DEVICES=0,2  # 示例；必须先确认当前机器的物理卡映射
+export ASCEND_DEVICES=0,1  # 示例：容器只挂载宿主 davinci0 和 davinci2
 export ASCEND_RT_VISIBLE_DEVICES="$ASCEND_DEVICES"
 python3 tools/check_env.py --model bevformer --nproc 2 --output outputs/bevformer/environment.json
 python3 tools/check_env.py --model sparse4d --nproc 2 --output outputs/sparse4d/environment.json
 python3 tools/check_env.py --model qwen3vl8b --nproc 2 --output outputs/qwen3vl8b/environment.json
 ```
 
-`result=pass` 只代表包可导入、版本主次号相符和设备可见，不代表模型训练成功。数据和权重仍须按 [环境指南](docs/environment.md) 放到源码要求的位置。
+`result=pass` 只代表包可导入、版本主次号相符和设备可见，不代表模型训练成功。隔离容器中的 `npu-smi` 可能因管理面挂载不完整而失败；此时检查报告为 `pass_with_warnings`，须另行保存宿主 `npu-smi info`，并核对真实 NPU 计算与 HCCL。数据和权重仍须按 [环境指南](docs/environment.md) 放到源码要求的位置。
 
 在目标镜像中先执行以下两 rank 前向、反向、参数更新和 HCCL 集合通信检查，并留存 `rank0.json`、`rank1.json`：
 

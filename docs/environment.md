@@ -4,6 +4,8 @@
 
 在可信 SSH 主机指纹确认后，先只读采集 DMI 产品型号、`npu-smi info -t board -i 0`、`npu-smi info`、`/etc/os-release`、驱动/固件版本、CANN Toolkit/ops 版本、Python、PyTorch、`torch_npu`、`mx_driving`、容器及可用设备数。将具体产品型号与 [ModelZoo-PyTorch 训练硬件支持表](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/docs/zh/install_guide.md)核对：表中 Atlas A3 训练系列受支持，A3 推理系列标为不支持。`npu-smi info` 应同时核对 `NPU` 与 `Chip Phy-ID`：一张双芯片物理卡可对应两个逻辑设备，双卡任务要选择不同物理卡的逻辑 ID。以实际产品形态、SoC、操作系统和驱动配套选择镜像，不能仅凭任务表中的“910C”安装。服务器地址和登录信息仅在受控环境中保存，不写入公开仓库。
 
+Docker 只挂载所选设备时，再核对**容器内**的编号。1# 实测将宿主 `/dev/davinci0`、`/dev/davinci2` 挂载进容器后，TorchNPU 看到两个连续设备 `0,1`；容器内设 `ASCEND_RT_VISIBLE_DEVICES=0,1` 时两者均可见，若设为宿主编号 `0,2` 则只可见一个。`run_train.py --devices` 和各启动脚本的 `ASCEND_DEVICES` 填进程/容器内编号。宿主设备映射及当前资源占用仍以宿主 `npu-smi info` 判断。
+
 [DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。本项目 2026-10-10 在 1# 按 linux/arm64 manifest digest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 拉取并导入 Docker。容器内 `torch2.7.1`、`bevformer` 和 `sparse4d` 环境均为 Python 3.10.21、PyTorch 2.7.1、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2；两个模型环境分别预装了相应 OpenMMLab 依赖。宿主驱动、固件、设备挂载以及 NPU 算子仍须由实机检查确认，包版本检查不代表训练通过。
 
 该官方镜像的两个模型环境同时装有 `opencv-python` 和 `opencv-python-headless` 4.11.0.86；无设备容器内导入 MMCV 时，当前 `cv2` 二进制缺少 `libGL.so.1`。本仓的 [派生镜像 Dockerfile](../docker/DrivingSDK-headless.Dockerfile)只在 `bevformer`、`sparse4d` 环境中保留 SHA256 固定的 ARM64 headless wheel，保留原镜像供回退。先按 Dockerfile 指定的版本下载 wheel 到被 Git 忽略的 `wheelhouse/`，校验 `sha256:6efabcaa9df731f29e5ea9051776715b1bdd1845d7c9530065c7951d2a2899eb`，然后在已导入原镜像的机器上离线构建：
@@ -44,7 +46,7 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 
 ### 公开 mini 功能试验
 
-[nuScenes 官方教程](https://www.nuscenes.org/tutorials/nuscenes_tutorial.html)提供无需完整 trainval 归档的 `v1.0-mini.tgz`。下载后校验传输完整性并解压到独立数据目录，再分别在 BEVFormer 和 Sparse4D 源码目录建立 `data/nuscenes` 链接。运行两仓上游转换器时显式选择 `v1.0-mini`；Sparse4D 还需由 mini 标注生成试验用 `nuscenes_kmeans900.npy`。训练入口用 `--smoke --dataset-version v1.0-mini`，其配置只用于功能验证。BEVFormer 缺少单独的 CAN bus 扩展时，上游转换器会把缺失场景的 CAN bus 信息填零，不能由该结果推断完整数据集精度。完整训练应重新准备 trainval、CAN bus、标注和锚框。
+[nuScenes 官方教程](https://www.nuscenes.org/tutorials/nuscenes_tutorial.html)提供无需完整 trainval 归档的 `v1.0-mini.tgz`。下载后校验传输完整性并解压到独立数据目录，再分别在 BEVFormer 和 Sparse4D 源码目录建立 `data/nuscenes` 链接。BEVFormer 在无 NPU 的数据准备容器中使用[仓内纯数据入口](../PyTorch/contrib/cv/detection/BEVFormer/README.md)执行固定上游元数据函数；Sparse4D 直接运行其上游 `tools/nuscenes_converter.py --version v1.0-mini`，再由 mini 标注生成试验用 `nuscenes_kmeans900.npy`。训练入口用 `--smoke --dataset-version v1.0-mini`，其配置只用于功能验证。BEVFormer 缺少单独的 CAN bus 扩展时，上游转换函数会把缺失场景的 CAN bus 信息填零，不能由该结果推断完整数据集精度。完整训练应重新准备 trainval、CAN bus、标注和锚框。
 
 ## 执行与留证顺序
 

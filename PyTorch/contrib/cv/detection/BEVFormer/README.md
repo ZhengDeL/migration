@@ -10,7 +10,16 @@
 
 模型源码下需有 nuScenes v1.0 full、CAN bus、`data/nuscenes/nuscenes_infos_temporal_{train,val}.pkl`、`ckpts/r101_dcn_fcos3d_pretrain.pth`。请按 DrivingSDK 样例生成标注；数据和权重不进入 Git。
 
-公开的 nuScenes `v1.0-mini` 可用于有限步功能试验。用[官方 mini 归档](https://www.nuscenes.org/tutorials/nuscenes_tutorial.html)解压到数据根目录后，将源码目录的 `data/nuscenes` 链接到该目录，使用上游 `tools/create_data.py nuscenes --root-path ./data/nuscenes --out-dir ./data/nuscenes --extra-tag nuscenes --version v1.0-mini --canbus ./data` 生成标注。若没有单独的 CAN bus 扩展包，上游转换器要求 `data/can_bus` 目录存在，且会将缺失场景的 CAN bus 信息填零；这种标注仅用于功能检查，不用于精度结论。预训练权重仍须按上游 README 获取。
+公开的 nuScenes `v1.0-mini` 可用于有限步功能试验。用[官方 mini 归档](https://www.nuscenes.org/tutorials/nuscenes_tutorial.html)解压到数据根目录后，将源码目录的 `data/nuscenes` 链接到该目录，并创建 `data/can_bus` 目录。上游 `tools/create_data.py` 在转换前就导入训练算子，纯 CPU 数据准备会因 mx_driving 查询设备而失败。本仓的 `tools/create_bevformer_mini_infos.py` 从固定的上游文件执行原始元数据函数，从镜像内 mmdet3d 源码读取类别映射，跳过训练算子和不参与 BEVFormer 训练的 2D 导出。在仓库根目录、DrivingSDK 的 `bevformer` 环境执行：
+
+```bash
+python3 tools/create_bevformer_mini_infos.py \
+  --source sources/BEVFormer \
+  --mmdet3d-dataset-source /workspace/bevformer/mmdetection3d/mmdet3d/datasets/nuscenes_dataset.py \
+  --canbus-root sources/BEVFormer/data
+```
+
+若没有单独的 CAN bus 扩展包，固定上游转换函数会将缺失场景的 CAN bus 信息填零；这种标注仅用于功能检查，不用于精度结论。预训练权重仍须按上游 README 获取。
 
 ## 快速开始
 

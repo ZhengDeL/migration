@@ -25,6 +25,8 @@ def main() -> int:
     parser.add_argument("--model", required=True, choices=("bevformer", "sparse4d", "qwen3vl8b", "worldengine", "apollo_visionnet"))
     parser.add_argument("--nproc", type=int, required=True)
     parser.add_argument("--output", type=Path, help="optional local JSON evidence file")
+    parser.add_argument("--require-npu-smi", action="store_true",
+                        help="also fail when the management CLI is unavailable inside the container")
     args = parser.parse_args()
     if args.nproc < 1:
         parser.error("--nproc must be positive")
@@ -76,12 +78,23 @@ def main() -> int:
         probe = subprocess.run(["npu-smi", "info"], text=True, capture_output=True, timeout=10)
         checks["npu_smi_exit_code"] = probe.returncode
         checks["npu_smi_ok"] = probe.returncode == 0
+        if probe.returncode:
+            info["npu_smi_output"] = (probe.stdout + probe.stderr).strip()[-500:]
     except (OSError, subprocess.TimeoutExpired) as exc:
         checks["npu_smi_error"] = str(exc)
 
-    failures = [name for name, value in checks.items() if value is False or (name.endswith("_error") and value)]
-    info["result"] = "pass" if not failures else "fail"
+    management_checks = {"npu_smi_ok", "npu_smi_error"}
+    failures = [name for name, value in checks.items()
+                if name not in management_checks and
+                (value is False or (name.endswith("_error") and value))]
+    warnings = [name for name in management_checks if name in checks and
+                (checks[name] is False or (name.endswith("_error") and checks[name]))]
+    if args.require_npu_smi:
+        failures.extend(warnings)
+        warnings = []
+    info["result"] = "fail" if failures else ("pass_with_warnings" if warnings else "pass")
     info["failures"] = failures
+    info["warnings"] = warnings
     report = json.dumps(info, ensure_ascii=False, indent=2)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -11,9 +11,10 @@
 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)给出的 `resnet50-19c8e357.pth` 使用旧 tar 序列化，PyTorch 2.7.1 的安全加载不能直接读取。`sources.lock.json` 固定官方 URL 和源文件 SHA256；下载后用 `tools/convert_sparse4d_weight.py` 核对哈希，生成 `ckpt/resnet50-19c8e357-modern.pth`，同时逐 tensor 核对新旧文件。转换过程必须在无网络、无 NPU、只暴露权重输出目录的隔离容器中执行；训练配置副本引用新文件，保留官方原文件。示例从本仓根目录运行：
 
 ```bash
-docker run --rm --network none --memory 3g \
+docker run --rm --network none --memory 3g --pids-limit 512 \
   -v "$PWD":/work:ro -v "$PWD/sources/Sparse4D/ckpt":/weights:rw -w /work \
-  -e TORCH_DEVICE_BACKEND_AUTOLOAD=0 \
+  -e TORCH_DEVICE_BACKEND_AUTOLOAD=0 -e OMP_NUM_THREADS=2 \
+  -e OPENBLAS_NUM_THREADS=2 -e MKL_NUM_THREADS=2 \
   --entrypoint /opt/conda/envs/sparse4d/bin/python \
   local/drivingsdk:26.1.0-a3-arm64-20261010 \
   tools/convert_sparse4d_weight.py \
