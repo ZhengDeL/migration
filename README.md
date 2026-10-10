@@ -28,15 +28,14 @@ DrivingSDK 官方标签、派生镜像 Dockerfile、包版本和构建方法，�
 
 ## 本地准备
 
-可以直接在训练服务器下载公开源码和 Qwen 权重。仓库工具要求 Python 3.10+，应在相应的训练容器或独立环境中运行；宿主机系统 Python 版本不一定满足要求。下载脚本默认只打印计划，追加 `--execute` 才联网；先在 1# 下载 DrivingSDK、BEVFormer、Sparse4D、LLaMA-Factory，后续在 2# 下载 WorldEngine 和 Apollo-Vision-Net。若服务器需要代理，仅为下载命令配置经批准的 `HTTP_PROXY`/`HTTPS_PROXY` 环境变量，不改系统 DNS 或 Docker 守护进程配置。nuScenes、OpenScene 和预训练权重按各上游的数据获取流程准备。以下命令从仓库根目录执行：
+可以直接在训练服务器下载公开源码和 Qwen 权重。在已准备好的 1# 上，最省步骤的是[快速上手](docs/quickstart.md)的 `check → plan → mini`；Qwen 权重先运行 `bash tools/quickstart.sh qwen3vl8b download`，由固定镜像内的 Python 下载并校验。下面是新机器或需要重新准备源码时的详细步骤。仓库工具要求 Python 3.10+，应在相应的训练容器或独立环境中运行；宿主机系统 Python 版本不一定满足要求。下载脚本默认只打印计划，追加 `--execute` 才联网；先在 1# 下载 DrivingSDK、BEVFormer、Sparse4D、LLaMA-Factory，后续在 2# 下载 WorldEngine 和 Apollo-Vision-Net。若服务器需要代理，仅为下载命令配置经批准的 `HTTP_PROXY`/`HTTPS_PROXY` 环境变量，不改系统 DNS 或 Docker 守护进程配置。nuScenes、OpenScene 和预训练权重按各上游的数据获取流程准备。以下命令从仓库根目录执行：
 
 ```bash
 python3 tools/fetch_sources.py drivingsdk bevformer sparse4d qwen3vl8b --execute
-python3 -m pip install huggingface_hub
-python3 tools/fetch_qwen.py --execute
+bash tools/quickstart.sh qwen3vl8b download  # 在已安装固定 Qwen 镜像的 1# 上运行
 ```
 
-脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，Qwen 四个权重分片另按固定 SHA256 校验；默认存入被 Git 忽略的 `sources/`，也可用 `fetch_qwen.py --destination` 放在仓库外的数据卷。Qwen 官方 ModelScope 镜像源可通过 `fetch_qwen.py --hub modelscope --execute` 使用，锁定独立提交并以相同四个分片 SHA256 核验。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
+脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，Qwen 四个权重分片另按固定 SHA256 校验。`quickstart.sh` 默认把 Qwen 权重放在仓库外的 `weights/`；独立运行 `fetch_qwen.py` 时可用 `--destination` 指定目录，且需先在对应 Python 环境安装 `modelscope` 或 `huggingface_hub`。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
 
 ```bash
 python3 tools/prepare.py bevformer --source sources/BEVFormer --sdk sources/DrivingSDK --apply

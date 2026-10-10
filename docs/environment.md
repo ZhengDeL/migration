@@ -34,7 +34,7 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 
 ## 数据与权重
 
-公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 通过 `huggingface_hub.snapshot_download` 下载锁定的模型快照并核对四个分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。Qwen 下载脚本需在独立环境中预装 `huggingface_hub`，并为 17,534,247,392 字节的四个权重分片及缓存预留足够空间；可用 `--destination` 把模型放在仓库外的数据卷。nuScenes、OpenScene 等数据集不由这些脚本自动下载；按上游许可和登录流程准备。
+公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 从发布方 Hugging Face 或 ModelScope 仓下载固定快照，并逐一核对四个权重分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。在已准备好的 1# 上优先使用[快速上手](quickstart.md)中的 `bash tools/quickstart.sh qwen3vl8b download`，无需在宿主机安装 Python 包；该入口使用 Qwen 官方 ModelScope 仓。权重分片约 18 GB，下载临时文件还需要额外空间。独立执行 `fetch_qwen.py` 时需在其 Python 环境安装相应的 `huggingface_hub` 或 `modelscope`；可用 `--destination` 把模型放在仓库外的数据卷。nuScenes、OpenScene 等数据集不由这些脚本自动下载；按上游许可和登录流程准备。
 
 | 模型 | 训练前必须由数据负责人提供 |
 | --- | --- |

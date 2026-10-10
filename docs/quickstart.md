@@ -33,4 +33,13 @@ bash tools/quickstart.sh qwen3vl8b mini
 
 **怎样判断通过：** `check` 的 JSON 报告为 `pass` 或已核对宿主 `npu-smi info` 的 `pass_with_warnings`；`plan` 的 `missing_data` 为空；`mini` 正常退出，两个 rank 日志均有有限 loss，并生成可加载 checkpoint。BEVFormer 和 Sparse4D 已在 1# 达到这一级功能验证。`train` 之前还要准备完整数据、预训练权重并确认业务指标；mini 结果不能代替正式精度和稳定性验收。
 
+**常见提示：**
+
+| 看到什么 | 下一步 |
+| --- | --- |
+| `缺少镜像` 或 `镜像 ID 不匹配` | 按[环境指南](environment.md)导入固定镜像；镜像 ID 不一致时先核对来源，不要修改脚本中的预期 ID。 |
+| `missing_data` 列出路径 | 按对应模型 README 准备这些文件，重复运行 `plan`；不要直接运行 `mini`。 |
+| `pass_with_warnings`，且只有容器内 `npu-smi` 告警 | 查看宿主 `npu-smi info`，再结合 `mini` 的真实 NPU 训练结果判断；不要把告警当成训练通过。 |
+| Qwen 下载中断 | 重新运行同一条 `download` 命令续传；只有四个分片均显示 `verified` 且 `plan` 不再缺权重时才运行 `mini`。 |
+
 缺少文件时，先按[BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md)、[Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md)或[Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md)的“环境和数据”准备，再重试 `plan`。镜像下载、固定 digest 和版本见[环境指南](environment.md)。WorldEngine、Apollo VisionNet 尚未选定可运行镜像或在 2# 实训，不使用本快速入口。
