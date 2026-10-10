@@ -1,6 +1,6 @@
 # Ascend 910C 训练迁移样例
 
-目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已在 1# 导入固定 digest 的 DrivingSDK 镜像并构建 headless 派生镜像，完成基础双 rank NPU/HCCL、变形注意力数值检查，以及 BEVFormer、Sparse4D 使用公开 nuScenes mini 的双卡模型训练功能试验。该试验不包含完整数据集精度或正式训练硬件支持验收。
+目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已在 1# 导入固定 digest 的 DrivingSDK 镜像并构建 headless 派生镜像，完成基础双 rank 与四 rank NPU/HCCL、变形注意力数值检查，以及 BEVFormer、Sparse4D 使用公开 nuScenes mini 的双卡模型训练功能试验。四 rank 是 1# 的基础通信与参数更新试验，不是 WorldEngine/Apollo 的模型级训练。上述结果不包含完整数据集精度或正式训练硬件支持验收。
 
 ## 范围和状态
 
@@ -8,7 +8,7 @@
 | --- | ---: | --- | --- |
 | [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁与 worker 序列化兼容补丁，FP16 训练 | 1# mini 162 迭代/1 epoch 正常退出，有限 loss、checkpoint 已核验；待完整数据精度 |
 | [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁、普通 AdamW/逐参数裁剪兼容覆盖、2 卡配置 | 1# mini 10 迭代正常退出，有限 loss、checkpoint 已核验；待完整数据精度和性能 |
-| [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | 上游源码与独立 A3 ARM64 镜像已在 1# 核对；该镜像双 rank 基础 NPU/HCCL 通过，待权重、业务数据和模型级实训 |
+| [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | 上游源码与独立 A3 ARM64 镜像已在 1# 核对；该镜像双 rank 基础 NPU/HCCL、锁定源码的 YAML 参数解析通过，待权重、业务数据和模型级实训 |
 | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 | AlgEngine VADv2 50% 的 NPU 入口与变形注意力补丁 | 补丁可应用、代码可编译；SimEngine 和完整后训练链路未适配 |
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
 
@@ -56,7 +56,7 @@ python3 tools/check_env.py --model qwen3vl8b --nproc 2 --output outputs/qwen3vl8
 torchrun --standalone --nproc_per_node=2 tools/check_npu_training.py --output-dir outputs/base_npu
 ```
 
-这个检查只证明基础算子和双 rank 通信在当时可用；具体产品的官方训练支持边界仍按 [环境指南](docs/environment.md)判断，模型级训练和精度也须分别验证。
+同一脚本也可在四张不同物理卡可见时用 `--nproc_per_node=4` 检查四 rank；1# 实测四 rank 的有限 loss、参数更新及 HCCL all-reduce sum=10 均通过。这个检查只证明基础算子和通信在当时可用；具体产品的官方训练支持边界仍按 [环境指南](docs/environment.md)判断，模型级训练和精度也须分别验证。
 
 对 BEVFormer、WorldEngine、Apollo 的变形注意力先在实际 NPU 环境运行 `python3 tools/check_msda.py --output outputs/<model>/msda.json`，留存前向和三类梯度的数值对齐结果。`run_train.py --execute` 也会自动执行这项检查，失败时不会启动训练。
 

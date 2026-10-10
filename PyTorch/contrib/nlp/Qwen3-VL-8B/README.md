@@ -26,4 +26,4 @@ bash PyTorch/contrib/nlp/Qwen3-VL-8B/test/train_2p.sh --smoke --execute
 
 ## 验证和状态
 
-本地已验证 YAML 解析、上游模板名和启动命令；1# 已下载锁定的 LLaMA-Factory 源码，核对独立 NPU 镜像内容并通过该镜像的双 rank 基础训练/HCCL。Qwen 模型级训练尚未执行。实机需核对两 rank 有限 loss、LoRA 参数更新、checkpoint，以及独立图文样本的答案内容。仅有训练 loss 不代表多模态能力达标。
+本地已验证 YAML 解析、上游模板名和启动命令；1# 已下载锁定的 LLaMA-Factory 源码，核对独立 NPU 镜像内容并通过该镜像的双 rank 基础训练/HCCL。实机还确认从锁定源码导入 LLaMA-Factory，按镜像实际依赖成功解析本仓 SFT 配置：`qwen3_vl_nothink`、LoRA rank 8、BF16、每卡 batch 1。Qwen 模型级训练尚未执行。实机需核对两 rank 有限 loss、LoRA 参数更新、checkpoint，以及独立图文样本的答案内容。仅有训练 loss 不代表多模态能力达标。

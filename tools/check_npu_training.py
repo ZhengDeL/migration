@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Small two-rank NPU backward and HCCL smoke; not a model acceptance test."""
+"""Small multi-rank NPU backward and HCCL smoke; not a model acceptance test."""
 
 from __future__ import annotations
 
@@ -22,8 +22,8 @@ def main() -> int:
     rank = int(os.environ["RANK"])
     local_rank = int(os.environ["LOCAL_RANK"])
     world_size = int(os.environ["WORLD_SIZE"])
-    if world_size != 2 or torch.npu.device_count() < 2:
-        raise RuntimeError("this check requires exactly two visible NPU ranks")
+    if world_size < 2 or torch.npu.device_count() < world_size:
+        raise RuntimeError("this check requires at least two visible NPU ranks")
     torch.npu.set_device(local_rank)
     device = torch.device(f"npu:{local_rank}")
     dist.init_process_group("hccl", timeout=timedelta(seconds=180))
@@ -52,7 +52,7 @@ def main() -> int:
         torch.npu.synchronize()
         changed = bool(torch.any(model.weight.detach() != weight_before))
         finite = bool(torch.isfinite(before) and torch.isfinite(after))
-        collective = float(marker.item()) == 3.0
+        collective = float(marker.item()) == world_size * (world_size + 1) / 2
         report = {
             "rank": rank,
             "local_rank": local_rank,
