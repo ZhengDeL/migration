@@ -74,6 +74,19 @@ def patch_for(name: str, sdk: Path | None) -> Path | None:
     return path
 
 
+def compat_patch_for(name: str) -> Path | None:
+    spec = LOCK[name].get("compat_patch")
+    if not spec:
+        return None
+    path = ROOT / spec
+    if not path.is_file():
+        raise RuntimeError(f"missing compatibility patch: {path}")
+    digest = hashlib.sha256(patch_bytes(path)).hexdigest()
+    if digest != LOCK[name]["compat_patch_sha256"]:
+        raise RuntimeError(f"{name}: compatibility patch SHA256 {digest} does not match sources.lock.json")
+    return path
+
+
 def patch_bytes(patch: Path) -> bytes:
     # DrivingSDK publishes CRLF patches; normalized input also works on LF checkouts.
     return patch.read_bytes().replace(b"\r\n", b"\n")
@@ -91,18 +104,20 @@ def patch_state(source: Path, patch: Path) -> str:
     raise RuntimeError(f"patch does not apply cleanly to {source}: {result.stderr.decode(errors='replace').strip()}")
 
 
-def verify_applied_patch(source: Path, patch: Path) -> None:
-    """Compare every patched blob to a patch applied to a temporary HEAD index."""
+def verify_applied_patch(source: Path, patch: Path,
+                         extra_patches: tuple[Path, ...] = ()) -> None:
+    """Compare every patched blob to patches applied to a temporary HEAD index."""
     if run("git", "diff", "--cached", "--quiet", "HEAD", cwd=source, check=False).returncode:
         raise RuntimeError(f"{source}: staged source changes are not allowed")
     with tempfile.TemporaryDirectory(prefix="ascend-patch-index-") as temp:
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(temp) / "index")}
         run("git", "read-tree", "HEAD", cwd=source, env=env)
-        applied = run("git", "apply", "--cached", "--ignore-space-change", "-",
-                      cwd=source, env=env, input=patch_bytes(patch), check=False)
-        if applied.returncode:
-            raise RuntimeError(f"{source}: cannot reconstruct reviewed patch from HEAD: "
-                               f"{applied.stderr.decode(errors='replace').strip()}")
+        for item in (patch, *extra_patches):
+            applied = run("git", "apply", "--cached", "--ignore-space-change", "-",
+                          cwd=source, env=env, input=patch_bytes(item), check=False)
+            if applied.returncode:
+                raise RuntimeError(f"{source}: cannot reconstruct reviewed patch {item} from HEAD: "
+                                   f"{applied.stderr.decode(errors='replace').strip()}")
         expected_paths = set(run("git", "diff", "--cached", "--name-only", "HEAD",
                                  cwd=source, env=env).stdout.decode().splitlines())
         actual_paths = set(run("git", "diff", "--name-only", "HEAD",
@@ -172,6 +187,7 @@ def main() -> int:
     sdk = args.sdk.resolve(strict=True) if args.sdk else None
     require_checkout(args.model, source)
     patch = patch_for(args.model, sdk)
+    compat = compat_patch_for(args.model)
     if patch is None:
         print(json.dumps({"model": args.model, "revision": LOCK[args.model]["revision"], "state": "upstream_ready"}))
         return 0
@@ -183,15 +199,25 @@ def main() -> int:
         run("git", "apply", "--ignore-space-change", "-", cwd=source,
             input=patch_bytes(patch))
         state = patch_state(source, patch)
+    compat_state = None
+    if compat is not None and state == "applied":
+        compat_state = patch_state(source, compat)
+        if args.apply and compat_state == "ready":
+            run("git", "apply", "--ignore-space-change", "-", cwd=source,
+                input=patch_bytes(compat))
+            compat_state = patch_state(source, compat)
     if state == "applied":
-        verify_applied_patch(source, patch)
+        if compat is None or compat_state == "applied":
+            verify_applied_patch(source, patch, (compat,) if compat else ())
+        elif args.apply:
+            raise RuntimeError(f"{args.model}: compatibility patch was not applied")
     if args.apply and args.model == "sparse4d" and sdk:
         stage_sparse4d_files(source, sdk)
     if state == "applied" and args.model == "sparse4d" and sdk:
         verify_sparse4d_files(source, sdk)
     print(json.dumps({"model": args.model, "revision": LOCK[args.model]["revision"],
                       "patch_sha256": hashlib.sha256(patch_bytes(patch)).hexdigest(),
-                      "state": state}))
+                      "state": state, "compat_state": compat_state}))
     return 0
 
 

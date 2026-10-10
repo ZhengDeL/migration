@@ -2,7 +2,7 @@
 
 ## 参考实现与范围
 
-上游是 [fundamentalvision/BEVFormer](https://github.com/fundamentalvision/BEVFormer) 的 `66b65f3a1f58caf0507cb2a971b9c0e7f842376c`。复用 [DrivingSDK BEVFormer 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/BEVFormer/README.md) 的 NPU 补丁，以 FP16 base 配置做 2 卡训练。`sources.lock.json` 固定了上游、DrivingSDK 和补丁哈希。
+上游是 [fundamentalvision/BEVFormer](https://github.com/fundamentalvision/BEVFormer) 的 `66b65f3a1f58caf0507cb2a971b9c0e7f842376c`。复用 [DrivingSDK BEVFormer 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/BEVFormer/README.md) 的 NPU 补丁，以 FP16 base 配置做 2 卡训练。`sources.lock.json` 固定了上游、DrivingSDK 和补丁哈希。1# 首次模型启动在数据 worker 的 `spawn` 阶段因 `eval_detection_configs.class_names` 是不可序列化的 `dict_keys` 而失败；本仓 `compat.patch` 将其转为保持类别顺序的 `list`，并由 `tools/prepare.py` 与官方补丁一起逐文件核验。
 
 ## 环境和数据
 
@@ -37,4 +37,4 @@ FP16 base 的 8 卡基线学习率为 `2e-4`；2 卡且每卡 batch 1 时以 `5e
 
 ## 验证和状态
 
-本地已验证补丁逐文件内容、Python 编译和命令生成；910C 训练尚未执行。实机需核对算子前后向、两 rank 有限 loss、checkpoint，以及 nuScenes mAP/NDS。学习率和精度需由实训确定。
+本地已验证补丁逐文件内容、Python 编译和命令生成；1# 的双卡基础训练与变形注意力数值检查已通过，BEVFormer 首次 mini 模型训练停在数据 worker 序列化，兼容补丁复跑结果待补充。实机需核对两 rank 有限 loss、checkpoint，以及 nuScenes mAP/NDS。学习率和精度需由实训确定。

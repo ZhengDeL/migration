@@ -8,7 +8,9 @@
     "url": "https://github.com/fundamentalvision/BEVFormer.git",
     "revision": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
     "patch": "drivingsdk:model_examples/BEVFormer/bev_former_config.patch",
-    "patch_sha256": "d0dc1ace4287d652f7d53598ca4933d3a824d9b6971ecb3bd6009d59241266a8"
+    "patch_sha256": "d0dc1ace4287d652f7d53598ca4933d3a824d9b6971ecb3bd6009d59241266a8",
+    "compat_patch": "PyTorch/contrib/cv/detection/BEVFormer/compat.patch",
+    "compat_patch_sha256": "2340ed496e292b040166a5fbb084936bf1bab2fa268b17a5f9a35ce467615e22"
   },
   "sparse4d": {
     "url": "https://github.com/HorizonRobotics/Sparse4D.git",

@@ -11,7 +11,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from prepare import (LOCK, ROOT, patch_for, patch_state, require_checkout,
+from prepare import (LOCK, ROOT, compat_patch_for, patch_for, patch_state, require_checkout,
                      patch_bytes, verify_applied_patch, verify_sparse4d_files)
 
 
@@ -94,10 +94,13 @@ def main() -> int:
     sdk = args.sdk.resolve(strict=True) if args.sdk else None
     require_checkout(args.model, source)
     patch = patch_for(args.model, sdk)
+    compat = compat_patch_for(args.model)
     if patch is not None and patch_state(source, patch) != "applied":
         raise RuntimeError("apply the reviewed patch with tools/prepare.py --apply first")
+    if compat is not None and patch_state(source, compat) != "applied":
+        raise RuntimeError("apply the compatibility patch with tools/prepare.py --apply first")
     if patch is not None:
-        verify_applied_patch(source, patch)
+        verify_applied_patch(source, patch, (compat,) if compat else ())
     if args.model == "sparse4d" and sdk is not None:
         verify_sparse4d_files(source, sdk)
 
@@ -206,6 +209,7 @@ def main() -> int:
 
     report = {"model": args.model, "revision": LOCK[args.model]["revision"],
               "patch_sha256": hashlib.sha256(patch_bytes(patch)).hexdigest() if patch else None,
+              "compat_patch_sha256": hashlib.sha256(patch_bytes(compat)).hexdigest() if compat else None,
               "cwd": str(cwd), "devices": args.devices, "command": command,
               "dataset_version": args.dataset_version if args.model in ("bevformer", "sparse4d") else None,
               "missing_data": missing, "execute": args.execute}

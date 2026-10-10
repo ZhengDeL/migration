@@ -1,0 +1,12 @@
+diff --git a/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py b/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
+--- a/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
++++ b/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
+@@ -23,5 +23,8 @@ class CustomNuScenesDataset(NuScenesDataset):
+     def __init__(self, queue_length=4, bev_size=(200, 200), overlap_test=False, *args, **kwargs):
+         super().__init__(*args, **kwargs)
++        # torch_npu uses spawn for data workers; dict_keys cannot be pickled.
++        self.eval_detection_configs.class_names = list(
++            self.eval_detection_configs.class_names)
+         self.queue_length = queue_length
+         self.overlap_test = overlap_test
+         self.bev_size = bev_size
