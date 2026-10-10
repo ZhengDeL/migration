@@ -48,6 +48,14 @@ python3 tools/check_env.py --model qwen3vl8b --nproc 2 --output outputs/qwen3vl8
 
 `result=pass` 只代表包可导入、版本主次号相符和设备可见，不代表模型训练成功。数据和权重仍须按 [环境指南](docs/environment.md) 放到源码要求的位置。
 
+在目标镜像中先执行以下两 rank 前向、反向、参数更新和 HCCL 集合通信检查，并留存 `rank0.json`、`rank1.json`：
+
+```bash
+torchrun --standalone --nproc_per_node=2 tools/check_npu_training.py --output-dir outputs/base_npu
+```
+
+这个检查只证明基础算子和双 rank 通信在当时可用；具体产品的官方训练支持边界仍按 [环境指南](docs/environment.md)判断，模型级训练和精度也须分别验证。
+
 对 BEVFormer、WorldEngine、Apollo 的变形注意力先在实际 NPU 环境运行 `python3 tools/check_msda.py --output outputs/<model>/msda.json`，留存前向和三类梯度的数值对齐结果。`run_train.py --execute` 也会自动执行这项检查，失败时不会启动训练。
 
 ## 训练命令
