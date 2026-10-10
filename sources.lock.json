@@ -1,0 +1,37 @@
+{
+  "drivingsdk": {
+    "url": "https://gitcode.com/Ascend/DrivingSDK.git",
+    "revision": "0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837",
+    "branch": "branch_v26.1.0"
+  },
+  "bevformer": {
+    "url": "https://github.com/fundamentalvision/BEVFormer.git",
+    "revision": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+    "patch": "drivingsdk:model_examples/BEVFormer/bev_former_config.patch",
+    "patch_sha256": "d0dc1ace4287d652f7d53598ca4933d3a824d9b6971ecb3bd6009d59241266a8"
+  },
+  "sparse4d": {
+    "url": "https://github.com/HorizonRobotics/Sparse4D.git",
+    "revision": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "patch": "drivingsdk:model_examples/Sparse4D/Sparse4D.patch",
+    "patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314"
+  },
+  "qwen3vl8b": {
+    "url": "https://github.com/hiyouga/LLaMA-Factory.git",
+    "revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+    "checkpoint": "Qwen/Qwen3-VL-8B-Instruct",
+    "checkpoint_revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b"
+  },
+  "worldengine": {
+    "url": "https://github.com/OpenDriveLab/WorldEngine.git",
+    "revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
+    "patch": "PyTorch/contrib/cv/others/WorldEngine/ascend.patch",
+    "patch_sha256": "02bf9a2022fc8cc0233ffdf86f8e432da847c7d474cc556e59e608a94ceb593a"
+  },
+  "apollo_visionnet": {
+    "url": "https://github.com/ApolloAuto/Apollo-Vision-Net.git",
+    "revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+    "patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/ascend.patch",
+    "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3"
+  }
+}

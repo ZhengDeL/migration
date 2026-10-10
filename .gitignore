@@ -1,0 +1,17 @@
+.sources/
+sources/
+.venv/
+__pycache__/
+*.pyc
+data/
+ckpts/
+ckpt/
+outputs/
+work_dirs/
+*.log
+*.pth
+*.pt
+*.safetensors
+*.npy
+*.pkl
+*.ckpt

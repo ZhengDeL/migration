@@ -1,0 +1,109 @@
+diff --git a/projects/mmdet3d_plugin/bevformer/apis/mmdet_train.py b/projects/mmdet3d_plugin/bevformer/apis/mmdet_train.py
+index be202a9..ea5973f 100644
+--- a/projects/mmdet3d_plugin/bevformer/apis/mmdet_train.py
++++ b/projects/mmdet3d_plugin/bevformer/apis/mmdet_train.py
+@@ -9,7 +9,8 @@ import warnings
+ import numpy as np
+ import torch
+ import torch.distributed as dist
+-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
++from mmcv.device.npu import NPUDataParallel as MMDataParallel
++from mmcv.device.npu import NPUDistributedDataParallel as MMDistributedDataParallel
+ from mmcv.runner import (HOOKS, DistSamplerSeedHook, EpochBasedRunner,
+                          Fp16OptimizerHook, OptimizerHook, build_optimizer,
+                          build_runner, get_dist_info)
+diff --git a/projects/mmdet3d_plugin/bevformer/modules/decoder.py b/projects/mmdet3d_plugin/bevformer/modules/decoder.py
+index eea9545..f350756 100644
+--- a/projects/mmdet3d_plugin/bevformer/modules/decoder.py
++++ b/projects/mmdet3d_plugin/bevformer/modules/decoder.py
+@@ -10,6 +10,7 @@ import warnings
+ from matplotlib import pyplot as plt
+ import numpy as np
+ import torch
++import mx_driving
+ import torch.nn as nn
+ import torch.nn.functional as F
+ from mmcv.cnn import xavier_init, constant_init
+@@ -319,7 +320,11 @@ class CustomMSDeformableAttention(BaseModule):
+             raise ValueError(
+                 f'Last dim of reference_points must be'
+                 f' 2 or 4, but get {reference_points.shape[-1]} instead.')
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == 'npu':
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights)
++        elif torch.cuda.is_available() and value.is_cuda:
+ 
+             # using fp16 deformable attention is unstable because it performs many sum operations
+             if value.dtype == torch.float16:
+diff --git a/projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py b/projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py
+index e324189..fcf03ec 100644
+--- a/projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py
++++ b/projects/mmdet3d_plugin/bevformer/modules/spatial_cross_attention.py
+@@ -5,6 +5,7 @@
+ from mmcv.ops.multi_scale_deform_attn import multi_scale_deformable_attn_pytorch
+ import warnings
+ import torch
++import mx_driving
+ import torch.nn as nn
+ import torch.nn.functional as F
+ from mmcv.cnn import xavier_init, constant_init
+@@ -379,7 +380,11 @@ class MSDeformableAttention3D(BaseModule):
+         #  attention_weights.shape: bs, num_query, num_heads, num_levels, num_all_points
+         #
+ 
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == 'npu':
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights)
++        elif torch.cuda.is_available() and value.is_cuda:
+             if value.dtype == torch.float16:
+                 MultiScaleDeformableAttnFunction = MultiScaleDeformableAttnFunction_fp32
+             else:
+diff --git a/projects/mmdet3d_plugin/bevformer/modules/temporal_self_attention.py b/projects/mmdet3d_plugin/bevformer/modules/temporal_self_attention.py
+index 0c1148f..17a0424 100644
+--- a/projects/mmdet3d_plugin/bevformer/modules/temporal_self_attention.py
++++ b/projects/mmdet3d_plugin/bevformer/modules/temporal_self_attention.py
+@@ -7,6 +7,7 @@ from .multi_scale_deformable_attn_function import MultiScaleDeformableAttnFuncti
+ from mmcv.ops.multi_scale_deform_attn import multi_scale_deformable_attn_pytorch
+ import warnings
+ import torch
++import mx_driving
+ import torch.nn as nn
+ import torch.nn.functional as F
+ from mmcv.cnn import xavier_init, constant_init
+@@ -236,7 +237,11 @@ class TemporalSelfAttention(BaseModule):
+             raise ValueError(
+                 f'Last dim of reference_points must be'
+                 f' 2 or 4, but get {reference_points.shape[-1]} instead.')
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == 'npu':
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights)
++        elif torch.cuda.is_available() and value.is_cuda:
+ 
+             # using fp16 deformable attention is unstable because it performs many sum operations
+             if value.dtype == torch.float16:
+@@ -329,4 +334,4 @@ def multi_scale_deformable_attn_pytorch_2d(value, value_spatial_shapes,
+     output = (torch.stack(sampling_value_list, dim=-2).flatten(-2) *
+               attention_weights).sum(-1).view(bs, num_heads * embed_dims,
+                                               num_queries)  # (2, 256, 40000)
+-    return output.transpose(1, 2).contiguous()
+\ No newline at end of file
++    return output.transpose(1, 2).contiguous()
+diff --git a/tools/train.py b/tools/train.py
+index 12d556c..a3d23da 100755
+--- a/tools/train.py
++++ b/tools/train.py
+@@ -10,6 +10,8 @@ import mmcv
+ import os
+ import time
+ import torch
++import torch_npu
++from torch_npu.contrib import transfer_to_npu
+ import warnings
+ from mmcv import Config, DictAction
+ from mmcv.runner import get_dist_info, init_dist
