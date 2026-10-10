@@ -23,7 +23,8 @@ model=$1
 action=$2
 case "$action" in check|plan|mini|train) ;; *) usage; exit 2 ;; esac
 
-repo_root=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+repo_root=$(cd -- "$script_dir/.." && pwd -P)
 mount_root=${MIGRATION_MOUNT_ROOT:-$(dirname "$repo_root")}
 mount_root=$(realpath "$mount_root")
 case "$repo_root/" in "$mount_root/"*) ;; *) echo "Repository must be under MIGRATION_MOUNT_ROOT: $mount_root" >&2; exit 2 ;; esac
