@@ -2,7 +2,7 @@
 
 ## 参考实现与范围
 
-上游是 [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D) 的 `c41df4bbf7bc82490f11ff55173abfcb3fb91425`。复用 [DrivingSDK Sparse4D 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md) 的模型和依赖补丁。`tools/prepare.py` 会核验官方 `tools/patch.py`，并生成一处可审计的本仓覆盖：把 `clip_grad_norm_fused_` 改为 `torch.nn.utils.clip_grad_norm_`，其余字节保持一致。1# 首次双卡训练在融合裁剪处出现梯度与掩码长度不一致，两个 rank 均报 `EZ1007`；逐参数裁剪保留原来的 `max_norm=25` 和 2 范数，运行性能需另行评估。官方原文件的 SHA256 为 `f2742e70b7dc06e50849c95eb8deb45911d4ca4bee92e35393f8d09185c933cf`，覆盖后的 SHA256 为 `53c4db5b6531e9210d665e67f0a1c4a2a5a34da6570a49da54b12e4161af0d34`。
+上游是 [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D) 的 `c41df4bbf7bc82490f11ff55173abfcb3fb91425`。复用 [DrivingSDK Sparse4D 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md) 的模型和依赖补丁。`tools/prepare.py` 会核验官方 `tools/patch.py`，并生成两处可审计的本仓覆盖：把 `clip_grad_norm_fused_` 改为 `torch.nn.utils.clip_grad_norm_`，并保留配置中的普通 `AdamW`，不强制改成 `NpuFusedAdamW`；其余字节保持一致。1# 首次双卡训练在融合裁剪处出现梯度与掩码长度不一致，两个 rank 均报 `EZ1007`；改用逐参数裁剪后，融合 AdamW 的参数更新仍有长度不一致。逐参数裁剪保留原来的 `max_norm=25` 和 2 范数；普通优化器的性能需另行评估。官方原文件的 SHA256 为 `f2742e70b7dc06e50849c95eb8deb45911d4ca4bee92e35393f8d09185c933cf`，覆盖后的 SHA256 为 `d0a89e3e4c775b0b3a51893c4bbfe2c9483bfc89d4ce4d947b9bb506d7f2c791`。
 
 ## 环境和数据
 
@@ -40,4 +40,4 @@ mini 模式另外将配置副本中的数据集版本改为 `v1.0-mini`，不会
 
 ## 验证和状态
 
-本地已验证补丁逐文件内容、配置生成、Python 编译和命令生成；1# 首轮双卡 mini 训练在第一次融合梯度裁剪时失败，覆盖后的复跑结果待补充。实机需核对两 rank 前后向、有限 loss、checkpoint 和 nuScenes mAP/NDS，学习率以精度结果确认。
+本地已验证补丁逐文件内容、配置生成、Python 编译和命令生成；1# 双卡 mini 训练的融合梯度裁剪及融合 AdamW 首次更新均已复现形状错误，两处覆盖后的复跑结果待补充。实机需核对两 rank 前后向、有限 loss、checkpoint 和 nuScenes mAP/NDS，学习率以精度结果确认。

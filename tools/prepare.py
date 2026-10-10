@@ -17,18 +17,24 @@ ROOT = Path(__file__).resolve().parents[1]
 LOCK = json.loads((ROOT / "sources.lock.json").read_text(encoding="utf-8"))
 MODELS = tuple(name for name in LOCK if name != "drivingsdk")
 
-# The pinned DrivingSDK Sparse4D helper uses fused clipping. On the tested A3
-# stack its combined gradient and mask lengths differ on the first step. Keep
-# the clipping threshold and norm while using the per-parameter PyTorch path.
+# The pinned DrivingSDK Sparse4D helper forces a fused optimizer and clipping.
+# On the tested A3 stack both paths fail on different combined-tensor shape
+# mismatches at the first step. Keep AdamW and the original clipping settings.
 SPARSE_CLIP_ORIGINAL = b"return runner.optimizer.clip_grad_norm_fused_(**self.grad_clip)"
 SPARSE_CLIP_REPLACEMENT = b"return torch.nn.utils.clip_grad_norm_(params, **self.grad_clip)"
+SPARSE_OPT_ORIGINAL = b"optimizer_cfg['type'] = 'NpuFused' + optimizer_cfg['type']"
+SPARSE_OPT_REPLACEMENT = b"# Preserve the configured optimizer type (AdamW)."
 
 
 def sparse_helper_bytes(supplied: Path) -> bytes:
     content = supplied.read_bytes()
-    if content.count(SPARSE_CLIP_ORIGINAL) != 1:
-        raise RuntimeError(f"{supplied}: expected one pinned fused clip call")
-    return content.replace(SPARSE_CLIP_ORIGINAL, SPARSE_CLIP_REPLACEMENT)
+    replacements = ((SPARSE_CLIP_ORIGINAL, SPARSE_CLIP_REPLACEMENT),
+                    (SPARSE_OPT_ORIGINAL, SPARSE_OPT_REPLACEMENT))
+    for original, replacement in replacements:
+        if content.count(original) != 1:
+            raise RuntimeError(f"{supplied}: expected one pinned occurrence of {original!r}")
+        content = content.replace(original, replacement)
+    return content
 
 
 def run(*args: str, cwd: Path, check: bool = True,
@@ -127,7 +133,11 @@ def stage_sparse4d_files(source: Path, sdk: Path) -> None:
     target = source / "tools" / "patch.py"
     supplied = official / "patch.py"
     expected = sparse_helper_bytes(supplied)
-    if target.exists() and target.read_bytes() not in (supplied.read_bytes(), expected):
+    if target.exists() and target.read_bytes() not in (supplied.read_bytes(),
+                                                       supplied.read_bytes().replace(
+                                                           SPARSE_CLIP_ORIGINAL,
+                                                           SPARSE_CLIP_REPLACEMENT),
+                                                       expected):
         raise RuntimeError(f"refusing to replace nonmatching {target}")
     target.write_bytes(expected)
     test_target = source / "test"
