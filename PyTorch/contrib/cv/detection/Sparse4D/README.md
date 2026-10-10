@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-使用隔离的 DrivingSDK/Sparse4D 环境，按官方样例构建 NPU 版 MMCV、mmdet 并安装 mx_driving。训练前执行 `python3 tools/check_env.py --model sparse4d --nproc 2`。需准备 nuScenes、`data/nuscenes_anno_pkls/nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy` 和 ResNet50 预训练权重；数据制作按官方样例执行。
+1# 实际双卡 mini 训练使用 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`（Docker image ID `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`）的独立 `sparse4d` 环境。它从华为 DrivingSDK A3/openEuler 官方标签 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10` 的 ARM64 manifest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 派生，只修正预置 OpenCV 的 headless 冲突；构建方法见仓库[环境指南](../../../../../docs/environment.md)和[Dockerfile](../../../../../docker/DrivingSDK-headless.Dockerfile)。实测环境为 CANN 9.1.0、Python 3.10.21、PyTorch 2.7.1+cpu、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2，并预置 Sparse4D 对应的 MMCV/mmdet。训练前执行 `python3 tools/check_env.py --model sparse4d --nproc 2`。需准备 nuScenes、`data/nuscenes_anno_pkls/nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy` 和 ResNet50 预训练权重；数据制作按官方样例执行。
 
 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)给出的 `resnet50-19c8e357.pth` 使用旧 tar 序列化，PyTorch 2.7.1 的安全加载不能直接读取。`sources.lock.json` 固定官方 URL 和源文件 SHA256；下载后用 `tools/convert_sparse4d_weight.py` 核对哈希，生成 `ckpt/resnet50-19c8e357-modern.pth`，同时逐 tensor 核对新旧文件。转换过程必须在无网络、无 NPU、只暴露权重输出目录的隔离容器中执行；训练配置副本引用新文件，保留官方原文件。示例从本仓根目录运行：
 
@@ -25,6 +25,8 @@ docker run --rm --network none --memory 3g --pids-limit 512 \
 用公开 `v1.0-mini` 做功能试验时，将源码目录的 `data/nuscenes` 链接到解压后的 mini 根目录，在 Sparse4D 源码目录运行 `python3 tools/nuscenes_converter.py --version v1.0-mini --info_prefix data/nuscenes_anno_pkls/nuscenes`，再按[DrivingSDK 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)运行 `tools/anchor_generator.py` 生成 `nuscenes_kmeans900.npy`。mini 生成的锚框只用于功能检查，正式训练须用完整数据重新生成。
 
 ## 快速开始
+
+1# 上已准备镜像和 mini 数据时，从仓库根目录依次执行 `bash tools/quickstart.sh sparse4d check`、`bash tools/quickstart.sh sparse4d plan`、`bash tools/quickstart.sh sparse4d mini`。命令作用和通过标准见[快速上手](../../../../../docs/quickstart.md)。
 
 以下命令从仓库根目录执行；未传 `--execute` 时只打印计划：
 

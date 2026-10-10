@@ -2,6 +2,8 @@
 
 目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已在 1# 导入固定 digest 的 DrivingSDK 镜像并构建 headless 派生镜像，完成基础双 rank 与四 rank NPU/HCCL、变形注意力数值检查，以及 BEVFormer、Sparse4D 使用公开 nuScenes mini 的双卡模型训练功能试验。四 rank 是 1# 的基础通信与参数更新试验，不是 WorldEngine/Apollo 的模型级训练。上述结果不包含完整数据集精度或正式训练硬件支持验收。
 
+**第一次使用：**先看[1# 双卡快速上手](docs/quickstart.md)。在已准备好镜像和数据的 1# 上，从仓库根目录执行 `bash tools/quickstart.sh bevformer check` 检查环境，再执行 `bash tools/quickstart.sh bevformer plan` 查看缺失文件；准备齐全后执行 `bash tools/quickstart.sh bevformer mini`。Sparse4D 将模型名换为 `sparse4d`；Qwen 将模型名换为 `qwen3vl8b`，需先下载完整权重。
+
 ## 范围和状态
 
 | 类别与模型 | 计划卡数 | 本仓范围 | 当前证据 |
@@ -13,6 +15,16 @@
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
 
 研究依据和限制见 [社区调研](docs/community_research.md)，环境版本和数据准备见 [环境指南](docs/environment.md)。`sources.lock.json` 是唯一的上游版本清单；各模型目录存放本仓配置和补丁。上游源码、权重、数据、训练输出及服务器地址不纳入本仓。1# 已使用两张物理卡进行功能试验；2# 计划使用 4 卡，设备仍待确认。
+
+## 实际镜像
+
+| 模型 | 上游 ARM64 镜像（固定 digest） | 1# 实际运行镜像 | 验证范围 |
+| --- | --- | --- | --- |
+| BEVFormer、Sparse4D | `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` | `local/migration-drivingsdk:26.1.0-a3-headless-20261010`；ID `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2` | 各自隔离的预置环境，双物理卡 mini 训练通过 |
+| Qwen3-VL-8B | `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36` | `local/llamafactory:a3-arm64-20261010`；ID `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8` | 双物理卡基础 NPU/HCCL 与训练配置解析通过；模型级训练待权重 |
+| WorldEngine、Apollo VisionNet | 尚未选定或构建 | 无 | 旧版 OpenMMLab 依赖未完成 A3 兼容验证，2# 未接入 |
+
+DrivingSDK 官方标签、派生镜像 Dockerfile、包版本和构建方法，以及 Qwen 镜像版本清单见[环境指南](docs/environment.md)。`sha256:523...` 和 `sha256:a95...` 是上游 ARM64 manifest digest；`sha256:34a...` 和 `sha256:8aa...` 是 1# 本地 Docker image ID，两类标识不可互换。WorldEngine 与 Apollo 的补丁静态通过，不表示现有镜像可运行其训练。
 
 ## 本地准备
 

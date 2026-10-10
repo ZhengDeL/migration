@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-在隔离的 DrivingSDK/BEVFormer 环境中安装配套 CANN、PyTorch、TorchNPU、mx_driving，以及按官方补丁源码构建的 MMCV、mmdet、mmdet3d。训练前执行 `python3 tools/check_env.py --model bevformer --nproc 2`。版本配套与镜像候选见仓库 `docs/environment.md`。
+1# 实际双卡 mini 训练使用 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`（Docker image ID `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`）的独立 `bevformer` 环境。该镜像从华为 DrivingSDK A3/openEuler 官方标签 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10` 的 ARM64 manifest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 派生，只修正预置 OpenCV 的 headless 冲突；构建方法见仓库[环境指南](../../../../../docs/environment.md)和[Dockerfile](../../../../../docker/DrivingSDK-headless.Dockerfile)。实测环境为 CANN 9.1.0、Python 3.10.21、PyTorch 2.7.1+cpu、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2，并预置 BEVFormer 对应的 MMCV/mmdet/mmdet3d。训练前执行 `python3 tools/check_env.py --model bevformer --nproc 2`；镜像导入不等于当前设备已通过训练检查。
 
 模型源码下需有 nuScenes v1.0 full、CAN bus、`data/nuscenes/nuscenes_infos_temporal_{train,val}.pkl`、`ckpts/r101_dcn_fcos3d_pretrain.pth`。请按 DrivingSDK 样例生成标注；数据和权重不进入 Git。
 
@@ -22,6 +22,8 @@ python3 tools/create_bevformer_mini_infos.py \
 若没有单独的 CAN bus 扩展包，固定上游转换函数会将缺失场景的 CAN bus 信息填零；这种标注仅用于功能检查，不用于精度结论。预训练权重仍须按上游 README 获取。
 
 ## 快速开始
+
+1# 上已准备镜像和 mini 数据时，从仓库根目录依次执行 `bash tools/quickstart.sh bevformer check`、`bash tools/quickstart.sh bevformer plan`、`bash tools/quickstart.sh bevformer mini`。命令作用和通过标准见[快速上手](../../../../../docs/quickstart.md)。
 
 以下命令从仓库根目录执行；未传 `--execute` 时只检查并打印启动计划：
 

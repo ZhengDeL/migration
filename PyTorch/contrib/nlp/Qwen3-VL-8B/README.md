@@ -6,9 +6,11 @@
 
 ## 环境和数据
 
-按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。1# 已导入 `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36` 的 ARM64 镜像；版本与镜像 ID 见[环境指南](../../../../docs/environment.md)。`run_train.py` 会优先从锁定的 LLaMA-Factory 源码 `src` 导入训练代码。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。
+按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。1# 实际使用 `local/llamafactory:a3-arm64-20261010`（Docker image ID `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8`），来源为 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 ARM64 manifest `sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36`。实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0；版本和归档 SHA256 详见[环境指南](../../../../docs/environment.md)。`run_train.py` 会优先从锁定的 LLaMA-Factory 源码 `src` 导入训练代码。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。当前已在该镜像通过双卡基础 NPU/HCCL 和 SFT 配置解析；Qwen 模型级训练尚未通过。
 
 ## 快速开始
+
+1# 上已准备镜像和完整模型权重时，从仓库根目录依次执行 `bash tools/quickstart.sh qwen3vl8b check`、`bash tools/quickstart.sh qwen3vl8b plan`、`bash tools/quickstart.sh qwen3vl8b mini`。命令作用、模型目录覆盖方法和通过标准见[快速上手](../../../../docs/quickstart.md)。
 
 以下命令从仓库根目录执行；默认 `mllm_demo` 仅用于功能试跑，未传 `--execute` 时只打印计划：
 

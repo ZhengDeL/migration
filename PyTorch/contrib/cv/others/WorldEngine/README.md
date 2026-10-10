@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-上游安装指南依赖旧版 CUDA/OpenMMLab，尚未证明可与当前 TorchNPU A3 环境兼容。必须先建立独立的 MMCV/mmdet/mmdet3d 依赖矩阵、源码编译、`python3 tools/check_env.py --model worldengine --nproc 4` 和算子数值检查；不能把本地静态检查当成环境通过。
+**当前未选定、构建或在 2# 验证 WorldEngine 训练镜像。** 上游 AlgEngine 使用 Python 3.9、CUDA PyTorch 2.0.1、MMCV 1.6.2、MMDetection3D 1.0.0rc6；这些包尚未证明可与当前 TorchNPU A3 环境兼容。1# 的 DrivingSDK 派生镜像仅验证了 BEVFormer/Sparse4D，不能当作本模型的已验证镜像。必须先在 2# 核对硬件和驱动，再建立独立的 CANN/TorchNPU/MMCV/mmdet/mmdet3d 依赖矩阵、源码编译、`python3 tools/check_env.py --model worldengine --nproc 4` 和算子数值检查；不能把本地静态检查当成环境通过。镜像选择原则见仓库[环境指南](../../../../../docs/environment.md)。
 
 按上游 [AlgEngine 数据说明](https://github.com/OpenDriveLab/WorldEngine/blob/main/docs/algengine_usage.md)准备 OpenScene/NAVSIM 数据、`nuplan_openscene_nav{train,test}.pkl`、`test_8192_kmeans.npy` 和配置引用的基座 checkpoint。数据路径详见根目录 `docs/environment.md`。
 
