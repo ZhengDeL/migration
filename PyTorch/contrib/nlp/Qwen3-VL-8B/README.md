@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器，并先固定所用镜像 digest。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。
+按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。1# 已导入 `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36` 的 ARM64 镜像；版本与镜像 ID 见[环境指南](../../../../docs/environment.md)。`run_train.py` 会优先从锁定的 LLaMA-Factory 源码 `src` 导入训练代码。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。
 
 ## 快速开始
 
@@ -22,8 +22,8 @@ bash PyTorch/contrib/nlp/Qwen3-VL-8B/test/train_2p.sh --smoke
 bash PyTorch/contrib/nlp/Qwen3-VL-8B/test/train_2p.sh --smoke --execute
 ```
 
-`--smoke` 跑 10 次优化迭代；完整训练移除该参数。脚本拒绝用 `mllm_demo` 做完整训练，并检查固定快照版本、模型类型、全部权重分片和数据集注册。两卡显存占用须在实机确认。
+`--smoke` 跑 10 次优化迭代；完整训练移除该参数。脚本拒绝用 `mllm_demo` 做完整训练，并检查固定快照版本、模型类型、全部权重分片和数据集注册。`fetch_qwen.py` 对四个分片逐一核对模型发布方在该固定快照的 SHA256。两卡显存占用须在实机确认。
 
 ## 验证和状态
 
-本地已验证 YAML 解析、上游模板名和启动命令；910C 训练尚未执行。实机需核对两 rank 有限 loss、LoRA 参数更新、checkpoint，以及独立图文样本的答案内容。仅有训练 loss 不代表多模态能力达标。
+本地已验证 YAML 解析、上游模板名和启动命令；1# 已下载锁定的 LLaMA-Factory 源码，核对独立 NPU 镜像内容并通过该镜像的双 rank 基础训练/HCCL。Qwen 模型级训练尚未执行。实机需核对两 rank 有限 loss、LoRA 参数更新、checkpoint，以及独立图文样本的答案内容。仅有训练 loss 不代表多模态能力达标。

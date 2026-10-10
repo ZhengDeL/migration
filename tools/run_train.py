@@ -173,6 +173,11 @@ def main() -> int:
         if args.execute and not args.smoke and args.dataset_id == "mllm_demo":
             raise RuntimeError("demo dataset is not a full training dataset")
         env["FORCE_TORCHRUN"] = "1"
+        env["NPROC_PER_NODE"] = str(NPROC[args.model])
+        # The image supplies binary dependencies, while the pinned checkout
+        # supplies LLaMA-Factory code. The CLI imports this src tree first.
+        env["PYTHONPATH"] = os.pathsep.join(
+            part for part in (str(source / "src"), env.get("PYTHONPATH", "")) if part)
         command = ["llamafactory-cli", "train", str(ROOT / "PyTorch/contrib/nlp/Qwen3-VL-8B/qwen3vl8b_lora_npu.yaml"),
                    f"model_name_or_path={args.model_path.resolve()}", f"dataset={args.dataset_id}",
                    f"output_dir={output}"]

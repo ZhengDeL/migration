@@ -26,7 +26,7 @@ docker build --network none -f docker/DrivingSDK-headless.Dockerfile \
 
 下载网络及代理由现场配置；Dockerfile 自身不访问网络，也不修改宿主软件。1# 实际构建的派生镜像标签为 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`，镜像 ID 为 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。BEVFormer 与 Sparse4D 使用该镜像完成了双卡 mini 功能训练。两套容器的 `check_env.py` 均报告 `pass_with_warnings`：包、NPU 数量和算子导入通过；容器内 `npu-smi info` 返回 211/`-9005`，宿主机 `npu-smi info` 正常。容器管理面告警与实际计算结果须分别留证。
 
-Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。与本仓锁定的 LLaMA-Factory 源码同一提交的镜像说明列出 CANN 9.1.0、Python 3.12、PyTorch 2.10.0 和 TorchNPU 2.10.0.post2；`latest-a3-openeuler` 是会变化的标签，不能直接作为可复现版本。Qwen 镜像尚未在本项目机器上拉取或验证，选定后应固定 arm64 digest，再核对容器内实际包版本。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
+Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。2026-10-10 在 1# 将 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 linux/arm64 manifest 固定为 `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36`；导入 Docker 后镜像 ID 为 `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8`，本地标签 `local/llamafactory:a3-arm64-20261010`。容器内实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0。导出归档为 5643616256 字节，SHA256 `4fd28e7884c48b846826c714a19ec57e722f8cf3203c9454c5a4b2cc956c7d31`。在该镜像里两物理卡实测基础前后向、参数更新和 HCCL all-reduce 均通过；这仅是基础栈证据，Qwen 模型训练仍需权重和数据。标签会变化，后续复用以上 digest；`run_train.py` 将已锁定 LLaMA-Factory 源码的 `src` 放在 `PYTHONPATH` 首位。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 
 若不用官方预置环境，按各模型 README 和 DrivingSDK 补丁**源码编译** MMCV、mmdet、mmdet3d；不能直接安装未适配的 `mmcv-full` CUDA wheel。WorldEngine 与 Apollo 的旧版 OpenMMLab 依赖必须分别隔离并做 API/算子兼容验证，不能用 BEVFormer 环境导入成功作为它们训练可用的证据。
 
@@ -34,7 +34,7 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 
 ## 数据与权重
 
-公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 通过 `huggingface_hub.snapshot_download` 下载锁定的模型快照并核对权重分片。两个脚本默认只输出计划，执行时加 `--execute`。Qwen 下载脚本需在独立环境中预装 `huggingface_hub`，并预留模型权重和缓存空间。nuScenes、OpenScene 等数据集不由这些脚本自动下载；按上游许可和登录流程准备。
+公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 通过 `huggingface_hub.snapshot_download` 下载锁定的模型快照并核对四个分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。Qwen 下载脚本需在独立环境中预装 `huggingface_hub`，并为 17,534,247,392 字节的四个权重分片及缓存预留足够空间；可用 `--destination` 把模型放在仓库外的数据卷。nuScenes、OpenScene 等数据集不由这些脚本自动下载；按上游许可和登录流程准备。
 
 | 模型 | 训练前必须由数据负责人提供 |
 | --- | --- |

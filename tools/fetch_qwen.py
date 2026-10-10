@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -27,10 +28,21 @@ def verify(directory: Path) -> None:
     weight_map = index.get("weight_map")
     if not isinstance(weight_map, dict) or not weight_map:
         raise RuntimeError("model.safetensors.index.json has no weight map")
-    for shard in set(weight_map.values()):
+    shards = set(weight_map.values())
+    expected = SPEC["checkpoint_shards_sha256"]
+    if shards != set(expected):
+        raise RuntimeError("model shard list differs from pinned snapshot")
+    for shard in sorted(shards):
         path = directory / shard
         if not path.is_file() or path.stat().st_size < 1024 * 1024:
             raise RuntimeError(f"model shard missing or incomplete: {path}")
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            while block := stream.read(8 * 1024 * 1024):
+                digest.update(block)
+        if digest.hexdigest() != expected[shard]:
+            raise RuntimeError(f"model shard SHA256 mismatch: {shard}")
+        print(f"verified {shard}: sha256:{digest.hexdigest()}")
 
 
 def main() -> int:

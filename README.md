@@ -8,7 +8,7 @@
 | --- | ---: | --- | --- |
 | [cv/detection/BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | DrivingSDK 官方 NPU 补丁与 worker 序列化兼容补丁，FP16 训练 | 1# mini 162 迭代/1 epoch 正常退出，有限 loss、checkpoint 已核验；待完整数据精度 |
 | [cv/detection/Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | DrivingSDK 官方 NPU 补丁、普通 AdamW/逐参数裁剪兼容覆盖、2 卡配置 | 1# mini 10 迭代正常退出，有限 loss、checkpoint 已核验；待完整数据精度和性能 |
-| [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | YAML 和命令静态检查通过；待权重、业务数据和 NPU 实训 |
+| [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | LLaMA-Factory BF16 LoRA SFT | 上游源码与独立 A3 ARM64 镜像已在 1# 核对；该镜像双 rank 基础 NPU/HCCL 通过，待权重、业务数据和模型级实训 |
 | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 | AlgEngine VADv2 50% 的 NPU 入口与变形注意力补丁 | 补丁可应用、代码可编译；SimEngine 和完整后训练链路未适配 |
 | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 官方 BEV+OCC 训练仓的 DLA34 配置与变形注意力补丁 | 补丁可应用、代码可编译；待旧版 MMDetection3D 兼容性验证 |
 
@@ -24,7 +24,7 @@ python3 -m pip install huggingface_hub
 python3 tools/fetch_qwen.py --execute
 ```
 
-脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，并存入被 Git 忽略的 `sources/`。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
+脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，Qwen 四个权重分片另按固定 SHA256 校验；默认存入被 Git 忽略的 `sources/`，也可用 `fetch_qwen.py --destination` 放在仓库外的数据卷。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
 
 ```bash
 python3 tools/prepare.py bevformer --source sources/BEVFormer --sdk sources/DrivingSDK --apply
