@@ -2,7 +2,7 @@
 
 目录参考 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的 `PyTorch/contrib/{cv,nlp}/<类别>/<模型>` 组织方式。每个模型目录保留独立 README、迁移补丁或配置、`test/` 启动脚本；共享的版本锁定和预检工具位于仓库根目录。截至 2026-10-10，本仓已在 1# 导入固定 digest 的 DrivingSDK 镜像并构建 headless 派生镜像，完成基础双 rank 与四 rank NPU/HCCL、变形注意力数值检查，以及 BEVFormer、Sparse4D 使用公开 nuScenes mini 的双卡模型训练功能试验。四 rank 是 1# 的基础通信与参数更新试验，不是 WorldEngine/Apollo 的模型级训练。上述结果不包含完整数据集精度或正式训练硬件支持验收。
 
-**第一次使用：**先看[1# 双卡快速上手](docs/quickstart.md)。在已准备好镜像和数据的 1# 上，从仓库根目录执行 `bash tools/quickstart.sh bevformer check` 检查环境，再执行 `bash tools/quickstart.sh bevformer plan` 查看缺失文件；准备齐全后执行 `bash tools/quickstart.sh bevformer mini`。Sparse4D 将模型名换为 `sparse4d`；Qwen 将模型名换为 `qwen3vl8b`，需先下载完整权重。
+**第一次使用：**先看[1# 双卡快速上手](docs/quickstart.md)。在已准备好镜像和数据的 1# 上，从仓库根目录执行 `bash tools/quickstart.sh bevformer check` 检查环境，再执行 `bash tools/quickstart.sh bevformer plan` 查看缺失文件；准备齐全后执行 `bash tools/quickstart.sh bevformer mini`。Sparse4D 将模型名换为 `sparse4d`；Qwen 先执行 `bash tools/quickstart.sh qwen3vl8b download` 下载并校验权重。
 
 ## 范围和状态
 
@@ -36,7 +36,7 @@ python3 -m pip install huggingface_hub
 python3 tools/fetch_qwen.py --execute
 ```
 
-脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，Qwen 四个权重分片另按固定 SHA256 校验；默认存入被 Git 忽略的 `sources/`，也可用 `fetch_qwen.py --destination` 放在仓库外的数据卷。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
+脚本以 `sources.lock.json` 的完整提交或模型快照 SHA 下载，Qwen 四个权重分片另按固定 SHA256 校验；默认存入被 Git 忽略的 `sources/`，也可用 `fetch_qwen.py --destination` 放在仓库外的数据卷。Qwen 官方 ModelScope 镜像源可通过 `fetch_qwen.py --hub modelscope --execute` 使用，锁定独立提交并以相同四个分片 SHA256 核验。如果训练机不能直连，可从可信机器传输相同快照。完成下载后应用补丁：
 
 ```bash
 python3 tools/prepare.py bevformer --source sources/BEVFormer --sdk sources/DrivingSDK --apply

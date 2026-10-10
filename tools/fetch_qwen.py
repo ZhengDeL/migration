@@ -12,9 +12,18 @@ from prepare import LOCK, ROOT
 
 
 SPEC = LOCK["qwen3vl8b"]
-ASSETS = ("config.json", "tokenizer.json", "tokenizer_config.json",
+ASSETS = ("config.json", "generation_config.json", "chat_template.json",
+          "tokenizer.json", "tokenizer_config.json", "merges.txt", "vocab.json",
           "preprocessor_config.json", "video_preprocessor_config.json",
           "model.safetensors.index.json")
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        while block := stream.read(8 * 1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def verify(directory: Path) -> None:
@@ -36,37 +45,51 @@ def verify(directory: Path) -> None:
         path = directory / shard
         if not path.is_file() or path.stat().st_size < 1024 * 1024:
             raise RuntimeError(f"model shard missing or incomplete: {path}")
-        digest = hashlib.sha256()
-        with path.open("rb") as stream:
-            while block := stream.read(8 * 1024 * 1024):
-                digest.update(block)
-        if digest.hexdigest() != expected[shard]:
+        digest = sha256_file(path)
+        if digest != expected[shard]:
             raise RuntimeError(f"model shard SHA256 mismatch: {shard}")
-        print(f"verified {shard}: sha256:{digest.hexdigest()}")
+        print(f"verified {shard}: sha256:{digest}")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", type=Path,
                         default=ROOT / "sources/Qwen3-VL-8B-Instruct")
+    parser.add_argument("--hub", choices=("huggingface", "modelscope"),
+                        default="huggingface", help="official publisher mirror; both verify pinned weight hashes")
     parser.add_argument("--execute", action="store_true", help="download the model snapshot")
     args = parser.parse_args()
     directory = args.destination.resolve()
-    report = {"repo_id": SPEC["checkpoint"],
-              "revision": SPEC["checkpoint_revision"],
+    repo_id = SPEC["checkpoint"] if args.hub == "huggingface" else SPEC["checkpoint_modelscope"]
+    revision = (SPEC["checkpoint_revision"] if args.hub == "huggingface"
+                else SPEC["checkpoint_modelscope_revision"])
+    report = {"hub": args.hub, "repo_id": repo_id,
+              "revision": revision,
               "destination": str(directory), "execute": args.execute}
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if not args.execute:
         return 0
-    from huggingface_hub import snapshot_download
+    if args.hub == "huggingface":
+        from huggingface_hub import snapshot_download
 
-    snapshot_download(repo_id=SPEC["checkpoint"],
-                      revision=SPEC["checkpoint_revision"],
-                      local_dir=str(directory), max_workers=4)
+        snapshot_download(repo_id=repo_id, revision=revision,
+                          local_dir=str(directory), max_workers=4)
+    else:
+        from modelscope import snapshot_download
+
+        needed = [name for name in ASSETS if not (directory / name).is_file()]
+        for name, expected in SPEC["checkpoint_shards_sha256"].items():
+            path = directory / name
+            if not path.is_file() or path.stat().st_size < 1024 * 1024 or sha256_file(path) != expected:
+                needed.append(name)
+        if needed:
+            snapshot_download(model_id=repo_id, revision=revision,
+                              local_dir=str(directory), allow_file_pattern=needed,
+                              max_workers=4)
     verify(directory)
-    (directory / ".source_revision").write_text(
-        SPEC["checkpoint_revision"] + "\n", encoding="utf-8")
-    print("validated pinned Qwen3-VL-8B checkpoint")
+    marker = ".source_revision" if args.hub == "huggingface" else ".source_modelscope_revision"
+    (directory / marker).write_text(revision + "\n", encoding="utf-8")
+    print(f"validated pinned Qwen3-VL-8B checkpoint from {args.hub}")
     return 0
 
 

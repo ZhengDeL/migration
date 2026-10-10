@@ -10,7 +10,7 @@ bash tools/quickstart.sh bevformer plan
 bash tools/quickstart.sh bevformer mini
 ```
 
-把上面命令中的 `bevformer` 换成 `sparse4d` 即可检查或运行 Sparse4D。`qwen3vl8b` 也使用同一入口，但必须先下载并校验完整 Qwen3-VL-8B-Instruct 权重；`plan` 会显示缺少的模型文件或数据集。默认模型目录为 `/var/ai-model/lzd/weights/qwen3-vl-8b-instruct`，可用 `QWEN_MODEL_DIR` 指定其他目录。Qwen 的 `mini` 使用 LLaMA-Factory 自带 `mllm_demo`，正式训练必须在源码 `data/dataset_info.json` 注册自己的图文数据集，并设置 `QWEN_DATASET_ID`。
+把上面命令中的 `bevformer` 换成 `sparse4d` 即可检查或运行 Sparse4D。`qwen3vl8b` 也使用同一入口；先运行 `download` 从 Qwen 官方 ModelScope 仓下载固定提交并核对四个权重分片的 SHA256，然后运行 `plan` 查看是否还缺文件。默认模型目录为 `/var/ai-model/lzd/weights/qwen3-vl-8b-instruct`，可用 `QWEN_MODEL_DIR` 指定其他目录。下载可续传，但必须看到校验完成及 `plan` 的 `missing_data` 为空后才执行 `mini`。1# 需要经现场批准的网络代理时，先为当前 shell 配置 `HTTPS_PROXY`、`HTTP_PROXY`；脚本只把它们传给下载容器。Qwen 的 `mini` 使用 LLaMA-Factory 自带 `mllm_demo`，正式训练必须在源码 `data/dataset_info.json` 注册自己的图文数据集，并设置 `QWEN_DATASET_ID`。
 
 ```bash
 bash tools/quickstart.sh sparse4d check
@@ -18,6 +18,7 @@ bash tools/quickstart.sh sparse4d plan
 bash tools/quickstart.sh sparse4d mini
 
 bash tools/quickstart.sh qwen3vl8b check
+bash tools/quickstart.sh qwen3vl8b download
 bash tools/quickstart.sh qwen3vl8b plan
 bash tools/quickstart.sh qwen3vl8b mini
 ```

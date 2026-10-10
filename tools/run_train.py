@@ -127,12 +127,15 @@ def main() -> int:
         else:
             if not (model_dir / "config.json").is_file():
                 missing.append(str(model_dir / "config.json"))
-            revision_file = model_dir / ".source_revision"
-            if not revision_file.is_file():
-                missing.append(str(revision_file))
-            elif revision_file.read_text(encoding="utf-8").strip() != LOCK["qwen3vl8b"]["checkpoint_revision"]:
-                raise RuntimeError("Qwen model snapshot revision differs from sources.lock.json")
-            for asset in ("tokenizer.json", "tokenizer_config.json",
+            hf_marker = model_dir / ".source_revision"
+            ms_marker = model_dir / ".source_modelscope_revision"
+            hf_verified = (hf_marker.is_file() and
+                           hf_marker.read_text(encoding="utf-8").strip() == LOCK["qwen3vl8b"]["checkpoint_revision"])
+            ms_verified = (ms_marker.is_file() and
+                           ms_marker.read_text(encoding="utf-8").strip() == LOCK["qwen3vl8b"]["checkpoint_modelscope_revision"])
+            if not (hf_verified or ms_verified):
+                missing.append(f"{hf_marker} or {ms_marker}: pinned download verification required")
+            for asset in ("tokenizer.json", "tokenizer_config.json", "merges.txt", "vocab.json",
                           "preprocessor_config.json", "video_preprocessor_config.json"):
                 if not (model_dir / asset).is_file():
                     missing.append(str(model_dir / asset))
@@ -223,6 +226,9 @@ def main() -> int:
         return 0
     if missing:
         raise RuntimeError("required data or weight files are missing")
+    if args.model == "qwen3vl8b":
+        from fetch_qwen import verify
+        verify(args.model_path.resolve())
     check = [sys.executable, str(ROOT / "tools/check_env.py"), "--model", args.model,
              "--nproc", str(NPROC[args.model]), "--output", str(output / "environment.json")]
     subprocess.run(check, env=env, check=True)

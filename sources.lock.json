@@ -25,6 +25,8 @@
     "revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
     "checkpoint": "Qwen/Qwen3-VL-8B-Instruct",
     "checkpoint_revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+    "checkpoint_modelscope": "Qwen/Qwen3-VL-8B-Instruct",
+    "checkpoint_modelscope_revision": "5d854aab08710c16b980ec6d603d863b3821b915",
     "checkpoint_shards_sha256": {
       "model-00001-of-00004.safetensors": "d5d0aef0eb170fc7453a296c43c0849a56f510555d3588e4fd662bb35490aefa",
       "model-00002-of-00004.safetensors": "8be88fb5501e4d5719a6d4cc212e6a13480330e74f3e8c77daa1a68f199106b5",

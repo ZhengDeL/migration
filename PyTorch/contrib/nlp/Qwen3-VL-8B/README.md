@@ -10,13 +10,15 @@
 
 ## 快速开始
 
-1# 上已准备镜像和完整模型权重时，从仓库根目录依次执行 `bash tools/quickstart.sh qwen3vl8b check`、`bash tools/quickstart.sh qwen3vl8b plan`、`bash tools/quickstart.sh qwen3vl8b mini`。命令作用、模型目录覆盖方法和通过标准见[快速上手](../../../../docs/quickstart.md)。
+1# 上已准备镜像时，从仓库根目录依次执行 `bash tools/quickstart.sh qwen3vl8b check`、`bash tools/quickstart.sh qwen3vl8b download`、`bash tools/quickstart.sh qwen3vl8b plan`；确认 `missing_data` 为空后执行 `bash tools/quickstart.sh qwen3vl8b mini`。`download` 使用 [Qwen 官方 ModelScope 仓](https://modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct)的固定提交 `5d854aab08710c16b980ec6d603d863b3821b915`，逐分片对照 `sources.lock.json` 中 Hugging Face 固定快照的 SHA256。两仓的提交号不同，校验通过表示四个权重分片内容一致；各自来源标记分别为 `.source_revision` 和 `.source_modelscope_revision`。命令作用、代理配置、模型目录覆盖方法和通过标准见[快速上手](../../../../docs/quickstart.md)。
 
 以下命令从仓库根目录执行；默认 `mllm_demo` 仅用于功能试跑，未传 `--execute` 时只打印计划：
 
 ```bash
 python3 tools/fetch_sources.py qwen3vl8b --execute
 python3 tools/fetch_qwen.py --execute
+# 若 Hugging Face 线路不稳，可使用 Qwen 官方 ModelScope 仓：
+python3 tools/fetch_qwen.py --hub modelscope --execute
 python3 tools/prepare.py qwen3vl8b --source sources/LLaMA-Factory
 export QWEN_MODEL_DIR=/path/to/Qwen3-VL-8B-Instruct
 export QWEN_DATASET_ID=my_multimodal_dataset
