@@ -17,6 +17,19 @@ ROOT = Path(__file__).resolve().parents[1]
 LOCK = json.loads((ROOT / "sources.lock.json").read_text(encoding="utf-8"))
 MODELS = tuple(name for name in LOCK if name != "drivingsdk")
 
+# The pinned DrivingSDK Sparse4D helper uses fused clipping. On the tested A3
+# stack its combined gradient and mask lengths differ on the first step. Keep
+# the clipping threshold and norm while using the per-parameter PyTorch path.
+SPARSE_CLIP_ORIGINAL = b"return runner.optimizer.clip_grad_norm_fused_(**self.grad_clip)"
+SPARSE_CLIP_REPLACEMENT = b"return torch.nn.utils.clip_grad_norm_(params, **self.grad_clip)"
+
+
+def sparse_helper_bytes(supplied: Path) -> bytes:
+    content = supplied.read_bytes()
+    if content.count(SPARSE_CLIP_ORIGINAL) != 1:
+        raise RuntimeError(f"{supplied}: expected one pinned fused clip call")
+    return content.replace(SPARSE_CLIP_ORIGINAL, SPARSE_CLIP_REPLACEMENT)
+
 
 def run(*args: str, cwd: Path, check: bool = True,
         env: dict[str, str] | None = None, input: bytes | None = None) -> subprocess.CompletedProcess:
@@ -113,9 +126,10 @@ def stage_sparse4d_files(source: Path, sdk: Path) -> None:
     official = sdk / "model_examples" / "Sparse4D"
     target = source / "tools" / "patch.py"
     supplied = official / "patch.py"
-    if target.exists() and target.read_bytes() != supplied.read_bytes():
+    expected = sparse_helper_bytes(supplied)
+    if target.exists() and target.read_bytes() not in (supplied.read_bytes(), expected):
         raise RuntimeError(f"refusing to replace nonmatching {target}")
-    shutil.copy2(supplied, target)
+    target.write_bytes(expected)
     test_target = source / "test"
     test_target.mkdir(exist_ok=True)
     for script in (official / "test").glob("*.sh"):
@@ -131,7 +145,8 @@ def verify_sparse4d_files(source: Path, sdk: Path) -> None:
     files.extend((script, source / "test" / script.name)
                  for script in (official / "test").glob("*.sh"))
     for supplied, target in files:
-        if not supplied.is_file() or not target.is_file() or supplied.read_bytes() != target.read_bytes():
+        expected = sparse_helper_bytes(supplied) if supplied.name == "patch.py" else supplied.read_bytes()
+        if not supplied.is_file() or not target.is_file() or expected != target.read_bytes():
             raise RuntimeError(f"{target}: missing or differs from pinned DrivingSDK copy")
 
 
