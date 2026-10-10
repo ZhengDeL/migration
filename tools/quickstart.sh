@@ -120,10 +120,10 @@ if [[ "$model" == qwen3vl8b ]]; then
 else
   docker_args+=(-e "PATH=/opt/conda/envs/$model/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
 fi
+if [[ "$action" == check ]]; then docker_args+=(-e PYTHONWARNINGS=ignore); fi
 docker_args+=(--entrypoint "$py" "$image")
 
 if [[ "$action" == check ]]; then
-  docker_args+=(-e PYTHONWARNINGS=ignore)
   command=(tools/check_env.py --model "$model" --nproc 2
            --output "outputs/$model/environment.json" --summary)
 else
