@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-按 LLaMA-Factory 的 [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/main/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。
+按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器，并先固定所用镜像 digest。训练前执行 `python3 tools/check_env.py --model qwen3vl8b --nproc 2`。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。
 
 ## 快速开始
 

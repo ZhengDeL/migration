@@ -16,7 +16,7 @@
 
 ## 本地准备
 
-可以直接在训练服务器下载公开源码和 Qwen 权重。下载脚本默认只打印计划，追加 `--execute` 才联网；先在 1# 下载 DrivingSDK、BEVFormer、Sparse4D、LLaMA-Factory，后续在 2# 下载 WorldEngine 和 Apollo-Vision-Net。nuScenes、OpenScene 和预训练权重按各上游的数据获取流程准备。以下命令从仓库根目录执行：
+可以直接在训练服务器下载公开源码和 Qwen 权重。仓库工具要求 Python 3.10+，应在相应的训练容器或独立环境中运行；宿主机系统 Python 版本不一定满足要求。下载脚本默认只打印计划，追加 `--execute` 才联网；先在 1# 下载 DrivingSDK、BEVFormer、Sparse4D、LLaMA-Factory，后续在 2# 下载 WorldEngine 和 Apollo-Vision-Net。若服务器需要代理，仅为下载命令配置经批准的 `HTTP_PROXY`/`HTTPS_PROXY` 环境变量，不改系统 DNS 或 Docker 守护进程配置。nuScenes、OpenScene 和预训练权重按各上游的数据获取流程准备。以下命令从仓库根目录执行：
 
 ```bash
 python3 tools/fetch_sources.py drivingsdk bevformer sparse4d qwen3vl8b --execute
