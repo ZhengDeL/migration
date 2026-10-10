@@ -25,7 +25,7 @@ DATA_FILES = {
     "sparse4d": ["data/nuscenes_anno_pkls/nuscenes_infos_train.pkl",
                  "data/nuscenes_anno_pkls/nuscenes_infos_val.pkl",
                  "data/nuscenes",
-                 "nuscenes_kmeans900.npy", "ckpt/resnet50-19c8e357.pth"],
+                 "nuscenes_kmeans900.npy", "ckpt/resnet50-19c8e357-modern.pth"],
     "apollo_visionnet": ["data/occ_gt_release_v1_0/nuscenes_infos_temporal_train_occ_gt.pkl",
                          "data/occ_gt_release_v1_0/nuscenes_infos_temporal_val_occ_gt.pkl",
                          "data/nuscenes",
@@ -48,6 +48,8 @@ def sparse_config(source: Path, output: Path, smoke: bool,
         "total_batch_size = 48": "total_batch_size = 2",
         "num_gpus = 8": "num_gpus = 2",
         "lr=6e-4,": "lr=2.5e-5,",
+        'pretrained="ckpt/resnet50-19c8e357.pth"':
+            'pretrained="ckpt/resnet50-19c8e357-modern.pth"',
     }
     for old, new in substitutions.items():
         if content.count(old) != 1:

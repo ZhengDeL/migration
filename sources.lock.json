@@ -14,7 +14,9 @@
     "url": "https://github.com/HorizonRobotics/Sparse4D.git",
     "revision": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
     "patch": "drivingsdk:model_examples/Sparse4D/Sparse4D.patch",
-    "patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314"
+    "patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314",
+    "pretrain_url": "https://download.pytorch.org/models/resnet50-19c8e357.pth",
+    "pretrain_sha256": "19c8e3572231adff6824a2da93fd67b5986919a2e65f8b6007eab4edee220097"
   },
   "qwen3vl8b": {
     "url": "https://github.com/hiyouga/LLaMA-Factory.git",

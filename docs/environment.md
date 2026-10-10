@@ -19,7 +19,7 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 | 模型 | 训练前必须由数据负责人提供 |
 | --- | --- |
 | BEVFormer | nuScenes v1.0 full、CAN bus、`nuscenes_infos_temporal_{train,val}.pkl`、`r101_dcn_fcos3d_pretrain.pth`，参见 [官方示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/BEVFormer/README.md)。 |
-| Sparse4D | nuScenes、`nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy`、ResNet50 预训练权重，参见 [官方示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)。 |
+| Sparse4D | nuScenes、`nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy`、ResNet50 预训练权重；旧版官方权重须按[模型说明](../PyTorch/contrib/cv/detection/Sparse4D/README.md)转换格式，参见 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)。 |
 | Qwen3-VL-8B | `Qwen3-VL-8B-Instruct` 本地完整权重/processor、按 LLaMA-Factory `data/dataset_info.json` 注册的图文训练集、独立验证集；`mllm_demo` 仅用于 smoke。 |
 | WorldEngine | 官方 OpenScene/NAVSIM 数据、已处理的 AlgEngine 标注、`test_8192_kmeans.npy` 和配置引用的基座 checkpoint，参见 [数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/main/docs/data_organization.md)。 |
 | Apollo VisionNet | nuScenes、CAN bus、OCC 标注/生成的 train/val pkl、DLA34 预训练权重，参见 [官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/main/docs/prepare_dataset.md)。 |
