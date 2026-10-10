@@ -10,12 +10,14 @@ import os
 import re
 import subprocess
 import sys
+import warnings
 from pathlib import Path
 
 
-def package(name: str) -> tuple[object | None, str | None]:
+def package(name: str, quiet: bool = False) -> tuple[object | None, str | None]:
     try:
-        return importlib.import_module(name), None
+        with warnings.catch_warnings(record=quiet):
+            return importlib.import_module(name), None
     except Exception as exc:  # report incompatible binary imports as well
         return None, f"{type(exc).__name__}: {exc}"
 
@@ -40,8 +42,8 @@ def main() -> int:
         "checks": {},
     }
     checks: dict[str, object] = info["checks"]  # type: ignore[assignment]
-    torch, checks["torch_import_error"] = package("torch")
-    torch_npu, checks["torch_npu_import_error"] = package("torch_npu")
+    torch, checks["torch_import_error"] = package("torch", args.summary)
+    torch_npu, checks["torch_npu_import_error"] = package("torch_npu", args.summary)
     if torch is not None:
         info["torch"] = getattr(torch, "__version__", "unknown")
     if torch_npu is not None:
@@ -61,18 +63,18 @@ def main() -> int:
     if args.model != "qwen3vl8b":
         dependencies = ("mmcv", "mmdet") if args.model == "sparse4d" else ("mmcv", "mmdet", "mmdet3d", "mmseg")
         for dependency in dependencies:
-            module, error = package(dependency)
+            module, error = package(dependency, args.summary)
             checks[f"{dependency}_import_error"] = error
             if module is not None:
                 info[f"{dependency}_version"] = getattr(module, "__version__", "unknown")
-        mx_driving, checks["mx_driving_import_error"] = package("mx_driving")
+        mx_driving, checks["mx_driving_import_error"] = package("mx_driving", args.summary)
         if mx_driving is not None:
             checks["msda_operator"] = callable(getattr(mx_driving, "multi_scale_deformable_attn", None))
-        mmcv_npu, checks["mmcv_npu_import_error"] = package("mmcv.device.npu")
+        mmcv_npu, checks["mmcv_npu_import_error"] = package("mmcv.device.npu", args.summary)
         if mmcv_npu is not None:
             checks["npu_distributed_wrapper"] = hasattr(mmcv_npu, "NPUDistributedDataParallel")
     else:
-        factory, checks["llamafactory_import_error"] = package("llamafactory")
+        factory, checks["llamafactory_import_error"] = package("llamafactory", args.summary)
         checks["llamafactory_imported"] = factory is not None
 
     try:
