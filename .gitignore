@@ -8,6 +8,7 @@ ckpts/
 ckpt/
 outputs/
 work_dirs/
+wheelhouse/
 *.log
 *.pth
 *.pt

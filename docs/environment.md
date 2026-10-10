@@ -6,6 +6,22 @@
 
 [DrivingSDK v26.1.0 安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)列出的 A3/openEuler 镜像是 `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk:26.1.0-9.1.0-torch_npu2.7.1.post6-a3-openeuler24.03-py3.10`。本项目 2026-10-10 在 1# 按 linux/arm64 manifest digest `sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` 拉取并导入 Docker。容器内 `torch2.7.1`、`bevformer` 和 `sparse4d` 环境均为 Python 3.10.21、PyTorch 2.7.1、TorchNPU 2.7.1.post6、mx_driving 26.1.0.post2；两个模型环境分别预装了相应 OpenMMLab 依赖。宿主驱动、固件、设备挂载以及 NPU 算子仍须由实机检查确认，包版本检查不代表训练通过。
 
+该官方镜像的两个模型环境同时装有 `opencv-python` 和 `opencv-python-headless` 4.11.0.86；无设备容器内导入 MMCV 时，当前 `cv2` 二进制缺少 `libGL.so.1`。本仓的 [派生镜像 Dockerfile](../docker/DrivingSDK-headless.Dockerfile)只在 `bevformer`、`sparse4d` 环境中保留 SHA256 固定的 ARM64 headless wheel，保留原镜像供回退。先按 Dockerfile 指定的版本下载 wheel 到被 Git 忽略的 `wheelhouse/`，校验 `sha256:6efabcaa9df731f29e5ea9051776715b1bdd1845d7c9530065c7951d2a2899eb`，然后在已导入原镜像的机器上离线构建：
+
+```bash
+mkdir -p wheelhouse
+docker run --rm -v "$PWD/wheelhouse":/wheelhouse:rw \
+  -e HTTPS_PROXY -e HTTP_PROXY \
+  --entrypoint /opt/conda/envs/bevformer/bin/python \
+  local/drivingsdk:26.1.0-a3-arm64-20261010 \
+  -m pip download --no-deps --only-binary=:all: --dest /wheelhouse \
+  opencv-python-headless==4.11.0.86
+docker build --network none -f docker/DrivingSDK-headless.Dockerfile \
+  -t local/migration-drivingsdk:26.1.0-a3-headless-20261010 .
+```
+
+下载网络及代理由现场配置；Dockerfile 自身不访问网络，也不修改宿主软件。使用派生镜像前仍须做有设备的 `check_env.py`、算子和 HCCL 检查。
+
 Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。与本仓锁定的 LLaMA-Factory 源码同一提交的镜像说明列出 CANN 9.1.0、Python 3.12、PyTorch 2.10.0 和 TorchNPU 2.10.0.post2；`latest-a3-openeuler` 是会变化的标签，不能直接作为可复现版本。Qwen 镜像尚未在本项目机器上拉取或验证，选定后应固定 arm64 digest，再核对容器内实际包版本。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 
 若不用官方预置环境，按各模型 README 和 DrivingSDK 补丁**源码编译** MMCV、mmdet、mmdet3d；不能直接安装未适配的 `mmcv-full` CUDA wheel。WorldEngine 与 Apollo 的旧版 OpenMMLab 依赖必须分别隔离并做 API/算子兼容验证，不能用 BEVFormer 环境导入成功作为它们训练可用的证据。
