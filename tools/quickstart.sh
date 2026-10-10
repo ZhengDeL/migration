@@ -63,6 +63,12 @@ if [[ "$actual_id" != "$image_id" ]]; then
 fi
 
 if [[ "$action" == download ]]; then
+  download_dir=$(realpath -m "${QWEN_MODEL_DIR:-$mount_root/weights/qwen3-vl-8b-instruct}")
+  case "$download_dir" in "$mount_root/"*) ;; *)
+    echo "QWEN_MODEL_DIR 必须位于 MIGRATION_MOUNT_ROOT 挂载目录下：$mount_root" >&2
+    exit 2
+    ;;
+  esac
   download_args=(run --rm --network host --memory 16g --cpus 4
                  --pids-limit 512 -v "$mount_root:$mount_root:rw" -w "$repo_root"
                  -e TORCH_DEVICE_BACKEND_AUTOLOAD=0)
@@ -77,7 +83,7 @@ if [[ "$action" == download ]]; then
   echo "从 Qwen 官方 ModelScope 仓下载固定版本；完成后逐分片校验 SHA256。"
   exec docker "${download_args[@]}" --entrypoint "$py" "$image" \
     tools/fetch_qwen.py --hub modelscope \
-    --destination "${QWEN_MODEL_DIR:-$mount_root/weights/qwen3-vl-8b-instruct}" --execute
+    --destination "$download_dir" --execute
 fi
 
 IFS=, read -r -a host_ids <<< "${ASCEND_HOST_DEVICES:-0,2}"
@@ -117,8 +123,9 @@ fi
 docker_args+=(--entrypoint "$py" "$image")
 
 if [[ "$action" == check ]]; then
+  docker_args+=(-e PYTHONWARNINGS=ignore)
   command=(tools/check_env.py --model "$model" --nproc 2
-           --output "outputs/$model/environment.json")
+           --output "outputs/$model/environment.json" --summary)
 else
   command=(tools/run_train.py "$model" --devices 0,1
            --output-dir "outputs/$model")

@@ -25,6 +25,7 @@ def main() -> int:
     parser.add_argument("--model", required=True, choices=("bevformer", "sparse4d", "qwen3vl8b", "worldengine", "apollo_visionnet"))
     parser.add_argument("--nproc", type=int, required=True)
     parser.add_argument("--output", type=Path, help="optional local JSON evidence file")
+    parser.add_argument("--summary", action="store_true", help="print a short result; still save full JSON with --output")
     parser.add_argument("--require-npu-smi", action="store_true",
                         help="also fail when the management CLI is unavailable inside the container")
     args = parser.parse_args()
@@ -99,7 +100,15 @@ def main() -> int:
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(report + "\n", encoding="utf-8")
-    print(report)
+    if args.summary:
+        print(f"{args.model}: {info['result']} | NPU {info.get('npu_count', 0)}/{args.nproc}"
+              f" | JSON {args.output or '(not saved)'}")
+        if failures:
+            print(f"失败项: {', '.join(failures)}")
+        if warnings:
+            print(f"告警项: {', '.join(warnings)}；请以宿主机 npu-smi info 和实际计算交叉核对")
+    else:
+        print(report)
     return 0 if not failures else 2
 
 
