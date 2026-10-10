@@ -240,6 +240,9 @@ def main() -> int:
                         "--output", str(output / "msda.json")], env=env, check=True)
     output.mkdir(parents=True, exist_ok=True)
     completed = subprocess.run(command, cwd=cwd, env=env, check=False)
+    if completed.returncode == 0 and args.model == "qwen3vl8b" and args.smoke:
+        subprocess.run([sys.executable, str(ROOT / "tools/check_qwen_checkpoint.py"),
+                        "--output-dir", str(output)], env=env, check=True)
     return completed.returncode
 
 
