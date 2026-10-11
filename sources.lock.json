@@ -38,12 +38,21 @@
     "url": "https://github.com/OpenDriveLab/WorldEngine.git",
     "revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
     "patch": "PyTorch/contrib/cv/others/WorldEngine/ascend.patch",
-    "patch_sha256": "02bf9a2022fc8cc0233ffdf86f8e432da847c7d474cc556e59e608a94ceb593a"
+    "patch_sha256": "02bf9a2022fc8cc0233ffdf86f8e432da847c7d474cc556e59e608a94ceb593a",
+    "dataset_url": "https://huggingface.co/datasets/OpenDriveLab/WorldEngine",
+    "dataset_revision": "d0e88d858533ca407a3387a26577c083aa7b3617",
+    "vocab_path": "data/alg_engine/test_8192_kmeans.npy",
+    "vocab_sha256": "cc44a31e75a53406db59f026f0358de97931e726f10254542f98d2a87a38ad35",
+    "vocab_bytes": 3932288,
+    "compat_patch": "PyTorch/contrib/cv/others/WorldEngine/compat.patch",
+    "compat_patch_sha256": "c7996d5250f0540dc35c48da742b94f1d45841d90a516c3e05a375538dc0f8b8"
   },
   "apollo_visionnet": {
     "url": "https://github.com/ApolloAuto/Apollo-Vision-Net.git",
     "revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
     "patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/ascend.patch",
-    "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3"
+    "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3",
+    "compat_patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/compat.patch",
+    "compat_patch_sha256": "6f2a62395bd3aac0b98b28308d9f642ea897fe9e6d5213a32373f7a3ea067036"
   }
 }

@@ -1,0 +1,15 @@
+diff --git a/projects/AlgEngine/mmdet3d_plugin/datasets/eval_utils/map_api.py b/projects/AlgEngine/mmdet3d_plugin/datasets/eval_utils/map_api.py
+--- a/projects/AlgEngine/mmdet3d_plugin/datasets/eval_utils/map_api.py
++++ b/projects/AlgEngine/mmdet3d_plugin/datasets/eval_utils/map_api.py
+@@ -31,7 +31,10 @@
+ from functools import partial
+ 
+ # Recommended style to use as the plots will show grids.
+-plt.style.use("seaborn-whitegrid")
++plt.style.use(
++    "seaborn-v0_8-whitegrid"
++    if "seaborn-v0_8-whitegrid" in plt.style.available else "seaborn-whitegrid"
++)
+ 
+ # Define a map geometry type for polygons and lines.
+ Geometry = Union[Polygon, LineString]
