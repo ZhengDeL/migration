@@ -91,6 +91,9 @@ def main() -> int:
     parser.add_argument("--execute", action="store_true", help="run only after environment and data checks")
     parser.add_argument("--model-path", type=Path, help="local Qwen3-VL-8B checkpoint directory")
     parser.add_argument("--dataset-id", help="LLaMA-Factory dataset name from dataset_info.json")
+    parser.add_argument("--data-dir", type=Path, help="Apollo/WorldEngine official asset directory")
+    parser.add_argument("--prepared-dir", type=Path, help="verified Apollo/WorldEngine functional subset")
+    parser.add_argument("--nuscenes", type=Path, help="raw nuScenes mini directory for Apollo")
     args = parser.parse_args()
     if args.dataset_version == "v1.0-mini" and (not args.smoke or args.model not in ("bevformer", "sparse4d")):
         parser.error("v1.0-mini is supported only for BEVFormer or Sparse4D --smoke")
@@ -117,7 +120,28 @@ def main() -> int:
     env["ASCEND_RT_VISIBLE_DEVICES"] = args.devices
     env["OMP_NUM_THREADS"] = env.get("OMP_NUM_THREADS", "8")
 
-    missing = [str(source / item) for item in DATA_FILES.get(args.model, ()) if not (source / item).exists()]
+    legacy_smoke = args.smoke and args.model in ("apollo_visionnet", "worldengine")
+    data_dir = None
+    prepared = None
+    if legacy_smoke:
+        data_dir = (args.data_dir or ROOT.parent / "data" /
+                    ("apollo" if args.model == "apollo_visionnet" else "worldengine_smoke")).resolve()
+        prepared = (args.prepared_dir or data_dir /
+                    ("mini_prepared" if args.model == "apollo_visionnet" else "prepared")).resolve()
+        names = (["apollo_mini_train.pkl", "apollo_mini_val.pkl"] if args.model == "apollo_visionnet" else
+                 ["worldengine_navtest_smoke.pkl", "worldengine_navtest_smoke_pdm.pkl",
+                  "worldengine_navtest_smoke.yaml"])
+        required = [prepared / name for name in ("manifest.json", *names)]
+        if args.model == "worldengine":
+            from world_mini_data import ASSETS
+            required += [data_dir / Path(path).name for _, _, path, _, _ in ASSETS]
+            required.append(source / LOCK["worldengine"]["vocab_path"])
+        else:
+            nuscenes = (args.nuscenes or ROOT.parent / "data/nuscenes").resolve()
+            required.append(nuscenes / "v1.0-mini/sample.json")
+        missing = [str(path) for path in required if not path.is_file()]
+    else:
+        missing = [str(source / item) for item in DATA_FILES.get(args.model, ()) if not (source / item).exists()]
     if args.dataset_version == "v1.0-mini":
         mini_scene = source / "data/nuscenes/v1.0-mini/scene.json"
         if not mini_scene.is_file():
@@ -202,6 +226,21 @@ def main() -> int:
         if args.smoke:
             command.append("--no-validate")
         cwd = source
+    elif legacy_smoke:
+        cwd = source if args.model == "apollo_visionnet" else source / "projects/AlgEngine"
+        if args.model == "worldengine":
+            env["WORLDENGINE_ROOT"] = str(source)
+        config = output / f"{args.model}_real_smoke.py"
+        if args.execute and not missing:
+            create = [sys.executable, str(ROOT / "tools/create_legacy_mini_config.py"), args.model,
+                      "--repo", str(ROOT), "--source", str(source), "--data-dir", str(data_dir),
+                      "--prepared-dir", str(prepared), "--output-dir", str(output)]
+            if args.model == "apollo_visionnet":
+                create += ["--nuscenes", str(nuscenes)]
+            subprocess.run(create, env=env, check=True)
+        entry = "tools/train.py" if args.model == "apollo_visionnet" else "scripts/train.py"
+        command = ["torchrun", "--standalone", "--nproc_per_node=4", entry,
+                   str(config), "--launcher", "pytorch", "--work-dir", str(output), "--no-validate"]
     else:
         settings = {
             "bevformer": ("tools/fp16/train.py", "projects/configs/bevformer_fp16/bevformer_base_fp16.py", "5e-5", 24),
@@ -223,12 +262,19 @@ def main() -> int:
                     "data.samples_per_gpu=1", f"runner.max_epochs={epoch_count}",
                     f"total_epochs={epoch_count}"]
 
+    if args.model != "qwen3vl8b":
+        env["PYTHONPATH"] = os.pathsep.join(
+            part for part in (str(cwd), str(ROOT / "tools"), env.get("PYTHONPATH", "")) if part)
     report = {"model": args.model, "revision": LOCK[args.model]["revision"],
               "patch_sha256": hashlib.sha256(patch_bytes(patch)).hexdigest() if patch else None,
               "compat_patch_sha256": hashlib.sha256(patch_bytes(compat)).hexdigest() if compat else None,
               "cwd": str(cwd), "devices": args.devices, "command": command,
               "dataset_version": args.dataset_version if args.model in ("bevformer", "sparse4d") else None,
               "missing_data": missing, "execute": args.execute}
+    if legacy_smoke:
+        report.update(prepared_dir=str(prepared), iterations=10, heldout_evaluation=False,
+                      dataset_scope=(json.loads((prepared / "manifest.json").read_text())["dataset_scope"]
+                                     if (prepared / "manifest.json").is_file() else "data not prepared"))
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if not args.execute:
         return 0

@@ -53,6 +53,6 @@
     "patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/ascend.patch",
     "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3",
     "compat_patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/compat.patch",
-    "compat_patch_sha256": "6f2a62395bd3aac0b98b28308d9f642ea897fe9e6d5213a32373f7a3ea067036"
+    "compat_patch_sha256": "256c272a728fa83967af9522a1ff37c6e2229b9ac44d6791c7fbfbeb43255022"
   }
 }

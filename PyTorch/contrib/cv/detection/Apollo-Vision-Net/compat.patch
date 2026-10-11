@@ -10,3 +10,82 @@ diff --git a/projects/mmdet3d_plugin/bevformer/modules/transformer.py b/projects
                          bev_h, bev_w, -1).permute(2, 0, 1)  # (embed_dims, bev_h, bev_w)
                      tmp_prev_bev = rotate(tmp_prev_bev, rotation_angle,
                                            center=self.rotate_center)  # TODO: for 3D voxel
+diff --git a/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py b/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
+--- a/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
++++ b/projects/mmdet3d_plugin/datasets/nuscenes_dataset.py
+@@ -70,5 +70,5 @@
+-        data = mmcv.load(ann_file)
++        data = mmcv.load(ann_file, file_format='pkl')
+         data_infos = list(sorted(data['infos'], key=lambda e: e['timestamp']))
+         if self.train_with_partial_data:
+             data_infos = [info for info in data_infos if info['scene_name'] in self.valid_scenes]
+         data_infos = data_infos[::self.load_interval]
+diff --git a/projects/mmdet3d_plugin/__init__.py b/projects/mmdet3d_plugin/__init__.py
+--- a/projects/mmdet3d_plugin/__init__.py
++++ b/projects/mmdet3d_plugin/__init__.py
+@@ -11,4 +11,5 @@
+ from .models.opt.adamw import AdamW2
+ from .models.occ_loss_utils import *
+ from .bevformer import *
+-from .semantic_kitti import * 
+\ No newline at end of file
++from .semantic_kitti import * 
++from .models.npu_focal_loss import NpuFocalLoss
+diff --git a/projects/configs/bevformer/bev_tiny_det_occ_apollo.py b/projects/configs/bevformer/bev_tiny_det_occ_apollo.py
+--- a/projects/configs/bevformer/bev_tiny_det_occ_apollo.py
++++ b/projects/configs/bevformer/bev_tiny_det_occ_apollo.py
+@@ -148,7 +148,7 @@
+             col_num_embed=bev_w_,
+             ),
+         loss_cls=dict(
+-            type='FocalLoss',
++            type='NpuFocalLoss',
+             use_sigmoid=True,
+             gamma=2.0,
+             alpha=0.25,
+@@ -157,7 +157,7 @@
+         loss_iou=dict(type='GIoULoss', loss_weight=0.0),
+         # balance_cls_weight=True,
+         loss_occupancy=dict(
+-            type='FocalLoss',
++            type='NpuFocalLoss',
+             use_sigmoid=True,
+             gamma=2.0,
+             alpha=0.25,
+diff --git a/projects/mmdet3d_plugin/models/npu_focal_loss.py b/projects/mmdet3d_plugin/models/npu_focal_loss.py
+new file mode 100644
+--- /dev/null
++++ b/projects/mmdet3d_plugin/models/npu_focal_loss.py
+@@ -0,0 +1,22 @@
++"""Use the upstream PyTorch focal loss on NPU with identical reduction rules."""
++import torch.nn.functional as F
++from mmdet.models.builder import LOSSES
++from mmdet.models.losses.focal_loss import FocalLoss, py_sigmoid_focal_loss
++
++
++@LOSSES.register_module()
++class NpuFocalLoss(FocalLoss):
++    def forward(self, pred, target, weight=None, avg_factor=None,
++                reduction_override=None):
++        if pred.device.type != 'npu' or self.activated:
++            return super().forward(pred, target, weight, avg_factor,
++                                   reduction_override)
++        if reduction_override not in (None, 'none', 'mean', 'sum'):
++            raise ValueError('Invalid focal loss reduction')
++        reduction = reduction_override or self.reduction
++        # Preserve the upstream background class (index C) as an all-zero row.
++        targets = F.one_hot(target, num_classes=pred.size(1) + 1)
++        targets = targets[:, :pred.size(1)]
++        return self.loss_weight * py_sigmoid_focal_loss(
++            pred, targets, weight, gamma=self.gamma, alpha=self.alpha,
++            reduction=reduction, avg_factor=avg_factor)
+diff --git a/projects/mmdet3d_plugin/bevformer/dense_heads/bevformer_occupancy_head_apollo.py b/projects/mmdet3d_plugin/bevformer/dense_heads/bevformer_occupancy_head_apollo.py
+--- a/projects/mmdet3d_plugin/bevformer/dense_heads/bevformer_occupancy_head_apollo.py
++++ b/projects/mmdet3d_plugin/bevformer/dense_heads/bevformer_occupancy_head_apollo.py
+@@ -47,5 +47,6 @@
+         loss_type = {
+             'FocalLoss': 'focal_loss',
++            'NpuFocalLoss': 'focal_loss',
+             'CustomFocalLoss': 'CustomFocalLoss',
+             'CrossEntropyLoss': 'ce_loss'
+         }

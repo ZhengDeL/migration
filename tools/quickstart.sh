@@ -6,14 +6,15 @@ usage() {
   cat <<'EOF'
 用法：bash tools/quickstart.sh {bevformer|sparse4d|qwen3vl8b} {check|plan|mini|train}
       bash tools/quickstart.sh qwen3vl8b download
-      bash tools/quickstart.sh apollo_visionnet {check|build|compute|plan|train}
-      bash tools/quickstart.sh worldengine {check|download|build|compute|plan|train}
+      bash tools/quickstart.sh apollo_visionnet {check|prepare|build|compute|plan|mini|train}
+      bash tools/quickstart.sh worldengine {check|download|prepare|build|compute|plan|mini|train}
 
   check  检查镜像、软件包和对应数量的 NPU，不启动训练。
   plan   列出 mini 训练命令和缺失文件，不启动训练。
   mini   运行短程功能训练（BEVFormer 为 mini 数据 1 个 epoch）。
   train  使用完整训练配置；先准备有授权的完整数据。
-  download  Qwen 下载完整固定权重；WorldEngine 仅下载 4 MB 官方轨迹词表，均校验 SHA256。
+  download  Qwen 下载完整固定权重；WorldEngine 下载约 5.59 GB 功能验证数据及词表，校验并准备子集。
+  prepare   用已下载的官方文件准备 Apollo/WorldEngine 真实样本功能子集。
   build    构建 Apollo/WorldEngine 模型并放到 NPU；不加载训练数据或预训练权重。
   compute  Apollo/WorldEngine 四卡合成输入前后向与参数更新；不代表真实数据训练。
 
@@ -21,23 +22,25 @@ usage() {
               MIGRATION_MOUNT_ROOT=/同时包含仓库与数据的目录
               QWEN_MODEL_DIR=/已校验的模型目录
               QWEN_DATASET_ID=已注册的数据集名 （Qwen 正式训练必填）
+              APOLLO_OCC_DIR=/解压后的/occ_gt_release_v1_0
+              APOLLO_VAL_ONLY=1 （仅有 VAL 标签时复用做功能训练，不评估精度）
 EOF
 }
 
 if [[ $# -ne 2 ]]; then usage; exit 2; fi
 model=$1
 action=$2
-case "$action" in check|build|compute|plan|mini|train|download) ;; *) usage; exit 2 ;; esac
+case "$action" in check|build|compute|plan|mini|train|download|prepare) ;; *) usage; exit 2 ;; esac
 if [[ "$action" == download ]] && [[ "$model" != qwen3vl8b && "$model" != worldengine ]]; then
-  echo "download 用于 qwen3vl8b 权重或 worldengine 轨迹词表" >&2
+  echo "download 用于 qwen3vl8b 权重或 worldengine 功能验证数据。" >&2
   exit 2
 fi
 if [[ "$action" == build || "$action" == compute ]] && [[ "$model" != apollo_visionnet && "$model" != worldengine ]]; then
   echo "build/compute 用于 apollo_visionnet 和 worldengine；其余模型使用 check/mini。" >&2
   exit 2
 fi
-if [[ "$action" == mini ]] && [[ "$model" == apollo_visionnet || "$model" == worldengine ]]; then
-  echo "$model 尚无已准备好的真实 mini 数据；先运行 compute 检查四卡计算路径。" >&2
+if [[ "$action" == prepare ]] && [[ "$model" != apollo_visionnet && "$model" != worldengine ]]; then
+  echo "prepare 用于 apollo_visionnet 和 worldengine。" >&2
   exit 2
 fi
 
@@ -99,7 +102,7 @@ if [[ "$actual_id" != "$image_id" ]]; then
   exit 2
 fi
 
-if [[ "$action" == download ]]; then
+if [[ "$action" == download || "$action" == prepare ]]; then
   if [[ "$model" == qwen3vl8b ]]; then
     download_dir=$(realpath -m "${QWEN_MODEL_DIR:-$mount_root/weights/qwen3-vl-8b-instruct}")
     case "$download_dir" in "$mount_root/"*) ;; *)
@@ -110,7 +113,22 @@ if [[ "$action" == download ]]; then
   fi
   download_args=(run --rm --network host --memory 16g --cpus 4
                  --pids-limit 512 -v "$mount_root:$mount_root:rw" -w "$repo_root"
-                 -e TORCH_DEVICE_BACKEND_AUTOLOAD=0)
+                 -e TORCH_DEVICE_BACKEND_AUTOLOAD=0 -e OMP_NUM_THREADS=2 -e OPENBLAS_NUM_THREADS=2)
+  if [[ "$action" == prepare ]]; then
+    download_args[3]=none
+    if [[ "$model" == worldengine ]]; then
+      exec docker "${download_args[@]}" --entrypoint "$py" "$image" \
+        tools/prepare_world_mini.py --source sources/WorldEngine \
+        --data-dir "$mount_root/data/worldengine_smoke"
+    else
+      prepare_args=(tools/prepare_apollo_mini.py --data-dir "$mount_root/data/apollo"
+                    --occ-dir "${APOLLO_OCC_DIR:-$mount_root/data/apollo/occ_gt_release_v1_0}"
+                    --nuscenes "$mount_root/data/nuscenes"
+                    --prepared-dir "$mount_root/data/apollo/mini_prepared")
+      if [[ ${APOLLO_VAL_ONLY:-0} == 1 ]]; then prepare_args+=(--val-only); fi
+      exec docker "${download_args[@]}" --entrypoint "$py" "$image" "${prepare_args[@]}"
+    fi
+  fi
   https_proxy_value=${HTTPS_PROXY:-${https_proxy:-}}
   http_proxy_value=${HTTP_PROXY:-${http_proxy:-$https_proxy_value}}
   if [[ -n "$https_proxy_value" ]]; then
@@ -124,9 +142,10 @@ if [[ "$action" == download ]]; then
     exec docker "${download_args[@]}" --entrypoint "$py" "$image" \
       tools/fetch_qwen.py --hub modelscope --destination "$download_dir" --execute
   else
-    echo "仅下载并校验 WorldEngine 官方轨迹词表；训练图像、标注和 checkpoint 需单独准备。"
+    echo "下载官方 NAVTEST 标注、PDM 缓存、三段日志的图像、感知基座权重及词表；完成后校验并准备功能训练子集。"
     exec docker "${download_args[@]}" --entrypoint "$py" "$image" \
-      tools/fetch_world_vocab.py --source sources/WorldEngine --execute
+      tools/fetch_world_mini.py --source sources/WorldEngine \
+      --destination "$mount_root/data/worldengine_smoke" --execute
   fi
 fi
 
@@ -149,6 +168,9 @@ for id in "${host_ids[@]}"; do
   seen_physical[$physical]=$id
 done
 container_devices=$(seq -s, 0 $((nproc - 1)))
+if [[ "$action" == mini || "$action" == train || "$action" == compute || "$action" == build ]]; then
+  python3 "$repo_root/tools/check_idle_cards.py" "$(IFS=,; echo "${host_ids[*]}")"
+fi
 
 docker_args=(run --rm --network "$network" --memory "$memory" --cpus 8
              --pids-limit 1024 --shm-size 8g)
@@ -199,8 +221,12 @@ elif [[ "$action" == compute ]]; then
            "$compute_tool" --source "sources/$source_name"
            --output-dir "outputs/$model/compute_fixture")
 else
+  output_dir="outputs/$model"
+  if [[ "$model" == apollo_visionnet || "$model" == worldengine ]] && [[ "$action" == mini || "$action" == plan ]]; then
+    output_dir="outputs/$model/mini"
+  fi
   command=(tools/run_train.py "$model" --devices "$container_devices"
-           --output-dir "outputs/$model")
+           --output-dir "$output_dir")
   case "$model" in
     bevformer|sparse4d)
       source_name=BEVFormer
@@ -218,11 +244,18 @@ else
       ;;
     apollo_visionnet)
       command+=(--source sources/Apollo-Vision-Net)
-      if [[ "$action" == plan ]]; then command+=(--smoke); fi
+      if [[ "$action" == mini || "$action" == plan ]]; then
+        command+=(--smoke --data-dir "$mount_root/data/apollo"
+                  --prepared-dir "$mount_root/data/apollo/mini_prepared"
+                  --nuscenes "$mount_root/data/nuscenes")
+      fi
       ;;
     worldengine)
       command+=(--source sources/WorldEngine)
-      if [[ "$action" == plan ]]; then command+=(--smoke); fi
+      if [[ "$action" == mini || "$action" == plan ]]; then
+        command+=(--smoke --data-dir "$mount_root/data/worldengine_smoke"
+                  --prepared-dir "$mount_root/data/worldengine_smoke/prepared")
+      fi
       ;;
   esac
   if [[ "$action" == mini || "$action" == train ]]; then command+=(--execute); fi

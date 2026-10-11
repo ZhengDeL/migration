@@ -50,7 +50,7 @@ Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyo
 
 ### Apollo 的实际环境
 
-Apollo 使用 DrivingSDK headless 镜像的 `bevformer` 环境，MMCV 1.7.2 / mmdet 2.24.0 / mmdet3d 1.0.0rc4 / mmseg 0.30.0。当前配置的导入、模型构建以及 DLA34 / 时序 BEV / 检测 / OCC 四卡合成输入检查均已通过。兼容补丁将 NumPy 旋转角转换成 Python float。真实数据和官方深度预训练初始化仍需验证。
+Apollo 使用 DrivingSDK headless 镜像的 `bevformer` 环境，MMCV 1.7.2 / mmdet 2.24.0 / mmdet3d 1.0.0rc4 / mmseg 0.30.0。已通过模型构建、合成计算和官方 162 帧 VAL / OCC 功能子集的四卡 10 步真实训练。兼容补丁处理 NumPy 角度、文件句柄 PKL 加载和编译 FocalLoss 崩溃；NPU 使用 MMDetection 已有的 PyTorch 公式，并完成有限案例的 CPU/NPU 前后向对比。完整 OCC 数据、官方深度预训练初始化及精度仍待验证。
 
 ### WorldEngine 的独立派生镜像
 
@@ -68,7 +68,7 @@ docker build --network host \
   -t local/migration-worldengine:26.1.0-a3-20261011 .
 ```
 
-代理按现场网络配置；直连环境可省略代理参数。1# 最终镜像 ID 为上表 `ff85...`，在该镜像上已通过环境导入、58,207,822 参数模型构建和四张物理卡的 AlgEngine 合成输入前后向、参数同步与 checkpoint 重载。合成输入为 96×160，未覆盖真实训练数据或原始分辨率。
+代理按现场网络配置；直连环境可省略代理参数。1# 最终镜像 ID 为上表 `ff85...`，在该镜像上已通过环境导入、58,207,822 参数模型构建、四卡合成计算，以及官方 NAVTEST 真实图像 / 轨迹 / PDM 缓存的四卡 10 步训练。真实短训练保留原图像流水线，加载官方感知基座；参数同步及模型 / 优化器保存状态检查通过。完整数据指标仍未验收。
 
 WorldEngine 官方 CUDA 依赖和 Apollo 官方旧版 CUDA 依赖作为适配基线，本次 Ascend 实验使用以上已实测栈。若重新搭建 OpenMMLab，按 DrivingSDK 补丁**源码编译**；新构建可能产生不同 image ID，需先核对依赖并重新执行功能验证，再通过代码评审更新镜像锁定。直接导入已验证的 Docker 归档可保留原 image ID。
 
@@ -94,15 +94,15 @@ Docker 拉取走宿主已有的 registry 网络配置；仅在 shell 设置代�
 
 ## 数据与权重
 
-公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 从发布方 Hugging Face 或 ModelScope 仓下载固定快照，并逐一核对四个权重分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。在已准备好的 1# 上优先使用[快速上手](quickstart.md)中的 `bash tools/quickstart.sh qwen3vl8b download`，无需在宿主机安装 Python 包；该入口使用 Qwen 官方 ModelScope 仓。权重分片约 18 GB，下载临时文件还需要额外空间。独立执行 `fetch_qwen.py` 时需在其 Python 环境安装相应的 `huggingface_hub` 或 `modelscope`；可用 `--destination` 把模型放在仓库外的数据卷。nuScenes、OpenScene 等数据集不由这些脚本自动下载；按上游许可和登录流程准备。
+公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 从发布方 Hugging Face 或 ModelScope 仓下载固定快照，并逐一核对四个权重分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。在已准备好的 1# 上优先使用[快速上手](quickstart.md)中的 `bash tools/quickstart.sh qwen3vl8b download`，无需在宿主机安装 Python 包；该入口使用 Qwen 官方 ModelScope 仓。权重分片约 18 GB，下载临时文件还需要额外空间。独立执行 `fetch_qwen.py` 时需在其 Python 环境安装相应的 `huggingface_hub` 或 `modelscope`；可用 `--destination` 把模型放在仓库外的数据卷。WorldEngine 功能子集由 `worldengine download` 获取固定官方文件并校验；完整数据集和 Apollo OCC 仍按上游许可与下载流程准备。
 
 | 模型 | 训练前必须由数据负责人提供 |
 | --- | --- |
 | BEVFormer | nuScenes v1.0 full、CAN bus、`nuscenes_infos_temporal_{train,val}.pkl`、`r101_dcn_fcos3d_pretrain.pth`，参见 [官方示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/BEVFormer/README.md)。 |
 | Sparse4D | nuScenes、`nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy`、ResNet50 预训练权重；旧版官方权重须按[模型说明](../PyTorch/contrib/cv/detection/Sparse4D/README.md)转换格式，参见 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)。 |
 | Qwen3-VL-8B | `Qwen3-VL-8B-Instruct` 本地完整权重/processor、按 LLaMA-Factory `data/dataset_info.json` 注册的图文训练集、独立验证集；`mllm_demo` 仅用于 smoke。 |
-| WorldEngine | 官方 OpenScene/NAVSIM 图像、已处理的 AlgEngine navtrain/navtest 标注、`pdm_8192_gt_cache_nav{train,test}.pkl`、轨迹词表和配置引用的基座 checkpoint，参见[固定上游数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)。`worldengine download` 仅自动获取词表。 |
-| Apollo VisionNet | nuScenes、CAN bus、OCC 标注/生成的 train/val pkl、DLA34 预训练权重，参见 [官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/main/docs/prepare_dataset.md)。 |
+| WorldEngine | 正式训练需官方完整 OpenScene/NAVSIM 图像、AlgEngine navtrain/navtest 标注、`pdm_8192_gt_cache_nav{train,test}.pkl`、词表和基座 checkpoint，见[固定上游数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)。功能子集用 `worldengine download` 自动获取约 5.59 GB 固定文件及词表。 |
+| Apollo VisionNet | nuScenes、CAN bus、完整 OCC 标注 / train/val pkl、DLA34 预训练权重，见[固定官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)。1# 仅有 162 个完整 VAL 标签用于功能训练，全归档仍待补齐。 |
 
 不要把数据、权重、训练输出或登录凭据提交到 GitHub。大数据通过挂载或符号链接放到上游配置所需的路径。`tools/run_train.py` 的 `missing_data` 输出可检查核心文件；还应人工确认文件完整性和许可证。
 
