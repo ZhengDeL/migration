@@ -1,6 +1,6 @@
-# 1# 快速上手
+# 工程师快速上手
 
-适用于已经准备好本仓镜像和源码的 1#。所有命令都在服务器的**仓库根目录**运行，一次运行一个模型。
+适用于已准备本仓镜像、固定源码和对应数据的 Ascend ARM64 Linux 机器。新机器先按[离线恢复指南](offline_delivery.md)恢复资产；自行部署先按[环境指南](environment.md)准备镜像，再按模型 README 准备数据。下面使用 1# 示例路径；离线恢复后替换为实际恢复目录中的 `migration/`。所有命令都在服务器的**仓库根目录**运行，一次运行一个模型。宿主需 Bash、Docker、Python 3.9+ 和配套驱动，模型 Python 依赖由容器提供。
 
 ```bash
 cd /var/ai-model/lzd/migration
@@ -17,7 +17,26 @@ npu-smi info  # 确认要使用的物理卡空闲
 | WorldEngine | `worldengine` | 4 | 官方 NAVTEST 功能子集，AlgEngine 训练 10 步 |
 | Apollo VisionNet | `apollo_visionnet` | 4 | 官方 OCC / nuScenes mini 功能子集，训练 10 步 |
 
-## 2. 复制对应命令
+## 2. 先决定检查已有结果还是重新训练
+
+交付已经包含训练结果。Apollo / Qwen 可以先运行本页的 `verify` 检查已有结果；其他模型的保存状态实测证据见[验证记录](validation.md)。要重新跑 `mini` 或 `train`，先保留整个旧输出目录。
+
+### 重新训练前保存旧结果
+
+在仓库根目录执行，示例为 Qwen；其他模型替换 `model` 的值：
+
+```bash
+model=qwen3vl8b
+if [ -d "outputs/$model" ]; then
+  backup="outputs/${model}.saved-$(date +%Y%m%d-%H%M%S)"
+  if [ -e "$backup" ]; then echo "备份路径已存在：$backup"; exit 1; fi
+  mv -- "outputs/$model" "$backup"
+fi
+```
+
+运行这一步后再做 `check`、`plan`、`mini`。Qwen 的官方框架可能自动发现旧 checkpoint 并续训，或拒绝非空输出；保留旧目录可以确保新的十步检查从初始化开始。其他模型也可避免保存文件被覆盖。下面的 `verify` 在当前模型输出目录检查新训练的结果。
+
+## 3. 复制对应命令
 
 ### BEVFormer / Sparse4D：先检查，再训练
 
@@ -71,7 +90,7 @@ OCC 目录不同可设置 `APOLLO_OCC_DIR=/解压后的/occ_gt_release_v1_0`。�
 
 WorldEngine / Apollo 的 `build` 只构建模型，`compute` 使用低分辨率合成输入检查计算，结果名为 `pass_compute_fixture`；真实样本短训练使用 `mini`。两种检查的范围见[实测记录](validation.md)。
 
-## 3. 看结果
+## 4. 看结果
 
 | 操作 | 看到什么才算这项检查通过 | 结果位置 |
 | --- | --- | --- |
@@ -84,7 +103,19 @@ WorldEngine / Apollo 的 `build` 只构建模型，`compute` 使用低分辨率�
 | Qwen `verify` | `pass_functional`，回答正确描述独立红色正方形 | `outputs/qwen3vl8b/inference_check.json` |
 | WorldEngine / Apollo `compute` | 四个 rank 均为 `pass_compute_fixture`；rank 0 重载通过 | `outputs/<模型名>/compute_fixture/rank{0,1,2,3}.json` |
 
-已有实测结果与验证范围见[实测记录](validation.md)。日志里出现弃用提示不等于失败，最终要看退出码和上述检查结果；非有限输出 / loss / 梯度、参数未更新或保存检查失败会使 WorldEngine / Apollo 的 `mini` 返回失败。每次运行使用相同的输出目录和文件名，重新训练会覆盖该模型的 mini 输出；需要保留结果时先复制整个输出目录。
+已有实测结果与验证范围见[实测记录](validation.md)。日志里出现弃用提示不等于失败，最终要看退出码和上述检查结果；非有限输出 / loss / 梯度、参数未更新或保存检查失败会使 WorldEngine / Apollo 的 `mini` 返回失败。每次运行使用相同的输出目录和文件名；重新训练前按第 2 节改名保留旧目录。BEVFormer / Sparse4D 的保存内容检查是本次实测取得的证据，quickstart 不会自动对每次新输出执行同一完整保存检查。
+
+### 保存本次终端日志
+
+训练耗时较长时，可在仓库根目录保存日志。下面以 Sparse4D 为例，`pipefail` 会保留训练失败的退出状态：
+
+```bash
+set -o pipefail
+mkdir -p logs
+bash tools/quickstart.sh sparse4d mini 2>&1 | tee "logs/sparse4d-mini-$(date +%Y%m%d-%H%M%S).log"
+```
+
+程序结束后检查退出码和模型对应结果文件；另一个终端可用 `tail -f` 查看选定日志。不要仅凭某一条 loss 或容器启动成功判断训练通过。
 
 ## 用的镜像
 
@@ -117,8 +148,15 @@ ASCEND_HOST_DEVICES=8,10,12,14 bash tools/quickstart.sh apollo_visionnet mini
 | `NPU 设备编号...同一物理卡` | 查看宿主映射，选择不同物理卡的芯片。 |
 | `pass_with_warnings` 且仅 `npu_smi_ok` 告警 | 查看宿主 `npu-smi info`，再结合实际模型计算结果；环境告警本身不代表训练通过。 |
 | Qwen 下载中断 | 重跑同一条 `download` 续传；全部分片校验后才运行 `mini`；训练后执行 `bash tools/quickstart.sh qwen3vl8b verify`。 |
+| Qwen 输出目录已存在 / 自动续训 | 按第 2 节改名保留整个旧输出目录，再重新运行 `check`、`plan`、`mini`。 |
 | WorldEngine `mini` 缺少 prepared 文件 | 运行同一条 `download`；若官方文件已下载，也可运行 `worldengine prepare`。 |
 | Apollo `prepare` 缺少 OCC 文件 | 按官方数据说明补齐标签；不要生成假标签。仅复用 VAL 时显式设置 `APOLLO_VAL_ONLY=1`。 |
 | 提示卡不空闲 | 查看宿主 `npu-smi info`，换用空闲的不同物理卡；脚本不会停止其他服务。 |
 
 模型说明：[BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md)、[Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md)、[Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md)、[WorldEngine](../PyTorch/contrib/cv/others/WorldEngine/README.md)、[Apollo](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md)。
+
+## 指南依据与复核日期
+
+2026-10-12 对照固定版本的官方资料复核五个模型 README、启动脚本、配置参数、数据路径和结果字段；实机训练与离线恢复基线日期为 2026-10-10/11。官方数据与训练文档链接放在各模型第 1 节。五份指南结构一致：模型与环境 → 运行已有资产 → 从零准备 → 成功判据 → 正式训练和常见问题；昇腾补丁与官方 CUDA 示例的适用环境已区分。
+
+版本升级时必须同步核对来源锁定、镜像 ID、补丁和实机结果；当前固定依赖的采用依据见[版本核验](latest_versions.md)。文档复核日期不代表在该日重新执行全部 NPU 训练。

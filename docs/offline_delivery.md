@@ -37,7 +37,7 @@ bash tools/quickstart.sh bevformer plan
 
 同样替换模型名为 `sparse4d`、`qwen3vl8b`、`worldengine`、`apollo_visionnet`。`plan` 的 `missing_data: []` 表示 mini 所需核心文件已具备。确认所选卡空闲后，用 `mini` 做训练功能检查；Qwen / Apollo 用 `verify` 重载交付中的保存结果并检查推理。各模型命令、卡号和成功判据见[快速上手](quickstart.md)。
 
-交付已包含功能验证所需数据，无需先执行 `download`。重新训练会覆盖对应输出目录，请先复制要保留的结果。完整训练仍需正式数据和独立指标验收；mini 成功不表示完整数据精度、性能或长期稳定性通过。
+交付已包含功能验证所需数据，无需先执行 `download`。重新训练前按[保存旧结果](quickstart.md#重新训练前保存旧结果)改名保留整个对应输出目录，避免覆盖结果或触发 Qwen 自动续训。完整训练仍需正式数据和独立指标验收；mini 成功不表示完整数据精度、性能或长期稳定性通过。
 
 ## 文件分类
 
@@ -48,7 +48,7 @@ bash tools/quickstart.sh bevformer plan
 | `03_data/` | 原始 mini / OCC 归档、标注、WorldEngine 官方功能资产 |
 | `04_weights/` | 完整 Qwen3-VL-8B 权重与视觉模型初始化权重 |
 | `05_results/` | 五模型验证产物和明确标注的历史对照产物 |
-| `06_reports/` | 版本核验、验证报告、恢复实测、当前任务重要问题说明 |
+| `06_reports/` | 使用说明、版本核验、模型验证和离线恢复证据 |
 | `manifest.json` / `restore_delivery.py` | 必须文件清单、版本锁定与恢复工具 |
 
 Apollo OCC 完整原归档已校验；本次语义检查及训练 / 验证仍使用 mini 的 404 帧。WorldEngine 仅覆盖 AlgEngine 功能链路。来源许可证随源码保留，数据和权重使用范围遵循其原发布许可。

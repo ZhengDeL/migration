@@ -1,70 +1,96 @@
-# Apollo VisionNet：Ascend 训练迁移
+# Apollo VisionNet：Ascend 工程使用指南
 
-## 范围与实测状态
+文档复核：2026-10-12；实机验证：2026-10-11。覆盖官方 DLA 初始化、四卡 mini 训练和保存后全部独立验证帧的推理功能检查。
 
-采用 [ApolloAuto/Apollo-Vision-Net](https://github.com/ApolloAuto/Apollo-Vision-Net/tree/4909aa681bc435a74e793e714b8066d9bbf0095d) 固定提交 `4909aa681bc435a74e793e714b8066d9bbf0095d`，迁移 `bev_tiny_det_occ_apollo.py` 的 DLA34 / 时序 BEV / GroupDETR 检测 / OCC 训练路径。
+## 1. 模型与环境
 
-2026-10-11 在 1# 四张不同物理卡上，通过公开 quickstart 入口完成真实数据 10 步训练。完整 OCC 归档已经校验并安全解压。当前数据保留官方划分与 mini 的交集：242 train / 162 独立 val，原始 OCC 标签及非零 CAN bus 保留。使用官方仓内 DLA 深度预训练权重，训练前全部 222 个张量匹配；保存后对独立 val 的 162/162 帧完成推理有限值检查，**未计算正式精度指标**。
+| 项目 | 本仓采用值 |
+| --- | --- |
+| 官方实现 | [ApolloAuto/Apollo-Vision-Net](https://github.com/ApolloAuto/Apollo-Vision-Net/tree/4909aa681bc435a74e793e714b8066d9bbf0095d)，固定提交 `4909aa681bc435a74e793e714b8066d9bbf0095d` |
+| 官方说明 | [数据准备](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)、[训练和测试](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/run.md) |
+| 配置 | `projects/configs/bevformer/bev_tiny_det_occ_apollo.py`，DLA34 / 时序 BEV / GroupDETR / OCC |
+| 资源 | ARM64 Linux；训练 4 张空闲物理卡，验证推理 1 张 |
+| 镜像 / 环境 | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` / `bevformer` |
+| 软件栈 | Python 3.10.21 / CANN 9.1.0 / Torch 2.7.1+cpu / TorchNPU 2.7.1.post6 / mx_driving 26.1.0.post2 |
 
-更正：此前“官方 DLA 权重未提供”的描述不准确，固定官方仓已在 `ckpts/` 提供该文件。本次已核验并重跑官方初始化训练；随机初始化的历史结果保留在归档中。
+image ID 为 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。来源、MMCV / mmdet / mmdet3d 配套和硬件支持边界见[环境指南](../../../../../docs/environment.md)。
 
-## 镜像
+## 2. 已有交付资产：检查、训练、推理
 
-实际使用 `local/migration-drivingsdk:26.1.0-a3-headless-20261010` 的 `bevformer` 环境：Python 3.10.21、CANN 9.1.0、Torch 2.7.1、TorchNPU 2.7.1.post6、MMCV 1.7.2、mmdet 2.24.0、mmdet3d 1.0.0rc4。官方来源、digest、实测 image ID 和构建方法见[环境指南](../../../../../docs/environment.md)。
-
-## 在已准备好的 1# 上运行
-
-从仓库根目录执行，一次运行一个模型：
+新机器先完成[离线恢复](../../../../../docs/offline_delivery.md)。以下均在迁移仓根目录运行，恢复后替换示例 `cd` 路径。已有 checkpoint 可先 verify；重新训练前按[保存旧结果](../../../../../docs/quickstart.md#重新训练前保存旧结果)保留 `outputs/apollo_visionnet/`。
 
 ```bash
+cd /var/ai-model/lzd/migration
+npu-smi info
 bash tools/quickstart.sh apollo_visionnet check
 bash tools/quickstart.sh apollo_visionnet plan
 bash tools/quickstart.sh apollo_visionnet mini
 bash tools/quickstart.sh apollo_visionnet verify
 ```
 
-默认宿主逻辑设备 `0,2,4,6`，容器内为 `0,1,2,3`。运行前检查空闲；换卡示例：`ASCEND_HOST_DEVICES=8,10,12,14 bash tools/quickstart.sh apollo_visionnet mini`。
+plan 必须显示 `missing_data: []`。mini 用 FP32、四卡每卡 batch 1、AdamW 学习率 `1e-4`、10 步；保留三帧 / 六相机、900×1600 原图与 0.5 缩放/padding、50×50 BEV 和 640000 体素 OCC 结构。
 
-`mini` 从固定上游配置生成 FP32 四卡、每卡 batch 1、AdamW 学习率 `1e-4` 的十步配置。保留原始三帧 / 六相机、900×1600 图像读取及 0.5 缩放 / padding、50×50 BEV 和 640000 体素的 OCC 结构。短训练不运行指标评测，结束后另用 `verify` 检查全部独立验证帧；自动检查原始输出、掩码处理前 loss、梯度、参数更新、被检查参数的跨 rank 一致性和保存状态。
+训练默认宿主逻辑 ID `0,2,4,6`，verify 默认只用 `0`。换卡分别设置 `ASCEND_HOST_DEVICES=8,10,12,14` 和 `ASCEND_HOST_DEVICES=8`。verify 严格重载保存模型，检查全部 **162 个独立验证帧**，不计算 mAP / mIoU。
 
-成功判据：命令退出码 0，`outputs/apollo_visionnet/mini/training_check_rank{0,1,2,3}.json` 均为 `pass_training_smoke`；rank 0 的 `checkpoint_reload` 为 `pass`、`optimizer_step_values` 为 `[10.0]`。保存文件 `iter_10.pth` 为 844544332 字节，SHA256 `f2b2c77e1b6df0a58ffcafff308b18a0fa5774d67dbd8efa7d284229569d4a29`；600 个模型张量 / 465 个优化器状态均有限。公开逐 rank 证据见[实测记录](../../../../../docs/validation.md)。这项保存检查未包含从 checkpoint 继续训练。
+## 3. 从零准备源码、数据与权重
 
-## 在其他机器准备 mini 数据
+在迁移仓根目录：
 
-按固定上游[官方数据说明](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)下载并解压有权使用的数据，默认布局：
+```bash
+python3 tools/fetch_sources.py apollo_visionnet --execute
+python3 tools/prepare.py apollo_visionnet --source sources/Apollo-Vision-Net --apply
+```
+
+数据遵循官方准备说明。mini 功能准备在仓库父目录使用：
 
 ```text
-/var/ai-model/lzd/data/nuscenes/v1.0-mini/sample.json
-/var/ai-model/lzd/data/nuscenes/samples/...
-/var/ai-model/lzd/data/apollo/nuscenes_infos_temporal_train_occ_gt.pkl
-/var/ai-model/lzd/data/apollo/nuscenes_infos_temporal_val_occ_gt.pkl
-/var/ai-model/lzd/data/apollo/occ_gt_release_v1_0/train/...
-/var/ai-model/lzd/data/apollo/occ_gt_release_v1_0/val/...
+data/nuscenes/
+├── v1.0-mini/sample.json
+└── samples/...
+data/apollo/
+├── nuscenes_infos_temporal_train_occ_gt.pkl
+├── nuscenes_infos_temporal_val_occ_gt.pkl
+├── occ_gt_release_v1_0.tar.gz          # 或已解压的同名目录
+└── mini_prepared/                     # 由 prepare 生成
 ```
+
+将完整 OCC 原归档和官方 train/val PKL 放到对应位置，nuScenes mini 图像准备完毕，再运行：
 
 ```bash
 bash tools/quickstart.sh apollo_visionnet prepare
 bash tools/quickstart.sh apollo_visionnet plan
-bash tools/quickstart.sh apollo_visionnet mini
-bash tools/quickstart.sh apollo_visionnet verify
 ```
 
-`prepare` 校验本仓从官方文件观测并锁定的 PKL SHA256，选取 mini 对应帧，检查每个稀疏 OCC 标签的形状、整数索引和类别范围，复制原标签并记录 SHA256；生成 `data/apollo/mini_prepared/manifest.json`。这些 PKL 哈希是本次下载观测值，不能说成发布方公布的哈希。完整 train/val 标签模式已在 1# 实测：404 个标签逐文件检查并记录复制前后 SHA256，训练和验证 token 无交集，覆盖全部 mini 样本。
+首次 OCC 解压需预留至少 100 GB 数据空间；整套交付恢复需 300 GB 可用空间。脚本核对归档 15,840,721,593 字节、观测 SHA、gzip CRC、103302 个 tar 成员和安全路径；已解压可复用。不同 OCC 路径用 `APOLLO_OCC_DIR=/实际路径/occ_gt_release_v1_0`。
 
-如未解压，将 `occ_gt_release_v1_0.tar.gz` 放到 `data/apollo/`，`prepare` 自动核对 15,840,721,593 字节与本次观测 SHA256 `52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282`，完整检查 gzip CRC、103302 个 tar 成员与安全路径后解压。该 SHA256 是用户提供文件的本次观测值，未取得发布方公布哈希；完整归档结构通过不表示所有 NPY 已作语义检查，本次逐数组验证范围为选出的 404 个标签。
+prepare 保留官方划分与 mini 的交集：**242 train / 162 独立 val**，token 无交集，原始 OCC 标签和非零 CAN bus 保留；逐数组检查 404 个 mini 标签，并记录复制 SHA。完整归档结构检查不等于全部 NPY 的语义验证。归档与 PKL 的 SHA 是本次观测值，未取得发布方公布哈希。
 
-### 官方初始化权重
+官方初始化权重已经在固定源码的 `ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth`；61,045,957 字节，Git blob、SHA 和实际初始化全部核验。mini 训练开始前 222/222 个初始化张量匹配，证据见[官方初始化报告](../../../../../verification/host1_20261011/apollo_official_init/rank0.json)。
 
-固定官方源码自带 `ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth`。大小 61,045,957 字节，官方 Git blob 为 `af42f8693fd64f47021e64d6b530331cf075e901`，本次 SHA256 为 `8c55b0d98fd0fbc885a7487a764457941e008dcc5a76887196e6264a0e38cc1d`；配置生成时自动核验全部值。训练 hook 检查所有 222 个预训练张量与初始化后模型完全相同，证据见[最新训练记录](../../../../../verification/host1_20261011/apollo_official_init/rank0.json)。
+## 4. 成功判据与输出
 
-## 适配内容
+| 检查 | 通过条件 / 文件 |
+| --- | --- |
+| mini | 退出码 0；`outputs/apollo_visionnet/mini/training_check_rank{0,1,2,3}.json` 全部为 `pass_training_smoke` |
+| 计算内容 | 原始输出、掩码前 loss、465 梯度有限；参数更新和被检查参数跨 rank 一致 |
+| 保存 | rank 0 的 `checkpoint_reload` 为 `pass`、`optimizer_step_values` 为 `[10.0]` |
+| checkpoint | `outputs/apollo_visionnet/mini/iter_10.pth`；本次 600 模型张量 / 465 优化器状态有限 |
+| verify | `outputs/apollo_visionnet/mini/heldout_check.json` 为 `pass_heldout_functional`，`frames_checked: 162` |
 
-- `ascend.patch`：训练入口、NPU 分布式包装及三处多尺度变形注意力改为 DrivingSDK 实现。
-- `compat.patch`：旋转角显式转为 Python `float`；文件句柄加载标注时指定 PKL 格式；NPU 上使用 MMDetection 已有的 `py_sigmoid_focal_loss`，保留原 gamma / alpha / weight / reduction / avg_factor 语义并注册 Apollo 损失映射。
-- 原编译版 FocalLoss 在真实训练入口发生 `PyThreadState_Get` 致命崩溃。替换后的 FP32 CPU/NPU 前后向对比 8 个案例通过 `atol=1e-5, rtol=1e-4`，最大梯度绝对误差约 `6.20e-6`；累计 sum 的 loss 绝对误差可达 `0.001953125`，满足相对误差标准。证据见[算子对比 JSON](../../../../../verification/host1_20261011/apollo_real/focal_parity.json)。未进行 CUDA 基准或完整数据精度对齐。
+本次 checkpoint SHA 见[验证记录](../../../../../docs/validation.md)，新训练 SHA 可以不同。保存重载检查不包含续训；输出有限不等于正式精度通过。
 
-`build` 只构建模型，`compute` 保留低分辨率合成计算检查。上游补丁哈希见仓库[来源锁定](../../../../../sources.lock.json)。
+## 5. 适配、正式训练与常见问题
 
-## 正式训练待办
+NPU 补丁覆盖分布式入口和变形注意力；兼容补丁处理 NumPy 旋转角、PKL 文件句柄格式和 FocalLoss。NPU 使用 MMDetection 的 PyTorch focal 公式，保留 gamma/alpha/weight/reduction/avg_factor；8 个 FP32 CPU/NPU 前后向案例通过 `atol=1e-5, rtol=1e-4`，不是完整模型 CUDA 精度对齐。
 
-正式完整训练需补齐完整 nuScenes 与 CAN bus，复用已校验的 OCC 归档及官方 DLA 权重，按上游目录准备后运行 `bash tools/quickstart.sh apollo_visionnet train`。正式入口会检查完整数据及权重路径；四卡每卡 batch 1、学习率 `1e-4` 为实验起点，需重新评估 batch / 学习率。mini 不替代检测 mAP、占用 mIoU、稳定性、性能和[官方训练硬件支持](../../../../../docs/environment.md)验收。
+完整训练还需完整 nuScenes/CAN bus，按官方结构准备源码内 `data/occ_gt_release_v1_0/` 下的 train/val PKL 和标签路径，然后运行 `bash tools/quickstart.sh apollo_visionnet train`。四卡每卡 batch 1、学习率 `1e-4`、24 epoch 是实验起点，需检测 mAP、占用 mIoU、稳定性和性能验收。
+
+| 提示 / 现象 | 处理 |
+| --- | --- |
+| 缺少 OCC / PKL / 图像 | 按官方说明补齐，再 prepare、plan；不生成假标签 |
+| 只有 VAL 标签 | 历史 `APOLLO_VAL_ONLY=1` 模式复用 VAL 作训练，不满足独立验证；当前交付使用完整 train/val |
+| 官方初始化核验失败 | 检查固定源码和权重 SHA，不改为随机初始化绕过门禁 |
+| verify 设备数错误 | 单卡操作只填一个宿主逻辑 ID |
+| 只通过 build / compute | build 是构建检查、compute 是合成输入检查，仍需 mini 和独立帧 verify |
+
+来源及补丁哈希见[sources.lock.json](../../../../../sources.lock.json)，完整验收边界见[环境指南](../../../../../docs/environment.md)。

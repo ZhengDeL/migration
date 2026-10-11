@@ -4,6 +4,8 @@
 
 **第一次使用：打开[快速上手](docs/quickstart.md)，选择模型，按命令顺序运行。** 1# 已准备镜像和源码，使用 `bash tools/quickstart.sh <模型> <操作>` 即可，无需在宿主机安装 Python 包。
 
+五份模型指南于 2026-10-12 对照固定版本的官方资料复核，均包含环境、数据布局、运行命令、输出判据及常见问题。新机器先完成[离线恢复](docs/offline_delivery.md)；重新训练前按[保存旧结果](docs/quickstart.md#重新训练前保存旧结果)保留对应输出目录。
+
 ## 已在 1# 验证的内容
 
 截至 2026-10-11，五个模型都在 1# 完成了短程数据训练。Apollo 和 WorldEngine 的真实样本四卡 10 步已通过公开 quickstart 入口核验；完整数据指标和长期稳定性仍待验收。详细范围及 checkpoint 哈希见[实测记录](docs/validation.md)。
