@@ -1,4 +1,4 @@
-# 社区迁移调研（2026-10-10）
+# 社区迁移调研（调研 2026-10-10，实测更新 2026-10-11）
 
 只引用项目维护方的代码、文档或 CI。公开材料中的 A2/A3 与 8 卡结果不能直接外推为本项目 910C 2/4 卡通过。
 
@@ -10,4 +10,10 @@
 | WorldEngine | [OpenDriveLab/WorldEngine](https://github.com/OpenDriveLab/WorldEngine) 官方仓及 [AlgEngine 训练指南](https://github.com/OpenDriveLab/WorldEngine/blob/main/docs/algengine_usage.md) | 官方发布的是 CUDA 训练/SimEngine 流程。未找到项目维护方发布的完整 Ascend/910C 适配；本仓只迁移 AlgEngine VADv2 入口和已定位的变形注意力调用。 |
 | Apollo VisionNet | [ApolloAuto/Apollo-Vision-Net](https://github.com/ApolloAuto/Apollo-Vision-Net) 官方 BEV+OCC 训练仓和 [训练说明](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/main/docs/run.md) | 官方依赖 PyTorch 1.10、CUDA、旧 MMCV/MMDetection3D；[部署仓](https://github.com/ApolloAuto/Apollo-Vision-Net-Deployment)为 TensorRT，不能替代 NPU 训练证明。未找到官方 910C 迁移。 |
 
-DrivingSDK 当前维护的 `v26.1.0` 示例和安装指南见 [官方 README](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/README.md) 与 [安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)。本仓的 WorldEngine/Apollo 补丁参考其 `mx_driving.multi_scale_deformable_attn` 调用形式；这属于从相似 BEV 算子推导的适配，尚需 NPU 数值与梯度回归。
+DrivingSDK 当前维护的 `v26.1.0` 示例和安装指南见 [官方 README](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/README.md) 与 [安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)。本仓的 WorldEngine/Apollo 补丁参考其 `mx_driving.multi_scale_deformable_attn` 调用形式。这项适配已在 1# 完成有限形状的前向/梯度数值检查，以及两模型各自的四卡合成输入前后向；真实数据指标仍需验证。
+
+## 本仓实测与工作流
+
+本次使用已安装的 `ascend-model-migration`、`ascend-migration-analysis`、`ascend-mmlab-install-suite` 和 `ascend-docker` 技能流程，按上游版本定位 CUDA 依赖、复用 DrivingSDK 的 Ascend OpenMMLab 环境、审计补丁并在隔离容器内验证。上表项目维护方材料是来源依据，本仓实测见[验证记录](validation.md)。
+
+BEVFormer、Sparse4D 已在 1# 两卡公开 nuScenes mini 上训练，Qwen 已在两卡完成演示数据 LoRA 十步及保存检查；Apollo 与 WorldEngine 已分别完成 1# 四物理卡模型计算检查。WorldEngine 使用独立派生镜像和固定官方 nuPlan devkit 提交。实测不包含完整数据精度或官方训练硬件支持验收，完整镜像清单见[环境指南](environment.md)。

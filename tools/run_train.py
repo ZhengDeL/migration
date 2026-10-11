@@ -34,6 +34,11 @@ DATA_FILES = {
     "worldengine": ["data/alg_engine/merged_infos_navformer/nuplan_openscene_navtrain.pkl",
                     "data/alg_engine/merged_infos_navformer/nuplan_openscene_navtest.pkl",
                     "data/raw/openscene-v1.1/sensor_blobs/trainval",
+                    "data/raw/openscene-v1.1/sensor_blobs/test",
+                    "data/alg_engine/pdms_cache/pdm_8192_gt_cache_navtrain.pkl",
+                    "data/alg_engine/pdms_cache/pdm_8192_gt_cache_navtest.pkl",
+                    "projects/AlgEngine/configs/navsim_splits/navtrain_split/navtrain_50pct.yaml",
+                    "projects/AlgEngine/configs/navsim_splits/navtest_split/navtest.yaml",
                     "data/alg_engine/test_8192_kmeans.npy",
                     "data/alg_engine/ckpts/track_map_nuplan_r50_navtrain_50pct_bs1x8.pth"],
 }

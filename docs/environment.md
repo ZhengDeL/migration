@@ -1,5 +1,25 @@
 # 910C/A3 环境与数据准备
 
+## 先找到要用的镜像
+
+1# 已准备下表镜像，直接按[快速上手](quickstart.md)运行。`local/...` 是本地标签，其他服务器需要导入已验证的镜像归档或按下文构建。
+
+| 模型 | 实际镜像 | 实测版本 |
+| --- | --- | --- |
+| BEVFormer、Sparse4D、Apollo | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` | CANN 9.1.0 / Python 3.10.21 / Torch 2.7.1 / TorchNPU 2.7.1.post6 / DrivingSDK 26.1.0.post2 |
+| Qwen3-VL-8B | `local/llamafactory:a3-arm64-20261010` | CANN 9.1.0 / Python 3.12.13 / Torch 2.10.0 / TorchNPU 2.10.0.post2 / transformers 5.8.0 |
+| WorldEngine | `local/migration-worldengine:26.1.0-a3-20261011` | 上述 DrivingSDK 栈，加隔离的 AlgEngine / nuPlan 地理依赖 |
+
+`quickstart.sh` 核对的本地 Docker image ID：
+
+```text
+DrivingSDK headless: sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2
+Qwen:               sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8
+WorldEngine:        sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3
+```
+
+上游 registry digest 标识拉取的 ARM64 manifest，本地 image ID 标识导入或构建后的镜像；两者不能互换。完整实测范围见[验证记录](validation.md)。
+
 ## 先确认硬件和软件
 
 在可信 SSH 主机指纹确认后，先只读采集 DMI 产品型号、`npu-smi info -t board -i 0`、`npu-smi info`、`/etc/os-release`、驱动/固件版本、CANN Toolkit/ops 版本、Python、PyTorch、`torch_npu`、`mx_driving`、容器及可用设备数。将具体产品型号与 [ModelZoo-PyTorch 训练硬件支持表](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/docs/zh/install_guide.md)核对：表中 Atlas A3 训练系列受支持，A3 推理系列标为不支持。`npu-smi info` 应同时核对 `NPU` 与 `Chip Phy-ID`：一张双芯片物理卡可对应两个逻辑设备，双卡任务要选择不同物理卡的逻辑 ID。以实际产品形态、SoC、操作系统和驱动配套选择镜像，不能仅凭任务表中的“910C”安装。服务器地址和登录信息仅在受控环境中保存，不写入公开仓库。
@@ -28,9 +48,49 @@ docker build --network none -f docker/DrivingSDK-headless.Dockerfile \
 
 Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。2026-10-10 在 1# 将 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 linux/arm64 manifest 固定为 `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36`；导入 Docker 后镜像 ID 为 `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8`，本地标签 `local/llamafactory:a3-arm64-20261010`。容器内实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0。导出归档为 5643616256 字节，SHA256 `4fd28e7884c48b846826c714a19ec57e722f8cf3203c9454c5a4b2cc956c7d31`。在该镜像里两物理卡实测基础前后向、参数更新和 HCCL all-reduce 均通过；2026-10-11 又完成 Qwen3-VL-8B 双卡 LoRA 十步训练、checkpoint/参数更新检查，以及保存后的单图图文推理。业务数据训练与精度尚未验收。标签会变化，后续复用以上 digest；`run_train.py` 将已锁定 LLaMA-Factory 源码的 `src` 放在 `PYTHONPATH` 首位。该镜像预置空的 `http_proxy`/`https_proxy`；若现场经批准使用命令级代理下载权重，需在该容器中同时设置小写和大写变量，并以实际请求确认生效。Qwen [官方 ModelScope 仓](https://modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct)已提供相同模型，本仓另外锁定其提交 `5d854aab08710c16b980ec6d603d863b3821b915`；从该源下载后必须逐一核对四个分片与 Hugging Face 锁定快照的 SHA256，不能仅凭模型名判断内容相同。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 
-若不用官方预置环境，按各模型 README 和 DrivingSDK 补丁**源码编译** MMCV、mmdet、mmdet3d；不能直接安装未适配的 `mmcv-full` CUDA wheel。WorldEngine 与 Apollo 的旧版 OpenMMLab 依赖必须分别隔离并做 API/算子兼容验证，不能用 BEVFormer 环境导入成功作为它们训练可用的证据。
+### Apollo 的实际环境
 
-WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV 1.6.2、MMDetection3D 1.0.0rc6；Apollo 官方安装文档指定 Python 3.7、PyTorch 1.10、MMCV 1.4.1、MMDetection3D 0.18.1。它们不能直接照搬到当前 TorchNPU/DrivingSDK A3 镜像。`ascend.patch` 只覆盖应用层主要 NPU 入口，尚需建立可导入、可编译且算子支持的完整依赖矩阵。
+Apollo 使用 DrivingSDK headless 镜像的 `bevformer` 环境，MMCV 1.7.2 / mmdet 2.24.0 / mmdet3d 1.0.0rc4 / mmseg 0.30.0。当前配置的导入、模型构建以及 DLA34 / 时序 BEV / 检测 / OCC 四卡合成输入检查均已通过。兼容补丁将 NumPy 旋转角转换成 Python float。真实数据和官方深度预训练初始化仍需验证。
+
+### WorldEngine 的独立派生镜像
+
+[WorldEngine.Dockerfile](../docker/WorldEngine.Dockerfile) 基于上述 DrivingSDK headless 镜像。额外 Python 包安装在 `/opt/worldengine-deps`，地理二进制依赖安装在 `/opt/worldengine-geo`，保留原 CANN 的 Python 搜索路径。NumPy 为 1.23.5，rasterio 为 1.3.11，Fiona 为 1.9.6；实测完整 conda 包清单见[ARM64 环境记录](../docker/worldengine_geo_linux-aarch64.explicit.txt)。
+
+[额外依赖清单](../docker/worldengine_extra_requirements.txt)固定 62 项直接及传递运行依赖，用 `--no-deps` 安装。nuPlan devkit 来自 [Motional 官方仓](https://github.com/motional/nuplan-devkit/tree/ce3c323af01c0d7ec5672f7832ef53f9c679aab0)的固定提交 `ce3c323af01c0d7ec5672f7832ef53f9c679aab0`。旧 Lightning 使用配套 torchmetrics 0.2.0；motmetrics 1.4.0 适配 Python 3.10。Matplotlib 风格名通过可审计的模型兼容补丁处理。
+
+在 ARM64 机器上、已准备 DrivingSDK headless 基础镜像后，从本仓根目录构建：
+
+```bash
+docker build --network host \
+  --build-arg HTTP_PROXY --build-arg HTTPS_PROXY \
+  --build-arg http_proxy="${HTTP_PROXY:-}" --build-arg https_proxy="${HTTPS_PROXY:-}" \
+  -f docker/WorldEngine.Dockerfile \
+  -t local/migration-worldengine:26.1.0-a3-20261011 .
+```
+
+代理按现场网络配置；直连环境可省略代理参数。1# 最终镜像 ID 为上表 `ff85...`，在该镜像上已通过环境导入、58,207,822 参数模型构建和四张物理卡的 AlgEngine 合成输入前后向、参数同步与 checkpoint 重载。合成输入为 96×160，未覆盖真实训练数据或原始分辨率。
+
+WorldEngine 官方 CUDA 依赖和 Apollo 官方旧版 CUDA 依赖作为适配基线，本次 Ascend 实验使用以上已实测栈。若重新搭建 OpenMMLab，按 DrivingSDK 补丁**源码编译**；新构建可能产生不同 image ID，需先核对依赖并重新执行功能验证，再通过代码评审更新镜像锁定。直接导入已验证的 Docker 归档可保留原 image ID。
+
+### 新机器的镜像准备
+
+先核对 ARM64 架构、具体 A3 产品和驱动配套。以下为**准备命令示例**；1# 已安装镜像，无需重复拉取。
+
+```bash
+docker pull --platform linux/arm64 \
+  swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801
+docker tag \
+  swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801 \
+  local/drivingsdk:26.1.0-a3-arm64-20261010
+
+docker pull --platform linux/arm64 \
+  quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36
+docker tag \
+  quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36 \
+  local/llamafactory:a3-arm64-20261010
+```
+
+Docker 拉取走宿主已有的 registry 网络配置；仅在 shell 设置代理不一定影响 Docker daemon。无法拉取时，使用可信机器上的 `docker save` 归档，经文件 SHA256 校验后在目标机 `docker load`。本仓不修改宿主 Docker daemon 或 DNS。DrivingSDK 继续按前文构建 headless 派生镜像，WorldEngine 再按独立 Dockerfile 构建。
 
 ## 数据与权重
 
@@ -41,7 +101,7 @@ WorldEngine 官方 AlgEngine 文档指定 Python 3.9、CUDA PyTorch 2.0.1、MMCV
 | BEVFormer | nuScenes v1.0 full、CAN bus、`nuscenes_infos_temporal_{train,val}.pkl`、`r101_dcn_fcos3d_pretrain.pth`，参见 [官方示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/BEVFormer/README.md)。 |
 | Sparse4D | nuScenes、`nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy`、ResNet50 预训练权重；旧版官方权重须按[模型说明](../PyTorch/contrib/cv/detection/Sparse4D/README.md)转换格式，参见 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)。 |
 | Qwen3-VL-8B | `Qwen3-VL-8B-Instruct` 本地完整权重/processor、按 LLaMA-Factory `data/dataset_info.json` 注册的图文训练集、独立验证集；`mllm_demo` 仅用于 smoke。 |
-| WorldEngine | 官方 OpenScene/NAVSIM 数据、已处理的 AlgEngine 标注、`test_8192_kmeans.npy` 和配置引用的基座 checkpoint，参见 [数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/main/docs/data_organization.md)。 |
+| WorldEngine | 官方 OpenScene/NAVSIM 图像、已处理的 AlgEngine navtrain/navtest 标注、`pdm_8192_gt_cache_nav{train,test}.pkl`、轨迹词表和配置引用的基座 checkpoint，参见[固定上游数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)。`worldengine download` 仅自动获取词表。 |
 | Apollo VisionNet | nuScenes、CAN bus、OCC 标注/生成的 train/val pkl、DLA34 预训练权重，参见 [官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/main/docs/prepare_dataset.md)。 |
 
 不要把数据、权重、训练输出或登录凭据提交到 GitHub。大数据通过挂载或符号链接放到上游配置所需的路径。`tools/run_train.py` 的 `missing_data` 输出可检查核心文件；还应人工确认文件完整性和许可证。

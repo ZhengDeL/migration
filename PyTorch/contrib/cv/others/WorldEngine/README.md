@@ -1,27 +1,42 @@
-# WorldEngine AlgEngine：Ascend 训练迁移草案
+# WorldEngine AlgEngine：Ascend 训练迁移
 
-## 参考实现与范围
+## 实现与范围
 
-上游是 [OpenDriveLab/WorldEngine](https://github.com/OpenDriveLab/WorldEngine) 的 `3eded7e8ac64e5bed817860765089b5914ab698f`。本目录补丁覆盖 **AlgEngine VADv2 50%** 配置的训练入口、NPU 分布式包装及 UniAD 路径的多尺度变形注意力。SimEngine、3DGS 和完整后训练链路不在本补丁范围内。
+上游 [OpenDriveLab/WorldEngine](https://github.com/OpenDriveLab/WorldEngine) 固定提交 `3eded7e8ac64e5bed817860765089b5914ab698f`。本目录覆盖 AlgEngine 的 `e2e_vadv2_50pct.py`：NAVFormer / TrajScoringHead、NPU 分布式入口及多尺度变形注意力。配置中的“50%”指上游数据划分；合成检查没有使用这些真实数据。SimEngine、3DGS、强化学习和完整后训练链路尚未适配。
 
-## 环境和数据
+## 镜像
 
-**当前未选定、构建或在 2# 验证 WorldEngine 训练镜像。** 上游 AlgEngine 使用 Python 3.9、CUDA PyTorch 2.0.1、MMCV 1.6.2、MMDetection3D 1.0.0rc6；这些包尚未证明可与当前 TorchNPU A3 环境兼容。1# 的 DrivingSDK 派生镜像仅验证了 BEVFormer/Sparse4D，不能当作本模型的已验证镜像。必须先在 2# 核对硬件和驱动，再建立独立的 CANN/TorchNPU/MMCV/mmdet/mmdet3d 依赖矩阵、源码编译、`python3 tools/check_env.py --model worldengine --nproc 4` 和算子数值检查；不能把本地静态检查当成环境通过。镜像选择原则见仓库[环境指南](../../../../../docs/environment.md)。
+1# 使用 `local/migration-worldengine:26.1.0-a3-20261011`，image ID `sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3`。基于 DrivingSDK headless 镜像，保留 Python 3.10.21、CANN 9.1.0、PyTorch 2.7.1、TorchNPU 2.7.1.post6、MMCV 1.7.2、mmdet 2.24.0、mmdet3d 1.0.0rc4。
 
-按上游 [AlgEngine 数据说明](https://github.com/OpenDriveLab/WorldEngine/blob/main/docs/algengine_usage.md)准备 OpenScene/NAVSIM 数据、`nuplan_openscene_nav{train,test}.pkl`、`test_8192_kmeans.npy` 和配置引用的基座 checkpoint。数据路径详见根目录 `docs/environment.md`。
+额外 nuPlan / AlgEngine 依赖隔离安装，nuPlan 使用维护方固定 Git 提交，NumPy 保持 1.23.5。ARM64 地理库来自独立 conda prefix。Dockerfile、依赖清单及来源见[环境指南](../../../../../docs/environment.md)。
 
 ## 快速开始
 
-以下命令从仓库根目录执行；未传 `--execute` 时只打印计划：
+在已经准备好镜像和源码的 1#，从仓库根目录执行：
 
 ```bash
-python3 tools/prepare.py worldengine --source sources/WorldEngine --apply
-bash PyTorch/contrib/cv/others/WorldEngine/test/train_4p.sh --smoke
-bash PyTorch/contrib/cv/others/WorldEngine/test/train_4p.sh --smoke --execute
+bash tools/quickstart.sh worldengine check
+bash tools/quickstart.sh worldengine download
+bash tools/quickstart.sh worldengine compute
 ```
 
-脚本以 4 卡、每卡 batch 1、`5e-5` 学习率为实验起点。`--smoke` 对 epoch runner 执行 1 个 epoch，可能耗时较长。
+`download` 只下载发布方 3932288 字节的 `test_8192_kmeans.npy`，SHA256 `cc44a31e75a53406db59f026f0358de97931e726f10254542f98d2a87a38ad35`。`compute` 默认选四张不同物理卡的宿主逻辑设备 `0,2,4,6`，容器内编号 `0,1,2,3`，不加载真实训练数据或预训练 checkpoint。
 
-## 验证和状态
+```bash
+bash tools/quickstart.sh worldengine build  # 仅模型构建和 NPU 放置
+bash tools/quickstart.sh worldengine plan   # 列出真实训练缺少的文件
+```
 
-补丁已做逐文件静态校验、Python 编译和命令生成；NPU 依赖栈、四卡训练、开环指标与 SimEngine 闭环链路均未验证。实机先核对变形注意力前后向，再做模型级精度回归。
+## 实机验证
+
+2026-10-11 在 1# 上，最终镜像的环境导入、58,207,822 参数模型构建及四物理卡 DDP 合成输入检查通过。四帧、八相机 `96×160`，原配置 `200×200` BEV、完整 8192 条轨迹词表；各 rank 使用不同随机输入。四个 rank 均有有限的原始 BEV、规划输出、掩码处理前的 imitation loss 和 259 个梯度张量，AdamW 更新发生，更新后的被检查参数跨 rank 一致。
+
+rank 0 的 checkpoint 为 233338823 字节，SHA256 `3b97ae39e728cde5fc0518a714a0d3a0b70fa9e04abd3702c55c1407be6b7288`，保存重载通过。报告位于 `outputs/worldengine/compute_fixture/rank{0,1,2,3}.json`，公开摘要见[实测记录](../../../../../docs/validation.md)。
+
+这证明当前合成输入计算路径可运行。真实数据训练、正式输入分辨率、PDM / 开环规划指标、长期稳定性和 SimEngine 闭环链路未验证；完整训练验收仍未完成。
+
+## 真实训练准备
+
+按固定上游[数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)准备 OpenScene/NAVSIM 图像、处理后的 navtrain/navtest 标注、两套 PDM 缓存、轨迹词表和基座 checkpoint。现有 `plan` 会检查关键路径，不能只准备词表就运行训练。
+
+文件齐全后运行 `bash tools/quickstart.sh worldengine train`。4 卡、每卡 batch 1、学习率 `5e-5`、8 epoch 为本仓实验配置；需要重新评估全局 batch 和学习率。相应容器内的 `test/train_4p.sh --smoke --execute` 使用 1 epoch，并显式设置 `ASCEND_DEVICES=0,1,2,3`；大数据下 1 epoch 可能耗时较长。
