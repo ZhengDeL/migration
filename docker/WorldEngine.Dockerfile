@@ -17,5 +17,5 @@ RUN TORCH_DEVICE_BACKEND_AUTOLOAD=0 /opt/conda/envs/bevformer/bin/python \
       -m pip install --no-deps --no-cache-dir --index-url https://pypi.org/simple \
       --target /opt/worldengine-deps -r /tmp/worldengine_extra_requirements.txt
 
-ENV PYTHONPATH=/opt/worldengine-deps:/opt/worldengine-geo/lib/python3.10/site-packages
+ENV PYTHONPATH=/opt/worldengine-deps:/opt/worldengine-geo/lib/python3.10/site-packages:${PYTHONPATH}
 ENV LD_LIBRARY_PATH=/opt/worldengine-geo/lib:${LD_LIBRARY_PATH}
