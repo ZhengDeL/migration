@@ -1,0 +1,16 @@
+.git
+sources
+outputs
+data
+ckpt
+ckpts
+work_dirs
+__pycache__
+*.pyc
+*.log
+*.pth
+*.pt
+*.safetensors
+*.npy
+*.pkl
+*.ckpt

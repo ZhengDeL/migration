@@ -1,0 +1,273 @@
+{
+  "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/compare/c41df4bbf7bc82490f11ff55173abfcb3fb91425...249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+  "html_url": "https://github.com/HorizonRobotics/Sparse4D/compare/c41df4bbf7bc82490f11ff55173abfcb3fb91425...249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+  "permalink_url": "https://github.com/HorizonRobotics/Sparse4D/compare/HorizonRobotics:c41df4b...HorizonRobotics:249ffbb",
+  "diff_url": "https://github.com/HorizonRobotics/Sparse4D/compare/c41df4bbf7bc82490f11ff55173abfcb3fb91425...249ffbb695f4e9db628d953e2bf6d36de04bbb69.diff",
+  "patch_url": "https://github.com/HorizonRobotics/Sparse4D/compare/c41df4bbf7bc82490f11ff55173abfcb3fb91425...249ffbb695f4e9db628d953e2bf6d36de04bbb69.patch",
+  "base_commit": {
+    "sha": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "node_id": "C_kwDOLH4v69oAKGM0MWRmNGJiZjdiYzgyNDkwZjExZmY1NTE3M2FiZmNiM2ZiOTE0MjU",
+    "commit": {
+      "author": {
+        "name": "linxuewu",
+        "email": "50012935+linxuewu@users.noreply.github.com",
+        "date": "2024-06-25T06:22:13Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-06-25T06:22:13Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "a905247a3352b43d2bd8fb69872b96b4d96e1c62",
+        "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/trees/a905247a3352b43d2bd8fb69872b96b4d96e1c62"
+      },
+      "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmemIVCRC1aQ7uu5UhlAAA0OcQAI+vyHD6TJiNppSwn6wlSSS1\nQm/bqoK484icQcXhQo5ISPKofvkPzZgJDQjX2FRDmDHTsYkkfnEcZQLIoz1fC49H\ntN/kUF2ouSAHgYnGH8XC8Pjia+AUU2eeQDhSx7uwCsgwnUq1G2MjF24CUTEAzVhr\nOqnGTWluFPLX2+HkNGXVL7V9iHL2VKTP14SXXNdwOb4OPquZVYXBQUNvfg5CdQg0\nSTZ66n5tDUO/lXTe545eqp1W0M3aXAEq8E2vIe6pk6VxLk8brRxikPuyt5OjzEap\nbpBpTH8meebmWIhL5s0SY3kdW96Ht13DWqzeNEaGH7lAwo/Tksgrki5wJo0aTP0P\nK4fc6Vx2Kelbg/TQeAsCPYwXMy9tYRAchBxKUgP61jm8AwUbGlLIxCCGJYGtVwWj\nIkwzNuUbLDSzmompWuV63NhljycCeABlG5Zk1pf2OqbPu+GmoLECkqeyvgZ/0XId\np9KYH13hcvWEBJssJsAwzb2fO8UgJDDeeSNZ1CcW1lRhFhnfnQgE9yL5O2XOVdnm\nAWfw/SFilH3GzDLkZq3CXTvvNsIvuV621/phPlcXLb9kENn7R4qCRMuWQ/WYBX/j\nS2M/+nyBk+iOPLEQ9FlJDMIJDfNApQ3Z440R8VSBxKlgnu+OfOIIZur//62O3PGZ\nsJ5zmnozkVi5cEw7Rttt\n=eIMa\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree a905247a3352b43d2bd8fb69872b96b4d96e1c62\nparent 911318c7eb5e32af6427673d3e10e65eb2bae01d\nauthor linxuewu <50012935+linxuewu@users.noreply.github.com> 1719296533 +0800\ncommitter GitHub <noreply@github.com> 1719296533 +0800\n\nUpdate README.md",
+        "verified_at": "2024-11-06T03:49:18Z"
+      }
+    },
+    "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "comments_url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425/comments",
+    "author": {
+      "login": "linxuewu",
+      "id": 50012935,
+      "node_id": "MDQ6VXNlcjUwMDEyOTM1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50012935?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/linxuewu",
+      "html_url": "https://github.com/linxuewu",
+      "followers_url": "https://api.github.com/users/linxuewu/followers",
+      "following_url": "https://api.github.com/users/linxuewu/following{/other_user}",
+      "gists_url": "https://api.github.com/users/linxuewu/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/linxuewu/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/linxuewu/subscriptions",
+      "organizations_url": "https://api.github.com/users/linxuewu/orgs",
+      "repos_url": "https://api.github.com/users/linxuewu/repos",
+      "events_url": "https://api.github.com/users/linxuewu/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/linxuewu/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "911318c7eb5e32af6427673d3e10e65eb2bae01d",
+        "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/911318c7eb5e32af6427673d3e10e65eb2bae01d",
+        "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/911318c7eb5e32af6427673d3e10e65eb2bae01d"
+      }
+    ]
+  },
+  "merge_base_commit": {
+    "sha": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "node_id": "C_kwDOLH4v69oAKGM0MWRmNGJiZjdiYzgyNDkwZjExZmY1NTE3M2FiZmNiM2ZiOTE0MjU",
+    "commit": {
+      "author": {
+        "name": "linxuewu",
+        "email": "50012935+linxuewu@users.noreply.github.com",
+        "date": "2024-06-25T06:22:13Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2024-06-25T06:22:13Z"
+      },
+      "message": "Update README.md",
+      "tree": {
+        "sha": "a905247a3352b43d2bd8fb69872b96b4d96e1c62",
+        "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/trees/a905247a3352b43d2bd8fb69872b96b4d96e1c62"
+      },
+      "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmemIVCRC1aQ7uu5UhlAAA0OcQAI+vyHD6TJiNppSwn6wlSSS1\nQm/bqoK484icQcXhQo5ISPKofvkPzZgJDQjX2FRDmDHTsYkkfnEcZQLIoz1fC49H\ntN/kUF2ouSAHgYnGH8XC8Pjia+AUU2eeQDhSx7uwCsgwnUq1G2MjF24CUTEAzVhr\nOqnGTWluFPLX2+HkNGXVL7V9iHL2VKTP14SXXNdwOb4OPquZVYXBQUNvfg5CdQg0\nSTZ66n5tDUO/lXTe545eqp1W0M3aXAEq8E2vIe6pk6VxLk8brRxikPuyt5OjzEap\nbpBpTH8meebmWIhL5s0SY3kdW96Ht13DWqzeNEaGH7lAwo/Tksgrki5wJo0aTP0P\nK4fc6Vx2Kelbg/TQeAsCPYwXMy9tYRAchBxKUgP61jm8AwUbGlLIxCCGJYGtVwWj\nIkwzNuUbLDSzmompWuV63NhljycCeABlG5Zk1pf2OqbPu+GmoLECkqeyvgZ/0XId\np9KYH13hcvWEBJssJsAwzb2fO8UgJDDeeSNZ1CcW1lRhFhnfnQgE9yL5O2XOVdnm\nAWfw/SFilH3GzDLkZq3CXTvvNsIvuV621/phPlcXLb9kENn7R4qCRMuWQ/WYBX/j\nS2M/+nyBk+iOPLEQ9FlJDMIJDfNApQ3Z440R8VSBxKlgnu+OfOIIZur//62O3PGZ\nsJ5zmnozkVi5cEw7Rttt\n=eIMa\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree a905247a3352b43d2bd8fb69872b96b4d96e1c62\nparent 911318c7eb5e32af6427673d3e10e65eb2bae01d\nauthor linxuewu <50012935+linxuewu@users.noreply.github.com> 1719296533 +0800\ncommitter GitHub <noreply@github.com> 1719296533 +0800\n\nUpdate README.md",
+        "verified_at": "2024-11-06T03:49:18Z"
+      }
+    },
+    "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "comments_url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425/comments",
+    "author": {
+      "login": "linxuewu",
+      "id": 50012935,
+      "node_id": "MDQ6VXNlcjUwMDEyOTM1",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50012935?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/linxuewu",
+      "html_url": "https://github.com/linxuewu",
+      "followers_url": "https://api.github.com/users/linxuewu/followers",
+      "following_url": "https://api.github.com/users/linxuewu/following{/other_user}",
+      "gists_url": "https://api.github.com/users/linxuewu/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/linxuewu/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/linxuewu/subscriptions",
+      "organizations_url": "https://api.github.com/users/linxuewu/orgs",
+      "repos_url": "https://api.github.com/users/linxuewu/repos",
+      "events_url": "https://api.github.com/users/linxuewu/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/linxuewu/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "911318c7eb5e32af6427673d3e10e65eb2bae01d",
+        "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/911318c7eb5e32af6427673d3e10e65eb2bae01d",
+        "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/911318c7eb5e32af6427673d3e10e65eb2bae01d"
+      }
+    ]
+  },
+  "status": "ahead",
+  "ahead_by": 1,
+  "behind_by": 0,
+  "total_commits": 1,
+  "commits": [
+    {
+      "sha": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "node_id": "C_kwDOLH4v69oAKDI0OWZmYmI2OTVmNGU5ZGI2MjhkOTUzZTJiZjZkMzZkZTA0YmJiNjk",
+      "commit": {
+        "author": {
+          "name": "linxuewu",
+          "email": "50012935+linxuewu@users.noreply.github.com",
+          "date": "2026-05-21T09:34:34Z"
+        },
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "date": "2026-05-21T09:34:34Z"
+        },
+        "message": "Update README.md",
+        "tree": {
+          "sha": "f5c8c597becc35e0645091dbdf3b2cb7814923ea",
+          "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/trees/f5c8c597becc35e0645091dbdf3b2cb7814923ea"
+        },
+        "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/git/commits/249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+        "comment_count": 0,
+        "verification": {
+          "verified": true,
+          "reason": "valid",
+          "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqDtGqCRC1aQ7uu5UhlAAA5NcQAIuGoNfB5lh55227KP/2Mxyb\nR3OrKwZjmghVLqhczFOxrm+n5QIdqohpAOZ1F/XjRrqqYVjhZMv3tG066XZtF4sb\n0+bXwrnWkRrWGfgaMSLPni1uAEa76MpOWo/CPSPd/R7+4maQrl91eNposZH9pgnp\ngRFjR5o+MwLhCsnVgT/9mvPSfWrhSOuz4lKzKEbxVz75LE6g0A8BzB0MElEBDFX9\nX9xPdjdCS+aQaeB3xz6DXmIAtmW1iXkPqfN/RJbJkN9tHpP0Ja5YVhRaJVZF7dho\n+6nIRP2VYn052hN637wCJGO5owQ0/xVyIkIwHUXyDZC2W+b9O+TSl5ZPrtuTeThC\nC8SuMANzi7RqJ48vHwbUjpeKERMNd0Vuo+NriBrIMXMhLv214vbQQEYMya/lSovz\nbCG1j8hGYUzGD5uU1Iw8jegm2BpOHogb+V8AFyxCorSuydwk+ETGDAKN4JuVkGQq\n8lcQRjAAehpwKwAR6pdKz8H5H9EYLCIpV1IES3AjRGAmkWAae41EzzF8npxra5oS\nYRksqLBvX/1ZvVnJtFnbAoKhdK42MEeGtVVud0ceO7VhCmQemc/3GVznHiXkhU1m\nQiwGOXtkcv7YetspUCYVncGzAcv6T//IrgYUF1Z13faQTbECU5mGYCwOXbwJuRtr\nAi4QUjvRN2eQFb0F4Qvu\n=MR0E\n-----END PGP SIGNATURE-----\n",
+          "payload": "tree f5c8c597becc35e0645091dbdf3b2cb7814923ea\nparent c41df4bbf7bc82490f11ff55173abfcb3fb91425\nauthor linxuewu <50012935+linxuewu@users.noreply.github.com> 1779356074 +0800\ncommitter GitHub <noreply@github.com> 1779356074 +0800\n\nUpdate README.md",
+          "verified_at": "2026-05-21T09:34:34Z"
+        }
+      },
+      "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "comments_url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/249ffbb695f4e9db628d953e2bf6d36de04bbb69/comments",
+      "author": {
+        "login": "linxuewu",
+        "id": 50012935,
+        "node_id": "MDQ6VXNlcjUwMDEyOTM1",
+        "avatar_url": "https://avatars.githubusercontent.com/u/50012935?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/linxuewu",
+        "html_url": "https://github.com/linxuewu",
+        "followers_url": "https://api.github.com/users/linxuewu/followers",
+        "following_url": "https://api.github.com/users/linxuewu/following{/other_user}",
+        "gists_url": "https://api.github.com/users/linxuewu/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/linxuewu/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/linxuewu/subscriptions",
+        "organizations_url": "https://api.github.com/users/linxuewu/orgs",
+        "repos_url": "https://api.github.com/users/linxuewu/repos",
+        "events_url": "https://api.github.com/users/linxuewu/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/linxuewu/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "web-flow",
+        "id": 19864447,
+        "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/web-flow",
+        "html_url": "https://github.com/web-flow",
+        "followers_url": "https://api.github.com/users/web-flow/followers",
+        "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+        "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+        "organizations_url": "https://api.github.com/users/web-flow/orgs",
+        "repos_url": "https://api.github.com/users/web-flow/repos",
+        "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/web-flow/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+          "url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/commits/c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+          "html_url": "https://github.com/HorizonRobotics/Sparse4D/commit/c41df4bbf7bc82490f11ff55173abfcb3fb91425"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "sha": "803878dbee53642815b579741bed6abfe6537e3e",
+      "filename": "README.md",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0,
+      "changes": 2,
+      "blob_url": "https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/README.md",
+      "raw_url": "https://github.com/HorizonRobotics/Sparse4D/raw/249ffbb695f4e9db628d953e2bf6d36de04bbb69/README.md",
+      "contents_url": "https://api.github.com/repos/HorizonRobotics/Sparse4D/contents/README.md?ref=249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "patch": "@@ -10,6 +10,8 @@\n > [SparseDrive: End-to-End Autonomous Driving via Sparse Scene Representation](https://arxiv.org/abs/2405.19620) \\\n > [Chinese Interpretation of the Papers](https://zhuanlan.zhihu.com/p/637096473)\n \n+**\u30102026/04\u3011The integrated version of Sparse4D (v1/v2/v3+lidar) was accepted by TPAMI. Please refer to: [link](https://ieeexplore.ieee.org/abstract/document/11498453/).**\n+\n **\u30102024/06\u3011Our follow-up project, SparseDrive (an end-to-end planning model based on the sparse framework), has been released!!! [arxiv](https://arxiv.org/abs/2405.19620) & [github](https://github.com/swc-17/SparseDrive).**\n \n ## Overall Architecture"
+    }
+  ]
+}

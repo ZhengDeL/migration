@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-11",
+  "entrypoint": "bash tools/quickstart.sh worldengine mini",
+  "exit_code": 0,
+  "model_revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
+  "patch_sha256": "02bf9a2022fc8cc0233ffdf86f8e432da847c7d474cc556e59e608a94ceb593a",
+  "compat_patch_sha256": "c7996d5250f0540dc35c48da742b94f1d45841d90a516c3e05a375538dc0f8b8",
+  "image": "local/migration-worldengine:26.1.0-a3-20261011",
+  "image_id": "sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3",
+  "host_logical_devices": [
+    0,
+    2,
+    4,
+    6
+  ],
+  "container_devices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "physical_cards": 4,
+  "hardware": "Atlas 800I A3; experimental functional validation",
+  "dtype": "float32",
+  "samples_per_rank": 1,
+  "config_origin": "pinned original model config; ten-iteration functional run",
+  "checkpoint_path": "outputs/worldengine/mini/iter_10.pth",
+  "heldout_metric": false,
+  "resume_training_tested": false,
+  "validation_tools": {
+    "tools/quickstart.sh": "691442052d68640399e75c2343fea6df6195a8da75dd5a7a502bfba2fa9d8ba6",
+    "tools/run_train.py": "c110185e63a1f4a80f8e714bb9564f797e9e8f2b5c7d4938a79a8eee6f8756ff",
+    "tools/check_idle_cards.py": "11c64482a550d13609478767f2b854b2614b8abda340dde552ce0a8bcae0b214",
+    "tools/prepare.py": "53eb1bf718232b88aade0cc32eea4ec7c2e3404fb5c5f6e79cca9cc1bb112530",
+    "tools/check_env.py": "de048b7bd25d11d0a13ba8ea183fde970469a0089447f90fb8e2ed4d0fb95799",
+    "tools/check_msda.py": "80fd03a8ff1a40cb1fd5ecead3adc2346b40f815088ca0f3574c60bc54a22750",
+    "tools/fetch_world_vocab.py": "3dc1b830a35a2e6de5def93560d10b723f8294646efff6a5a7d2e13ce1a67ce2",
+    "tools/finite_training.py": "cfefb1f52c59d071579e1ced3b3cf86ae2aeb1fcbc19338d0a198f16b0add17d",
+    "tools/create_legacy_mini_config.py": "debcbf4177ae581e30d5fa783734a4647087ecc4ab1263a47ed678eb742ec1b9",
+    "tools/validate_legacy_mini.py": "d858fa57ab2b530c88d4895d77ee8415c769c31fa19d048a0648ac4c91c24d2d",
+    "tools/prepare_apollo_mini.py": "7ae599f03ade22f58042ff8fa14a834832f83f4b1d84e0a5612230f054285160",
+    "tools/prepare_world_mini.py": "42038383602e0d30a33d05f36b044ad18db6af5e5b87cb5e22f8b4a465ff7a1c",
+    "tools/fetch_world_mini.py": "acddb1eefc75d4ace7f31cf14fa54128faa6c74d4f8d9cda86971f3f953414ad",
+    "tools/world_mini_data.py": "8d428422d22dcc839d73ab426e2a2f9ce4856756c199945a5c0da84690365b62",
+    "tools/check_apollo_focal.py": "641fa25d3077b95bc0c5f74266c3b2a857edcd489869fd69d54f14c9c47ba61f"
+  }
+}

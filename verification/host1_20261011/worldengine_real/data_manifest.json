@@ -1,0 +1,26 @@
+{
+  "model": "worldengine",
+  "dataset_scope": "Official NAVTEST samples reused for functional training only; no heldout metric",
+  "logs": [
+    "2021.05.25.15.59.03_veh-30_04463_04606",
+    "2021.09.09.17.18.51_veh-48_01173_01237",
+    "2021.09.16.19.12.04_veh-42_01221_01380"
+  ],
+  "annotation_frames": 140,
+  "training_anchors": 64,
+  "camera_files": 8096,
+  "pdm_tokens": 64,
+  "publisher_checksums": {
+    "annotation": "59a8bdf1a9a2c6066dd562333679f54ffee9cbfe9cb3420bab27dce62c5da21b",
+    "pdm_cache": "58d82e73bc3dfaa6464ea7d90dee86f8e0139ea1679145d610a9babf86fe7316",
+    "camera": "67a9c6ca0cb7ed650e93e2790425f8676f4749125e72f6f9f9f003eedfc36c57"
+  },
+  "trajectory_labels_changed": false,
+  "diffusiondrive_data_mode": false,
+  "heldout_samples": 0,
+  "prepared_files": {
+    "worldengine_navtest_smoke.pkl": "7a74bc428219b5e843cfc3bb45f29ba727cf1158f92d3c4ec635edf8f51b87de",
+    "worldengine_navtest_smoke_pdm.pkl": "b28f27c06402fea7a72deb256df7163a3101c09f3c5ec4e5b5663ae79f8006e9",
+    "worldengine_navtest_smoke.yaml": "1e483ac9c0dd3d4b7c2df79ab2b1edb63a8c8c46263be912d4c90aec07550952"
+  }
+}

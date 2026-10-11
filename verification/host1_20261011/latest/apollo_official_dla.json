@@ -1,0 +1,1163 @@
+{
+  "official_repository": "https://github.com/ApolloAuto/Apollo-Vision-Net",
+  "revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+  "path": "ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth",
+  "git_blob_sha1": "af42f8693fd64f47021e64d6b530331cf075e901",
+  "bytes": 61045957,
+  "sha256_observed": "8c55b0d98fd0fbc885a7487a764457941e008dcc5a76887196e6264a0e38cc1d",
+  "state_keys": [
+    "base_layer.weight",
+    "base_layer.norm.weight",
+    "base_layer.norm.bias",
+    "base_layer.norm.running_mean",
+    "base_layer.norm.running_var",
+    "base_layer.norm.num_batches_tracked",
+    "level0.0.weight",
+    "level0.0.norm.weight",
+    "level0.0.norm.bias",
+    "level0.0.norm.running_mean",
+    "level0.0.norm.running_var",
+    "level0.0.norm.num_batches_tracked",
+    "level1.0.weight",
+    "level1.0.norm.weight",
+    "level1.0.norm.bias",
+    "level1.0.norm.running_mean",
+    "level1.0.norm.running_var",
+    "level1.0.norm.num_batches_tracked",
+    "level2.tree1.conv1.weight",
+    "level2.tree1.conv1.norm.weight",
+    "level2.tree1.conv1.norm.bias",
+    "level2.tree1.conv1.norm.running_mean",
+    "level2.tree1.conv1.norm.running_var",
+    "level2.tree1.conv1.norm.num_batches_tracked",
+    "level2.tree1.conv2.weight",
+    "level2.tree1.conv2.norm.weight",
+    "level2.tree1.conv2.norm.bias",
+    "level2.tree1.conv2.norm.running_mean",
+    "level2.tree1.conv2.norm.running_var",
+    "level2.tree1.conv2.norm.num_batches_tracked",
+    "level2.tree2.conv1.weight",
+    "level2.tree2.conv1.norm.weight",
+    "level2.tree2.conv1.norm.bias",
+    "level2.tree2.conv1.norm.running_mean",
+    "level2.tree2.conv1.norm.running_var",
+    "level2.tree2.conv1.norm.num_batches_tracked",
+    "level2.tree2.conv2.weight",
+    "level2.tree2.conv2.norm.weight",
+    "level2.tree2.conv2.norm.bias",
+    "level2.tree2.conv2.norm.running_mean",
+    "level2.tree2.conv2.norm.running_var",
+    "level2.tree2.conv2.norm.num_batches_tracked",
+    "level2.root.conv.weight",
+    "level2.root.conv.norm.weight",
+    "level2.root.conv.norm.bias",
+    "level2.root.conv.norm.running_mean",
+    "level2.root.conv.norm.running_var",
+    "level2.root.conv.norm.num_batches_tracked",
+    "level2.project.weight",
+    "level2.project.norm.weight",
+    "level2.project.norm.bias",
+    "level2.project.norm.running_mean",
+    "level2.project.norm.running_var",
+    "level2.project.norm.num_batches_tracked",
+    "level3.tree1.tree1.conv1.weight",
+    "level3.tree1.tree1.conv1.norm.weight",
+    "level3.tree1.tree1.conv1.norm.bias",
+    "level3.tree1.tree1.conv1.norm.running_mean",
+    "level3.tree1.tree1.conv1.norm.running_var",
+    "level3.tree1.tree1.conv1.norm.num_batches_tracked",
+    "level3.tree1.tree1.conv2.weight",
+    "level3.tree1.tree1.conv2.norm.weight",
+    "level3.tree1.tree1.conv2.norm.bias",
+    "level3.tree1.tree1.conv2.norm.running_mean",
+    "level3.tree1.tree1.conv2.norm.running_var",
+    "level3.tree1.tree1.conv2.norm.num_batches_tracked",
+    "level3.tree1.tree2.conv1.weight",
+    "level3.tree1.tree2.conv1.norm.weight",
+    "level3.tree1.tree2.conv1.norm.bias",
+    "level3.tree1.tree2.conv1.norm.running_mean",
+    "level3.tree1.tree2.conv1.norm.running_var",
+    "level3.tree1.tree2.conv1.norm.num_batches_tracked",
+    "level3.tree1.tree2.conv2.weight",
+    "level3.tree1.tree2.conv2.norm.weight",
+    "level3.tree1.tree2.conv2.norm.bias",
+    "level3.tree1.tree2.conv2.norm.running_mean",
+    "level3.tree1.tree2.conv2.norm.running_var",
+    "level3.tree1.tree2.conv2.norm.num_batches_tracked",
+    "level3.tree1.root.conv.weight",
+    "level3.tree1.root.conv.norm.weight",
+    "level3.tree1.root.conv.norm.bias",
+    "level3.tree1.root.conv.norm.running_mean",
+    "level3.tree1.root.conv.norm.running_var",
+    "level3.tree1.root.conv.norm.num_batches_tracked",
+    "level3.tree1.project.weight",
+    "level3.tree1.project.norm.weight",
+    "level3.tree1.project.norm.bias",
+    "level3.tree1.project.norm.running_mean",
+    "level3.tree1.project.norm.running_var",
+    "level3.tree1.project.norm.num_batches_tracked",
+    "level3.tree2.tree1.conv1.weight",
+    "level3.tree2.tree1.conv1.norm.weight",
+    "level3.tree2.tree1.conv1.norm.bias",
+    "level3.tree2.tree1.conv1.norm.running_mean",
+    "level3.tree2.tree1.conv1.norm.running_var",
+    "level3.tree2.tree1.conv1.norm.num_batches_tracked",
+    "level3.tree2.tree1.conv2.weight",
+    "level3.tree2.tree1.conv2.norm.weight",
+    "level3.tree2.tree1.conv2.norm.bias",
+    "level3.tree2.tree1.conv2.norm.running_mean",
+    "level3.tree2.tree1.conv2.norm.running_var",
+    "level3.tree2.tree1.conv2.norm.num_batches_tracked",
+    "level3.tree2.tree2.conv1.weight",
+    "level3.tree2.tree2.conv1.norm.weight",
+    "level3.tree2.tree2.conv1.norm.bias",
+    "level3.tree2.tree2.conv1.norm.running_mean",
+    "level3.tree2.tree2.conv1.norm.running_var",
+    "level3.tree2.tree2.conv1.norm.num_batches_tracked",
+    "level3.tree2.tree2.conv2.weight",
+    "level3.tree2.tree2.conv2.norm.weight",
+    "level3.tree2.tree2.conv2.norm.bias",
+    "level3.tree2.tree2.conv2.norm.running_mean",
+    "level3.tree2.tree2.conv2.norm.running_var",
+    "level3.tree2.tree2.conv2.norm.num_batches_tracked",
+    "level3.tree2.root.conv.weight",
+    "level3.tree2.root.conv.norm.weight",
+    "level3.tree2.root.conv.norm.bias",
+    "level3.tree2.root.conv.norm.running_mean",
+    "level3.tree2.root.conv.norm.running_var",
+    "level3.tree2.root.conv.norm.num_batches_tracked",
+    "level4.tree1.tree1.conv1.weight",
+    "level4.tree1.tree1.conv1.norm.weight",
+    "level4.tree1.tree1.conv1.norm.bias",
+    "level4.tree1.tree1.conv1.norm.running_mean",
+    "level4.tree1.tree1.conv1.norm.running_var",
+    "level4.tree1.tree1.conv1.norm.num_batches_tracked",
+    "level4.tree1.tree1.conv2.weight",
+    "level4.tree1.tree1.conv2.norm.weight",
+    "level4.tree1.tree1.conv2.norm.bias",
+    "level4.tree1.tree1.conv2.norm.running_mean",
+    "level4.tree1.tree1.conv2.norm.running_var",
+    "level4.tree1.tree1.conv2.norm.num_batches_tracked",
+    "level4.tree1.tree2.conv1.weight",
+    "level4.tree1.tree2.conv1.norm.weight",
+    "level4.tree1.tree2.conv1.norm.bias",
+    "level4.tree1.tree2.conv1.norm.running_mean",
+    "level4.tree1.tree2.conv1.norm.running_var",
+    "level4.tree1.tree2.conv1.norm.num_batches_tracked",
+    "level4.tree1.tree2.conv2.weight",
+    "level4.tree1.tree2.conv2.norm.weight",
+    "level4.tree1.tree2.conv2.norm.bias",
+    "level4.tree1.tree2.conv2.norm.running_mean",
+    "level4.tree1.tree2.conv2.norm.running_var",
+    "level4.tree1.tree2.conv2.norm.num_batches_tracked",
+    "level4.tree1.root.conv.weight",
+    "level4.tree1.root.conv.norm.weight",
+    "level4.tree1.root.conv.norm.bias",
+    "level4.tree1.root.conv.norm.running_mean",
+    "level4.tree1.root.conv.norm.running_var",
+    "level4.tree1.root.conv.norm.num_batches_tracked",
+    "level4.tree1.project.weight",
+    "level4.tree1.project.norm.weight",
+    "level4.tree1.project.norm.bias",
+    "level4.tree1.project.norm.running_mean",
+    "level4.tree1.project.norm.running_var",
+    "level4.tree1.project.norm.num_batches_tracked",
+    "level4.tree2.tree1.conv1.weight",
+    "level4.tree2.tree1.conv1.norm.weight",
+    "level4.tree2.tree1.conv1.norm.bias",
+    "level4.tree2.tree1.conv1.norm.running_mean",
+    "level4.tree2.tree1.conv1.norm.running_var",
+    "level4.tree2.tree1.conv1.norm.num_batches_tracked",
+    "level4.tree2.tree1.conv2.weight",
+    "level4.tree2.tree1.conv2.norm.weight",
+    "level4.tree2.tree1.conv2.norm.bias",
+    "level4.tree2.tree1.conv2.norm.running_mean",
+    "level4.tree2.tree1.conv2.norm.running_var",
+    "level4.tree2.tree1.conv2.norm.num_batches_tracked",
+    "level4.tree2.tree2.conv1.weight",
+    "level4.tree2.tree2.conv1.norm.weight",
+    "level4.tree2.tree2.conv1.norm.bias",
+    "level4.tree2.tree2.conv1.norm.running_mean",
+    "level4.tree2.tree2.conv1.norm.running_var",
+    "level4.tree2.tree2.conv1.norm.num_batches_tracked",
+    "level4.tree2.tree2.conv2.weight",
+    "level4.tree2.tree2.conv2.norm.weight",
+    "level4.tree2.tree2.conv2.norm.bias",
+    "level4.tree2.tree2.conv2.norm.running_mean",
+    "level4.tree2.tree2.conv2.norm.running_var",
+    "level4.tree2.tree2.conv2.norm.num_batches_tracked",
+    "level4.tree2.root.conv.weight",
+    "level4.tree2.root.conv.norm.weight",
+    "level4.tree2.root.conv.norm.bias",
+    "level4.tree2.root.conv.norm.running_mean",
+    "level4.tree2.root.conv.norm.running_var",
+    "level4.tree2.root.conv.norm.num_batches_tracked",
+    "level5.tree1.conv1.weight",
+    "level5.tree1.conv1.norm.weight",
+    "level5.tree1.conv1.norm.bias",
+    "level5.tree1.conv1.norm.running_mean",
+    "level5.tree1.conv1.norm.running_var",
+    "level5.tree1.conv1.norm.num_batches_tracked",
+    "level5.tree1.conv2.weight",
+    "level5.tree1.conv2.norm.weight",
+    "level5.tree1.conv2.norm.bias",
+    "level5.tree1.conv2.norm.running_mean",
+    "level5.tree1.conv2.norm.running_var",
+    "level5.tree1.conv2.norm.num_batches_tracked",
+    "level5.tree2.conv1.weight",
+    "level5.tree2.conv1.norm.weight",
+    "level5.tree2.conv1.norm.bias",
+    "level5.tree2.conv1.norm.running_mean",
+    "level5.tree2.conv1.norm.running_var",
+    "level5.tree2.conv1.norm.num_batches_tracked",
+    "level5.tree2.conv2.weight",
+    "level5.tree2.conv2.norm.weight",
+    "level5.tree2.conv2.norm.bias",
+    "level5.tree2.conv2.norm.running_mean",
+    "level5.tree2.conv2.norm.running_var",
+    "level5.tree2.conv2.norm.num_batches_tracked",
+    "level5.root.conv.weight",
+    "level5.root.conv.norm.weight",
+    "level5.root.conv.norm.bias",
+    "level5.root.conv.norm.running_mean",
+    "level5.root.conv.norm.running_var",
+    "level5.root.conv.norm.num_batches_tracked",
+    "level5.project.weight",
+    "level5.project.norm.weight",
+    "level5.project.norm.bias",
+    "level5.project.norm.running_mean",
+    "level5.project.norm.running_var",
+    "level5.project.norm.num_batches_tracked"
+  ],
+  "tensor_shapes": {
+    "base_layer.weight": [
+      16,
+      3,
+      7,
+      7
+    ],
+    "base_layer.norm.weight": [
+      16
+    ],
+    "base_layer.norm.bias": [
+      16
+    ],
+    "base_layer.norm.running_mean": [
+      16
+    ],
+    "base_layer.norm.running_var": [
+      16
+    ],
+    "base_layer.norm.num_batches_tracked": [],
+    "level0.0.weight": [
+      16,
+      16,
+      3,
+      3
+    ],
+    "level0.0.norm.weight": [
+      16
+    ],
+    "level0.0.norm.bias": [
+      16
+    ],
+    "level0.0.norm.running_mean": [
+      16
+    ],
+    "level0.0.norm.running_var": [
+      16
+    ],
+    "level0.0.norm.num_batches_tracked": [],
+    "level1.0.weight": [
+      32,
+      16,
+      3,
+      3
+    ],
+    "level1.0.norm.weight": [
+      32
+    ],
+    "level1.0.norm.bias": [
+      32
+    ],
+    "level1.0.norm.running_mean": [
+      32
+    ],
+    "level1.0.norm.running_var": [
+      32
+    ],
+    "level1.0.norm.num_batches_tracked": [],
+    "level2.tree1.conv1.weight": [
+      64,
+      32,
+      3,
+      3
+    ],
+    "level2.tree1.conv1.norm.weight": [
+      64
+    ],
+    "level2.tree1.conv1.norm.bias": [
+      64
+    ],
+    "level2.tree1.conv1.norm.running_mean": [
+      64
+    ],
+    "level2.tree1.conv1.norm.running_var": [
+      64
+    ],
+    "level2.tree1.conv1.norm.num_batches_tracked": [],
+    "level2.tree1.conv2.weight": [
+      64,
+      64,
+      3,
+      3
+    ],
+    "level2.tree1.conv2.norm.weight": [
+      64
+    ],
+    "level2.tree1.conv2.norm.bias": [
+      64
+    ],
+    "level2.tree1.conv2.norm.running_mean": [
+      64
+    ],
+    "level2.tree1.conv2.norm.running_var": [
+      64
+    ],
+    "level2.tree1.conv2.norm.num_batches_tracked": [],
+    "level2.tree2.conv1.weight": [
+      64,
+      64,
+      3,
+      3
+    ],
+    "level2.tree2.conv1.norm.weight": [
+      64
+    ],
+    "level2.tree2.conv1.norm.bias": [
+      64
+    ],
+    "level2.tree2.conv1.norm.running_mean": [
+      64
+    ],
+    "level2.tree2.conv1.norm.running_var": [
+      64
+    ],
+    "level2.tree2.conv1.norm.num_batches_tracked": [],
+    "level2.tree2.conv2.weight": [
+      64,
+      64,
+      3,
+      3
+    ],
+    "level2.tree2.conv2.norm.weight": [
+      64
+    ],
+    "level2.tree2.conv2.norm.bias": [
+      64
+    ],
+    "level2.tree2.conv2.norm.running_mean": [
+      64
+    ],
+    "level2.tree2.conv2.norm.running_var": [
+      64
+    ],
+    "level2.tree2.conv2.norm.num_batches_tracked": [],
+    "level2.root.conv.weight": [
+      64,
+      128,
+      1,
+      1
+    ],
+    "level2.root.conv.norm.weight": [
+      64
+    ],
+    "level2.root.conv.norm.bias": [
+      64
+    ],
+    "level2.root.conv.norm.running_mean": [
+      64
+    ],
+    "level2.root.conv.norm.running_var": [
+      64
+    ],
+    "level2.root.conv.norm.num_batches_tracked": [],
+    "level2.project.weight": [
+      64,
+      32,
+      1,
+      1
+    ],
+    "level2.project.norm.weight": [
+      64
+    ],
+    "level2.project.norm.bias": [
+      64
+    ],
+    "level2.project.norm.running_mean": [
+      64
+    ],
+    "level2.project.norm.running_var": [
+      64
+    ],
+    "level2.project.norm.num_batches_tracked": [],
+    "level3.tree1.tree1.conv1.weight": [
+      128,
+      64,
+      3,
+      3
+    ],
+    "level3.tree1.tree1.conv1.norm.weight": [
+      128
+    ],
+    "level3.tree1.tree1.conv1.norm.bias": [
+      128
+    ],
+    "level3.tree1.tree1.conv1.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.tree1.conv1.norm.running_var": [
+      128
+    ],
+    "level3.tree1.tree1.conv1.norm.num_batches_tracked": [],
+    "level3.tree1.tree1.conv2.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree1.tree1.conv2.norm.weight": [
+      128
+    ],
+    "level3.tree1.tree1.conv2.norm.bias": [
+      128
+    ],
+    "level3.tree1.tree1.conv2.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.tree1.conv2.norm.running_var": [
+      128
+    ],
+    "level3.tree1.tree1.conv2.norm.num_batches_tracked": [],
+    "level3.tree1.tree2.conv1.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree1.tree2.conv1.norm.weight": [
+      128
+    ],
+    "level3.tree1.tree2.conv1.norm.bias": [
+      128
+    ],
+    "level3.tree1.tree2.conv1.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.tree2.conv1.norm.running_var": [
+      128
+    ],
+    "level3.tree1.tree2.conv1.norm.num_batches_tracked": [],
+    "level3.tree1.tree2.conv2.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree1.tree2.conv2.norm.weight": [
+      128
+    ],
+    "level3.tree1.tree2.conv2.norm.bias": [
+      128
+    ],
+    "level3.tree1.tree2.conv2.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.tree2.conv2.norm.running_var": [
+      128
+    ],
+    "level3.tree1.tree2.conv2.norm.num_batches_tracked": [],
+    "level3.tree1.root.conv.weight": [
+      128,
+      256,
+      1,
+      1
+    ],
+    "level3.tree1.root.conv.norm.weight": [
+      128
+    ],
+    "level3.tree1.root.conv.norm.bias": [
+      128
+    ],
+    "level3.tree1.root.conv.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.root.conv.norm.running_var": [
+      128
+    ],
+    "level3.tree1.root.conv.norm.num_batches_tracked": [],
+    "level3.tree1.project.weight": [
+      128,
+      64,
+      1,
+      1
+    ],
+    "level3.tree1.project.norm.weight": [
+      128
+    ],
+    "level3.tree1.project.norm.bias": [
+      128
+    ],
+    "level3.tree1.project.norm.running_mean": [
+      128
+    ],
+    "level3.tree1.project.norm.running_var": [
+      128
+    ],
+    "level3.tree1.project.norm.num_batches_tracked": [],
+    "level3.tree2.tree1.conv1.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree2.tree1.conv1.norm.weight": [
+      128
+    ],
+    "level3.tree2.tree1.conv1.norm.bias": [
+      128
+    ],
+    "level3.tree2.tree1.conv1.norm.running_mean": [
+      128
+    ],
+    "level3.tree2.tree1.conv1.norm.running_var": [
+      128
+    ],
+    "level3.tree2.tree1.conv1.norm.num_batches_tracked": [],
+    "level3.tree2.tree1.conv2.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree2.tree1.conv2.norm.weight": [
+      128
+    ],
+    "level3.tree2.tree1.conv2.norm.bias": [
+      128
+    ],
+    "level3.tree2.tree1.conv2.norm.running_mean": [
+      128
+    ],
+    "level3.tree2.tree1.conv2.norm.running_var": [
+      128
+    ],
+    "level3.tree2.tree1.conv2.norm.num_batches_tracked": [],
+    "level3.tree2.tree2.conv1.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree2.tree2.conv1.norm.weight": [
+      128
+    ],
+    "level3.tree2.tree2.conv1.norm.bias": [
+      128
+    ],
+    "level3.tree2.tree2.conv1.norm.running_mean": [
+      128
+    ],
+    "level3.tree2.tree2.conv1.norm.running_var": [
+      128
+    ],
+    "level3.tree2.tree2.conv1.norm.num_batches_tracked": [],
+    "level3.tree2.tree2.conv2.weight": [
+      128,
+      128,
+      3,
+      3
+    ],
+    "level3.tree2.tree2.conv2.norm.weight": [
+      128
+    ],
+    "level3.tree2.tree2.conv2.norm.bias": [
+      128
+    ],
+    "level3.tree2.tree2.conv2.norm.running_mean": [
+      128
+    ],
+    "level3.tree2.tree2.conv2.norm.running_var": [
+      128
+    ],
+    "level3.tree2.tree2.conv2.norm.num_batches_tracked": [],
+    "level3.tree2.root.conv.weight": [
+      128,
+      448,
+      1,
+      1
+    ],
+    "level3.tree2.root.conv.norm.weight": [
+      128
+    ],
+    "level3.tree2.root.conv.norm.bias": [
+      128
+    ],
+    "level3.tree2.root.conv.norm.running_mean": [
+      128
+    ],
+    "level3.tree2.root.conv.norm.running_var": [
+      128
+    ],
+    "level3.tree2.root.conv.norm.num_batches_tracked": [],
+    "level4.tree1.tree1.conv1.weight": [
+      256,
+      128,
+      3,
+      3
+    ],
+    "level4.tree1.tree1.conv1.norm.weight": [
+      256
+    ],
+    "level4.tree1.tree1.conv1.norm.bias": [
+      256
+    ],
+    "level4.tree1.tree1.conv1.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.tree1.conv1.norm.running_var": [
+      256
+    ],
+    "level4.tree1.tree1.conv1.norm.num_batches_tracked": [],
+    "level4.tree1.tree1.conv2.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree1.tree1.conv2.norm.weight": [
+      256
+    ],
+    "level4.tree1.tree1.conv2.norm.bias": [
+      256
+    ],
+    "level4.tree1.tree1.conv2.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.tree1.conv2.norm.running_var": [
+      256
+    ],
+    "level4.tree1.tree1.conv2.norm.num_batches_tracked": [],
+    "level4.tree1.tree2.conv1.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree1.tree2.conv1.norm.weight": [
+      256
+    ],
+    "level4.tree1.tree2.conv1.norm.bias": [
+      256
+    ],
+    "level4.tree1.tree2.conv1.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.tree2.conv1.norm.running_var": [
+      256
+    ],
+    "level4.tree1.tree2.conv1.norm.num_batches_tracked": [],
+    "level4.tree1.tree2.conv2.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree1.tree2.conv2.norm.weight": [
+      256
+    ],
+    "level4.tree1.tree2.conv2.norm.bias": [
+      256
+    ],
+    "level4.tree1.tree2.conv2.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.tree2.conv2.norm.running_var": [
+      256
+    ],
+    "level4.tree1.tree2.conv2.norm.num_batches_tracked": [],
+    "level4.tree1.root.conv.weight": [
+      256,
+      512,
+      1,
+      1
+    ],
+    "level4.tree1.root.conv.norm.weight": [
+      256
+    ],
+    "level4.tree1.root.conv.norm.bias": [
+      256
+    ],
+    "level4.tree1.root.conv.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.root.conv.norm.running_var": [
+      256
+    ],
+    "level4.tree1.root.conv.norm.num_batches_tracked": [],
+    "level4.tree1.project.weight": [
+      256,
+      128,
+      1,
+      1
+    ],
+    "level4.tree1.project.norm.weight": [
+      256
+    ],
+    "level4.tree1.project.norm.bias": [
+      256
+    ],
+    "level4.tree1.project.norm.running_mean": [
+      256
+    ],
+    "level4.tree1.project.norm.running_var": [
+      256
+    ],
+    "level4.tree1.project.norm.num_batches_tracked": [],
+    "level4.tree2.tree1.conv1.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree2.tree1.conv1.norm.weight": [
+      256
+    ],
+    "level4.tree2.tree1.conv1.norm.bias": [
+      256
+    ],
+    "level4.tree2.tree1.conv1.norm.running_mean": [
+      256
+    ],
+    "level4.tree2.tree1.conv1.norm.running_var": [
+      256
+    ],
+    "level4.tree2.tree1.conv1.norm.num_batches_tracked": [],
+    "level4.tree2.tree1.conv2.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree2.tree1.conv2.norm.weight": [
+      256
+    ],
+    "level4.tree2.tree1.conv2.norm.bias": [
+      256
+    ],
+    "level4.tree2.tree1.conv2.norm.running_mean": [
+      256
+    ],
+    "level4.tree2.tree1.conv2.norm.running_var": [
+      256
+    ],
+    "level4.tree2.tree1.conv2.norm.num_batches_tracked": [],
+    "level4.tree2.tree2.conv1.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree2.tree2.conv1.norm.weight": [
+      256
+    ],
+    "level4.tree2.tree2.conv1.norm.bias": [
+      256
+    ],
+    "level4.tree2.tree2.conv1.norm.running_mean": [
+      256
+    ],
+    "level4.tree2.tree2.conv1.norm.running_var": [
+      256
+    ],
+    "level4.tree2.tree2.conv1.norm.num_batches_tracked": [],
+    "level4.tree2.tree2.conv2.weight": [
+      256,
+      256,
+      3,
+      3
+    ],
+    "level4.tree2.tree2.conv2.norm.weight": [
+      256
+    ],
+    "level4.tree2.tree2.conv2.norm.bias": [
+      256
+    ],
+    "level4.tree2.tree2.conv2.norm.running_mean": [
+      256
+    ],
+    "level4.tree2.tree2.conv2.norm.running_var": [
+      256
+    ],
+    "level4.tree2.tree2.conv2.norm.num_batches_tracked": [],
+    "level4.tree2.root.conv.weight": [
+      256,
+      896,
+      1,
+      1
+    ],
+    "level4.tree2.root.conv.norm.weight": [
+      256
+    ],
+    "level4.tree2.root.conv.norm.bias": [
+      256
+    ],
+    "level4.tree2.root.conv.norm.running_mean": [
+      256
+    ],
+    "level4.tree2.root.conv.norm.running_var": [
+      256
+    ],
+    "level4.tree2.root.conv.norm.num_batches_tracked": [],
+    "level5.tree1.conv1.weight": [
+      512,
+      256,
+      3,
+      3
+    ],
+    "level5.tree1.conv1.norm.weight": [
+      512
+    ],
+    "level5.tree1.conv1.norm.bias": [
+      512
+    ],
+    "level5.tree1.conv1.norm.running_mean": [
+      512
+    ],
+    "level5.tree1.conv1.norm.running_var": [
+      512
+    ],
+    "level5.tree1.conv1.norm.num_batches_tracked": [],
+    "level5.tree1.conv2.weight": [
+      512,
+      512,
+      3,
+      3
+    ],
+    "level5.tree1.conv2.norm.weight": [
+      512
+    ],
+    "level5.tree1.conv2.norm.bias": [
+      512
+    ],
+    "level5.tree1.conv2.norm.running_mean": [
+      512
+    ],
+    "level5.tree1.conv2.norm.running_var": [
+      512
+    ],
+    "level5.tree1.conv2.norm.num_batches_tracked": [],
+    "level5.tree2.conv1.weight": [
+      512,
+      512,
+      3,
+      3
+    ],
+    "level5.tree2.conv1.norm.weight": [
+      512
+    ],
+    "level5.tree2.conv1.norm.bias": [
+      512
+    ],
+    "level5.tree2.conv1.norm.running_mean": [
+      512
+    ],
+    "level5.tree2.conv1.norm.running_var": [
+      512
+    ],
+    "level5.tree2.conv1.norm.num_batches_tracked": [],
+    "level5.tree2.conv2.weight": [
+      512,
+      512,
+      3,
+      3
+    ],
+    "level5.tree2.conv2.norm.weight": [
+      512
+    ],
+    "level5.tree2.conv2.norm.bias": [
+      512
+    ],
+    "level5.tree2.conv2.norm.running_mean": [
+      512
+    ],
+    "level5.tree2.conv2.norm.running_var": [
+      512
+    ],
+    "level5.tree2.conv2.norm.num_batches_tracked": [],
+    "level5.root.conv.weight": [
+      512,
+      1280,
+      1,
+      1
+    ],
+    "level5.root.conv.norm.weight": [
+      512
+    ],
+    "level5.root.conv.norm.bias": [
+      512
+    ],
+    "level5.root.conv.norm.running_mean": [
+      512
+    ],
+    "level5.root.conv.norm.running_var": [
+      512
+    ],
+    "level5.root.conv.norm.num_batches_tracked": [],
+    "level5.project.weight": [
+      512,
+      256,
+      1,
+      1
+    ],
+    "level5.project.norm.weight": [
+      512
+    ],
+    "level5.project.norm.bias": [
+      512
+    ],
+    "level5.project.norm.running_mean": [
+      512
+    ],
+    "level5.project.norm.running_var": [
+      512
+    ],
+    "level5.project.norm.num_batches_tracked": []
+  },
+  "finite": true,
+  "top_level_keys": [
+    "base_layer.weight",
+    "base_layer.norm.weight",
+    "base_layer.norm.bias",
+    "base_layer.norm.running_mean",
+    "base_layer.norm.running_var",
+    "base_layer.norm.num_batches_tracked",
+    "level0.0.weight",
+    "level0.0.norm.weight",
+    "level0.0.norm.bias",
+    "level0.0.norm.running_mean",
+    "level0.0.norm.running_var",
+    "level0.0.norm.num_batches_tracked",
+    "level1.0.weight",
+    "level1.0.norm.weight",
+    "level1.0.norm.bias",
+    "level1.0.norm.running_mean",
+    "level1.0.norm.running_var",
+    "level1.0.norm.num_batches_tracked",
+    "level2.tree1.conv1.weight",
+    "level2.tree1.conv1.norm.weight",
+    "level2.tree1.conv1.norm.bias",
+    "level2.tree1.conv1.norm.running_mean",
+    "level2.tree1.conv1.norm.running_var",
+    "level2.tree1.conv1.norm.num_batches_tracked",
+    "level2.tree1.conv2.weight",
+    "level2.tree1.conv2.norm.weight",
+    "level2.tree1.conv2.norm.bias",
+    "level2.tree1.conv2.norm.running_mean",
+    "level2.tree1.conv2.norm.running_var",
+    "level2.tree1.conv2.norm.num_batches_tracked",
+    "level2.tree2.conv1.weight",
+    "level2.tree2.conv1.norm.weight",
+    "level2.tree2.conv1.norm.bias",
+    "level2.tree2.conv1.norm.running_mean",
+    "level2.tree2.conv1.norm.running_var",
+    "level2.tree2.conv1.norm.num_batches_tracked",
+    "level2.tree2.conv2.weight",
+    "level2.tree2.conv2.norm.weight",
+    "level2.tree2.conv2.norm.bias",
+    "level2.tree2.conv2.norm.running_mean",
+    "level2.tree2.conv2.norm.running_var",
+    "level2.tree2.conv2.norm.num_batches_tracked",
+    "level2.root.conv.weight",
+    "level2.root.conv.norm.weight",
+    "level2.root.conv.norm.bias",
+    "level2.root.conv.norm.running_mean",
+    "level2.root.conv.norm.running_var",
+    "level2.root.conv.norm.num_batches_tracked",
+    "level2.project.weight",
+    "level2.project.norm.weight",
+    "level2.project.norm.bias",
+    "level2.project.norm.running_mean",
+    "level2.project.norm.running_var",
+    "level2.project.norm.num_batches_tracked",
+    "level3.tree1.tree1.conv1.weight",
+    "level3.tree1.tree1.conv1.norm.weight",
+    "level3.tree1.tree1.conv1.norm.bias",
+    "level3.tree1.tree1.conv1.norm.running_mean",
+    "level3.tree1.tree1.conv1.norm.running_var",
+    "level3.tree1.tree1.conv1.norm.num_batches_tracked",
+    "level3.tree1.tree1.conv2.weight",
+    "level3.tree1.tree1.conv2.norm.weight",
+    "level3.tree1.tree1.conv2.norm.bias",
+    "level3.tree1.tree1.conv2.norm.running_mean",
+    "level3.tree1.tree1.conv2.norm.running_var",
+    "level3.tree1.tree1.conv2.norm.num_batches_tracked",
+    "level3.tree1.tree2.conv1.weight",
+    "level3.tree1.tree2.conv1.norm.weight",
+    "level3.tree1.tree2.conv1.norm.bias",
+    "level3.tree1.tree2.conv1.norm.running_mean",
+    "level3.tree1.tree2.conv1.norm.running_var",
+    "level3.tree1.tree2.conv1.norm.num_batches_tracked",
+    "level3.tree1.tree2.conv2.weight",
+    "level3.tree1.tree2.conv2.norm.weight",
+    "level3.tree1.tree2.conv2.norm.bias",
+    "level3.tree1.tree2.conv2.norm.running_mean",
+    "level3.tree1.tree2.conv2.norm.running_var",
+    "level3.tree1.tree2.conv2.norm.num_batches_tracked",
+    "level3.tree1.root.conv.weight",
+    "level3.tree1.root.conv.norm.weight",
+    "level3.tree1.root.conv.norm.bias",
+    "level3.tree1.root.conv.norm.running_mean",
+    "level3.tree1.root.conv.norm.running_var",
+    "level3.tree1.root.conv.norm.num_batches_tracked",
+    "level3.tree1.project.weight",
+    "level3.tree1.project.norm.weight",
+    "level3.tree1.project.norm.bias",
+    "level3.tree1.project.norm.running_mean",
+    "level3.tree1.project.norm.running_var",
+    "level3.tree1.project.norm.num_batches_tracked",
+    "level3.tree2.tree1.conv1.weight",
+    "level3.tree2.tree1.conv1.norm.weight",
+    "level3.tree2.tree1.conv1.norm.bias",
+    "level3.tree2.tree1.conv1.norm.running_mean",
+    "level3.tree2.tree1.conv1.norm.running_var",
+    "level3.tree2.tree1.conv1.norm.num_batches_tracked",
+    "level3.tree2.tree1.conv2.weight",
+    "level3.tree2.tree1.conv2.norm.weight",
+    "level3.tree2.tree1.conv2.norm.bias",
+    "level3.tree2.tree1.conv2.norm.running_mean",
+    "level3.tree2.tree1.conv2.norm.running_var",
+    "level3.tree2.tree1.conv2.norm.num_batches_tracked",
+    "level3.tree2.tree2.conv1.weight",
+    "level3.tree2.tree2.conv1.norm.weight",
+    "level3.tree2.tree2.conv1.norm.bias",
+    "level3.tree2.tree2.conv1.norm.running_mean",
+    "level3.tree2.tree2.conv1.norm.running_var",
+    "level3.tree2.tree2.conv1.norm.num_batches_tracked",
+    "level3.tree2.tree2.conv2.weight",
+    "level3.tree2.tree2.conv2.norm.weight",
+    "level3.tree2.tree2.conv2.norm.bias",
+    "level3.tree2.tree2.conv2.norm.running_mean",
+    "level3.tree2.tree2.conv2.norm.running_var",
+    "level3.tree2.tree2.conv2.norm.num_batches_tracked",
+    "level3.tree2.root.conv.weight",
+    "level3.tree2.root.conv.norm.weight",
+    "level3.tree2.root.conv.norm.bias",
+    "level3.tree2.root.conv.norm.running_mean",
+    "level3.tree2.root.conv.norm.running_var",
+    "level3.tree2.root.conv.norm.num_batches_tracked",
+    "level4.tree1.tree1.conv1.weight",
+    "level4.tree1.tree1.conv1.norm.weight",
+    "level4.tree1.tree1.conv1.norm.bias",
+    "level4.tree1.tree1.conv1.norm.running_mean",
+    "level4.tree1.tree1.conv1.norm.running_var",
+    "level4.tree1.tree1.conv1.norm.num_batches_tracked",
+    "level4.tree1.tree1.conv2.weight",
+    "level4.tree1.tree1.conv2.norm.weight",
+    "level4.tree1.tree1.conv2.norm.bias",
+    "level4.tree1.tree1.conv2.norm.running_mean",
+    "level4.tree1.tree1.conv2.norm.running_var",
+    "level4.tree1.tree1.conv2.norm.num_batches_tracked",
+    "level4.tree1.tree2.conv1.weight",
+    "level4.tree1.tree2.conv1.norm.weight",
+    "level4.tree1.tree2.conv1.norm.bias",
+    "level4.tree1.tree2.conv1.norm.running_mean",
+    "level4.tree1.tree2.conv1.norm.running_var",
+    "level4.tree1.tree2.conv1.norm.num_batches_tracked",
+    "level4.tree1.tree2.conv2.weight",
+    "level4.tree1.tree2.conv2.norm.weight",
+    "level4.tree1.tree2.conv2.norm.bias",
+    "level4.tree1.tree2.conv2.norm.running_mean",
+    "level4.tree1.tree2.conv2.norm.running_var",
+    "level4.tree1.tree2.conv2.norm.num_batches_tracked",
+    "level4.tree1.root.conv.weight",
+    "level4.tree1.root.conv.norm.weight",
+    "level4.tree1.root.conv.norm.bias",
+    "level4.tree1.root.conv.norm.running_mean",
+    "level4.tree1.root.conv.norm.running_var",
+    "level4.tree1.root.conv.norm.num_batches_tracked",
+    "level4.tree1.project.weight",
+    "level4.tree1.project.norm.weight",
+    "level4.tree1.project.norm.bias",
+    "level4.tree1.project.norm.running_mean",
+    "level4.tree1.project.norm.running_var",
+    "level4.tree1.project.norm.num_batches_tracked",
+    "level4.tree2.tree1.conv1.weight",
+    "level4.tree2.tree1.conv1.norm.weight",
+    "level4.tree2.tree1.conv1.norm.bias",
+    "level4.tree2.tree1.conv1.norm.running_mean",
+    "level4.tree2.tree1.conv1.norm.running_var",
+    "level4.tree2.tree1.conv1.norm.num_batches_tracked",
+    "level4.tree2.tree1.conv2.weight",
+    "level4.tree2.tree1.conv2.norm.weight",
+    "level4.tree2.tree1.conv2.norm.bias",
+    "level4.tree2.tree1.conv2.norm.running_mean",
+    "level4.tree2.tree1.conv2.norm.running_var",
+    "level4.tree2.tree1.conv2.norm.num_batches_tracked",
+    "level4.tree2.tree2.conv1.weight",
+    "level4.tree2.tree2.conv1.norm.weight",
+    "level4.tree2.tree2.conv1.norm.bias",
+    "level4.tree2.tree2.conv1.norm.running_mean",
+    "level4.tree2.tree2.conv1.norm.running_var",
+    "level4.tree2.tree2.conv1.norm.num_batches_tracked",
+    "level4.tree2.tree2.conv2.weight",
+    "level4.tree2.tree2.conv2.norm.weight",
+    "level4.tree2.tree2.conv2.norm.bias",
+    "level4.tree2.tree2.conv2.norm.running_mean",
+    "level4.tree2.tree2.conv2.norm.running_var",
+    "level4.tree2.tree2.conv2.norm.num_batches_tracked",
+    "level4.tree2.root.conv.weight",
+    "level4.tree2.root.conv.norm.weight",
+    "level4.tree2.root.conv.norm.bias",
+    "level4.tree2.root.conv.norm.running_mean",
+    "level4.tree2.root.conv.norm.running_var",
+    "level4.tree2.root.conv.norm.num_batches_tracked",
+    "level5.tree1.conv1.weight",
+    "level5.tree1.conv1.norm.weight",
+    "level5.tree1.conv1.norm.bias",
+    "level5.tree1.conv1.norm.running_mean",
+    "level5.tree1.conv1.norm.running_var",
+    "level5.tree1.conv1.norm.num_batches_tracked",
+    "level5.tree1.conv2.weight",
+    "level5.tree1.conv2.norm.weight",
+    "level5.tree1.conv2.norm.bias",
+    "level5.tree1.conv2.norm.running_mean",
+    "level5.tree1.conv2.norm.running_var",
+    "level5.tree1.conv2.norm.num_batches_tracked",
+    "level5.tree2.conv1.weight",
+    "level5.tree2.conv1.norm.weight",
+    "level5.tree2.conv1.norm.bias",
+    "level5.tree2.conv1.norm.running_mean",
+    "level5.tree2.conv1.norm.running_var",
+    "level5.tree2.conv1.norm.num_batches_tracked",
+    "level5.tree2.conv2.weight",
+    "level5.tree2.conv2.norm.weight",
+    "level5.tree2.conv2.norm.bias",
+    "level5.tree2.conv2.norm.running_mean",
+    "level5.tree2.conv2.norm.running_var",
+    "level5.tree2.conv2.norm.num_batches_tracked",
+    "level5.root.conv.weight",
+    "level5.root.conv.norm.weight",
+    "level5.root.conv.norm.bias",
+    "level5.root.conv.norm.running_mean",
+    "level5.root.conv.norm.running_var",
+    "level5.root.conv.norm.num_batches_tracked",
+    "level5.project.weight",
+    "level5.project.norm.weight",
+    "level5.project.norm.bias",
+    "level5.project.norm.running_mean",
+    "level5.project.norm.running_var",
+    "level5.project.norm.num_batches_tracked"
+  ],
+  "result": "pass_official_git_blob"
+}

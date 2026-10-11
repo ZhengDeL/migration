@@ -1,0 +1,131 @@
+diff --git a/projects/AlgEngine/mmdet3d_plugin/uniad/apis/mmdet_train.py b/projects/AlgEngine/mmdet3d_plugin/uniad/apis/mmdet_train.py
+index 860208c..6e318a3 100644
+--- a/projects/AlgEngine/mmdet3d_plugin/uniad/apis/mmdet_train.py
++++ b/projects/AlgEngine/mmdet3d_plugin/uniad/apis/mmdet_train.py
+@@ -5,7 +5,8 @@ import numpy as np
+ import torch
+ # torch.multiprocessing.set_start_method("fork")
+ import torch.distributed as dist
+-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
++from mmcv.device.npu import NPUDataParallel as MMDataParallel
++from mmcv.device.npu import NPUDistributedDataParallel as MMDistributedDataParallel
+ from mmcv.runner import (
+     HOOKS,
+     DistSamplerSeedHook,
+diff --git a/projects/AlgEngine/mmdet3d_plugin/uniad/dense_heads/motion_head_plugin/motion_deformable_attn.py b/projects/AlgEngine/mmdet3d_plugin/uniad/dense_heads/motion_head_plugin/motion_deformable_attn.py
+index 3b63b3a..805053f 100644
+--- a/projects/AlgEngine/mmdet3d_plugin/uniad/dense_heads/motion_head_plugin/motion_deformable_attn.py
++++ b/projects/AlgEngine/mmdet3d_plugin/uniad/dense_heads/motion_head_plugin/motion_deformable_attn.py
+@@ -7,6 +7,7 @@
+ import copy
+ import warnings
+ import torch
++import mx_driving
+ import math
+ import torch.nn as nn
+ 
+@@ -592,7 +593,12 @@ class MotionDeformableAttention(BaseModule):
+                 f"Last dim of reference_trajs must be"
+                 f" 2 or 4, but get {reference_trajs.shape[-1]} instead."
+             )
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == "npu":
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights,
++            )
++        elif torch.cuda.is_available() and value.is_cuda:
+ 
+             # using fp16 deformable attention is unstable because it performs many sum operations
+             if value.dtype == torch.float16:
+diff --git a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/decoder.py b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/decoder.py
+index b0116fa..8400d6f 100644
+--- a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/decoder.py
++++ b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/decoder.py
+@@ -12,6 +12,7 @@ import warnings
+ from matplotlib import pyplot as plt
+ import numpy as np
+ import torch
++import mx_driving
+ import torch.nn as nn
+ import torch.nn.functional as F
+ from mmcv.cnn import xavier_init, constant_init
+@@ -380,7 +381,12 @@ class CustomMSDeformableAttention(BaseModule):
+                 f"Last dim of reference_points must be"
+                 f" 2 or 4, but get {reference_points.shape[-1]} instead."
+             )
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == "npu":
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights,
++            )
++        elif torch.cuda.is_available() and value.is_cuda:
+ 
+             # using fp16 deformable attention is unstable because it performs many sum operations
+             if value.dtype == torch.float16:
+diff --git a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/spatial_cross_attention.py b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/spatial_cross_attention.py
+index 9495427..77d208d 100644
+--- a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/spatial_cross_attention.py
++++ b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/spatial_cross_attention.py
+@@ -7,6 +7,7 @@
+ from mmcv.ops.multi_scale_deform_attn import multi_scale_deformable_attn_pytorch
+ import warnings
+ import torch
++import mx_driving
+ import torch.nn as nn
+ import torch.nn.functional as F
+ from mmcv.cnn import xavier_init, constant_init
+@@ -494,7 +495,12 @@ class MSDeformableAttention3D(BaseModule):
+         #  attention_weights.shape: bs, num_query, num_heads, num_levels, num_all_points
+         #
+ 
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == "npu":
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights,
++            )
++        elif torch.cuda.is_available() and value.is_cuda:
+             if value.dtype == torch.float16:
+                 MultiScaleDeformableAttnFunction = MultiScaleDeformableAttnFunction_fp32
+             else:
+diff --git a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/temporal_self_attention.py b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/temporal_self_attention.py
+index df178dd..9269bd6 100644
+--- a/projects/AlgEngine/mmdet3d_plugin/uniad/modules/temporal_self_attention.py
++++ b/projects/AlgEngine/mmdet3d_plugin/uniad/modules/temporal_self_attention.py
+@@ -8,6 +8,7 @@ from .multi_scale_deformable_attn_function import MultiScaleDeformableAttnFuncti
+ from mmcv.ops.multi_scale_deform_attn import multi_scale_deformable_attn_pytorch
+ import warnings
+ import torch
++import mx_driving
+ import torch.nn as nn
+ from mmcv.cnn import xavier_init, constant_init
+ from mmcv.cnn.bricks.registry import ATTENTION
+@@ -319,7 +320,12 @@ class TemporalSelfAttention(BaseModule):
+                 f"Last dim of reference_points must be"
+                 f" 2 or 4, but get {reference_points.shape[-1]} instead."
+             )
+-        if torch.cuda.is_available() and value.is_cuda:
++        if value.device.type == "npu":
++            output = mx_driving.multi_scale_deformable_attn(
++                value, spatial_shapes, level_start_index,
++                sampling_locations, attention_weights,
++            )
++        elif torch.cuda.is_available() and value.is_cuda:
+ 
+             # using fp16 deformable attention is unstable because it performs many sum operations
+             if value.dtype == torch.float16:
+diff --git a/projects/AlgEngine/scripts/train.py b/projects/AlgEngine/scripts/train.py
+index 637fa32..99b1775 100755
+--- a/projects/AlgEngine/scripts/train.py
++++ b/projects/AlgEngine/scripts/train.py
+@@ -2,6 +2,8 @@ from __future__ import division
+ import sys 
+ import argparse
+ import torch
++import torch_npu
++from torch_npu.contrib import transfer_to_npu
+ import mmcv
+ import copy
+ import os

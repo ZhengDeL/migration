@@ -1,0 +1,38 @@
+{
+  "model": "apollo_visionnet",
+  "dataset_scope": "162 official Apollo VAL frames overlapping nuScenes mini reused for functional training only; no heldout metric; random initialization",
+  "rank": 1,
+  "world_size": 4,
+  "iterations": 10,
+  "losses": [
+    44.74418640136719,
+    58.182884216308594,
+    26.23141860961914,
+    44.692054748535156,
+    36.163543701171875,
+    22.009519577026367,
+    21.672800064086914,
+    41.08892822265625,
+    44.685813903808594,
+    46.59152603149414
+  ],
+  "gradient_tensors_per_iteration": [
+    465,
+    465,
+    465,
+    465,
+    465,
+    465,
+    465,
+    465,
+    465,
+    465
+  ],
+  "raw_output_checks": 30,
+  "raw_loss_checked_before_masking": true,
+  "raw_loss_checks": 1430,
+  "parameter_changed": true,
+  "parameter_sync": "pass",
+  "result": "pass_training_smoke",
+  "initialization_tensor_matches": []
+}
