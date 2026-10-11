@@ -31,7 +31,7 @@ bash tools/quickstart.sh qwen3vl8b mini
 
 `quickstart.sh` 会核对镜像 ID，挂载两张宿主物理卡及 Ascend 驱动，将它们映射为容器内 `0,1`，使用相应容器的 Python。默认宿主逻辑设备为 `0,2`，它们在 1# 上属于两张不同物理卡；改变选卡时先核对 `npu-smi info` 中的物理卡与芯片映射，再设置 `ASCEND_HOST_DEVICES=ID1,ID2`。若代码或数据不在同一个父目录下，设置 `MIGRATION_MOUNT_ROOT` 为同时包含仓库及数据的目录。脚本会把该目录以相同绝对路径挂载进容器。
 
-**怎样判断通过：** `check` 的 JSON 报告为 `pass` 或已核对宿主 `npu-smi info` 的 `pass_with_warnings`；`plan` 的 `missing_data` 为空；`mini` 正常退出，两个 rank 日志均有有限 loss，并生成可加载 checkpoint。BEVFormer 和 Sparse4D 已在 1# 达到这一级功能验证。`train` 之前还要准备完整数据、预训练权重并确认业务指标；mini 结果不能代替正式精度和稳定性验收。
+**怎样判断通过：** `check` 的报告为 `pass` 或已核对宿主 `npu-smi info` 的 `pass_with_warnings`；`plan` 的 `missing_data` 为空；`mini` 正常退出，分布式训练的 loss 有限，并生成可加载 checkpoint。Qwen 的 `mini` 结束后还会自动检查 10 步 loss、LoRA 参数更新、优化器及两个 rank 的保存文件，看到 `result: pass_functional` 即通过这项检查；报告保存在 `outputs/qwen3vl8b/checkpoint_check.json`。三个模型已在 1# 完成功能验证。`train` 之前还要准备完整数据、预训练权重并确认业务指标；mini 结果不能代替正式精度和稳定性验收。
 
 **常见提示：**
 
