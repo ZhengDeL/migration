@@ -2,7 +2,7 @@
 
 ## 参考实现与范围
 
-上游是 [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D) 的 `c41df4bbf7bc82490f11ff55173abfcb3fb91425`。复用 [DrivingSDK Sparse4D 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md) 的模型和依赖补丁。`tools/prepare.py` 会核验官方 `tools/patch.py`，并生成两处可审计的本仓覆盖：把 `clip_grad_norm_fused_` 改为 `torch.nn.utils.clip_grad_norm_`，并保留配置中的普通 `AdamW`，不强制改成 `NpuFusedAdamW`；其余字节保持一致。1# 首次双卡训练在融合裁剪处出现梯度与掩码长度不一致，两个 rank 均报 `EZ1007`；改用逐参数裁剪后，融合 AdamW 的参数更新仍有长度不一致。逐参数裁剪保留原来的 `max_norm=25` 和 2 范数；普通优化器的性能需另行评估。官方原文件的 SHA256 为 `f2742e70b7dc06e50849c95eb8deb45911d4ca4bee92e35393f8d09185c933cf`，覆盖后的 SHA256 为 `d0a89e3e4c775b0b3a51893c4bbfe2c9483bfc89d4ce4d947b9bb506d7f2c791`。
+上游是 [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D) 的 `249ffbb695f4e9db628d953e2bf6d36de04bbb69`（2026-10-11 核验的上游 HEAD）。相比 DrivingSDK 基线 `c41df4bbf7bc82490f11ff55173abfcb3fb91425` 只新增 README 两行，运行代码完全相同；固定补丁在新提交上已核验。复用 [DrivingSDK Sparse4D 样例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md) 的模型和依赖补丁。`tools/prepare.py` 会核验官方 `tools/patch.py`，并生成两处可审计的本仓覆盖：把 `clip_grad_norm_fused_` 改为 `torch.nn.utils.clip_grad_norm_`，并保留配置中的普通 `AdamW`，不强制改成 `NpuFusedAdamW`；其余字节保持一致。1# 首次双卡训练在融合裁剪处出现梯度与掩码长度不一致，两个 rank 均报 `EZ1007`；改用逐参数裁剪后，融合 AdamW 的参数更新仍有长度不一致。逐参数裁剪保留原来的 `max_norm=25` 和 2 范数；普通优化器的性能需另行评估。官方原文件的 SHA256 为 `f2742e70b7dc06e50849c95eb8deb45911d4ca4bee92e35393f8d09185c933cf`，覆盖后的 SHA256 为 `d0a89e3e4c775b0b3a51893c4bbfe2c9483bfc89d4ce4d947b9bb506d7f2c791`。
 
 ## 环境和数据
 

@@ -20,7 +20,7 @@ def validate(model, prepared, data_dir):
     if model == 'worldengine':
         for _, _, path, _, checksum in ASSETS:
             require_hash(Path(data_dir) / Path(path).name, checksum)
-        annotation = prepared / 'worldengine_navtest_smoke.pkl'
+        annotations = [prepared / 'worldengine_navtest_smoke.pkl']
     else:
         if not manifest.get('label_payloads_unchanged'):
             raise RuntimeError('Apollo label verification is missing')
@@ -29,12 +29,28 @@ def validate(model, prepared, data_dir):
             if not path.resolve().is_relative_to(prepared):
                 raise RuntimeError('Label path escapes prepared directory')
             require_hash(path, item['sha256'])
-        annotation = prepared / 'apollo_mini_train.pkl'
+        annotations = [prepared / 'apollo_mini_train.pkl', prepared / 'apollo_mini_val.pkl']
+        if manifest.get('heldout_samples', 0) and manifest.get('train_val_disjoint') is not True:
+            raise RuntimeError('Apollo heldout split has not been checked for overlap')
     # Only load files just matched to the locally prepared manifest above.
-    with annotation.open('rb') as stream:
-        infos = pickle.load(stream)['infos']
-    for info in infos:
-        for camera in info['cams'].values():
-            if not Path(camera['data_path']).is_file():
-                raise RuntimeError('Missing real image: ' + camera['data_path'])
+    tokens = []
+    for annotation in annotations:
+        with annotation.open('rb') as stream:
+            infos = pickle.load(stream)['infos']
+        split_tokens = {info['token'] for info in infos}
+        if len(split_tokens) != len(infos):
+            raise RuntimeError('Duplicate sample tokens: ' + annotation.name)
+        tokens.append(split_tokens)
+        for info in infos:
+            for camera in info['cams'].values():
+                if not Path(camera['data_path']).is_file():
+                    raise RuntimeError('Missing real image: ' + camera['data_path'])
+    if model == 'apollo_visionnet':
+        if len(tokens[0]) != manifest['train_samples']:
+            raise RuntimeError('Apollo train sample count differs from manifest')
+        if manifest.get('heldout_samples', 0):
+            if len(tokens[1]) != manifest['heldout_samples'] or tokens[0] & tokens[1]:
+                raise RuntimeError('Apollo validation count or train/val overlap is invalid')
+            if len(tokens[0] | tokens[1]) != manifest['mini_samples_expected']:
+                raise RuntimeError('Apollo mini split does not cover the expected samples')
     return manifest

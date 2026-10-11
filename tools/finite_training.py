@@ -37,19 +37,33 @@ class MigrationFiniteOptimizerHook(OptimizerHook):
         model = runner.model.module
         if self.initialization_checkpoint:
             path = Path(self.initialization_checkpoint)
-            if hashlib.sha256(path.read_bytes()).hexdigest() != '2a81595fcee9df0ef93e9f76d7e735752786802f8a907c0c06949afb03ecea7a':
-                raise RuntimeError('Official initialization checkpoint checksum mismatch')
-            initial = torch.load(path, map_location='cpu', weights_only=False)['state_dict']
-            current = model.state_dict()
-            for prefix in ('img_backbone.', 'pts_bbox_head.transformer.encoder.'):
-                candidates = [name for name in initial if name.startswith(prefix) and name in current
-                              and initial[name].is_floating_point() and initial[name].numel() > 100]
-                if not candidates:
-                    raise RuntimeError('No initialization tensor matches prefix: ' + prefix)
-                name = candidates[0]
-                if not torch.equal(initial[name], current[name].detach().cpu()):
-                    raise RuntimeError('Official initialization was not loaded: ' + name)
-                self.initialization_matches.append(name)
+            if self.model_name == 'apollo_visionnet':
+                from prepare import LOCK
+                spec = LOCK['apollo_visionnet']
+                if hashlib.sha256(path.read_bytes()).hexdigest() != spec['pretrain_sha256_observed']:
+                    raise RuntimeError('Official DLA initialization checksum mismatch')
+                initial = torch.load(path, map_location='cpu', weights_only=True)
+                current = model.img_backbone.state_dict()
+                if not initial or not finite_tensors(initial):
+                    raise RuntimeError('Invalid official DLA initialization tensors')
+                for name, tensor in initial.items():
+                    if name not in current or tensor.shape != current[name].shape or not torch.equal(tensor, current[name].detach().cpu()):
+                        raise RuntimeError('Official DLA initialization was not loaded: ' + name)
+                    self.initialization_matches.append('img_backbone.' + name)
+            else:
+                if hashlib.sha256(path.read_bytes()).hexdigest() != '2a81595fcee9df0ef93e9f76d7e735752786802f8a907c0c06949afb03ecea7a':
+                    raise RuntimeError('Official initialization checkpoint checksum mismatch')
+                initial = torch.load(path, map_location='cpu', weights_only=False)['state_dict']
+                current = model.state_dict()
+                for prefix in ('img_backbone.', 'pts_bbox_head.transformer.encoder.'):
+                    candidates = [name for name in initial if name.startswith(prefix) and name in current
+                                  and initial[name].is_floating_point() and initial[name].numel() > 100]
+                    if not candidates:
+                        raise RuntimeError('No initialization tensor matches prefix: ' + prefix)
+                    name = candidates[0]
+                    if not torch.equal(initial[name], current[name].detach().cpu()):
+                        raise RuntimeError('Official initialization was not loaded: ' + name)
+                    self.initialization_matches.append(name)
             del initial, current
         if self.model_name == 'worldengine':
             if model.planning_head.reward_shaping:

@@ -12,8 +12,10 @@
 
 DrivingSDK 当前维护的 `v26.1.0` 示例和安装指南见 [官方 README](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/README.md) 与 [安装文档](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/docs/zh/installation/installation.md)。本仓的 WorldEngine/Apollo 补丁参考其 `mx_driving.multi_scale_deformable_attn` 调用形式。已在 1# 完成有限形状的前向/梯度数值检查、两模型四卡合成检查和官方真实样本的四卡 10 步训练；完整指标仍需验证。
 
+2026-10-11 已重新核对来源；Sparse4D 上游 HEAD 更新至 `249ffbb`（仅 README 两行），官方补丁在新提交核验通过。DrivingSDK 采用已发布并实测的 v26.1.0，当前开发分支另行记录；详情见[版本核验](latest_versions.md)。
+
 ## 本仓实测与工作流
 
 本次使用已安装的 `ascend-model-migration`、`ascend-migration-analysis`、`ascend-mmlab-install-suite` 和 `ascend-docker` 技能流程，按上游版本定位 CUDA 依赖、复用 DrivingSDK 的 Ascend OpenMMLab 环境、审计补丁并在隔离容器内验证。上表项目维护方材料是来源依据，本仓实测见[验证记录](validation.md)。
 
-BEVFormer、Sparse4D 已在 1# 两卡公开 nuScenes mini 上训练，Qwen 已在两卡完成演示数据 LoRA 十步及保存检查；Apollo 官方 VAL / OCC 功能子集与 WorldEngine 官方 NAVTEST 子集，均通过公开 quickstart 入口完成四物理卡真实短训练。WorldEngine 使用独立派生镜像、固定官方 nuPlan devkit 提交和官方感知基座。Apollo 使用随机初始化；其编译 FocalLoss 改为 MMDetection 已有的 PyTorch 公式，有限案例 CPU/NPU 前后向对比通过。VAL / NAVTEST 复用仅检查功能，不评估独立精度。实测不包含完整数据精度或官方训练硬件支持验收，完整镜像清单见[环境指南](environment.md)。
+BEVFormer、Sparse4D 已在 1# 两卡公开 nuScenes mini 上训练，Qwen 已在两卡完成演示数据 LoRA 十步及保存检查；Apollo 官方 train/val 与 mini 交集（242 train / 162 独立 val）与 WorldEngine 官方 NAVTEST 子集，均通过公开 quickstart 入口完成四物理卡真实短训练。WorldEngine 使用独立派生镜像、固定官方 nuPlan devkit 提交和官方感知基座。Apollo 已使用固定官方仓自带的 DLA 深度预训练权重完成全部初始化张量匹配检查；其编译 FocalLoss 改为 MMDetection 已有的 PyTorch 公式，有限案例 CPU/NPU 前后向对比通过。WorldEngine 的 NAVTEST 复用只检查功能；Apollo 另检查全部 162 个独立验证帧的推理输出，但未计算正式精度指标。实测不包含完整数据精度或官方训练硬件支持验收，完整镜像清单见[环境指南](environment.md)。

@@ -6,7 +6,7 @@
 
 ## 环境和数据
 
-按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。1# 实际使用 `local/llamafactory:a3-arm64-20261010`（Docker image ID `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8`），来源为 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 ARM64 manifest `sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36`。实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0；版本和归档 SHA256 详见[环境指南](../../../../docs/environment.md)。`run_train.py` 会优先从锁定的 LLaMA-Factory 源码 `src` 导入训练代码。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。该镜像已通过双卡基础 NPU/HCCL、十步 LoRA 功能训练和保存后的图文推理；业务数据训练与精度尚未验收。
+按本仓锁定提交的 LLaMA-Factory [Ascend 环境说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) 建立独立容器。1# 实际使用 `local/llamafactory:a3-arm64-20261011`（Docker image ID `sha256:5134fb97fcfe4a9a83103fbe45c6f196b847e4cfac2f873a29fb4effab8e7645`），来源为 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 ARM64 manifest `sha256:f1aa74bf63e62cd9503f8b34922b6a26f14c49bf1910b484b44cd57d624cfad1`。实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0；版本和归档 SHA256 详见[环境指南](../../../../docs/environment.md)。`run_train.py` 会优先从锁定的 LLaMA-Factory 源码 `src` 导入训练代码。准备完整的本地模型权重、processor/tokenizer 文件，在 LLaMA-Factory 的 `data/dataset_info.json` 注册图文训练集，并保留独立验证集。该镜像已通过双卡基础 NPU/HCCL、十步 LoRA 功能训练和保存后的图文推理；业务数据训练与精度尚未验收。
 
 ## 快速开始
 

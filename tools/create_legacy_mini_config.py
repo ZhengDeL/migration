@@ -35,7 +35,9 @@ def main():
         raise RuntimeError('Data manifest model mismatch')
     if args.model == 'apollo_visionnet':
         cfg = Config.fromfile(str(source / 'projects/configs/bevformer/bev_tiny_det_occ_apollo.py'), import_custom_modules=False)
-        cfg.model.pretrained = None
+        from verify_apollo_weight import verify as verify_apollo_weight
+        initialization = verify_apollo_weight(source)
+        cfg.model.pretrained = dict(img=str(initialization))
         cfg.load_from = None
         cfg.data.train.ann_file = str(prepared / 'apollo_mini_train.pkl')
         cfg.data.train.data_root = str(args.nuscenes.resolve(strict=True))
@@ -43,7 +45,7 @@ def main():
         cfg.data.val.data_root = cfg.data.train.data_root
         cfg.data.test = cfg.data.val.copy()
         cfg.custom_imports = dict(imports=['finite_training'], allow_failed_imports=False)
-        scope = manifest['dataset_scope'] + '; random initialization'
+        scope = manifest['dataset_scope'] + '; official DLA depth pretrained backbone'
         lr = 1e-4
     else:
         cfg = Config.fromfile(str(source / 'projects/AlgEngine/configs/worldengine/e2e_vadv2_50pct.py'), import_custom_modules=False)
@@ -70,6 +72,8 @@ def main():
                                 grad_clip=dict(max_norm=35, norm_type=2))
     if args.model == 'worldengine':
         cfg.optimizer_config.initialization_checkpoint = cfg.load_from
+    else:
+        cfg.optimizer_config.initialization_checkpoint = str(initialization)
     cfg.lr_config = dict(policy='CosineAnnealing', by_epoch=False, warmup='linear',
                          warmup_iters=2, warmup_ratio=1.0 / 3, min_lr_ratio=1e-3)
     cfg.runner = dict(type='IterBasedRunner', max_iters=10)
@@ -82,7 +86,9 @@ def main():
     config = output / f'{args.model}_real_smoke.py'
     cfg.dump(str(config))
     print(json.dumps({'config': str(config), 'iterations': 10, 'dataset_scope': scope,
-                      'load_from': cfg.load_from, 'image_pipeline': cfg.data.train.pipeline[0]}), flush=True)
+                      'load_from': cfg.load_from,
+                      'initialization_checkpoint': cfg.optimizer_config.initialization_checkpoint,
+                      'image_pipeline': cfg.data.train.pipeline[0]}), flush=True)
 
 
 if __name__ == '__main__':

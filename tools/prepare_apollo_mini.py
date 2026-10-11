@@ -70,6 +70,15 @@ def prepare(args):
         metadata = copy.deepcopy(full['metadata'])
         metadata['version'] = 'v1.0-mini'
         selected[split] = {'infos': infos, 'metadata': metadata}
+    split_disjoint = None
+    if not args.val_only:
+        train_tokens = {info['token'] for info in selected['train']['infos']}
+        val_tokens = {info['token'] for info in selected['val']['infos']}
+        if (train_tokens & val_tokens or train_tokens | val_tokens != mini
+                or len(train_tokens) != len(selected['train']['infos'])
+                or len(val_tokens) != len(selected['val']['infos'])):
+            raise RuntimeError('Official mini train/val splits overlap, contain duplicates, or omit samples')
+        split_disjoint = True
     if args.val_only:
         selected['train'] = copy.deepcopy(selected['val'])
         scope = (f"{len(selected['train']['infos'])} official Apollo VAL frames overlapping nuScenes mini "
@@ -83,6 +92,14 @@ def prepare(args):
         with path.open('wb') as stream:
             pickle.dump(value, stream, protocol=4)
         files[path.name] = digest(path)
+    archive_report = None
+    archive_stamp = args.occ_dir / '.migration_occ_manifest.json'
+    if archive_stamp.is_file():
+        archive_report = json.loads(archive_stamp.read_text(encoding='utf-8'))
+        expected = json.loads((Path(__file__).resolve().parents[1] / 'sources.lock.json').read_text(encoding='utf-8'))['apollo_visionnet']
+        if (archive_report.get('archive_sha256_observed') != expected['occ_archive_sha256_observed']
+                or not archive_report.get('gzip_crc_checked') or not archive_report.get('tar_members_checked')):
+            raise RuntimeError('OCC archive verification stamp does not match the locked release')
     report = {'model': 'apollo_visionnet', 'dataset_scope': scope,
               'train_samples': len(selected['train']['infos']),
               'heldout_samples': 0 if args.val_only else len(selected['val']['infos']),
@@ -90,9 +107,11 @@ def prepare(args):
               'label_payloads_unchanged': True, 'prepared_files': files,
               'annotation_observed_checksums': {name: ANNOTATIONS[name] for name in splits},
               'occupancy_source': 'extracted directory; selected regular files checked individually',
-              'full_archive_checked': False,
+              'full_archive_checked': archive_report is not None,
+              'archive_verification': archive_report,
+              'train_val_disjoint': split_disjoint, 'mini_samples_expected': len(mini),
               'can_bus_zero_samples': sum(not np.asarray(v['can_bus']).any() for v in selected['train']['infos']),
-              'initialization': 'random; depth-pretrained DLA weight not supplied'}
+              'initialization': 'verified separately when the training configuration is generated'}
     (prepared / 'manifest.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps({k: v for k, v in report.items() if k != 'labels'}, indent=2), flush=True)
 
@@ -102,12 +121,17 @@ if __name__ == '__main__':
     parser.add_argument('--data-dir', required=True, type=Path)
     parser.add_argument('--occ-dir', required=True, type=Path,
                         help='extracted occ_gt_release_v1_0 directory')
+    parser.add_argument('--archive', type=Path,
+                        help='verify and safely extract this full archive if OCC directory is absent')
     parser.add_argument('--nuscenes', required=True, type=Path)
     parser.add_argument('--prepared-dir', required=True, type=Path)
     parser.add_argument('--val-only', action='store_true',
                         help='reuse original VAL samples for functional training, with no heldout evaluation')
     args = parser.parse_args()
     args.data_dir = args.data_dir.resolve(strict=True)
+    if not args.occ_dir.exists() and args.archive:
+        from extract_apollo_occ import extract
+        extract(args.archive, args.occ_dir)
     args.occ_dir = args.occ_dir.resolve(strict=True)
     args.nuscenes = args.nuscenes.resolve(strict=True)
     prepare(args)

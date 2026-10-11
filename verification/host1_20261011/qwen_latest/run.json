@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-11",
+  "entrypoint": "bash tools/quickstart.sh qwen3vl8b mini",
+  "exit_code": 0,
+  "image": "local/llamafactory:a3-arm64-20261011",
+  "image_id": "sha256:5134fb97fcfe4a9a83103fbe45c6f196b847e4cfac2f873a29fb4effab8e7645",
+  "model_revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+  "host_logical_devices": [
+    0,
+    2
+  ],
+  "physical_cards": 2,
+  "hardware": "Atlas 800I A3; experimental functional validation",
+  "precision": "BF16 LoRA",
+  "official_accuracy_evaluation": false,
+  "resume_training_tested": false,
+  "module_checksums_before_final_LF_normalization": {
+    "tools/run_train.py": "c110185e63a1f4a80f8e714bb9564f797e9e8f2b5c7d4938a79a8eee6f8756ff",
+    "tools/check_qwen_checkpoint.py": "6922bdfdf5f506e38d6a13c2ec04767d918b78416d249a9ac054b8fcd4937da7",
+    "tools/check_qwen_inference.py": "f15137f076bb6f768d61b3e18d41ae7230b99b3e0b715bd2b52f5ded78fc0aab"
+  },
+  "provenance_note": "NPU run preceded final documentation freeze; launcher changed afterward for image-lock centralization in Qwen case. Results are observed machine output, not an assertion that the final documentation commit was used during training."
+}

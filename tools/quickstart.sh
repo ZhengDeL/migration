@@ -6,7 +6,8 @@ usage() {
   cat <<'EOF'
 用法：bash tools/quickstart.sh {bevformer|sparse4d|qwen3vl8b} {check|plan|mini|train}
       bash tools/quickstart.sh qwen3vl8b download
-      bash tools/quickstart.sh apollo_visionnet {check|prepare|build|compute|plan|mini|train}
+      bash tools/quickstart.sh qwen3vl8b verify
+      bash tools/quickstart.sh apollo_visionnet {check|prepare|build|compute|plan|mini|verify|train}
       bash tools/quickstart.sh worldengine {check|download|prepare|build|compute|plan|mini|train}
 
   check  检查镜像、软件包和对应数量的 NPU，不启动训练。
@@ -15,6 +16,7 @@ usage() {
   train  使用完整训练配置；先准备有授权的完整数据。
   download  Qwen 下载完整固定权重；WorldEngine 下载约 5.59 GB 功能验证数据及词表，校验并准备子集。
   prepare   用已下载的官方文件准备 Apollo/WorldEngine 真实样本功能子集。
+  verify    单卡重载已保存的结果：Apollo 检查全部独立验证帧；Qwen 检查一张独立图文样例。
   build    构建 Apollo/WorldEngine 模型并放到 NPU；不加载训练数据或预训练权重。
   compute  Apollo/WorldEngine 四卡合成输入前后向与参数更新；不代表真实数据训练。
 
@@ -30,7 +32,11 @@ EOF
 if [[ $# -ne 2 ]]; then usage; exit 2; fi
 model=$1
 action=$2
-case "$action" in check|build|compute|plan|mini|train|download|prepare) ;; *) usage; exit 2 ;; esac
+case "$action" in check|build|compute|plan|mini|train|download|prepare|verify) ;; *) usage; exit 2 ;; esac
+if [[ "$action" == verify ]] && [[ "$model" != apollo_visionnet && "$model" != qwen3vl8b ]]; then
+  echo "verify 用于 Apollo 或 Qwen 的 checkpoint 重载与推理检查。" >&2
+  exit 2
+fi
 if [[ "$action" == download ]] && [[ "$model" != qwen3vl8b && "$model" != worldengine ]]; then
   echo "download 用于 qwen3vl8b 权重或 worldengine 功能验证数据。" >&2
   exit 2
@@ -52,8 +58,7 @@ case "$repo_root/" in "$mount_root/"*) ;; *) echo "仓库必须位于 MIGRATION_
 
 case "$model" in
   bevformer|sparse4d)
-    image=local/migration-drivingsdk:26.1.0-a3-headless-20261010
-    image_id=sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2
+    image_key=drivingsdk_headless
     py=/opt/conda/envs/$model/bin/python
     network=host
     memory=48g
@@ -62,8 +67,7 @@ case "$model" in
     model_env=$model
     ;;
   apollo_visionnet)
-    image=local/migration-drivingsdk:26.1.0-a3-headless-20261010
-    image_id=sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2
+    image_key=drivingsdk_headless
     model_env=bevformer
     py=/opt/conda/envs/bevformer/bin/python
     network=host
@@ -72,8 +76,7 @@ case "$model" in
     default_host_ids=0,2,4,6
     ;;
   worldengine)
-    image=local/migration-worldengine:26.1.0-a3-20261011
-    image_id=sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3
+    image_key=worldengine
     model_env=bevformer
     py=/opt/conda/envs/bevformer/bin/python
     network=host
@@ -82,8 +85,7 @@ case "$model" in
     default_host_ids=0,2,4,6
     ;;
   qwen3vl8b)
-    image=local/llamafactory:a3-arm64-20261010
-    image_id=sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8
+    image_key=qwen
     py=/usr/local/python3.12.13/bin/python
     network=none
     memory=64g
@@ -92,6 +94,18 @@ case "$model" in
     ;;
   *) usage; exit 2 ;;
 esac
+
+if [[ "$action" == verify ]]; then nproc=1; default_host_ids=0; fi
+
+image_spec=$(python3 - "$repo_root/images.lock.json" "$image_key" <<'PY'
+import json, re, sys
+entry = json.load(open(sys.argv[1], encoding='utf-8'))['images'][sys.argv[2]]
+if not re.fullmatch(r'sha256:[0-9a-f]{64}', entry['image_id']):
+    raise SystemExit('Invalid locked image ID')
+print(entry['tag'] + '\t' + entry['image_id'])
+PY
+)
+IFS=$'\t' read -r image image_id <<< "$image_spec"
 
 actual_id=$(docker image inspect --format '{{.Id}}' "$image" 2>/dev/null) || {
   echo "缺少镜像 $image；请查看 docs/environment.md。" >&2
@@ -125,6 +139,9 @@ if [[ "$action" == download || "$action" == prepare ]]; then
                     --occ-dir "${APOLLO_OCC_DIR:-$mount_root/data/apollo/occ_gt_release_v1_0}"
                     --nuscenes "$mount_root/data/nuscenes"
                     --prepared-dir "$mount_root/data/apollo/mini_prepared")
+      if [[ ${APOLLO_VAL_ONLY:-0} != 1 && ! -d "${APOLLO_OCC_DIR:-$mount_root/data/apollo/occ_gt_release_v1_0}" ]]; then
+        prepare_args+=(--archive "$mount_root/data/apollo/occ_gt_release_v1_0.tar.gz")
+      fi
       if [[ ${APOLLO_VAL_ONLY:-0} == 1 ]]; then prepare_args+=(--val-only); fi
       exec docker "${download_args[@]}" --entrypoint "$py" "$image" "${prepare_args[@]}"
     fi
@@ -168,7 +185,7 @@ for id in "${host_ids[@]}"; do
   seen_physical[$physical]=$id
 done
 container_devices=$(seq -s, 0 $((nproc - 1)))
-if [[ "$action" == mini || "$action" == train || "$action" == compute || "$action" == build ]]; then
+if [[ "$action" == mini || "$action" == train || "$action" == compute || "$action" == build || "$action" == verify ]]; then
   python3 "$repo_root/tools/check_idle_cards.py" "$(IFS=,; echo "${host_ids[*]}")"
 fi
 
@@ -202,7 +219,16 @@ fi
 if [[ "$action" == check ]]; then docker_args+=(-e PYTHONWARNINGS=ignore); fi
 docker_args+=(--entrypoint "$py" "$image")
 
-if [[ "$action" == check ]]; then
+if [[ "$action" == verify ]]; then
+  if [[ "$model" == qwen3vl8b ]]; then
+    command=(tools/check_qwen_inference.py --model-dir "${QWEN_MODEL_DIR:-$mount_root/weights/qwen3-vl-8b-instruct}"
+             --adapter-dir outputs/qwen3vl8b)
+  else
+    command=(tools/check_apollo_heldout.py --source sources/Apollo-Vision-Net
+             --data-dir "$mount_root/data/apollo" --prepared-dir "$mount_root/data/apollo/mini_prepared"
+             --output-dir outputs/apollo_visionnet/mini)
+  fi
+elif [[ "$action" == check ]]; then
   command=(tools/check_env.py --model "$model" --nproc "$nproc"
            --output "outputs/$model/environment.json" --summary)
 elif [[ "$action" == build ]]; then

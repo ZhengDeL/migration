@@ -7,14 +7,14 @@
 | 模型 | 实际镜像 | 实测版本 |
 | --- | --- | --- |
 | BEVFormer、Sparse4D、Apollo | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` | CANN 9.1.0 / Python 3.10.21 / Torch 2.7.1 / TorchNPU 2.7.1.post6 / DrivingSDK 26.1.0.post2 |
-| Qwen3-VL-8B | `local/llamafactory:a3-arm64-20261010` | CANN 9.1.0 / Python 3.12.13 / Torch 2.10.0 / TorchNPU 2.10.0.post2 / transformers 5.8.0 |
+| Qwen3-VL-8B | `local/llamafactory:a3-arm64-20261011` | CANN 9.1.0 / Python 3.12.13 / Torch 2.10.0 / TorchNPU 2.10.0.post2 / transformers 5.8.0 |
 | WorldEngine | `local/migration-worldengine:26.1.0-a3-20261011` | 上述 DrivingSDK 栈，加隔离的 AlgEngine / nuPlan 地理依赖 |
 
 `quickstart.sh` 核对的本地 Docker image ID：
 
 ```text
 DrivingSDK headless: sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2
-Qwen:               sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8
+Qwen:               sha256:5134fb97fcfe4a9a83103fbe45c6f196b847e4cfac2f873a29fb4effab8e7645
 WorldEngine:        sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3
 ```
 
@@ -46,11 +46,11 @@ docker build --network none -f docker/DrivingSDK-headless.Dockerfile \
 
 下载网络及代理由现场配置；Dockerfile 自身不访问网络，也不修改宿主软件。1# 实际构建的派生镜像标签为 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`，镜像 ID 为 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。BEVFormer 与 Sparse4D 使用该镜像完成了双卡 mini 功能训练。两套容器的 `check_env.py` 均报告 `pass_with_warnings`：包、NPU 数量和算子导入通过；容器内 `npu-smi info` 返回 211/`-9005`，宿主机 `npu-smi info` 正常。容器管理面告警与实际计算结果须分别留证。
 
-Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。2026-10-10 在 1# 将 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 linux/arm64 manifest 固定为 `quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36`；导入 Docker 后镜像 ID 为 `sha256:8aac9350905d1aa8b6bdf2cffc6d512d64f7e936d6ed20cf7e4076726be372c8`，本地标签 `local/llamafactory:a3-arm64-20261010`。容器内实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0。导出归档为 5643616256 字节，SHA256 `4fd28e7884c48b846826c714a19ec57e722f8cf3203c9454c5a4b2cc956c7d31`。在该镜像里两物理卡实测基础前后向、参数更新和 HCCL all-reduce 均通过；2026-10-11 又完成 Qwen3-VL-8B 双卡 LoRA 十步训练、checkpoint/参数更新检查，以及保存后的单图图文推理。业务数据训练与精度尚未验收。标签会变化，后续复用以上 digest；`run_train.py` 将已锁定 LLaMA-Factory 源码的 `src` 放在 `PYTHONPATH` 首位。该镜像预置空的 `http_proxy`/`https_proxy`；若现场经批准使用命令级代理下载权重，需在该容器中同时设置小写和大写变量，并以实际请求确认生效。Qwen [官方 ModelScope 仓](https://modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct)已提供相同模型，本仓另外锁定其提交 `5d854aab08710c16b980ec6d603d863b3821b915`；从该源下载后必须逐一核对四个分片与 Hugging Face 锁定快照的 SHA256，不能仅凭模型名判断内容相同。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
+Qwen3-VL 使用独立的 [LLaMA-Factory A3 容器方案](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。2026-10-11 重新核验并在 1# 将 `quay.io/ascend/llamafactory:latest-a3-openeuler` 的 linux/arm64 manifest 固定为 `quay.io/ascend/llamafactory@sha256:f1aa74bf63e62cd9503f8b34922b6a26f14c49bf1910b484b44cd57d624cfad1`；导入 Docker 后镜像 ID 为 `sha256:5134fb97fcfe4a9a83103fbe45c6f196b847e4cfac2f873a29fb4effab8e7645`，本地标签 `local/llamafactory:a3-arm64-20261011`。容器内实测 CANN 9.1.0、Python 3.12.13、PyTorch 2.10.0+cpu、TorchNPU 2.10.0.post2、transformers 5.8.0、LLaMA-Factory 0.9.6.dev0。Docker inspect 的镜像安装大小为 15,072,572,748 字节（不是传输归档大小）；单独导出文件的 SHA256 为 `09238b0643c89c259a95058c0b58cebd9dede37f93463ffd33ee2a32822aa57a`。最终交付采用包含五个镜像标签、共享层去重的压缩归档；分卷与 SHA256 以交付 `manifest.json` 为准。2026-10-11 新镜像已重新完成 Qwen3-VL-8B 双卡 LoRA 十步训练、checkpoint/参数更新检查和保存后的单图推理；基础双 rank NPU/HCCL 检查在此前镜像完成。业务数据训练与精度尚未验收。旧 ARM64 manifest 本次查询返回 404，旧镜像仅作为归档回退版本；标签会变化，后续复用以上 digest 或已校验归档。`run_train.py` 将已锁定 LLaMA-Factory 源码的 `src` 放在 `PYTHONPATH` 首位。该镜像预置空的 `http_proxy`/`https_proxy`；若现场经批准使用命令级代理下载权重，需在该容器中同时设置小写和大写变量，并以实际请求确认生效。Qwen [官方 ModelScope 仓](https://modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct)已提供相同模型，本仓另外锁定其提交 `5d854aab08710c16b980ec6d603d863b3821b915`；从该源下载后必须逐一核对四个分片与 Hugging Face 锁定快照的 SHA256，不能仅凭模型名判断内容相同。DrivingSDK 的 PyTorch 2.7.1 环境与 Qwen 环境分别使用。
 
 ### Apollo 的实际环境
 
-Apollo 使用 DrivingSDK headless 镜像的 `bevformer` 环境，MMCV 1.7.2 / mmdet 2.24.0 / mmdet3d 1.0.0rc4 / mmseg 0.30.0。已通过模型构建、合成计算和官方 162 帧 VAL / OCC 功能子集的四卡 10 步真实训练。兼容补丁处理 NumPy 角度、文件句柄 PKL 加载和编译 FocalLoss 崩溃；NPU 使用 MMDetection 已有的 PyTorch 公式，并完成有限案例的 CPU/NPU 前后向对比。完整 OCC 数据、官方深度预训练初始化及精度仍待验证。
+Apollo 使用 DrivingSDK headless 镜像的 `bevformer` 环境，MMCV 1.7.2 / mmdet 2.24.0 / mmdet3d 1.0.0rc4 / mmseg 0.30.0。已通过模型构建、合成计算和官方 train/val 与 nuScenes mini 交集的四卡 10 步训练（242 train / 162 val），并重载检查全部 162 个独立验证帧。兼容补丁处理 NumPy 角度、文件句柄 PKL 加载和编译 FocalLoss 崩溃；NPU 使用 MMDetection 已有的 PyTorch 公式，并完成有限案例的 CPU/NPU 前后向对比。完整 OCC 归档已校验并安全解压；官方仓内 DLA 深度预训练权重经 Git blob、大小、SHA256 验证，训练前全部 222 个权重张量与模型完全匹配。完整 nuScenes 数据精度仍待验收。
 
 ### WorldEngine 的独立派生镜像
 
@@ -84,17 +84,19 @@ docker tag \
   local/drivingsdk:26.1.0-a3-arm64-20261010
 
 docker pull --platform linux/arm64 \
-  quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36
+  quay.io/ascend/llamafactory@sha256:f1aa74bf63e62cd9503f8b34922b6a26f14c49bf1910b484b44cd57d624cfad1
 docker tag \
-  quay.io/ascend/llamafactory@sha256:a95eeae05d63e2ec046c946a35301326aec742d914aed4bbe05caa572d478d36 \
-  local/llamafactory:a3-arm64-20261010
+  quay.io/ascend/llamafactory@sha256:f1aa74bf63e62cd9503f8b34922b6a26f14c49bf1910b484b44cd57d624cfad1 \
+  local/llamafactory:a3-arm64-20261011
 ```
 
 Docker 拉取走宿主已有的 registry 网络配置；仅在 shell 设置代理不一定影响 Docker daemon。无法拉取时，使用可信机器上的 `docker save` 归档，经文件 SHA256 校验后在目标机 `docker load`。本仓不修改宿主 Docker daemon 或 DNS。DrivingSDK 继续按前文构建 headless 派生镜像，WorldEngine 再按独立 Dockerfile 构建。
 
+镜像当前选择和实测 ID 统一由 [images.lock.json](../images.lock.json) 管理；版本核验日期、最新分支与已采用发布版的关系见[版本核验](latest_versions.md)。优先通过[离线恢复](offline_delivery.md)导入整套已验证镜像。
+
 ## 数据与权重
 
-公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 从发布方 Hugging Face 或 ModelScope 仓下载固定快照，并逐一核对四个权重分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。在已准备好的 1# 上优先使用[快速上手](quickstart.md)中的 `bash tools/quickstart.sh qwen3vl8b download`，无需在宿主机安装 Python 包；该入口使用 Qwen 官方 ModelScope 仓。权重分片约 18 GB，下载临时文件还需要额外空间。独立执行 `fetch_qwen.py` 时需在其 Python 环境安装相应的 `huggingface_hub` 或 `modelscope`；可用 `--destination` 把模型放在仓库外的数据卷。WorldEngine 功能子集由 `worldengine download` 获取固定官方文件并校验；完整数据集和 Apollo OCC 仍按上游许可与下载流程准备。
+公开源码和 Qwen3-VL-8B-Instruct 权重可在训练服务器直接下载：`tools/fetch_sources.py` 克隆 `sources.lock.json` 锁定的提交，`tools/fetch_qwen.py` 从发布方 Hugging Face 或 ModelScope 仓下载固定快照，并逐一核对四个权重分片的 SHA256。两个脚本默认只输出计划，执行时加 `--execute`。在已准备好的 1# 上优先使用[快速上手](quickstart.md)中的 `bash tools/quickstart.sh qwen3vl8b download`，无需在宿主机安装 Python 包；该入口使用 Qwen 官方 ModelScope 仓。权重分片约 18 GB，下载临时文件还需要额外空间。独立执行 `fetch_qwen.py` 时需在其 Python 环境安装相应的 `huggingface_hub` 或 `modelscope`；可用 `--destination` 把模型放在仓库外的数据卷。WorldEngine 功能子集由 `worldengine download` 获取固定官方文件并校验；正式完整数据集按上游许可与下载流程准备；交付中已包含本次验证使用的完整 Apollo OCC 归档和公开 nuScenes mini。
 
 | 模型 | 训练前必须由数据负责人提供 |
 | --- | --- |
@@ -102,7 +104,7 @@ Docker 拉取走宿主已有的 registry 网络配置；仅在 shell 设置代�
 | Sparse4D | nuScenes、`nuscenes_infos_{train,val}.pkl`、`nuscenes_kmeans900.npy`、ResNet50 预训练权重；旧版官方权重须按[模型说明](../PyTorch/contrib/cv/detection/Sparse4D/README.md)转换格式，参见 [DrivingSDK 示例](https://gitcode.com/Ascend/DrivingSDK/blob/branch_v26.1.0/model_examples/Sparse4D/README.md)。 |
 | Qwen3-VL-8B | `Qwen3-VL-8B-Instruct` 本地完整权重/processor、按 LLaMA-Factory `data/dataset_info.json` 注册的图文训练集、独立验证集；`mllm_demo` 仅用于 smoke。 |
 | WorldEngine | 正式训练需官方完整 OpenScene/NAVSIM 图像、AlgEngine navtrain/navtest 标注、`pdm_8192_gt_cache_nav{train,test}.pkl`、词表和基座 checkpoint，见[固定上游数据指南](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)。功能子集用 `worldengine download` 自动获取约 5.59 GB 固定文件及词表。 |
-| Apollo VisionNet | nuScenes、CAN bus、完整 OCC 标注 / train/val pkl、DLA34 预训练权重，见[固定官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)。1# 仅有 162 个完整 VAL 标签用于功能训练，全归档仍待补齐。 |
+| Apollo VisionNet | nuScenes、CAN bus、完整 OCC 标注 / train/val pkl、DLA34 预训练权重，见[固定官方数据指南](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)。1# 已有完整 OCC 归档，mini 交集为 242 train / 162 val；DLA 权重已包含在固定官方源码的 `ckpts/` 内并核验。正式训练仍需完整 nuScenes 和 CAN bus。 |
 
 不要把数据、权重、训练输出或登录凭据提交到 GitHub。大数据通过挂载或符号链接放到上游配置所需的路径。`tools/run_train.py` 的 `missing_data` 输出可检查核心文件；还应人工确认文件完整性和许可证。
 

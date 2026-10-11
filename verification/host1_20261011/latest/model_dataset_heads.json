@@ -1,0 +1,33 @@
+{
+  "checked_at_utc": "2026-10-11T07:55:45.730622+00:00",
+  "snapshots": {
+    "qwen_checkpoint": {
+      "url": "https://huggingface.co/api/models/Qwen/Qwen3-VL-8B-Instruct/revision/main",
+      "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+      "last_modified": "2025-10-15T16:16:59.000Z"
+    },
+    "world_dataset": {
+      "url": "https://huggingface.co/api/datasets/OpenDriveLab/WorldEngine/revision/main",
+      "revision": "d0e88d858533ca407a3387a26577c083aa7b3617",
+      "last_modified": "2026-09-15T15:03:34.000Z"
+    },
+    "dd3d_readme": {
+      "url": "https://raw.githubusercontent.com/TRI-ML/dd3d/main/README.md",
+      "official_weight_lines": [
+        [
+          140,
+          "| DLA34 | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/pretrained/depth_pretrained_dla34-2lnfuzr1.pth) |"
+        ],
+        [
+          163,
+          "| [config](configs/experiments/dd3d_kitti_dla34_overfit.yaml) | DLA-34 | 6 | 0.25 | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/logs/log.txt) | 84.54 |  88.83 | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/dla34-kitti-overfit/model_final.pth) |"
+        ],
+        [
+          204,
+          "| [config](configs/experiments/dd3d_kitti_dla34.yaml) | DLA-34 | 256 | 4.5 | 103 | 19.9** | [log](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/26675chm-20210826_083148/logs/log.txt) | 16.92 |  24.77 | [model](https://tri-ml-public.s3.amazonaws.com/github/dd3d/experiments/26675chm-20210826_083148/model_final.pth) |"
+        ]
+      ]
+    }
+  },
+  "errors": {}
+}

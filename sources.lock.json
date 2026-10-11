@@ -14,7 +14,7 @@
   },
   "sparse4d": {
     "url": "https://github.com/HorizonRobotics/Sparse4D.git",
-    "revision": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+    "revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
     "patch": "drivingsdk:model_examples/Sparse4D/Sparse4D.patch",
     "patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314",
     "pretrain_url": "https://download.pytorch.org/models/resnet50-19c8e357.pth",
@@ -53,6 +53,14 @@
     "patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/ascend.patch",
     "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3",
     "compat_patch": "PyTorch/contrib/cv/detection/Apollo-Vision-Net/compat.patch",
-    "compat_patch_sha256": "256c272a728fa83967af9522a1ff37c6e2229b9ac44d6791c7fbfbeb43255022"
+    "compat_patch_sha256": "256c272a728fa83967af9522a1ff37c6e2229b9ac44d6791c7fbfbeb43255022",
+    "occ_archive_bytes": 15840721593,
+    "occ_archive_sha256_observed": "52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282",
+    "occ_archive_members": 103302,
+    "occ_uncompressed_file_bytes": 78287038688,
+    "pretrain_path": "ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth",
+    "pretrain_git_blob_sha1": "af42f8693fd64f47021e64d6b530331cf075e901",
+    "pretrain_bytes": 61045957,
+    "pretrain_sha256_observed": "8c55b0d98fd0fbc885a7487a764457941e008dcc5a76887196e6264a0e38cc1d"
   }
 }

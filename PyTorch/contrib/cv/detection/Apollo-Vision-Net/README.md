@@ -4,7 +4,9 @@
 
 采用 [ApolloAuto/Apollo-Vision-Net](https://github.com/ApolloAuto/Apollo-Vision-Net/tree/4909aa681bc435a74e793e714b8066d9bbf0095d) 固定提交 `4909aa681bc435a74e793e714b8066d9bbf0095d`，迁移 `bev_tiny_det_occ_apollo.py` 的 DLA34 / 时序 BEV / GroupDETR 检测 / OCC 训练路径。
 
-2026-10-11 在 1# 四张不同物理卡上，通过公开 quickstart 入口完成真实数据 10 步训练。当前 162 帧来自官方 VAL 与 nuScenes mini 的交集，原始 OCC 标签和 CAN bus 保留；VAL 仅复用做功能训练，**不评估独立验证精度**。深度预训练 DLA34 权重未提供，短训练明确使用随机初始化。
+2026-10-11 在 1# 四张不同物理卡上，通过公开 quickstart 入口完成真实数据 10 步训练。完整 OCC 归档已经校验并安全解压。当前数据保留官方划分与 mini 的交集：242 train / 162 独立 val，原始 OCC 标签及非零 CAN bus 保留。使用官方仓内 DLA 深度预训练权重，训练前全部 222 个张量匹配；保存后对独立 val 的 162/162 帧完成推理有限值检查，**未计算正式精度指标**。
+
+更正：此前“官方 DLA 权重未提供”的描述不准确，固定官方仓已在 `ckpts/` 提供该文件。本次已核验并重跑官方初始化训练；随机初始化的历史结果保留在归档中。
 
 ## 镜像
 
@@ -18,13 +20,14 @@
 bash tools/quickstart.sh apollo_visionnet check
 bash tools/quickstart.sh apollo_visionnet plan
 bash tools/quickstart.sh apollo_visionnet mini
+bash tools/quickstart.sh apollo_visionnet verify
 ```
 
 默认宿主逻辑设备 `0,2,4,6`，容器内为 `0,1,2,3`。运行前检查空闲；换卡示例：`ASCEND_HOST_DEVICES=8,10,12,14 bash tools/quickstart.sh apollo_visionnet mini`。
 
-`mini` 从固定上游配置生成 FP32 四卡、每卡 batch 1、AdamW 学习率 `1e-4` 的十步配置。保留原始三帧 / 六相机、900×1600 图像读取及 0.5 缩放 / padding、50×50 BEV 和 640000 体素的 OCC 结构。禁用验证，仅检查功能；自动检查原始输出、掩码处理前 loss、梯度、参数更新、被检查参数的跨 rank 一致性和保存状态。
+`mini` 从固定上游配置生成 FP32 四卡、每卡 batch 1、AdamW 学习率 `1e-4` 的十步配置。保留原始三帧 / 六相机、900×1600 图像读取及 0.5 缩放 / padding、50×50 BEV 和 640000 体素的 OCC 结构。短训练不运行指标评测，结束后另用 `verify` 检查全部独立验证帧；自动检查原始输出、掩码处理前 loss、梯度、参数更新、被检查参数的跨 rank 一致性和保存状态。
 
-成功判据：命令退出码 0，`outputs/apollo_visionnet/mini/training_check_rank{0,1,2,3}.json` 均为 `pass_training_smoke`；rank 0 的 `checkpoint_reload` 为 `pass`、`optimizer_step_values` 为 `[10.0]`。保存文件 `iter_10.pth` 为 844544012 字节，SHA256 `5288adfd7555740da0a41ba04fd2bad30d866a6b9e628fe948d4bf628b576c3d`；600 个模型张量 / 465 个优化器状态均有限。公开逐 rank 证据见[实测记录](../../../../../docs/validation.md)。这项保存检查未包含从 checkpoint 继续训练。
+成功判据：命令退出码 0，`outputs/apollo_visionnet/mini/training_check_rank{0,1,2,3}.json` 均为 `pass_training_smoke`；rank 0 的 `checkpoint_reload` 为 `pass`、`optimizer_step_values` 为 `[10.0]`。保存文件 `iter_10.pth` 为 844544332 字节，SHA256 `f2b2c77e1b6df0a58ffcafff308b18a0fa5774d67dbd8efa7d284229569d4a29`；600 个模型张量 / 465 个优化器状态均有限。公开逐 rank 证据见[实测记录](../../../../../docs/validation.md)。这项保存检查未包含从 checkpoint 继续训练。
 
 ## 在其他机器准备 mini 数据
 
@@ -43,11 +46,16 @@ bash tools/quickstart.sh apollo_visionnet mini
 bash tools/quickstart.sh apollo_visionnet prepare
 bash tools/quickstart.sh apollo_visionnet plan
 bash tools/quickstart.sh apollo_visionnet mini
+bash tools/quickstart.sh apollo_visionnet verify
 ```
 
-`prepare` 校验本仓从官方文件观测并锁定的 PKL SHA256，选取 mini 对应帧，检查每个稀疏 OCC 标签的形状、整数索引和类别范围，复制原标签并记录 SHA256；生成 `data/apollo/mini_prepared/manifest.json`。这些 PKL 哈希是本次下载观测值，不能说成发布方公布的哈希。完整 train/val 标签模式尚待完整 OCC 数据补齐后实测。
+`prepare` 校验本仓从官方文件观测并锁定的 PKL SHA256，选取 mini 对应帧，检查每个稀疏 OCC 标签的形状、整数索引和类别范围，复制原标签并记录 SHA256；生成 `data/apollo/mini_prepared/manifest.json`。这些 PKL 哈希是本次下载观测值，不能说成发布方公布的哈希。完整 train/val 标签模式已在 1# 实测：404 个标签逐文件检查并记录复制前后 SHA256，训练和验证 token 无交集，覆盖全部 mini 样本。
 
-只有 VAL 标签时，可显式加 `APOLLO_VAL_ONLY=1`；OCC 在其他路径时加 `APOLLO_OCC_DIR=/解压后的/occ_gt_release_v1_0`。当前 1# 的 162 个完整 VAL 标签来自下载到的官方归档前段，逐成员检查通过，但 **15.84 GB 完整归档未校验成功**。Google Drive 返回下载额度耗尽，完整 OCC 数据等待补齐。禁止将前段文件当成完整数据或生成替代标签。
+如未解压，将 `occ_gt_release_v1_0.tar.gz` 放到 `data/apollo/`，`prepare` 自动核对 15,840,721,593 字节与本次观测 SHA256 `52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282`，完整检查 gzip CRC、103302 个 tar 成员与安全路径后解压。该 SHA256 是用户提供文件的本次观测值，未取得发布方公布哈希；完整归档结构通过不表示所有 NPY 已作语义检查，本次逐数组验证范围为选出的 404 个标签。
+
+### 官方初始化权重
+
+固定官方源码自带 `ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth`。大小 61,045,957 字节，官方 Git blob 为 `af42f8693fd64f47021e64d6b530331cf075e901`，本次 SHA256 为 `8c55b0d98fd0fbc885a7487a764457941e008dcc5a76887196e6264a0e38cc1d`；配置生成时自动核验全部值。训练 hook 检查所有 222 个预训练张量与初始化后模型完全相同，证据见[最新训练记录](../../../../../verification/host1_20261011/apollo_official_init/rank0.json)。
 
 ## 适配内容
 
@@ -59,4 +67,4 @@ bash tools/quickstart.sh apollo_visionnet mini
 
 ## 正式训练待办
 
-补齐完整 nuScenes、CAN bus、OCC 归档和官方 DLA34 深度预训练权重，按上游目录准备后运行 `bash tools/quickstart.sh apollo_visionnet train`。正式入口会检查完整数据及权重路径；四卡每卡 batch 1、学习率 `1e-4` 为实验起点，需重新评估 batch / 学习率。mini 不替代检测 mAP、占用 mIoU、稳定性、性能和[官方训练硬件支持](../../../../../docs/environment.md)验收。
+正式完整训练需补齐完整 nuScenes 与 CAN bus，复用已校验的 OCC 归档及官方 DLA 权重，按上游目录准备后运行 `bash tools/quickstart.sh apollo_visionnet train`。正式入口会检查完整数据及权重路径；四卡每卡 batch 1、学习率 `1e-4` 为实验起点，需重新评估 batch / 学习率。mini 不替代检测 mAP、占用 mIoU、稳定性、性能和[官方训练硬件支持](../../../../../docs/environment.md)验收。

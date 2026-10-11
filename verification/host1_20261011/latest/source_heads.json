@@ -1,0 +1,115 @@
+{
+  "checked_at_utc": "2026-10-11T07:39:05.288363+00:00",
+  "repositories": {
+    "bevformer": {
+      "name": "bevformer",
+      "repository": "https://github.com/fundamentalvision/BEVFormer",
+      "branch": "master",
+      "verified_revision": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+      "current_head": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+      "head_date": "2024-05-03T10:58:13Z",
+      "head_message": "Update README.md",
+      "head_url": "https://github.com/fundamentalvision/BEVFormer/commit/66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+      "archived": false,
+      "comparison": {
+        "status": "identical",
+        "ahead_by": 0,
+        "files": []
+      },
+      "latest_release": {
+        "tag": "v2.0",
+        "published_at": "2022-06-27T02:49:59Z",
+        "url": "https://github.com/fundamentalvision/BEVFormer/releases/tag/v2.0",
+        "prerelease": false
+      }
+    },
+    "worldengine": {
+      "name": "worldengine",
+      "repository": "https://github.com/OpenDriveLab/WorldEngine",
+      "branch": "main",
+      "verified_revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
+      "current_head": "3eded7e8ac64e5bed817860765089b5914ab698f",
+      "head_date": "2026-09-15T15:04:08Z",
+      "head_message": "Update README",
+      "head_url": "https://github.com/OpenDriveLab/WorldEngine/commit/3eded7e8ac64e5bed817860765089b5914ab698f",
+      "archived": false,
+      "comparison": {
+        "status": "identical",
+        "ahead_by": 0,
+        "files": []
+      },
+      "latest_release": {
+        "http_status": 404
+      }
+    },
+    "apollo_visionnet": {
+      "name": "apollo_visionnet",
+      "repository": "https://github.com/ApolloAuto/Apollo-Vision-Net",
+      "branch": "main",
+      "verified_revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+      "current_head": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+      "head_date": "2024-12-05T04:54:57Z",
+      "head_message": "Initial commit",
+      "head_url": "https://github.com/ApolloAuto/Apollo-Vision-Net/commit/4909aa681bc435a74e793e714b8066d9bbf0095d",
+      "archived": false,
+      "comparison": {
+        "status": "identical",
+        "ahead_by": 0,
+        "files": []
+      },
+      "latest_release": {
+        "http_status": 404
+      }
+    },
+    "qwen3vl8b": {
+      "name": "qwen3vl8b",
+      "repository": "https://github.com/hiyouga/LlamaFactory",
+      "branch": "main",
+      "verified_revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+      "current_head": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+      "head_date": "2026-10-10T07:29:22Z",
+      "head_message": "[docs] add security notes to NPU Docker overviews (#10883)",
+      "head_url": "https://github.com/hiyouga/LlamaFactory/commit/1fded918ac4723ac9966363f51ed4500866c5d1d",
+      "archived": false,
+      "comparison": {
+        "status": "identical",
+        "ahead_by": 0,
+        "files": []
+      },
+      "latest_release": {
+        "tag": "v0.9.5",
+        "published_at": "2026-05-30T15:57:58Z",
+        "url": "https://github.com/hiyouga/LlamaFactory/releases/tag/v0.9.5",
+        "prerelease": false
+      }
+    },
+    "sparse4d": {
+      "name": "sparse4d",
+      "repository": "https://github.com/HorizonRobotics/Sparse4D",
+      "branch": "main",
+      "verified_revision": "c41df4bbf7bc82490f11ff55173abfcb3fb91425",
+      "current_head": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "head_date": "2026-05-21T09:34:34Z",
+      "head_message": "Update README.md",
+      "head_url": "https://github.com/HorizonRobotics/Sparse4D/commit/249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "archived": false,
+      "comparison": {
+        "status": "ahead",
+        "ahead_by": 1,
+        "behind_by": 0,
+        "total_commits": 1,
+        "html_url": "https://github.com/HorizonRobotics/Sparse4D/compare/c41df4bbf7bc82490f11ff55173abfcb3fb91425...249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+        "files": [
+          "README.md"
+        ]
+      },
+      "latest_release": {
+        "tag": "v3.0",
+        "published_at": "2024-01-22T05:36:50Z",
+        "url": "https://github.com/HorizonRobotics/Sparse4D/releases/tag/v3.0",
+        "prerelease": false
+      }
+    }
+  },
+  "errors": {}
+}

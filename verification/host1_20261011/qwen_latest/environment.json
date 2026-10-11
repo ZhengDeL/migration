@@ -1,0 +1,30 @@
+{
+  "model": "qwen3vl8b",
+  "python": "3.12.13",
+  "visible_devices": "0,1",
+  "cann_home": "/usr/local/Ascend/cann-9.1.0",
+  "checks": {
+    "torch_import_error": null,
+    "torch_npu_import_error": null,
+    "torch_version_match": true,
+    "enough_npus": true,
+    "llamafactory_import_error": null,
+    "llamafactory_imported": true,
+    "npu_smi_exit_code": 211,
+    "npu_smi_ok": false
+  },
+  "torch": "2.10.0+cpu",
+  "torch_npu": "2.10.0.post2",
+  "npu_available": true,
+  "npu_count": 2,
+  "devices": [
+    "Ascend910_9362",
+    "Ascend910_9362"
+  ],
+  "npu_smi_output": "npu get board type failed. ret is -9005",
+  "result": "pass_with_warnings",
+  "failures": [],
+  "warnings": [
+    "npu_smi_ok"
+  ]
+}

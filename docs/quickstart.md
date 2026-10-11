@@ -53,25 +53,21 @@ bash tools/quickstart.sh worldengine mini
 
 `mini` 保留原模型结构、正式图像流水线和轨迹标签，加载官方感知基座，运行 FP32 四卡 10 步。NAVTEST 样本复用为功能训练，**不输出独立验证集精度**。准备好的 1# 可直接从 `plan` 开始。
 
-### Apollo VisionNet：1# 已有真实 mini 功能数据
+### Apollo VisionNet：训练后检查全部验证帧
 
 ```bash
 bash tools/quickstart.sh apollo_visionnet check
-bash tools/quickstart.sh apollo_visionnet plan
-bash tools/quickstart.sh apollo_visionnet mini
-```
-
-当前 1# 已准备 162 帧官方 VAL 标注及对应完整 OCC 标签，保留原始标签和 CAN bus。这些 VAL 样本仅复用做功能训练，**没有独立验证精度**；完整 OCC 归档尚未完成下载。`mini` 保留原配置三帧 / 六相机 / 图像缩放流程，随机初始化 DLA34，FP32 四卡训练 10 步。
-
-其他机器先按 [Apollo 数据说明](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md)准备 nuScenes mini、官方 train/val pkl 及解压后的 OCC 目录，再执行：
-
-```bash
 bash tools/quickstart.sh apollo_visionnet prepare
 bash tools/quickstart.sh apollo_visionnet plan
 bash tools/quickstart.sh apollo_visionnet mini
+bash tools/quickstart.sh apollo_visionnet verify
 ```
 
-仅有 VAL 标签时可显式使用 `APOLLO_VAL_ONLY=1 APOLLO_OCC_DIR=/解压后的/occ_gt_release_v1_0 bash tools/quickstart.sh apollo_visionnet prepare`，报告会标注 VAL 复用且不评估精度。1# 已准备好，无需再次执行 `prepare`。
+1# 已有完整 OCC 归档和官方标注，`prepare` 会校验并复用。新机器将交付包恢复后也可以执行相同命令：若只有原始 OCC 归档，脚本自动完成安全解压。预留至少 100 GB 数据空间，首次解压耗时数分钟。
+
+使用官方 train/val 划分与 nuScenes mini 的交集：**242 帧训练、162 帧独立验证**，原始 OCC 标签和非零 CAN bus 保留。`mini` 保留三帧 / 六相机图像流程，验证官方 DLA 深度预训练初始化后，FP32 四卡训练 10 步；`verify` 使用一张空闲物理卡，严格重载保存的模型并检查全部 162 帧检测和占用输出的有限值，**不计算 mAP / mIoU**。
+
+OCC 目录不同可设置 `APOLLO_OCC_DIR=/解压后的/occ_gt_release_v1_0`。只有 VAL 标签的历史兼容模式需显式设置 `APOLLO_VAL_ONLY=1`，该模式不支持独立验证验收。当前正常使用无需设置此变量。
 
 WorldEngine / Apollo 的 `build` 只构建模型，`compute` 使用低分辨率合成输入检查计算，结果名为 `pass_compute_fixture`；真实样本短训练使用 `mini`。两种检查的范围见[实测记录](validation.md)。
 
@@ -84,6 +80,8 @@ WorldEngine / Apollo 的 `build` 只构建模型，`compute` 使用低分辨率�
 | BEVFormer / Sparse4D `mini` | 正常退出、训练 loss 有限、checkpoint 可加载 | `outputs/bevformer/epoch_1.pth` / `outputs/sparse4d/iter_10.pth` |
 | Qwen `mini` | 自动检查显示 `result: pass_functional` | `outputs/qwen3vl8b/checkpoint_check.json` |
 | WorldEngine / Apollo `mini` | 正常退出；四个 rank 均为 `pass_training_smoke`，rank 0 的 `checkpoint_reload` 为 `pass`、优化器步数为 10 | `outputs/<模型名>/mini/training_check_rank{0,1,2,3}.json` 和 `iter_10.pth` |
+| Apollo `verify` | `pass_heldout_functional`，`frames_checked: 162` | `outputs/apollo_visionnet/mini/heldout_check.json` |
+| Qwen `verify` | `pass_functional`，回答正确描述独立红色正方形 | `outputs/qwen3vl8b/inference_check.json` |
 | WorldEngine / Apollo `compute` | 四个 rank 均为 `pass_compute_fixture`；rank 0 重载通过 | `outputs/<模型名>/compute_fixture/rank{0,1,2,3}.json` |
 
 已有实测结果与验证范围见[实测记录](validation.md)。日志里出现弃用提示不等于失败，最终要看退出码和上述检查结果；非有限输出 / loss / 梯度、参数未更新或保存检查失败会使 WorldEngine / Apollo 的 `mini` 返回失败。每次运行使用相同的输出目录和文件名，重新训练会覆盖该模型的 mini 输出；需要保留结果时先复制整个输出目录。
@@ -93,7 +91,7 @@ WorldEngine / Apollo 的 `build` 只构建模型，`compute` 使用低分辨率�
 | 模型 | 1# 镜像 |
 | --- | --- |
 | BEVFormer、Sparse4D、Apollo | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` |
-| Qwen3-VL-8B | `local/llamafactory:a3-arm64-20261010` |
+| Qwen3-VL-8B | `local/llamafactory:a3-arm64-20261011` |
 | WorldEngine | `local/migration-worldengine:26.1.0-a3-20261011` |
 
 镜像 ID 会自动核对。官方下载地址、digest、具体 Python / CANN / TorchNPU 版本和构建步骤见[镜像与环境指南](environment.md)。新机器需先准备镜像和源码。
@@ -118,7 +116,7 @@ ASCEND_HOST_DEVICES=8,10,12,14 bash tools/quickstart.sh apollo_visionnet mini
 | `missing_data` 有内容 | 按对应模型 README 准备列出的文件，再运行 `plan`。 |
 | `NPU 设备编号...同一物理卡` | 查看宿主映射，选择不同物理卡的芯片。 |
 | `pass_with_warnings` 且仅 `npu_smi_ok` 告警 | 查看宿主 `npu-smi info`，再结合实际模型计算结果；环境告警本身不代表训练通过。 |
-| Qwen 下载中断 | 重跑同一条 `download` 续传；全部分片校验后才运行 `mini`。 |
+| Qwen 下载中断 | 重跑同一条 `download` 续传；全部分片校验后才运行 `mini`；训练后执行 `bash tools/quickstart.sh qwen3vl8b verify`。 |
 | WorldEngine `mini` 缺少 prepared 文件 | 运行同一条 `download`；若官方文件已下载，也可运行 `worldengine prepare`。 |
 | Apollo `prepare` 缺少 OCC 文件 | 按官方数据说明补齐标签；不要生成假标签。仅复用 VAL 时显式设置 `APOLLO_VAL_ONLY=1`。 |
 | 提示卡不空闲 | 查看宿主 `npu-smi info`，换用空闲的不同物理卡；脚本不会停止其他服务。 |
