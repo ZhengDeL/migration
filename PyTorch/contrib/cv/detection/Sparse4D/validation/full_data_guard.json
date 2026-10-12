@@ -1,0 +1,9 @@
+{
+  "model": "sparse4d",
+  "result": "pass_reject_functional_data_as_full_without_state_change",
+  "target_python_compile": "pass",
+  "negative_exit_code": 1,
+  "dataset_links_unchanged": true,
+  "latest_result_pointer_unchanged": true,
+  "full_training_executed": false
+}

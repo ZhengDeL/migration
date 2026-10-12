@@ -1,0 +1,25 @@
+{
+  "model": "sparse4d",
+  "result": "pass_functional_training",
+  "mode": "functional",
+  "nproc": 2,
+  "upstream_revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+  "entry_command": [
+    "/opt/conda/envs/sparse4d/bin/python",
+    "/var/ai-model/lzd/independent_20261012/models/Sparse4D/tools/run_train.py",
+    "sparse4d",
+    "--source",
+    "/var/ai-model/lzd/independent_20261012/models/Sparse4D/sources/Sparse4D",
+    "--devices",
+    "0,1",
+    "--output-dir",
+    "/var/ai-model/lzd/independent_20261012/models/Sparse4D/test/output/functional_20261012_172246_240212",
+    "--sdk",
+    "/var/ai-model/lzd/independent_20261012/models/Sparse4D/vendor",
+    "--smoke",
+    "--dataset-version",
+    "v1.0-mini",
+    "--execute"
+  ],
+  "functional_accuracy_claimed": false
+}

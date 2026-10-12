@@ -1,0 +1,9 @@
+{
+  "role": "drivingsdk_headless",
+  "initial_images": 0,
+  "initial_containers": 0,
+  "archive_sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+  "archive_bytes": 9272909176,
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "loaded_images": 1
+}

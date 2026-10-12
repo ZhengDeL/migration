@@ -1,105 +1,86 @@
-# Sparse4Dv3：Ascend 工程使用指南
+# Sparse4Dv3：Ascend 独立训练与验证
 
-文档复核：2026-10-12；实机验证：2026-10-10/11。按官方的环境、数据、训练和结果检查顺序组织，使用本仓实测两卡 NPU 入口。
+本目录是一套单模型工程。使用本模型自己的源码、镜像、数据、训练脚本和验证脚本；可单独复制或解压到服务器，目录名与上级路径可改变。无需保留其他模型目录或迁移仓 Git 根目录。
 
-## 1. 模型与环境
+## 1. 官方依据与环境
 
-| 项目 | 本仓采用值 |
-| --- | --- |
-| 官方实现 | [HorizonRobotics/Sparse4D](https://github.com/HorizonRobotics/Sparse4D/tree/249ffbb695f4e9db628d953e2bf6d36de04bbb69)，固定提交 `249ffbb695f4e9db628d953e2bf6d36de04bbb69` |
-| 昇腾参考 | [DrivingSDK Sparse4D 样例](https://gitcode.com/Ascend/DrivingSDK/blob/0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837/model_examples/Sparse4D/README.md) |
-| 配置 | `projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py`，Sparse4Dv3 / ResNet50 |
-| 资源 | ARM64 Linux，2 张空闲物理卡；1# 默认逻辑 ID `0,2` |
-| 镜像 / 环境 | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` / `sparse4d` |
-| 软件栈 | Python 3.10.21 / CANN 9.1.0 / Torch 2.7.1+cpu / TorchNPU 2.7.1.post6 / mx_driving 26.1.0.post2 |
+- [官方数据/项目说明](https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/docs/quick_start.md)；[昇腾样例或官方训练说明](https://gitcode.com/Ascend/DrivingSDK/blob/0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837/model_examples/Sparse4D/README.md)。
+- 上游实现：https://github.com/HorizonRobotics/Sparse4D.git，固定提交 `249ffbb695f4e9db628d953e2bf6d36de04bbb69`。
+- 本模型镜像：`local/migration-drivingsdk:26.1.0-a3-headless-20261010`，image ID `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。原始 registry digest 与软件版本见本目录 `images.lock.json`。
+- 服务器：ARM64 Linux、配套 Ascend 驱动、Docker、Python 3.9+，训练需要 2 张空闲物理卡；模型 Python 与运行库在镜像内。`+cpu` 包版本标记不表示使用 CPU 训练，实际设备由环境检查和实测报告确认。
+- 本次 1# 为 Atlas 800I A3 推理系列，实验训练结果不改变华为官方训练硬件支持范围。
 
-镜像 ID、配套 MMCV/mmdet 及硬件支持边界见[环境指南](../../../../../docs/environment.md)。固定源码相比 SDK 基线仅新增 README 两行，运行代码相同，补丁已核验。
+## 2. 获取并准备本模型目录
 
-## 2. 已有交付资产：检查并运行
-
-新机器先完成[离线恢复](../../../../../docs/offline_delivery.md)。以下均在迁移仓根目录运行，恢复后替换示例 `cd` 路径。重新训练前按[保存旧结果](../../../../../docs/quickstart.md#重新训练前保存旧结果)保留 `outputs/sparse4d/`。
+取得本模型完整离线包并解压，进入包含本 README 的目录。包内镜像为一个独立 Docker 归档；原始数据、源码和权重均属于本模型，数据准备不访问网络。
 
 ```bash
-cd /var/ai-model/lzd/migration
+cd Sparse4D
+python3 tools/verify_package.py
+bash test/setup.sh
+```
+
+verify_package 显示 `Single-model package verification passed` 才表示下载文件完整；setup 导入/核对本模型镜像，核验源码和补丁，重建当前目录的数据路径。setup 不启动训练。若只有 GitHub 源码，需要先补齐本目录的数据和镜像资产，不能用空目录冒充离线包。
+
+## 3. 环境检查、训练与独立验证
+
+```bash
 npu-smi info
-bash tools/quickstart.sh sparse4d check
-bash tools/quickstart.sh sparse4d plan
-bash tools/quickstart.sh sparse4d mini
+bash test/check_env.sh --device_id=0,2
+bash test/plan.sh
+bash test/train_2p.sh --device_id=0,2
+bash test/validate_1p.sh --device_id=0
 ```
 
-`plan` 须显示 `missing_data: []`。mini 是 **10 次优化迭代**；两卡每卡 batch 1、普通 AdamW、学习率 `2.5e-5`。配置副本写入 outputs，原配置保留。
+1# 一张物理卡有两个逻辑芯片；默认 `0,2` 每物理卡只取一个。容器内重新编号为连续 ID。换机先核对实际拓扑，换卡修改 `--device_id`。验证只用一张卡，只填一个 ID。
 
-## 3. 从零准备源码、数据与权重
+每次训练创建独立的 `test/output/functional_<时间>/`，保留已有结果；`test/output/latest_run.json` 指向最近一次尝试。训练失败时验证脚本拒绝把旧结果当成本次通过。所有原始终端输出、配置、checkpoint 和 JSON 报告均保存于本模型目录内。
 
-在迁移仓根目录：
+本次功能配置：**nuScenes mini；2 卡每卡 batch 1，普通 AdamW，学习率 2.5e-5，10 次优化迭代**。输出 `iter_10.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
-```bash
-python3 tools/fetch_sources.py drivingsdk sparse4d --execute
-python3 tools/prepare.py sparse4d --source sources/Sparse4D --sdk sources/DrivingSDK --apply
-```
+## 4. 通过判据
 
-遵循[官方 Quick Start](https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/docs/quick_start.md)与上述 SDK 样例。必要布局：
+| 检查 | 判断方法 |
+| --- | --- |
+| 包完整性 | verify_package 退出0、文件大小与 SHA 匹配 |
+| 环境 | `test/output/environment.json` 为 pass 或 pass_with_warnings，failures 为空；管理面告警须结合宿主 npu-smi 与实际计算判定 |
+| 数据计划 | plan 的 missing_data 必须为 []；仅有文件还不代表训练通过 |
+| 功能训练 | 命令退出0，当前运行目录 `train_result.json` 为 pass_functional_training；保存内容检查通过 |
+| 独立验证 | validate 退出0，当前运行目录 `validation_result.json` 为 pass_independent_functional_validation |
+
+验证内容：十条 loss、模型/优化器有限值与 step10；严格重载后对一帧 mini val 做 NPU 推理。 每次新训练文件 SHA 可以不同，验收依据为对应本次运行的记录和检查内容。
+
+mini 只验证功能；完整 mAP/NDS、收敛、性能尚未验收。SDK meta.iter=9 是零基计数，实际优化器 step=10。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
+
+## 5. 数据布局与从零准备
 
 ```text
-sources/Sparse4D/
-├── data/nuscenes/
-├── data/nuscenes_anno_pkls/
-│   ├── nuscenes_infos_train.pkl
-│   └── nuscenes_infos_val.pkl
-├── nuscenes_kmeans900.npy
-└── ckpt/
-    ├── resnet50-19c8e357.pth
-    └── resnet50-19c8e357-modern.pth
+data/nuscenes/{samples,sweeps,maps,v1.0-mini}
+data/annotations_original/nuscenes_infos_{train,val}.pkl
+sources/Sparse4D/nuscenes_kmeans900.npy
+sources/Sparse4D/ckpt/resnet50-19c8e357{,-modern}.pth
 ```
 
-交付已包含 mini 标注、锚框和两份权重。自行生成时，先链接原始 nuScenes 数据，**在镜像的 sparse4d 环境内、Sparse4D 源码根目录**执行：
+`sources.lock.json` 固定本模型源码和补丁。本模型使用本目录保存的DrivingSDK固定补丁/辅助文件，以及镜像内mx_driving。 迁移到新目录后重新运行本模型的 `bash test/prepare_data.sh`。
+
+仅源码部署时先在本模型的固定镜像中运行 `tools/fetch_sources.py --execute`、`tools/prepare.py`，再遵循上述官方数据说明准备资产。离线交付已经含固定源码，不需重新下载或重新安装依赖。
+
+## 6. 正式训练与常见问题
+
+完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 按上游 kmeans 工具在完整训练标注上生成 `data/nuscenes_full/nuscenes_kmeans900.npy`；完整入口使用它，不复用 mini anchor。
 
 ```bash
-cd sources/Sparse4D
-mkdir -p data/nuscenes_anno_pkls
-python3 tools/nuscenes_converter.py --version v1.0-mini --info_prefix data/nuscenes_anno_pkls/nuscenes
-OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 python3 tools/anchor_generator.py \
-  --ann_file data/nuscenes_anno_pkls/nuscenes_infos_train.pkl \
-  --output_file_name nuscenes_kmeans900.npy
+bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
 ```
 
-显式指定锚框文件名，避免上游命令行默认的 `_nuscenes_kmeans900.npy` 与本训练配置不一致。正式训练用完整 trainval/test 重新生成 PKL 和锚框。
-
-官方 ResNet50 文件采用旧 tar 序列化，PyTorch 2.7.1 安全加载不能直接读取。本仓锁定原文件 SHA，转换后逐张量核对。自行下载后，在**迁移仓根目录**用无网络、无 NPU 容器转换：
-
-```bash
-docker run --rm --network none --memory 3g --pids-limit 512 \
-  -v "$PWD":/work:ro -v "$PWD/sources/Sparse4D/ckpt":/weights:rw -w /work \
-  -e TORCH_DEVICE_BACKEND_AUTOLOAD=0 -e OMP_NUM_THREADS=2 \
-  -e OPENBLAS_NUM_THREADS=2 -e MKL_NUM_THREADS=2 \
-  --entrypoint /opt/conda/envs/sparse4d/bin/python \
-  local/migration-drivingsdk:26.1.0-a3-headless-20261010 \
-  tools/convert_sparse4d_weight.py --input /weights/resnet50-19c8e357.pth \
-  --output /weights/resnet50-19c8e357-modern.pth --execute
-```
-
-## 4. 成功判据与输出
-
-| 检查 | 通过条件 / 结果位置 |
-| --- | --- |
-| 环境 | `outputs/sparse4d/environment.json`；管理面告警处理见[快速上手](../../../../../docs/quickstart.md) |
-| 训练 | 退出码 0，日志有 10 条有限 loss；短程 loss 不要求单调下降 |
-| 保存 | `outputs/sparse4d/iter_10.pth` 可加载；本次 819 模型张量 / 652 优化器状态有限，优化器 step=10 |
-| 计数 | SDK `meta.iter=9` 为零基计数，不能据此判断少跑了一步 |
-
-本次 checkpoint SHA 见[验证记录](../../../../../docs/validation.md)，新训练的 SHA 可以不同。此模型没有 `quickstart verify` 操作。
-
-## 5. 正式训练、适配与常见问题
-
-本仓保留普通 AdamW 和逐参数梯度裁剪 `max_norm=25`、2 范数。1# 上官方辅助脚本强制的融合裁剪与融合 AdamW 均发生长度不一致；`prepare.py` 核验原文件并应用两处覆盖，其他模型与依赖补丁沿用固定 SDK 文件。
-
-完整资产准备后执行 `bash tools/quickstart.sh sparse4d train`。两卡总 batch 2、学习率 `2.5e-5`、100 epoch；按卡数重新计算每 epoch 迭代数。学习率由上游 batch 48 的 `6e-4` 缩放，是实验起点，需完整 mAP / NDS、稳定性和性能验收。
+完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
 
 | 提示 / 现象 | 处理 |
 | --- | --- |
-| 锚框文件缺失 | 检查 `--output_file_name` 与 `plan` 打印路径 |
-| 旧权重加载失败 | 用上述转换入口，保留官方原文件，不修改全局加载行为 |
-| 融合裁剪 / 优化器形状错误 | 核验 `prepare.py --apply` 的两处覆盖 |
-| 卡重复或不空闲 | 核对宿主物理映射，换用空闲的不同物理卡 |
+| 缺少镜像归档 / image ID 不一致 | 取得本模型完整包，核对 images.lock.json 与现有镜像用途 |
+| 标注或图像路径缺失 | 重新运行本模型 prepare_data，核对 data 目录；不要生成假标签 |
+| NPU 不空闲 / 卡号重复 | 核对宿主进程和物理映射，处理占用后再启动 |
+| 只有训练日志没有通过报告 | 查看本次输出最后异常与退出码，不能据此宣称通过 |
+| 迁入另一目录后文件路径错误 | 先 setup/prepare_data，再检查 plan，使用当前目录的新配置 |
 
-mini 未覆盖收敛、正式精度、性能或续训。固定提交与补丁哈希见[sources.lock.json](../../../../../sources.lock.json)。
+本模型实机证据随验证报告提供；问题档案和内部操作记录留在本机，不随离线包上传。

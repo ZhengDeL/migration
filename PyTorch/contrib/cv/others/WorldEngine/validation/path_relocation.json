@@ -1,0 +1,50 @@
+{
+  "model": "worldengine",
+  "started_utc": "2026-10-12T09:58:35.770309+00:00",
+  "ended_utc": "2026-10-12T09:59:26.735936+00:00",
+  "result": "pass_relocated_single_model_directory",
+  "model_directory_changed": true,
+  "other_model_mounts": false,
+  "parent_migration_git_required": false,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/verify_package.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/setup.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/check_env.sh",
+        "--device_id=0,2,4,6"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/plan.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/validate_1p.sh",
+        "--device_id=0"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "validation_result": "pass_independent_functional_validation",
+  "source_image_id": "sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3"
+}

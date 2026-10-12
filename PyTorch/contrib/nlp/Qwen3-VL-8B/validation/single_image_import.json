@@ -1,0 +1,9 @@
+{
+  "role": "qwen",
+  "initial_images": 0,
+  "initial_containers": 0,
+  "loaded_images": 1,
+  "archive_sha256": "0b0ce68cac12a215ad540ee9f458422cde3474a69810e5cd55fc2bb5f0c5faed",
+  "archive_bytes": 6024595159,
+  "image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5"
+}

@@ -1,0 +1,25 @@
+{
+  "model": "qwen3vl8b",
+  "result": "pass_functional_training",
+  "mode": "functional",
+  "nproc": 2,
+  "upstream_revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+  "entry_command": [
+    "/usr/local/python3.12.13/bin/python",
+    "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B/tools/run_train.py",
+    "qwen3vl8b",
+    "--source",
+    "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B/sources/LLaMA-Factory",
+    "--devices",
+    "0,1",
+    "--output-dir",
+    "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B/test/output/functional_20261012_184348_091849",
+    "--model-path",
+    "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B/weights/qwen3-vl-8b-instruct",
+    "--dataset-id",
+    "mllm_demo",
+    "--smoke",
+    "--execute"
+  ],
+  "functional_accuracy_claimed": false
+}

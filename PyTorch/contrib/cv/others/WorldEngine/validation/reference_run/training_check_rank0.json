@@ -1,0 +1,50 @@
+{
+  "model": "worldengine",
+  "dataset_scope": "Official NAVTEST samples reused for functional training only; no heldout metric",
+  "rank": 0,
+  "world_size": 4,
+  "iterations": 10,
+  "losses": [
+    8.989771842956543,
+    8.918280601501465,
+    8.886093139648438,
+    8.639302253723145,
+    8.638101577758789,
+    8.541739463806152,
+    8.62973690032959,
+    8.864230155944824,
+    8.772945404052734,
+    8.403888702392578
+  ],
+  "gradient_tensors_per_iteration": [
+    259,
+    259,
+    259,
+    259,
+    259,
+    259,
+    259,
+    259,
+    259,
+    259
+  ],
+  "raw_output_checks": 10,
+  "raw_loss_checked_before_masking": true,
+  "raw_loss_checks": 10,
+  "parameter_changed": true,
+  "parameter_sync": "pass",
+  "result": "pass_training_smoke",
+  "initialization_tensor_matches": [
+    "img_backbone.conv1.weight",
+    "pts_bbox_head.transformer.encoder.layers.0.attentions.0.sampling_offsets.weight"
+  ],
+  "checkpoint_meta_iter": 9,
+  "optimizer_step_values": [
+    10.0
+  ],
+  "checkpoint_bytes": 434886933,
+  "checkpoint_sha256": "704ffdf269ca7782df969c5031455db80f97ff88052ade12480d1ab007308d44",
+  "model_tensors": 889,
+  "optimizer_states": 259,
+  "checkpoint_reload": "pass"
+}

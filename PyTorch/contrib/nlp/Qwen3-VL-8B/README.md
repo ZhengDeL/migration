@@ -1,102 +1,85 @@
-# Qwen3-VL-8B-Instruct：Ascend 工程使用指南
+# Qwen3-VL-8B-Instruct：Ascend 独立训练与验证
 
-文档复核：2026-10-12；实机验证：2026-10-11。覆盖两卡 BF16 LoRA SFT、保存状态检查和保存后图文推理。
+本目录是一套单模型工程。使用本模型自己的源码、镜像、数据、训练脚本和验证脚本；可单独复制或解压到服务器，目录名与上级路径可改变。无需保留其他模型目录或迁移仓 Git 根目录。
 
-## 1. 模型与环境
+## 1. 官方依据与环境
 
-| 项目 | 本仓采用值 |
-| --- | --- |
-| 官方权重 | [Qwen3-VL-8B-Instruct 固定快照](https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/tree/0c351dd01ed87e9c1b53cbc748cba10e6187ff3b) |
-| 训练源码 | [LLaMA-Factory](https://github.com/hiyouga/LlamaFactory/tree/1fded918ac4723ac9966363f51ed4500866c5d1d)，`1fded918ac4723ac9966363f51ed4500866c5d1d` |
-| 官方昇腾参考 | [NPU 镜像说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md) |
-| 资源 | ARM64 Linux；训练 2 张空闲物理卡，推理检查 1 张 |
-| 镜像 | `local/llamafactory:a3-arm64-20261011` |
-| 软件栈 | Python 3.12.13 / CANN 9.1.0 / Torch 2.10.0+cpu / TorchNPU 2.10.0.post2 / transformers 5.8.0 |
+- [官方数据/项目说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/data/README_zh.md)；[昇腾样例或官方训练说明](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/docker/docker-npu/OVERVIEW.zh.md)。
+- 上游实现：https://github.com/hiyouga/LLaMA-Factory.git，固定提交 `1fded918ac4723ac9966363f51ed4500866c5d1d`。
+- 本模型镜像：`local/llamafactory:a3-arm64-20261012`，image ID `sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5`。原始 registry digest 与软件版本见本目录 `images.lock.json`。
+- 服务器：ARM64 Linux、配套 Ascend 驱动、Docker、Python 3.9+，训练需要 2 张空闲物理卡；模型 Python 与运行库在镜像内。`+cpu` 包版本标记不表示使用 CPU 训练，实际设备由环境检查和实测报告确认。
+- 本次 1# 为 Atlas 800I A3 推理系列，实验训练结果不改变华为官方训练硬件支持范围。
 
-image ID 为 `sha256:5134fb97fcfe4a9a83103fbe45c6f196b847e4cfac2f873a29fb4effab8e7645`，启动器核对，训练优先导入锁定源码的 src。镜像来源、digest 和硬件支持边界见[环境指南](../../../../docs/environment.md)。
+## 2. 获取并准备本模型目录
 
-## 2. 已有交付资产：检查并运行
-
-新机器先完成[离线恢复](../../../../docs/offline_delivery.md)。以下均在迁移仓根目录执行，恢复后替换示例 `cd` 路径。
-
-**已有交付 adapter 时，可先运行 verify。重新训练前必须按[保存旧结果](../../../../docs/quickstart.md#重新训练前保存旧结果)保留整个 outputs/qwen3vl8b/。** 官方框架会发现旧 checkpoint 并尝试续训，或拒绝非空输出；直接复用目录不能保证获得一次新的十步检查。
+取得本模型完整离线包并解压，进入包含本 README 的目录。包内镜像为一个独立 Docker 归档；原始数据、源码和权重均属于本模型，数据准备不访问网络。
 
 ```bash
-cd /var/ai-model/lzd/migration
+cd Qwen3-VL-8B
+python3 tools/verify_package.py
+bash test/setup.sh
+```
+
+verify_package 显示 `Single-model package verification passed` 才表示下载文件完整；setup 导入/核对本模型镜像，核验源码和补丁，重建当前目录的数据路径。setup 不启动训练。若只有 GitHub 源码，需要先补齐本目录的数据和镜像资产，不能用空目录冒充离线包。
+
+## 3. 环境检查、训练与独立验证
+
+```bash
 npu-smi info
-bash tools/quickstart.sh qwen3vl8b check
-bash tools/quickstart.sh qwen3vl8b plan
-bash tools/quickstart.sh qwen3vl8b mini
-bash tools/quickstart.sh qwen3vl8b verify
+bash test/check_env.sh --device_id=0,2
+bash test/plan.sh
+bash test/train_2p.sh --device_id=0,2
+bash test/validate_1p.sh --device_id=0
 ```
 
-训练默认宿主逻辑 ID `0,2`，verify 默认只用 `0`。换卡分别设置 `ASCEND_HOST_DEVICES=8,10` 和 `ASCEND_HOST_DEVICES=8`。计划须显示 `missing_data: []`。
+1# 一张物理卡有两个逻辑芯片；默认 `0,2` 每物理卡只取一个。容器内重新编号为连续 ID。换机先核对实际拓扑，换卡修改 `--device_id`。验证只用一张卡，只填一个 ID。
 
-没有权重时先执行 `bash tools/quickstart.sh qwen3vl8b download`。默认下载到仓库父目录的 `weights/qwen3-vl-8b-instruct/`，支持续传；使用[Qwen 官方 ModelScope](https://modelscope.cn/models/Qwen/Qwen3-VL-8B-Instruct)提交 `5d854aab08710c16b980ec6d603d863b3821b915`，四分片逐一对照 HF 固定快照 SHA。两站提交号不同，分片内容已核验一致。离线恢复后无需下载。
+每次训练创建独立的 `test/output/functional_<时间>/`，保留已有结果；`test/output/latest_run.json` 指向最近一次尝试。训练失败时验证脚本拒绝把旧结果当成本次通过。所有原始终端输出、配置、checkpoint 和 JSON 报告均保存于本模型目录内。
 
-## 3. 源码、模型文件和业务数据
+本次功能配置：**完整官方 8B 权重；2 卡 BF16 LoRA，rank8，mllm_demo 六条图文样本，10 次优化更新**。输出 `adapter_model.safetensors + checkpoint-10/`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
-从零准备源码，在迁移仓根目录：
+## 4. 通过判据
 
-```bash
-python3 tools/fetch_sources.py qwen3vl8b --execute
-python3 tools/prepare.py qwen3vl8b --source sources/LLaMA-Factory
-```
-
-模型目录需要四个 safetensors 分片、索引、config、tokenizer、processor 文件和下载校验标记，只下载分片不能进行图文训练。自定义 `QWEN_MODEL_DIR` 必须位于 `MIGRATION_MOUNT_ROOT` 挂载目录内。文件 SHA 与版本见[sources.lock.json](../../../../sources.lock.json)。
-
-业务图文数据按[官方数据格式](https://github.com/hiyouga/LlamaFactory/blob/1fded918ac4723ac9966363f51ed4500866c5d1d/data/README_zh.md)准备。例如将以下 JSON 保存为 `sources/LLaMA-Factory/data/my_vl.json`，图片放在同一 data 目录下的 images/：
-
-```json
-[
-  {
-    "conversations": [
-      {"from": "human", "value": "<image>图中的交通标志是什么？"},
-      {"from": "gpt", "value": "这是停车让行标志。"}
-    ],
-    "images": ["images/stop_sign.jpg"]
-  }
-]
-```
-
-在现有 `sources/LLaMA-Factory/data/dataset_info.json` 的顶层对象中**增加**条目，保留已有注册项：
-
-```json
-"my_vl": {
-  "file_name": "my_vl.json",
-  "formatting": "sharegpt",
-  "columns": {"messages": "conversations", "images": "images"}
-}
-```
-
-第二段是对象内的条目，不是完整 JSON 文件。每条样本的 `<image>` 数量与图片数一致，图片须真实存在且在容器中可读；标签按实际样本填写。另备独立业务验证集。
-
-## 4. 配置、成功判据与输出
-
-配置见[qwen3vl8b_lora_npu.yaml](qwen3vl8b_lora_npu.yaml)：`qwen3_vl_nothink` 模板、LoRA rank 8、目标 all、BF16、每卡 batch 1、图像上限 262144 像素、cutoff 2048、学习率 `1e-4`。正式配置累积 8、3 epoch；mini 临时改为累积 1、10 次更新、每步日志、第十步保存，使用上游 6 条 mllm_demo。
-
-| 操作 | 通过条件 / 文件 |
+| 检查 | 判断方法 |
 | --- | --- |
-| mini | 退出码 0，`outputs/qwen3vl8b/checkpoint_check.json` 为 `pass_functional` |
-| 保存检查 | 十步 loss / 梯度有限、LoRA 更新、优化器 step=10、两个 rank 的 RNG 文件齐全 |
-| verify | `outputs/qwen3vl8b/inference_check.json` 为 `pass_functional`，正确描述独立红色正方形 |
+| 包完整性 | verify_package 退出0、文件大小与 SHA 匹配 |
+| 环境 | `test/output/environment.json` 为 pass 或 pass_with_warnings，failures 为空；管理面告警须结合宿主 npu-smi 与实际计算判定 |
+| 数据计划 | plan 的 missing_data 必须为 []；仅有文件还不代表训练通过 |
+| 功能训练 | 命令退出0，当前运行目录 `train_result.json` 为 pass_functional_training；保存内容检查通过 |
+| 独立验证 | validate 退出0，当前运行目录 `validation_result.json` 为 pass_independent_functional_validation |
 
-本次 504 个 adapter 张量有限、252 个 LoRA B 非零，文件 SHA 见[验证记录](../../../../docs/validation.md)。verify 只验一张合成图，不代表业务精度通过。
+验证内容：逐步 loss/梯度、LoRA 更新、优化器 step10、两 rank 保存文件；重载完整模型及 adapter，对独立红色正方形图文推理。 每次新训练文件 SHA 可以不同，验收依据为对应本次运行的记录和检查内容。
 
-## 5. 正式训练与常见问题
+一张合成验证图不代表业务图文精度；正式训练必须注册业务数据，不能用 mllm_demo。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
 
-注册业务数据并保留旧输出后：
+## 5. 数据布局与从零准备
 
-```bash
-QWEN_DATASET_ID=my_vl bash tools/quickstart.sh qwen3vl8b train
+```text
+weights/qwen3-vl-8b-instruct/  # 四个分片、索引、tokenizer、processor 和版本标记
+sources/LLaMA-Factory/data/dataset_info.json
+sources/LLaMA-Factory/data/mllm_demo.json 及对应图片
 ```
 
-启动器拒绝用 mllm_demo 做正式训练。按业务数据量与显存评估配置，另验独立业务精度、性能和稳定性。
+`sources.lock.json` 固定本模型源码和补丁。本模型使用锁定的LLaMA-Factory源码及基于官方NPU环境制作的固定交付镜像。 迁移到新目录后重新运行本模型的 `bash test/prepare_data.sh`。
+
+仅源码部署时先在本模型的固定镜像中运行 `tools/fetch_sources.py --execute`、`tools/prepare.py`，再遵循上述官方数据说明准备资产。离线交付已经含固定源码，不需重新下载或重新安装依赖。
+
+## 6. 正式训练与常见问题
+
+在 `sources/LLaMA-Factory/data/dataset_info.json` 注册业务数据集；每条图片数量必须匹配消息中的 `<image>` 数量。
+
+```bash
+bash test/train_full_2p.sh --device_id=0,2 --dataset_id=业务数据集名
+```
+
+完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。正式训练须增加 `--dataset_id=已注册的业务数据集名`，按官方ShareGPT图文格式准备图片和注册文件。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
 
 | 提示 / 现象 | 处理 |
 | --- | --- |
-| `dataset-id:...` 缺失 | 检查注册名、JSON 合法性与 file_name 对应文件 |
-| 权重 / processor / 校验标记缺失 | 用完整交付或重跑 download，不手写标记绕过校验 |
-| 输出目录已存在 / 自动续训 | 改名保留整个输出目录，重新 check、plan、mini |
-| 图片数与标记不一致 | 按官方格式修正样本并核对容器内图片路径 |
-| verify 设备数错误 | 单卡操作仅设置一个宿主逻辑 ID |
+| 缺少镜像归档 / image ID 不一致 | 取得本模型完整包，核对 images.lock.json 与现有镜像用途 |
+| 标注或图像路径缺失 | 重新运行本模型 prepare_data，核对 data 目录；不要生成假标签 |
+| NPU 不空闲 / 卡号重复 | 核对宿主进程和物理映射，处理占用后再启动 |
+| 只有训练日志没有通过报告 | 查看本次输出最后异常与退出码，不能据此宣称通过 |
+| 迁入另一目录后文件路径错误 | 先 setup/prepare_data，再检查 plan，使用当前目录的新配置 |
+
+本模型实机证据随验证报告提供；问题档案和内部操作记录留在本机，不随离线包上传。

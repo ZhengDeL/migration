@@ -1,0 +1,18 @@
+{
+  "model": "worldengine",
+  "result": "pass_saved_state",
+  "official_accuracy_evaluation": false,
+  "saved": {
+    "checkpoint": "iter_10.pth",
+    "sha256": "704ffdf269ca7782df969c5031455db80f97ff88052ade12480d1ab007308d44",
+    "model_tensors": 889,
+    "optimizer_states": 259,
+    "optimizer_steps": [
+      10.0
+    ],
+    "loss_records": 10,
+    "meta_iter": 9,
+    "result": "pass_finite_saved_state"
+  },
+  "ranks_checked": 4
+}

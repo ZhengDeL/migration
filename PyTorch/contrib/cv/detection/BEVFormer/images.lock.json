@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "architecture": "arm64",
+  "images": {
+    "drivingsdk_headless": {
+      "role": "drivingsdk_headless",
+      "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+      "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+      "models": [
+        "bevformer"
+      ],
+      "versions": {
+        "cann": "9.1.0",
+        "python": "3.10.21",
+        "torch": "2.7.1+cpu",
+        "torch_npu": "2.7.1.post6",
+        "mx_driving": "26.1.0.post2"
+      },
+      "archive": {
+        "filename": "drivingsdk_headless.tar.gz",
+        "bytes": 9272909176,
+        "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+        "saved_image_count": 1
+      }
+    }
+  }
+}

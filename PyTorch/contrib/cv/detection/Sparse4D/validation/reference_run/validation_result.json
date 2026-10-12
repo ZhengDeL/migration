@@ -1,0 +1,24 @@
+{
+  "model": "sparse4d",
+  "result": "pass_independent_functional_validation",
+  "official_accuracy_evaluation": false,
+  "saved": {
+    "checkpoint": "iter_10.pth",
+    "sha256": "f948ad2a2d5f6eb8769e488d3cbad07771bbd23251ae939144d9d499ec3d6f66",
+    "model_tensors": 819,
+    "optimizer_states": 652,
+    "optimizer_steps": [
+      10.0
+    ],
+    "loss_records": 10,
+    "meta_iter": 9,
+    "result": "pass_finite_saved_state"
+  },
+  "inference": {
+    "result": "pass_single_frame_functional_inference",
+    "frames_checked": 1,
+    "checkpoint_reload": "strict",
+    "outputs_finite": true,
+    "official_metrics": false
+  }
+}

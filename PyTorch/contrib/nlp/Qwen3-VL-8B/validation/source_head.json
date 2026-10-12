@@ -1,0 +1,7 @@
+{
+  "checked_at_utc": "2026-10-12T09:42:59.757970+00:00",
+  "repository": "https://github.com/hiyouga/LLaMA-Factory.git",
+  "latest_head_verified": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+  "pinned_revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+  "verification": "git ls-remote HEAD on 2026-10-12; equal to pinned revision"
+}

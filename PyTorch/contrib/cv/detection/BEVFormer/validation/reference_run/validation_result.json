@@ -1,0 +1,24 @@
+{
+  "model": "bevformer",
+  "result": "pass_independent_functional_validation",
+  "official_accuracy_evaluation": false,
+  "saved": {
+    "checkpoint": "epoch_1.pth",
+    "sha256": "51af21f51b5696fba4336055598a6cd2ea9cdc1fae97c9879fcfad06b8c49458",
+    "model_tensors": 1089,
+    "optimizer_states": 557,
+    "optimizer_steps": [
+      162.0
+    ],
+    "loss_records": 3,
+    "meta_iter": 162,
+    "result": "pass_finite_saved_state"
+  },
+  "inference": {
+    "result": "pass_single_frame_functional_inference",
+    "frames_checked": 1,
+    "checkpoint_reload": "strict",
+    "outputs_finite": true,
+    "official_metrics": false
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "architecture": "arm64",
+  "images": {
+    "qwen": {
+      "role": "qwen",
+      "tag": "local/llamafactory:a3-arm64-20261012",
+      "image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5",
+      "source_manifest": "quay.io/ascend/llamafactory@sha256:6394a17532563a9b978b2e524a20594287b8ee480fe159e4e57b5067ec8125ea",
+      "models": [
+        "qwen3vl8b"
+      ],
+      "versions": {
+        "cann": "9.1.0",
+        "python": "3.12.13",
+        "torch": "2.10.0+cpu",
+        "torch_npu": "2.10.0.post2",
+        "transformers": "5.8.0",
+        "peft": "0.18.1",
+        "llamafactory": "0.9.6.dev0",
+        "accelerate": "1.11.0"
+      },
+      "archive": {
+        "filename": "qwen.tar.gz",
+        "bytes": 6024595159,
+        "sha256": "0b0ce68cac12a215ad540ee9f458422cde3474a69810e5cd55fc2bb5f0c5faed",
+        "saved_image_count": 1
+      }
+    }
+  }
+}

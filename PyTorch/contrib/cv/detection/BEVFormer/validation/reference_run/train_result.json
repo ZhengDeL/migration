@@ -1,0 +1,25 @@
+{
+  "model": "bevformer",
+  "result": "pass_functional_training",
+  "mode": "functional",
+  "nproc": 2,
+  "upstream_revision": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+  "entry_command": [
+    "/opt/conda/envs/bevformer/bin/python",
+    "/var/ai-model/lzd/independent_20261012/models/BEVFormer/tools/run_train.py",
+    "bevformer",
+    "--source",
+    "/var/ai-model/lzd/independent_20261012/models/BEVFormer/sources/BEVFormer",
+    "--devices",
+    "0,1",
+    "--output-dir",
+    "/var/ai-model/lzd/independent_20261012/models/BEVFormer/test/output/functional_20261012_172246_268797",
+    "--sdk",
+    "/var/ai-model/lzd/independent_20261012/models/BEVFormer/vendor",
+    "--smoke",
+    "--dataset-version",
+    "v1.0-mini",
+    "--execute"
+  ],
+  "functional_accuracy_claimed": false
+}

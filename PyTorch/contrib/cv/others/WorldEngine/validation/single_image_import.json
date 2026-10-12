@@ -1,0 +1,9 @@
+{
+  "role": "worldengine",
+  "initial_images": 0,
+  "initial_containers": 0,
+  "archive_sha256": "5cd585f49883906aac39d7dfdaf74ef9b458c3bf2fd4b3e5de00f4796aa91ecb",
+  "archive_bytes": 9935906014,
+  "image_id": "sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3",
+  "loaded_images": 1
+}

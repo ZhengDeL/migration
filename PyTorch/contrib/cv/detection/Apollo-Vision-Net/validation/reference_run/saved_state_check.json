@@ -1,0 +1,18 @@
+{
+  "model": "apollo_visionnet",
+  "result": "pass_saved_state",
+  "official_accuracy_evaluation": false,
+  "saved": {
+    "checkpoint": "iter_10.pth",
+    "sha256": "75f808d0d52b208b804508af048f39c22c10ffcbb14a28c7b299afc879c7a9c3",
+    "model_tensors": 600,
+    "optimizer_states": 465,
+    "optimizer_steps": [
+      10.0
+    ],
+    "loss_records": 10,
+    "meta_iter": 9,
+    "result": "pass_finite_saved_state"
+  },
+  "ranks_checked": 4
+}

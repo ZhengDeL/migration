@@ -1,0 +1,7 @@
+{
+  "repository": "https://gitcode.com/Ascend/DrivingSDK.git",
+  "revision": "0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837",
+  "model": "bevformer",
+  "official_patch": "model_examples/BEVFormer/bev_former_config.patch",
+  "normalized_patch_sha256": "d0dc1ace4287d652f7d53598ca4933d3a824d9b6971ecb3bd6009d59241266a8"
+}

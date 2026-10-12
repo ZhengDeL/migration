@@ -1,0 +1,15 @@
+{
+  "sparse4d": {
+    "url": "https://github.com/HorizonRobotics/Sparse4D.git",
+    "revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+    "patch": "ascend.patch",
+    "patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314",
+    "pretrain_url": "https://download.pytorch.org/models/resnet50-19c8e357.pth",
+    "pretrain_sha256": "19c8e3572231adff6824a2da93fd67b5986919a2e65f8b6007eab4edee220097"
+  },
+  "drivingsdk": {
+    "url": "https://gitcode.com/Ascend/DrivingSDK.git",
+    "revision": "0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837",
+    "branch": "branch_v26.1.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "model": "qwen3vl8b",
+  "source": "LLaMA-Factory",
+  "nproc": 2,
+  "image_role": "qwen",
+  "environment": null,
+  "python": "/usr/local/python3.12.13/bin/python",
+  "host_devices": "0,2",
+  "data_dir": "sources/LLaMA-Factory/data",
+  "memory": "64g",
+  "image_archive": "qwen.tar.gz",
+  "sdk_dir": null
+}
