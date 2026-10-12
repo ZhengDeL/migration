@@ -1,0 +1,85 @@
+{
+  "rank": 1,
+  "world_size": 2,
+  "steps_executed_this_run": 10,
+  "total_optimizer_steps": 10,
+  "parameters_on_npu": true,
+  "initial_parameter_sha256": "238b04af4f78582127cac761b39267db05d020641471e85104e3ec0775b18281",
+  "final_parameter_sha256": "027a097a2dbe2007204a76c57dda75f2962175b9a08d7f2a5e2eeb29c9dbcab7",
+  "parameters_updated": true,
+  "all_parameter_rank_hashes_match": true,
+  "state_finite": true,
+  "optimizer_finite": true,
+  "records": [
+    {
+      "step": 1,
+      "loss": 6.844064712524414,
+      "gradient_norm": 44.1070277553628,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 2,
+      "loss": 6.80544376373291,
+      "gradient_norm": 38.13767972790078,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 3,
+      "loss": 6.811050891876221,
+      "gradient_norm": 43.76421412003014,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 4,
+      "loss": 6.880263328552246,
+      "gradient_norm": 42.25634866180677,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 5,
+      "loss": 6.99818229675293,
+      "gradient_norm": 33.84578236212022,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 6,
+      "loss": 6.821506500244141,
+      "gradient_norm": 30.976362497186784,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 7,
+      "loss": 6.660397529602051,
+      "gradient_norm": 32.17452507487518,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 8,
+      "loss": 6.701793670654297,
+      "gradient_norm": 29.463271640430325,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 9,
+      "loss": 6.438992977142334,
+      "gradient_norm": 32.71186612088326,
+      "gradient_tensors": 158,
+      "images": 4
+    },
+    {
+      "step": 10,
+      "loss": 6.190948963165283,
+      "gradient_norm": 31.581361898955368,
+      "gradient_tensors": 158,
+      "images": 4
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "result": "pass_independent_restore_setup_reload_real_validation",
+  "independent_directory": true,
+  "uses_original_release_source_directory": false,
+  "checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+  "metrics_match_original": true,
+  "cpu_npu_max_absolute_error": 3.56137752532959e-05,
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "standalone_source_checksum_verified": true,
+  "private_logs_excluded": true
+}

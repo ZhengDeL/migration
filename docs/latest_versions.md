@@ -1,6 +1,10 @@
-# 版本核验（2026-10-12）
+# 版本核验（原五项 2026-10-12；新增四项 2026-10-13）
 
 本次独立交付使用当前核验的上游提交、配套官方发布镜像和完整权重；具体 image ID 和归档 SHA 固定在每个模型自己的 images.lock.json。后续滚动标签变化时需重新验证后再更新交付。
+
+新增 LSTM / STGCN / ResWorld / MobileNetV2 使用各自 `validation/upstream_status.json` 记录的 2026-10-13 默认分支或 canonical HEAD 核验。LSTM `27696a19`、STGCN PyTorch `5cfa82c7`、STGCN 作者 `4ab75ab6`、ResWorld `a5ae9730`、ModelZoo GitCode `e779117e` 均与此次核验一致。ModelZoo 的 GitHub 镜像停在旧版，采用 GitCode 主仓核验结果。新增四项使用经过实测的 DrivingSDK 26.1 A3 headless 派生镜像，保持原始 26.1 发布配套，不切换尚未完成本项目训练验证的开发分支。
+
+新增四项的 checkpoint 是本项目随机初始化短训练保存的功能产物，未被描述为官方完整预训练或精度达标权重。模型、任务和指标范围见 [新增四项实测](additional_models_delivery.md)。
 
 ## 上游和数据
 

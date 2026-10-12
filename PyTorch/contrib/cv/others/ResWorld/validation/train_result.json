@@ -1,0 +1,20 @@
+{
+  "model": "resworld",
+  "mode": "functional",
+  "result": "pass_functional_training",
+  "world_size": 4,
+  "optimizer_steps": 10,
+  "dataset_digest": "f2a7e7c6a2c8f0170ea6f9123baa5b5f064abe562937d44aa0c4c3b1b016fa22",
+  "checkpoint_sha256": "7005808e22a08884bacd10f620b308858f1f0a40aa17dfa2961ff009b2ff0ebf",
+  "settings": {
+    "steps": 10,
+    "epochs": 2,
+    "batch_size": 1,
+    "lr": 0.0001
+  },
+  "data_scope": "real_nuscenes_mini_resworld_functional",
+  "formal_accuracy_claimed": false,
+  "resume_from": null,
+  "resume_is_weight_optimizer_continuation_not_bit_exact_replay": false,
+  "data_path": "data/nuscenes"
+}

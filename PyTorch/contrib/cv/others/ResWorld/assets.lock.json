@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "distribution": "prepared model-local real dataset; redundant expansion archives omitted",
+  "nuscenes_mini_source": "https://www.nuscenes.org/nuscenes#download",
+  "official_expansion_reference": "https://github.com/nutonomy/nuscenes-devkit/blob/b40adc467b919192899405d9b77871afee8efa07/.github/actions/run-python-tests/action.yml",
+  "can_bus": {
+    "url": "https://s3.ap-northeast-1.amazonaws.com/motional-nuscenes/public/v1.0/can_bus.zip",
+    "official_ci_url": "https://motional-nuscenes.s3-ap-northeast-1.amazonaws.com/public/v1.0/can_bus.zip",
+    "source_revision": "b40adc467b919192899405d9b77871afee8efa07",
+    "source_page": "https://github.com/nutonomy/nuscenes-devkit/blob/b40adc467b919192899405d9b77871afee8efa07/.github/actions/run-python-tests/action.yml",
+    "original_zip_bytes": 780974697,
+    "original_zip_etag": "\"8a808d4b0cccf4d8141af63281809508-94\"",
+    "method": "HTTP ranges of official ZIP; original member CRC checked",
+    "filename": "can_bus_mini_selected.zip",
+    "bytes": 1230944,
+    "sha256": "4c961768156b846c0eac17ab25c14d5cbefceb345336ee135c36594b3fa17fb4",
+    "original_complete_archive_sha256": null,
+    "files": [
+      {
+        "path": "can_bus/scene-0061_pose.json",
+        "bytes": 324148,
+        "sha256": "8ce4586b7498a8600414a603e9eec223d9fe568e399a7fa9e305eaff56d78a1a",
+        "zip_crc32": 973289765,
+        "message_count": 938
+      },
+      {
+        "path": "can_bus/scene-0061_steeranglefeedback.json",
+        "bytes": 104832,
+        "sha256": "8e897f9752dfc1ed24d06cb98f5f555d8f0aa14b57cef00c09c1f462a60d31f8",
+        "zip_crc32": 3686999691,
+        "message_count": 1797
+      },
+      {
+        "path": "can_bus/scene-0103_pose.json",
+        "bytes": 335519,
+        "sha256": "099a109687c4663e7ecbd85b8ebd4307e3b1739afa56301960febbb0d56f90d5",
+        "zip_crc32": 3417370531,
+        "message_count": 969
+      },
+      {
+        "path": "can_bus/scene-0103_steeranglefeedback.json",
+        "bytes": 113835,
+        "sha256": "f443028a7296cf550dee02e214ae1c4395c818eeb63a58e3117b34d3562fe99e",
+        "zip_crc32": 939565782,
+        "message_count": 1896
+      },
+      {
+        "path": "can_bus/scene-0553_pose.json",
+        "bytes": 346425,
+        "sha256": "a2cdb074bac12304d06d36adbe96b97afe89347dca6788a7fef5d7916d0877d7",
+        "zip_crc32": 700454143,
+        "message_count": 992
+      },
+      {
+        "path": "can_bus/scene-0553_steeranglefeedback.json",
+        "bytes": 114736,
+        "sha256": "bf0504f11d6d848ab747d81482445c6b34265cdc0e9677265cbcd5801a3b9ad2",
+        "zip_crc32": 2983543467,
+        "message_count": 1957
+      },
+      {
+        "path": "can_bus/scene-0655_pose.json",
+        "bytes": 341478,
+        "sha256": "8ad86e3af254be5efdaea7b6079d17d13b20763ca94151b30b8feec0b4490e4f",
+        "zip_crc32": 847417166,
+        "message_count": 985
+      },
+      {
+        "path": "can_bus/scene-0655_steeranglefeedback.json",
+        "bytes": 116668,
+        "sha256": "7ca1484ec78540d7031bf110e2c41e89e26f4b711c856288627f637abc8db6eb",
+        "zip_crc32": 1777702810,
+        "message_count": 1947
+      },
+      {
+        "path": "can_bus/scene-0757_pose.json",
+        "bytes": 346247,
+        "sha256": "62adda101de01a6ffc4ff202f667e41fb0be880cde25d2db317f7e856535cbea",
+        "zip_crc32": 821264771,
+        "message_count": 992
+      },
+      {
+        "path": "can_bus/scene-0757_steeranglefeedback.json",
+        "bytes": 116389,
+        "sha256": "8eb3b4e4341bbafa8d3602f4769f2aae93f1ec2adbbf2a0097badf0cd9ff3f62",
+        "zip_crc32": 1066273346,
+        "message_count": 1971
+      },
+      {
+        "path": "can_bus/scene-0796_pose.json",
+        "bytes": 339316,
+        "sha256": "ab2b1eccfda284510f3121e69b6975697d4373a127d9948cf26dbd41f075184f",
+        "zip_crc32": 904154735,
+        "message_count": 976
+      },
+      {
+        "path": "can_bus/scene-0796_steeranglefeedback.json",
+        "bytes": 116065,
+        "sha256": "64f2b65a30beff2e3ffc82629f33ec58e4b4a2b58309d502d75cf02ba053ad67",
+        "zip_crc32": 4113046672,
+        "message_count": 1943
+      },
+      {
+        "path": "can_bus/scene-0916_pose.json",
+        "bytes": 342556,
+        "sha256": "008a25373a197006a887e585db9f65dc12b1a5c65d644c24ccd319ebcc7afce6",
+        "zip_crc32": 635577669,
+        "message_count": 995
+      },
+      {
+        "path": "can_bus/scene-0916_steeranglefeedback.json",
+        "bytes": 116272,
+        "sha256": "1f6317a2cfff986a1c76d6605040cda91da9bf7c98e27055096d5a2f39681370",
+        "zip_crc32": 1460285735,
+        "message_count": 1979
+      },
+      {
+        "path": "can_bus/scene-1077_pose.json",
+        "bytes": 343341,
+        "sha256": "ba736324224087b56c516fd4cb997b780014ac231b1b9cf487b34d81c7f5b835",
+        "zip_crc32": 1494770006,
+        "message_count": 992
+      },
+      {
+        "path": "can_bus/scene-1077_steeranglefeedback.json",
+        "bytes": 116392,
+        "sha256": "6f7127e28811b07f30c0cb1ba26a77965cfef40874bb72d40b0bc0842f0b6bd6",
+        "zip_crc32": 3889604573,
+        "message_count": 1960
+      },
+      {
+        "path": "can_bus/scene-1094_pose.json",
+        "bytes": 334610,
+        "sha256": "25e62e483e763f01d44e4e01881383df5751eccfdd47d6e3a407e04b197132f1",
+        "zip_crc32": 1988553586,
+        "message_count": 967
+      },
+      {
+        "path": "can_bus/scene-1094_steeranglefeedback.json",
+        "bytes": 113560,
+        "sha256": "2cdb1574c44abb3b6ca6b406f5bdf1d2ef3456d87fc72c18425aaecd918e6172",
+        "zip_crc32": 3214472615,
+        "message_count": 1925
+      },
+      {
+        "path": "can_bus/scene-1100_pose.json",
+        "bytes": 344196,
+        "sha256": "4aa880888b41f009d162a750513e8193f1acc7a3090dedd6fa71706d43616151",
+        "zip_crc32": 2827849842,
+        "message_count": 974
+      },
+      {
+        "path": "can_bus/scene-1100_steeranglefeedback.json",
+        "bytes": 112327,
+        "sha256": "f5f1af311f925af8966ccc0ab9d7853742e69bc8f26ab12f6524cf14f8c42fd5",
+        "zip_crc32": 3278517836,
+        "message_count": 1923
+      }
+    ],
+    "synthetic_messages": false
+  },
+  "map_expansion": {
+    "url": "https://s3.ap-northeast-1.amazonaws.com/motional-nuscenes/public/v1.0/nuScenes-map-expansion-v1.3.zip",
+    "bytes": 398535531,
+    "sha256": "9dbc80a095b6b28d9b79fc9a43471a750dc92ca78c6d0db288fd92b34be5a144"
+  },
+  "lidarseg_mini": {
+    "url": "https://s3.ap-northeast-1.amazonaws.com/motional-nuscenes/public/v1.0/nuScenes-lidarseg-mini-v1.0.tar.bz2",
+    "bytes": 1819477,
+    "sha256": "c268ecd7bfbcc5e3b66c716998fdecbc0a91a1f98f825dbd794f357957209945"
+  },
+  "data_file_integrity": "data/nuscenes/metadata.json lists every delivered prepared input"
+}

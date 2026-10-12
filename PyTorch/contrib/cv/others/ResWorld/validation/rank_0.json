@@ -1,0 +1,165 @@
+{
+  "rank": 0,
+  "world_size": 4,
+  "steps_executed_this_run": 10,
+  "total_optimizer_steps": 10,
+  "parameters_on_npu": true,
+  "initial_parameter_sha256": "2c870bb68332d9293bb2ce202f0edf72f7a7aeb6e993d067f9ed89dbb6b57010",
+  "final_parameter_sha256": "75168abf17f2c80ebb22e204c3f7f4a7b4a524ba28196fd62d5ecde6b5237b05",
+  "parameters_updated": true,
+  "all_parameter_rank_hashes_match": true,
+  "state_finite": true,
+  "optimizer_finite": true,
+  "records": [
+    {
+      "step": 1,
+      "loss": 1.0874207019805908,
+      "gradient_norm": 214.47111457932564,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "4d7cf1ad5f9c4842bb6f135e058deed4"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5390664935112,
+        "loss_plan_reg": 0.3605976998806,
+        "loss_plan_reg_init": 0.18775659799575806
+      }
+    },
+    {
+      "step": 2,
+      "loss": 1.7410314083099365,
+      "gradient_norm": 142.09289050151523,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "61cfc5554a724824b0d34bddc147d890"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5369689464569092,
+        "loss_plan_reg": 0.9942649602890015,
+        "loss_plan_reg_init": 0.20979748666286469
+      }
+    },
+    {
+      "step": 3,
+      "loss": 20.355300903320312,
+      "gradient_norm": 44.99745345245963,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "3be9d2705879419f8f3afc08949dca57"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5410410165786743,
+        "loss_plan_reg": 9.72366714477539,
+        "loss_plan_reg_init": 10.090593338012695
+      }
+    },
+    {
+      "step": 4,
+      "loss": 8.233589172363281,
+      "gradient_norm": 78.20463708804948,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "2ff86dc19c4644a1a88ce5ba848f56e5"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5407347083091736,
+        "loss_plan_reg": 3.559574842453003,
+        "loss_plan_reg_init": 4.133279800415039
+      }
+    },
+    {
+      "step": 5,
+      "loss": 18.78905487060547,
+      "gradient_norm": 63.98756438902625,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "312cd4d3bef1476a9211d3dab50dd0b7"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5397801995277405,
+        "loss_plan_reg": 8.69586181640625,
+        "loss_plan_reg_init": 9.553412437438965
+      }
+    },
+    {
+      "step": 6,
+      "loss": 20.671024322509766,
+      "gradient_norm": 64.67354721455926,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "6d1d793b68b24165be5755a54054c82a"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5383931398391724,
+        "loss_plan_reg": 9.4233980178833,
+        "loss_plan_reg_init": 10.709233283996582
+      }
+    },
+    {
+      "step": 7,
+      "loss": 11.871036529541016,
+      "gradient_norm": 199.04565337144328,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "0e837c21890a4515874247ceb3dbf5c3"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5422422289848328,
+        "loss_plan_reg": 5.034358978271484,
+        "loss_plan_reg_init": 6.294435501098633
+      }
+    },
+    {
+      "step": 8,
+      "loss": 7.225885391235352,
+      "gradient_norm": 143.3340296014012,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "023c4df2d451409881d8e6ea82f14704"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5438737869262695,
+        "loss_plan_reg": 2.164250135421753,
+        "loss_plan_reg_init": 4.517761707305908
+      }
+    },
+    {
+      "step": 9,
+      "loss": 17.070798873901367,
+      "gradient_norm": 98.68192883714538,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "dca2cc206bb34bc197ae8ebdaed22f35"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5421003699302673,
+        "loss_plan_reg": 7.181679725646973,
+        "loss_plan_reg_init": 9.34701919555664
+      }
+    },
+    {
+      "step": 10,
+      "loss": 12.498703956604004,
+      "gradient_norm": 148.4381933993402,
+      "gradient_tensors": 446,
+      "real_tokens": [
+        "273c930b3f384bd58b2bbae02fe81d1e"
+      ],
+      "real_can_data": true,
+      "losses": {
+        "loss_depth": 0.5461658835411072,
+        "loss_plan_reg": 5.148825168609619,
+        "loss_plan_reg_init": 6.803712844848633
+      }
+    }
+  ]
+}

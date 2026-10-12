@@ -1,0 +1,91 @@
+{
+  "scope": "same original real-data network weights, FP32; fixed image only",
+  "native_control": {
+    "1": {
+      "embedding_cpu_npu_max_error": 0.0,
+      "hidden_initial_sum": 0.0,
+      "native_cell_cpu_npu_h_max_error": 0.1465350091457367,
+      "native_cell_cpu_npu_c_max_error": 0.2291058897972107,
+      "composite_cell_cpu_npu_h_max_error": 2.2351741790771484e-08,
+      "composite_cell_cpu_npu_c_max_error": 4.470348358154297e-08,
+      "native_repeat_max_error": 0.2251797318458557
+    },
+    "2": {
+      "embedding_cpu_npu_max_error": 0.0,
+      "hidden_initial_sum": 0.0,
+      "native_cell_cpu_npu_h_max_error": 1.1175870895385742e-08,
+      "native_cell_cpu_npu_c_max_error": 2.2351741790771484e-08,
+      "composite_cell_cpu_npu_h_max_error": 2.2351741790771484e-08,
+      "composite_cell_cpu_npu_c_max_error": 4.470348358154297e-08,
+      "native_repeat_max_error": 0.0
+    }
+  },
+  "padding_gradient_control": {
+    "result": "pass_real_input_batch1_padding_gradient_control",
+    "real_batch_size": 1,
+    "npu_kernel_batch_size": 2,
+    "padded_row_in_loss": false,
+    "cpu_npu_loss_error": 1.1920928955078125e-07,
+    "max_gradient_absolute_error": 1.4901161193847656e-08,
+    "checked_parameter_gradients": 14,
+    "gradients": [
+      {
+        "parameter": "encoder.linear1.weight",
+        "max_absolute_error": 4.656612873077393e-10
+      },
+      {
+        "parameter": "encoder.linear1.bias",
+        "max_absolute_error": 4.656612873077393e-10
+      },
+      {
+        "parameter": "encoder.lstm1.weight_ih",
+        "max_absolute_error": 9.313225746154785e-10
+      },
+      {
+        "parameter": "encoder.lstm1.weight_hh",
+        "max_absolute_error": 3.4924596548080444e-10
+      },
+      {
+        "parameter": "encoder.lstm1.bias_ih",
+        "max_absolute_error": 4.656612873077393e-10
+      },
+      {
+        "parameter": "encoder.lstm1.bias_hh",
+        "max_absolute_error": 4.656612873077393e-10
+      },
+      {
+        "parameter": "decoder.linear1.weight",
+        "max_absolute_error": 1.862645149230957e-09
+      },
+      {
+        "parameter": "decoder.linear1.bias",
+        "max_absolute_error": 7.450580596923828e-09
+      },
+      {
+        "parameter": "decoder.lstm1.weight_ih",
+        "max_absolute_error": 1.4901161193847656e-08
+      },
+      {
+        "parameter": "decoder.lstm1.weight_hh",
+        "max_absolute_error": 5.587935447692871e-09
+      },
+      {
+        "parameter": "decoder.lstm1.bias_ih",
+        "max_absolute_error": 1.4901161193847656e-08
+      },
+      {
+        "parameter": "decoder.lstm1.bias_hh",
+        "max_absolute_error": 1.4901161193847656e-08
+      },
+      {
+        "parameter": "decoder.linear2.weight",
+        "max_absolute_error": 1.4901161193847656e-08
+      },
+      {
+        "parameter": "decoder.linear2.bias",
+        "max_absolute_error": 1.4901161193847656e-08
+      }
+    ]
+  },
+  "underlying_kernel_root_cause_confirmed": false
+}

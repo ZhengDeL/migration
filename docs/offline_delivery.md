@@ -1,5 +1,7 @@
 # 独立模型离线交付
 
+本页保留 2026-10-12 原五项交付。新增四项的实测与独立包见 [新增四模型交付](additional_models_delivery.md)；最终九项上传目录只包含各模型 ZIP、必要说明和校验清单。
+
 每个模型单独交付一个可直接查看的展开目录，以及一个对应的完整归档。模型目录中包含自己的指导、脚本、固定上游源码、运行镜像、功能数据、初始化权重和实测结果。镜像使用独立的 Docker save 归档，setup 导入后核对实际 image ID。
 
 取用哪个模型，就按它的 README 执行。每份包的 `package_manifest.json` 和 `tools/verify_package.py` 校验本模型文件；归档另有 SHA256。目录名及上级路径可以改变，setup 会重建当前目录的数据路径。训练需要对应 Ascend ARM64 Linux 服务器；Windows 可查看文件并校验下载完整性。

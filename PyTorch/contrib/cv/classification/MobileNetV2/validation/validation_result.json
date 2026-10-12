@@ -1,0 +1,20 @@
+{
+  "model": "mobilenetv2",
+  "result": "pass_checkpoint_reload_and_validation",
+  "checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+  "optimizer_steps": 10,
+  "strict_state_reload": true,
+  "reference_replay_matches": true,
+  "cpu_npu_max_absolute_error": 3.56137752532959e-05,
+  "cpu_npu_rtol": 0.003,
+  "cpu_npu_atol": 0.003,
+  "data_scope": "public_imagenette_functional_subset",
+  "metrics": {
+    "held_out_images": 40,
+    "correct_top1": 4,
+    "top1": 0.1,
+    "class_head": 1000,
+    "claim": "subset_functionality_only"
+  },
+  "formal_accuracy_claimed": false
+}

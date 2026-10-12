@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "data/raw/PeMSD7_Full.zip",
+      "url": "https://github.com/VeritasYin/STGCN_IJCAI-18/blob/4ab75ab69af354d6a0ab86aefa082d389b187127/dataset/PeMSD7_Full.zip",
+      "sha256": "79e03f4b3054ceb19b6c6488b78b2bc8884e4bfaabd9d7266ad5933332fb1580",
+      "bytes": 29211203
+    },
+    {
+      "path": "data/raw/adj.npz",
+      "url": "https://github.com/hazdzz/STGCN/blob/5cfa82c78984fc58fafe4841c35618c6647c4219/data/pemsd7-m/adj.npz",
+      "sha256": "66382967506019a66cb15b03851981514786750881d92f5b00531b848cbaf4af",
+      "bytes": 112183
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+--- a/PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/train/mobilenet.py
++++ b/PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/train/mobilenet.py
+@@ -17,11 +17,12 @@
+ 
+ 
+ from torch import nn
++from pathlib import Path
+ 
+ 
+ __all__ = ['MobileNetV2', 'mobilenet_v2']
+ 
+-with open('url.ini', 'r') as f:
++with Path(__file__).with_name('url.ini').open('r') as f:
+     content = f.read()
+     mobilenet_v2_url = content.split('mobilenet_v2_url=')[1].split('\n')[0]
+ model_urls = {

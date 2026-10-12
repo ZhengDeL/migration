@@ -1,0 +1,85 @@
+{
+  "rank": 1,
+  "world_size": 2,
+  "steps_executed_this_run": 10,
+  "total_optimizer_steps": 10,
+  "parameters_on_npu": true,
+  "initial_parameter_sha256": "ca8532b6ea35dfc2a21d2c8dd30a2fb87d63cfa8f704c7331800519e17c7b23c",
+  "final_parameter_sha256": "76488febbb7154096ada9e5e811c17d445b3b5a1f9df03827693fe3a788f984d",
+  "parameters_updated": true,
+  "all_parameter_rank_hashes_match": true,
+  "state_finite": true,
+  "optimizer_finite": true,
+  "records": [
+    {
+      "step": 1,
+      "loss": 0.34892112016677856,
+      "gradient_norm": 3.2046749205201053,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 2,
+      "loss": 0.18154679238796234,
+      "gradient_norm": 1.074630746390911,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 3,
+      "loss": 0.1827513575553894,
+      "gradient_norm": 1.4371962691819855,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 4,
+      "loss": 0.5785962343215942,
+      "gradient_norm": 2.182347072531189,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 5,
+      "loss": 3.2461771965026855,
+      "gradient_norm": 8.088911984262095,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 6,
+      "loss": 2.900831699371338,
+      "gradient_norm": 6.541703937138093,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 7,
+      "loss": 0.9284957647323608,
+      "gradient_norm": 1.678505391976559,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 8,
+      "loss": 0.5095677375793457,
+      "gradient_norm": 2.2209936186639285,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 9,
+      "loss": 0.42533522844314575,
+      "gradient_norm": 2.590947306817907,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    },
+    {
+      "step": 10,
+      "loss": 0.33610039949417114,
+      "gradient_norm": 1.4957529652191155,
+      "gradient_tensors": 28,
+      "traffic_windows": 8
+    }
+  ]
+}

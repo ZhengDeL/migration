@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch.git",
+  "revision": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "directory": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch",
+  "modifications": [
+    "Resolve vendor/url.ini relative to the model module"
+  ],
+  "files": [
+    {
+      "path": "vendor/mobilenet.py",
+      "sha256": "5579e5f940d6de1f037d5dde444fb51906e16d2a628e0c6b0bcf5d5bb458e0a8"
+    },
+    {
+      "path": "vendor/url.ini",
+      "sha256": "eeb763903d050364445e24febd1be60ca6aea9fb9c25c806a3fa904b9ac8c79c"
+    },
+    {
+      "path": "vendor/LICENSE.MobileNetV2",
+      "upstream_path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/LICENSE",
+      "sha256": "9f342c83c19b04ee47a99e87c2c43d5a6098192ed92b5da0e5f39ac1a80827b8"
+    }
+  ]
+}

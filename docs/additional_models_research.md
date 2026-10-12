@@ -1,17 +1,17 @@
 # 新增智驾模型：来源、选型与验证进展
 
-核验日期：2026-10-12。四项按智驾用途组织。本页记录当前阶段；各项完整数据训练、正式精度、性能和长期稳定性均尚未验收。
+核验日期：2026-10-13。四项按智驾用途组织，均已在用户提供的 1# 机器完成真实数据多卡训练、checkpoint 独立重载、CPU 数值对照和留出验证。各项完整数据训练、正式精度、性能和长期稳定性均尚未验收。
 
 ## 当前任务与来源
 
 | 名称 | 本轮采用或研究的实现 | 用途 | 当前验证范围 |
 | --- | --- | --- | --- |
-| LSTM | Argoverse 官方基础 LSTM，建议工程名 LSTM-Argoverse | 用车辆历史二维轨迹预测未来位置 | 原始编码器 / 解码器单 NPU 前向、反向、一次参数更新及 CPU 对照通过；真实数据及完整工程未验收 |
+| LSTM | [Argoverse 官方基础 LSTM](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 用车辆历史二维轨迹预测未来位置 | 官方真实 train/val 128/32 子集，双卡各 10 步、独立重载、ADE/FDE/Miss Rate 已测；质量未验收 |
 | STGCN | hazdzz/STGCN 的 PyTorch 交通实现，配合原论文作者的 PeMSD7 数据 | 道路传感器时间序列预测；本轮预测交通速度 | PeMSD7-M 功能子集双卡 10 步，checkpoint 独立重载及 241 个留出窗口验证通过 |
-| ResWorld | 用户指定的 mengtan00/ResWorld | 多相机时序输入的端到端智驾规划 | 完整官方网络构造通过，80,766,238 参数；前向、反向、训练及真实数据验收待完成 |
+| ResWorld | [作者完整 ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 多相机时序输入的端到端智驾规划 | 80,766,238 参数完整网络，真实 mini/CAN/前景深度，四卡各 10 步、独立重载和 65 留出帧验证通过 |
 | MobileNetV2 | Ascend ModelZoo 的 V2 网络，保留 1000 类输出头 | 图像分类基础网络；可作为智驾视觉骨干参考 | 公开 Imagenette 图片子集双卡 10 步，checkpoint 独立重载及 40 张留出图片验证通过 |
 
-LSTM 的进一步研究见 [独立研究说明](lstm_driving_research.md)及 [实际单 NPU 复验](../verification/lstm_driving_research_20261012/README.md)。其他三项的当前阶段摘要见 [progress.json](../verification/additional_models_research_20261012/progress.json)。MobileNetV2 / STGCN 的本地独立工程仍在完善指导和封包，尚未作为最终离线交付发布。
+当前完整功能结果见各模型 README 和 `validation/`，摘要见 [progress.json](../verification/additional_models_research_20261012/progress.json)。[LSTM 选型研究](lstm_driving_research.md)及 [早期单 NPU 检查](../verification/lstm_driving_research_20261012/README.md)保留最初阶段依据。四项均有独立工程、指导、训练与验证入口，离线交付说明见 [实测与交付](additional_models_delivery.md)。
 
 ## 固定源码
 
@@ -52,9 +52,9 @@ TorchNPU:     2.7.1.post6
 
 ## 后续验收
 
-- LSTM：验证真实 Argoverse 1 数据、归一化和坐标恢复、双卡 HCCL、checkpoint 与 ADE / FDE / Miss Rate。
+- LSTM：真实数据、归一化和坐标恢复、双卡 HCCL、checkpoint 与指标功能验证已通过；后续需完整训练 rollout 和正式精度验收。
 - STGCN：完整 PeMSD7-M 或另行固定 METR-LA / PEMS 协议后验收；功能子集不能证明论文精度。
-- ResWorld：准备完整数据与官方配置需要的监督、验证 NPU 网络前向 / 反向、训练重载与规划评测。
+- ResWorld：真实 mini、NPU 前后向、四卡训练与重载已通过；后续需正式预训练、完整数据和作者训练协议、整套规划与碰撞指标。
 - MobileNetV2：完整 ImageNet 分类训练及指标；Imagenette 子集没有证明下游检测、分割或智驾业务精度。
 
 内部问题台账、失败排查日志和操作记录留在本机。最终交付只包含每个模型必要的源码、指导、镜像、数据、权重、验证结果及校验清单。

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "data/raw/argoverse_official_functional_subset.tar.gz",
+      "bytes": 2698713,
+      "sha256": "4ecee546e4fb55c5fccc560872b790f876b951975d5632efb78f81d5f72dd382",
+      "source_archives": [
+        {
+          "filename": "forecasting_train_v1.1.tar.gz",
+          "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_train_v1.1.tar.gz",
+          "bytes": 3751225856,
+          "sha256": "a6fdd1b9d26e167ca2b07d12e55705d2c1c673483a1676b7950e197b16bb8cdb",
+          "official_source_page": "https://www.argoverse.org/av1.html"
+        },
+        {
+          "filename": "forecasting_val_v1.1.tar.gz",
+          "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_val_v1.1.tar.gz",
+          "bytes": 659666087,
+          "sha256": "79777058538dac003e910824d5fcceec27e76072afbdacd3935cb73cbd1b4857",
+          "official_source_page": "https://www.argoverse.org/av1.html"
+        }
+      ]
+    }
+  ]
+}

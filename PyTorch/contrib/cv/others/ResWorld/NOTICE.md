@@ -1,0 +1,1 @@
+Original ResWorld source: mengtan00/ResWorld a5ae973001dd6001d95b3389020a9e263d73a56e. Apache-2.0; upstream license preserved in vendor/ResWorld/LICENSE. New adaptation code uses this directory LICENSE. Original dataset terms and source attribution apply.

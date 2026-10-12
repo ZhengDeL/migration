@@ -1,0 +1,8 @@
+{
+  "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch",
+  "pinned_revision": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "current_HEAD": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "pinned_is_current_head": true,
+  "verification": "git ls-remote canonical origin HEAD",
+  "checked_at": "2026-10-13T00:50:00+08:00"
+}

@@ -11,14 +11,19 @@
 | Qwen3-VL-8B-Instruct | [nlp/Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 |
 | WorldEngine AlgEngine | [cv/others/WorldEngine](PyTorch/contrib/cv/others/WorldEngine/README.md) | 4 |
 | Apollo VisionNet | [cv/detection/Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 |
+| LSTM 车辆轨迹预测 | [cv/others/LSTM-Argoverse](PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2 |
+| 交通 STGCN | [cv/others/STGCN-Traffic](PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2 |
+| ResWorld | [cv/others/ResWorld](PyTorch/contrib/cv/others/ResWorld/README.md) | 4 |
+| MobileNetV2 | [cv/classification/MobileNetV2](PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2 |
 
-进入对应模型目录，按它自己的指导操作。每个目录包含独立的来源锁、镜像锁、补丁、数据准备与检查脚本，以及 `test/train_*p.sh`、`test/train_full_*p.sh` 和 `test/validate_1p.sh`。入口通过脚本位置确定模型目录，可单独复制到其他路径，不依赖迁移仓 Git 根目录。
+进入对应模型目录，按它自己的指导操作。每个目录包含独立的来源锁、镜像锁、适配代码、数据准备与检查脚本，以及 `test/train_*p.sh` 和 `test/validate_1p.sh`。全量训练协议和入口的支持范围以各模型 README 为准。入口通过脚本位置确定模型目录，可单独复制到其他路径，不依赖迁移仓 Git 根目录。
 
 BEVFormer / Sparse4D 采用华为 DrivingSDK 固定模型补丁及必要辅助文件；其余模型按固定官方上游实现适配。官方样例的默认八卡配置与本项目的两卡 / 四卡功能配置有所区别，具体修改和验收范围在各模型说明中列出。
 
 ## 交付和证据
 
 - [独立模型离线交付](docs/offline_delivery.md)：每个模型独立目录及归档，单独取得即可使用。
+- [新增四模型实测与交付](docs/additional_models_delivery.md)：逐模型独立训练、重载、真实留出验证及离线包说明。
 - [社区调研](docs/community_research.md)：华为 / Ascend 已有实现与上游依据。
 - [新增智驾模型研究与进展](docs/additional_models_research.md)：LSTM 轨迹预测、交通 STGCN、ResWorld 与 MobileNetV2；逐项列出当前验证范围。
 - [LSTM 智驾选型研究](docs/lstm_driving_research.md)：官方基础 LSTM 的任务、数据协议、固定来源及单 NPU 神经网络复验。

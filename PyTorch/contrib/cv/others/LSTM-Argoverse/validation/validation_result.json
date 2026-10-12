@@ -1,0 +1,26 @@
+{
+  "model": "lstm-argoverse",
+  "result": "pass_checkpoint_reload_and_validation",
+  "checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+  "optimizer_steps": 10,
+  "strict_state_reload": true,
+  "reference_replay_matches": true,
+  "cpu_npu_max_absolute_error": 5.960464477539063e-08,
+  "cpu_npu_rtol": 0.003,
+  "cpu_npu_atol": 0.003,
+  "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+  "metrics": {
+    "held_out_sequences": 32,
+    "ade_m": 13.761220409958154,
+    "fde_m": 26.48044279814375,
+    "miss_rate": 1.0,
+    "miss_threshold_m": 2.0,
+    "prediction_guesses_k": 1,
+    "observation_steps": 20,
+    "prediction_steps": 30,
+    "synthetic_data": false,
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "formal_accuracy_claimed": false
+  },
+  "formal_accuracy_claimed": false
+}

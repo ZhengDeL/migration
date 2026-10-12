@@ -16,3 +16,15 @@ wheelhouse/
 *.npy
 *.pkl
 *.ckpt
+*.npz
+runtime/
+images/
+test/output/
+package_manifest.json
+SHA256SUMS
+*.tar.gz
+*.tar.bz2
+*.tgz
+*.zip
+*.partial
+.model_operation.lock
