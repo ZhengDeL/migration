@@ -20,6 +20,7 @@ BEVFormer / Sparse4D 采用华为 DrivingSDK 固定模型补丁及必要辅助�
 
 - [独立模型离线交付](docs/offline_delivery.md)：每个模型独立目录及归档，单独取得即可使用。
 - [社区调研](docs/community_research.md)：华为 / Ascend 已有实现与上游依据。
+- [新增模型迁移前核验](docs/additional_models_research.md)：LSTM、ST-GCN、MobileNet 与待确认的 Resword；当前为候选调研，尚未完成新增模型实测。
 - [版本核验](docs/latest_versions.md)：固定来源、镜像及权重版本。
 - [历史实测](docs/validation.md)：此前验证范围；新的独立入口证据分别放在各模型 `validation/`。
 
