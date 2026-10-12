@@ -1,0 +1,11 @@
+sources/
+data/
+weights/
+images/
+prepared/
+test/output/
+*.log
+__pycache__/
+.model_operation.lock
+package_manifest.json
+SHA256SUMS.txt

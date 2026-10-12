@@ -1,0 +1,24 @@
+{
+  "model": "bevformer",
+  "root": "/var/ai-model/lzd/independent_20261012/models/BEVFormer",
+  "host_devices": "0,2",
+  "started_utc": "2026-10-12T09:22:45.452936+00:00",
+  "state": "passed",
+  "commands": [
+    [
+      "bash",
+      "test/train_2p.sh",
+      "--device_id=0,2"
+    ],
+    [
+      "bash",
+      "test/validate_1p.sh",
+      "--device_id=0"
+    ]
+  ],
+  "exit_codes": [
+    0,
+    0
+  ],
+  "ended_utc": "2026-10-12T09:30:26.027942+00:00"
+}

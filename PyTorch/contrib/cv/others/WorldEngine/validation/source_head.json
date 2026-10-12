@@ -1,0 +1,7 @@
+{
+  "checked_at_utc": "2026-10-12T09:42:59.762450+00:00",
+  "repository": "https://github.com/OpenDriveLab/WorldEngine.git",
+  "latest_head_verified": "3eded7e8ac64e5bed817860765089b5914ab698f",
+  "pinned_revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
+  "verification": "git ls-remote HEAD on 2026-10-12; equal to pinned revision"
+}

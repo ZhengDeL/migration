@@ -1,0 +1,27 @@
+{
+  "model": "apollo_visionnet",
+  "result": "pass_functional_training",
+  "mode": "functional",
+  "nproc": 4,
+  "upstream_revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+  "entry_command": [
+    "/opt/conda/envs/bevformer/bin/python",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/tools/run_train.py",
+    "apollo_visionnet",
+    "--source",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/sources/Apollo-Vision-Net",
+    "--devices",
+    "0,1,2,3",
+    "--output-dir",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/test/output/functional_20261012_173622_689716",
+    "--smoke",
+    "--data-dir",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/data/apollo",
+    "--prepared-dir",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/prepared/apollo",
+    "--nuscenes",
+    "/var/ai-model/lzd/independent_20261012/models/Apollo-Vision-Net/data/nuscenes",
+    "--execute"
+  ],
+  "functional_accuracy_claimed": false
+}

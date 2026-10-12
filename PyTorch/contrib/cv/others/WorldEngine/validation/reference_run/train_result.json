@@ -1,0 +1,25 @@
+{
+  "model": "worldengine",
+  "result": "pass_functional_training",
+  "mode": "functional",
+  "nproc": 4,
+  "upstream_revision": "3eded7e8ac64e5bed817860765089b5914ab698f",
+  "entry_command": [
+    "/opt/conda/envs/bevformer/bin/python",
+    "/var/ai-model/lzd/independent_20261012/models/WorldEngine/tools/run_train.py",
+    "worldengine",
+    "--source",
+    "/var/ai-model/lzd/independent_20261012/models/WorldEngine/sources/WorldEngine",
+    "--devices",
+    "0,1,2,3",
+    "--output-dir",
+    "/var/ai-model/lzd/independent_20261012/models/WorldEngine/test/output/functional_20261012_172246_295993",
+    "--smoke",
+    "--data-dir",
+    "/var/ai-model/lzd/independent_20261012/models/WorldEngine/data/worldengine_smoke",
+    "--prepared-dir",
+    "/var/ai-model/lzd/independent_20261012/models/WorldEngine/data/worldengine_smoke/prepared",
+    "--execute"
+  ],
+  "functional_accuracy_claimed": false
+}

@@ -1,0 +1,18 @@
+{
+  "apollo_visionnet": {
+    "url": "https://github.com/ApolloAuto/Apollo-Vision-Net.git",
+    "revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+    "patch": "ascend.patch",
+    "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3",
+    "compat_patch": "compat.patch",
+    "compat_patch_sha256": "256c272a728fa83967af9522a1ff37c6e2229b9ac44d6791c7fbfbeb43255022",
+    "occ_archive_bytes": 15840721593,
+    "occ_archive_sha256_observed": "52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282",
+    "occ_archive_members": 103302,
+    "occ_uncompressed_file_bytes": 78287038688,
+    "pretrain_path": "ckpts/depth_pretrained_dla34-y1urdmir-20210422_165446-model_final-remapped_bev.pth",
+    "pretrain_git_blob_sha1": "af42f8693fd64f47021e64d6b530331cf075e901",
+    "pretrain_bytes": 61045957,
+    "pretrain_sha256_observed": "8c55b0d98fd0fbc885a7487a764457941e008dcc5a76887196e6264a0e38cc1d"
+  }
+}

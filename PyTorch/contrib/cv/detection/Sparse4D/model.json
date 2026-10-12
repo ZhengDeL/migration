@@ -1,0 +1,13 @@
+{
+  "model": "sparse4d",
+  "source": "Sparse4D",
+  "nproc": 2,
+  "image_role": "drivingsdk_headless",
+  "environment": "sparse4d",
+  "python": "/opt/conda/envs/sparse4d/bin/python",
+  "host_devices": "0,2",
+  "data_dir": "data/nuscenes",
+  "memory": "48g",
+  "image_archive": "drivingsdk_headless.tar.gz",
+  "sdk_dir": "vendor"
+}

@@ -1,0 +1,24 @@
+{
+  "model": "sparse4d",
+  "root": "/var/ai-model/lzd/independent_20261012/models/Sparse4D",
+  "host_devices": "4,6",
+  "started_utc": "2026-10-12T09:22:45.457686+00:00",
+  "state": "passed",
+  "commands": [
+    [
+      "bash",
+      "test/train_2p.sh",
+      "--device_id=4,6"
+    ],
+    [
+      "bash",
+      "test/validate_1p.sh",
+      "--device_id=4"
+    ]
+  ],
+  "exit_codes": [
+    0,
+    0
+  ],
+  "ended_utc": "2026-10-12T09:24:16.757376+00:00"
+}

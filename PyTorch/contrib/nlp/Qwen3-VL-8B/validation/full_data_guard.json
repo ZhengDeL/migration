@@ -1,0 +1,9 @@
+{
+  "model": "qwen3vl8b",
+  "result": "pass_reject_functional_data_as_full_without_state_change",
+  "negative_exit_code": 1,
+  "dataset_links_unchanged": true,
+  "latest_result_pointer_unchanged": true,
+  "full_training_executed": false,
+  "image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5"
+}

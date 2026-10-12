@@ -1,0 +1,50 @@
+{
+  "model": "apollo_visionnet",
+  "started_utc": "2026-10-12T09:51:43.739702+00:00",
+  "ended_utc": "2026-10-12T09:54:34.444761+00:00",
+  "result": "pass_relocated_single_model_directory",
+  "model_directory_changed": true,
+  "other_model_mounts": false,
+  "parent_migration_git_required": false,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/verify_package.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/setup.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/check_env.sh",
+        "--device_id=0,2,4,6"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/plan.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/validate_1p.sh",
+        "--device_id=0"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "validation_result": "pass_independent_functional_validation",
+  "source_image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2"
+}

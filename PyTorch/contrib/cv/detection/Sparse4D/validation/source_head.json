@@ -1,0 +1,7 @@
+{
+  "checked_at_utc": "2026-10-12T09:42:59.754486+00:00",
+  "repository": "https://github.com/HorizonRobotics/Sparse4D.git",
+  "latest_head_verified": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+  "pinned_revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+  "verification": "git ls-remote HEAD on 2026-10-12; equal to pinned revision"
+}

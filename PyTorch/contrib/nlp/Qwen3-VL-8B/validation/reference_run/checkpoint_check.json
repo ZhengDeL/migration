@@ -1,0 +1,19 @@
+{
+  "result": "pass_functional",
+  "output_dir": "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B/test/output/functional_20261012_184348_091849",
+  "global_step": 10,
+  "rank_artifacts": 2,
+  "loss_first": 3.2745351791381836,
+  "loss_last": 2.5068483352661133,
+  "loss_min": 1.9903165102005005,
+  "loss_max": 3.4865002632141113,
+  "adapter_bytes": 87368144,
+  "adapter_sha256": "7ee34281193045e042789faa20a570fb6cf3ddc16df1c8aee0923c5640839c7e",
+  "adapter_tensors": 504,
+  "lora_b_tensors": 252,
+  "nonzero_lora_b_tensors": 252,
+  "optimizer_states": 504,
+  "optimizer_steps": [
+    10
+  ]
+}

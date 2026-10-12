@@ -1,0 +1,32 @@
+{
+  "model": "qwen3vl8b",
+  "started_utc": "2026-10-12T10:43:46.947257+00:00",
+  "state": "passed",
+  "image_revision": "20261012",
+  "commands": [
+    [
+      "bash",
+      "test/train_2p.sh",
+      "--device_id=0,2"
+    ],
+    [
+      "bash",
+      "test/validate_1p.sh",
+      "--device_id=0"
+    ]
+  ],
+  "exit_codes": [
+    0,
+    0
+  ],
+  "ended_utc": "2026-10-12T10:47:42.245356+00:00",
+  "preparation": {
+    "command": [
+      "bash",
+      "test/prepare_data.sh"
+    ],
+    "exit_code": 0
+  },
+  "host_devices": "0,2",
+  "root": "/var/ai-model/lzd/independent_20261012/qwen_current_20261012/Qwen3-VL-8B"
+}

@@ -1,0 +1,13 @@
+{
+  "model": "worldengine",
+  "source": "WorldEngine",
+  "nproc": 4,
+  "image_role": "worldengine",
+  "environment": "bevformer",
+  "python": "/opt/conda/envs/bevformer/bin/python",
+  "host_devices": "0,2,4,6",
+  "data_dir": "data/worldengine_smoke",
+  "memory": "96g",
+  "image_archive": "worldengine.tar.gz",
+  "sdk_dir": null
+}

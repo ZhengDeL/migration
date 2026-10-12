@@ -1,0 +1,13 @@
+{
+  "model": "apollo_visionnet",
+  "source": "Apollo-Vision-Net",
+  "nproc": 4,
+  "image_role": "drivingsdk_headless",
+  "environment": "bevformer",
+  "python": "/opt/conda/envs/bevformer/bin/python",
+  "host_devices": "0,2,4,6",
+  "data_dir": "data/apollo",
+  "memory": "96g",
+  "image_archive": "drivingsdk_headless.tar.gz",
+  "sdk_dir": null
+}

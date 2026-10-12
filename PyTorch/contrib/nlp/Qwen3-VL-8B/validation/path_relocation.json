@@ -1,0 +1,50 @@
+{
+  "model": "qwen3vl8b",
+  "started_utc": "2026-10-12T10:56:42.054082+00:00",
+  "ended_utc": "2026-10-12T10:59:31.766426+00:00",
+  "result": "pass_relocated_single_model_directory",
+  "model_directory_changed": true,
+  "other_model_mounts": false,
+  "parent_migration_git_required": false,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/verify_package.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/setup.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/check_env.sh",
+        "--device_id=0,2"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/plan.sh"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "bash",
+        "test/validate_1p.sh",
+        "--device_id=0"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "validation_result": "pass_independent_functional_validation",
+  "source_image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5"
+}

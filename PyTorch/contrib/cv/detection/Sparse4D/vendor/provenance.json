@@ -1,0 +1,7 @@
+{
+  "repository": "https://gitcode.com/Ascend/DrivingSDK.git",
+  "revision": "0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837",
+  "model": "sparse4d",
+  "official_patch": "model_examples/Sparse4D/Sparse4D.patch",
+  "normalized_patch_sha256": "f626f0280b4d5f7db60979bdbbe193c0489ea420f3ff5a190cbc48db59598314"
+}

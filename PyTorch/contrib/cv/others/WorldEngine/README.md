@@ -1,87 +1,84 @@
-# WorldEngine AlgEngine：Ascend 工程使用指南
+# WorldEngine AlgEngine：Ascend 独立训练与验证
 
-文档复核：2026-10-12；实机验证：2026-10-11。覆盖 AlgEngine 真实图像短程训练与保存检查，当前使用 NAVTEST 功能子集。
+本目录是一套单模型工程。使用本模型自己的源码、镜像、数据、训练脚本和验证脚本；可单独复制或解压到服务器，目录名与上级路径可改变。无需保留其他模型目录或迁移仓 Git 根目录。
 
-## 1. 模型与环境
+## 1. 官方依据与环境
 
-| 项目 | 本仓采用值 |
-| --- | --- |
-| 官方实现 | [OpenDriveLab/WorldEngine](https://github.com/OpenDriveLab/WorldEngine/tree/3eded7e8ac64e5bed817860765089b5914ab698f)，固定提交 `3eded7e8ac64e5bed817860765089b5914ab698f` |
-| 官方说明 | [数据组织](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)、[AlgEngine 使用](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/algengine_usage.md) |
-| 配置 | `projects/AlgEngine/configs/worldengine/e2e_vadv2_50pct.py`，NAVFormer / TrajScoringHead |
-| 资源 | ARM64 Linux，4 张空闲物理卡；1# 默认宿主逻辑 ID `0,2,4,6` |
-| 镜像 | `local/migration-worldengine:26.1.0-a3-20261011` |
-| 软件栈 | Python 3.10.21 / CANN 9.1.0 / Torch 2.7.1+cpu / TorchNPU 2.7.1.post6 / mx_driving 26.1.0.post2 |
-| 额外依赖 | 隔离安装的 AlgEngine / nuPlan 依赖、NumPy 1.23.5、rasterio 1.3.11、Fiona 1.9.6 |
+- [官方数据/项目说明](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/data_organization.md)；[昇腾样例或官方训练说明](https://github.com/OpenDriveLab/WorldEngine/blob/3eded7e8ac64e5bed817860765089b5914ab698f/docs/algengine_usage.md)。
+- 上游实现：https://github.com/OpenDriveLab/WorldEngine.git，固定提交 `3eded7e8ac64e5bed817860765089b5914ab698f`。
+- 本模型镜像：`local/migration-worldengine:26.1.0-a3-20261011`，image ID `sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3`。原始 registry digest 与软件版本见本目录 `images.lock.json`。
+- 服务器：ARM64 Linux、配套 Ascend 驱动、Docker、Python 3.9+，训练需要 4 张空闲物理卡；模型 Python 与运行库在镜像内。`+cpu` 包版本标记不表示使用 CPU 训练，实际设备由环境检查和实测报告确认。
+- 本次 1# 为 Atlas 800I A3 推理系列，实验训练结果不改变华为官方训练硬件支持范围。
 
-image ID 为 `sha256:ff85edc4a3e51385d814d9b3bfa442efdf040fc6c78e74e667ba9850f7b1b4a3`。镜像构建、OpenMMLab 版本和硬件支持边界见[环境指南](../../../../../docs/environment.md)。
+## 2. 获取并准备本模型目录
 
-本次覆盖 AlgEngine imitation；**SimEngine、3DGS、强化学习与完整后训练未适配**。NAVTEST 用于功能训练，不作为独立精度评估；配置名称中的 50% 不代表此次完成了正式 50% 训练。
-
-## 2. 已有交付资产：检查并运行
-
-新机器先完成[离线恢复](../../../../../docs/offline_delivery.md)。以下均从迁移仓根目录执行，恢复后替换示例 `cd` 路径。重新训练前按[保存旧结果](../../../../../docs/quickstart.md#重新训练前保存旧结果)保留 `outputs/worldengine/`。
+取得本模型完整离线包并解压，进入包含本 README 的目录。包内镜像为一个独立 Docker 归档；原始数据、源码和权重均属于本模型，数据准备不访问网络。
 
 ```bash
-cd /var/ai-model/lzd/migration
+cd WorldEngine
+python3 tools/verify_package.py
+bash test/setup.sh
+```
+
+verify_package 显示 `Single-model package verification passed` 才表示下载文件完整；setup 导入/核对本模型镜像，核验源码和补丁，重建当前目录的数据路径。setup 不启动训练。若只有 GitHub 源码，需要先补齐本目录的数据和镜像资产，不能用空目录冒充离线包。
+
+## 3. 环境检查、训练与独立验证
+
+```bash
 npu-smi info
-bash tools/quickstart.sh worldengine check
-bash tools/quickstart.sh worldengine plan
-bash tools/quickstart.sh worldengine mini
+bash test/check_env.sh --device_id=0,2,4,6
+bash test/plan.sh
+bash test/train_4p.sh --device_id=0,2,4,6
+bash test/validate_1p.sh --device_id=0
 ```
 
-`plan` 须显示 `missing_data: []`。mini 使用四卡 FP32、每卡 batch 1、AdamW 学习率 `5e-5`、10 步；保留四帧 / 八相机、正式图像流水线、200×200 BEV、六层 encoder 和完整 8192×40×3 词表。换卡示例：`ASCEND_HOST_DEVICES=8,10,12,14 bash tools/quickstart.sh worldengine mini`。
+1# 一张物理卡有两个逻辑芯片；默认 `0,2,4,6` 每物理卡只取一个。容器内重新编号为连续 ID。换机先核对实际拓扑，换卡修改 `--device_id`。验证只用一张卡，只填一个 ID。
 
-## 3. 从零准备源码和功能数据
+每次训练创建独立的 `test/output/functional_<时间>/`，保留已有结果；`test/output/latest_run.json` 指向最近一次尝试。训练失败时验证脚本拒绝把旧结果当成本次通过。所有原始终端输出、配置、checkpoint 和 JSON 报告均保存于本模型目录内。
 
-先按环境指南准备专用镜像；在迁移仓根目录执行：
+本次功能配置：**NAVTEST 三段真实日志，140 帧 / 64 时序锚点；官方感知基座；4 卡 FP32 每卡 batch1，学习率5e-5，10 步**。输出 `iter_10.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
-```bash
-python3 tools/fetch_sources.py worldengine --execute
-python3 tools/prepare.py worldengine --source sources/WorldEngine --apply
-bash tools/quickstart.sh worldengine download
-bash tools/quickstart.sh worldengine plan
-```
+## 4. 通过判据
 
-download 获取约 **5.59 GB** 官方 NAVTEST 标注、PDM 缓存、感知基座 checkpoint 和 camera30 图像归档，另取约 4 MB 轨迹词表。发布快照、文件大小和 SHA 固定，支持续传；自动准备三段日志的 **140 帧 / 64 个时序锚点**。建议至少预留 20 GB 功能数据空间。
+| 检查 | 判断方法 |
+| --- | --- |
+| 包完整性 | verify_package 退出0、文件大小与 SHA 匹配 |
+| 环境 | `test/output/environment.json` 为 pass 或 pass_with_warnings，failures 为空；管理面告警须结合宿主 npu-smi 与实际计算判定 |
+| 数据计划 | plan 的 missing_data 必须为 []；仅有文件还不代表训练通过 |
+| 功能训练 | 命令退出0，当前运行目录 `train_result.json` 为 pass_functional_training；保存内容检查通过 |
+| 独立验证 | validate 退出0，当前运行目录 `validation_result.json` 为 pass_independent_functional_validation |
 
-已有下载文件但缺少 prepared 文件时运行 `bash tools/quickstart.sh worldengine prepare`。必要布局在仓库父目录：
+验证内容：四 rank 原始输出、掩码前 imitation loss、梯度、参数更新与抽查同步；有限模型/优化器和 step10 保存重载。 每次新训练文件 SHA 可以不同，验收依据为对应本次运行的记录和检查内容。
+
+仅 AlgEngine imitation 功能；NAVTEST 复用作训练，无独立 PDM 指标。SimEngine/3DGS/RL 尚未适配。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
+
+## 5. 数据布局与从零准备
 
 ```text
-data/worldengine_smoke/
-├── nuplan_openscene_navtest.pkl
-├── pdm_8192_gt_cache_navtest.pkl
-├── track_map_nuplan_r50_navtrain_50pct_bs1x8.pth
-├── openscene_sensor_test_camera_30.tgz
-└── prepared/
-    ├── manifest.json
-    ├── worldengine_navtest_smoke.pkl
-    ├── worldengine_navtest_smoke_pdm.pkl
-    └── worldengine_navtest_smoke.yaml
+data/worldengine_smoke/  # NAVTEST、PDM 缓存、camera30、基座 checkpoint
+sources/WorldEngine/data/alg_engine/test_8192_kmeans.npy  # 完整轨迹词表
 ```
 
-词表位于 `sources/WorldEngine/data/alg_engine/test_8192_kmeans.npy`。数据准备选择真实连续帧并重写图像路径，保留坐标、轨迹标签和 PDM 数据，不启用改变数据语义的 diffusiondrive 模式。固定下载清单见[world_mini_data.py](../../../../../tools/world_mini_data.py)，子集条件见[数据 manifest](../../../../../verification/host1_20261011/worldengine_real/data_manifest.json)。
+`sources.lock.json` 固定本模型源码和补丁。本模型的NPU与兼容补丁保存在本目录，来源和SHA见sources.lock.json。 迁移到新目录后重新运行本模型的 `bash test/prepare_data.sh`。
 
-## 4. 成功判据与输出
+仅源码部署时先在本模型的固定镜像中运行 `tools/fetch_sources.py --execute`、`tools/prepare.py`，再遵循上述官方数据说明准备资产。离线交付已经含固定源码，不需重新下载或重新安装依赖。
 
-| 检查 | 通过条件 / 结果位置 |
-| --- | --- |
-| 训练 | 命令退出码 0；`outputs/worldengine/mini/training_check_rank{0,1,2,3}.json` 全部为 `pass_training_smoke` |
-| 计算内容 | 每 rank 十步原始输出、掩码前 imitation loss、259 个梯度张量有限，参数更新及被检查参数跨 rank 一致 |
-| 保存 | rank 0 的 `checkpoint_reload` 为 `pass`，`optimizer_step_values` 为 `[10.0]` |
-| checkpoint | `outputs/worldengine/mini/iter_10.pth`；本次 889 模型张量 / 259 优化器状态有限 |
+## 6. 正式训练与常见问题
 
-字段结构和文件 SHA 见[验证记录](../../../../../docs/validation.md)。SDK `meta.iter=9` 是零基计数，优化器实际 step=10；保存检查未包含 checkpoint 续训。模型没有 quickstart verify 操作。`build` 仅构建模型，`compute` 是低分辨率合成输入检查，不能替代 mini 真实样本训练。
+完整数据保持官方布局放在 `data/worldengine_full/{raw,alg_engine}/`；保留源码中的 navtrain/navtest split 和完整词表。
 
-## 5. 正式训练与常见问题
+```bash
+bash test/train_full_4p.sh --device_id=0,2,4,6 --data_path="$PWD/data/worldengine_full"
+```
 
-正式训练按官方数据指南准备完整 OpenScene/NAVSIM 图像、navtrain/navtest 标注、两套 PDM 缓存、词表、基座 checkpoint 和场景划分；须符合上游 `data/raw/`、`data/alg_engine/` 与配置内路径。然后运行 `bash tools/quickstart.sh worldengine train`。四卡每卡 batch 1、学习率 `5e-5`、8 epoch 是实验起点，需独立规划指标、性能和稳定性验收。
+完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整AlgEngine训练需官方navtrain/navtest图像、标注、两套PDM缓存、词表和基座；当前NAVTEST功能子集不能替代它。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
 
 | 提示 / 现象 | 处理 |
 | --- | --- |
-| prepared 文件缺失 | 完成 download；已有全部官方文件时执行 prepare |
-| 词表缺失或哈希不匹配 | 运行固定下载入口核验，不能缩小或随机替代词表 |
-| 地理依赖 / Matplotlib 导入失败 | 使用专用 WorldEngine 镜像并核对 ID，不直接混装到其他模型环境 |
-| 四 rank 报告缺失 / 非有限 / 未更新 | 保留对应日志查错，不能只看 rank 0 或 checkpoint 存在 |
+| 缺少镜像归档 / image ID 不一致 | 取得本模型完整包，核对 images.lock.json 与现有镜像用途 |
+| 标注或图像路径缺失 | 重新运行本模型 prepare_data，核对 data 目录；不要生成假标签 |
+| NPU 不空闲 / 卡号重复 | 核对宿主进程和物理映射，处理占用后再启动 |
+| 只有训练日志没有通过报告 | 查看本次输出最后异常与退出码，不能据此宣称通过 |
+| 迁入另一目录后文件路径错误 | 先 setup/prepare_data，再检查 plan，使用当前目录的新配置 |
 
-适配包括 NPU 分布式入口与变形注意力；兼容补丁修正 Matplotlib 样式名。版本及补丁哈希见[sources.lock.json](../../../../../sources.lock.json)。
+本模型实机证据随验证报告提供；问题档案和内部操作记录留在本机，不随离线包上传。
