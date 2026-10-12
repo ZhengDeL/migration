@@ -1,0 +1,65 @@
+{
+  "recorded_on": "2026-10-12",
+  "scope": "additional_models_stage_evidence",
+  "formal_acceptance_complete": false,
+  "mobilenetv2": {
+    "training_physical_cards": 2,
+    "held_out_result": {
+      "model": "mobilenetv2",
+      "result": "pass_checkpoint_reload_and_validation",
+      "checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+      "optimizer_steps": 10,
+      "strict_state_reload": true,
+      "reference_replay_matches": true,
+      "cpu_npu_max_absolute_error": 3.56137752532959e-05,
+      "cpu_npu_rtol": 0.003,
+      "cpu_npu_atol": 0.003,
+      "data_scope": "public_imagenette_functional_subset",
+      "metrics": {
+        "held_out_images": 40,
+        "correct_top1": 4,
+        "top1": 0.1,
+        "class_head": 1000,
+        "claim": "subset_functionality_only"
+      },
+      "formal_accuracy_claimed": false
+    }
+  },
+  "stgcn_traffic": {
+    "training_physical_cards": 2,
+    "held_out_result": {
+      "model": "stgcn-traffic",
+      "result": "pass_checkpoint_reload_and_validation",
+      "checkpoint_sha256": "420ef3aec85224d9192105e3fd28f3f0775043c888260fec1ed34e6d6b62d914",
+      "optimizer_steps": 10,
+      "strict_state_reload": true,
+      "reference_replay_matches": true,
+      "cpu_npu_max_absolute_error": 7.265806198120117e-05,
+      "cpu_npu_rtol": 0.003,
+      "cpu_npu_atol": 0.003,
+      "data_scope": "pemsd7-m_functional_subset",
+      "metrics": {
+        "held_out_windows": 241,
+        "mae": 7.466639197514013,
+        "rmse": 10.906267185419189,
+        "mape_percent": 18.465662707214733,
+        "forecast_minutes": 15,
+        "metric_units": "original_speed_values",
+        "formal_accuracy_claimed": false
+      },
+      "formal_accuracy_claimed": false
+    }
+  },
+  "resworld": {
+    "architecture_result": {
+      "result": "official_resworld_model_built",
+      "parameters": 80766238
+    },
+    "forward_backward_verified": false,
+    "training_pipeline_verified": false
+  },
+  "lstm": {
+    "evidence": "../lstm_driving_research_20261012/neural_core_result.json",
+    "full_training_pipeline_verified": false
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/jagjeet-singh/argoverse-forecasting",
+  "revision": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+  "branch_checked": "master",
+  "upstream_commit_utc": "2020-05-29T11:39:19Z",
+  "head_verified_on": "2026-10-12",
+  "license": "BSD-3-Clause-Clear",
+  "files": [
+    {
+      "path": "upstream/lstm_train_test.py",
+      "upstream_path": "lstm_train_test.py",
+      "bytes": 27595,
+      "sha256": "9e026fde5bf9820c007e08322f9ce01de7757a3305685aac119701dd214ecbf7"
+    },
+    {
+      "path": "upstream/utils/baseline_config.py",
+      "upstream_path": "utils/baseline_config.py",
+      "bytes": 2226,
+      "sha256": "c00162637dfd9b8bda9b05b378be625597e8cd1638521e0859ebfcb65edd185b"
+    },
+    {
+      "path": "upstream/README.md",
+      "upstream_path": "README.md",
+      "bytes": 7866,
+      "sha256": "39d93f5ee0b69cd7d73babc97c8b6c7335ec2a5e7dba4befe04737357cced207"
+    },
+    {
+      "path": "upstream/LICENSE",
+      "upstream_path": "LICENSE",
+      "bytes": 1634,
+      "sha256": "9a576c23f4af6ba234fbe1899e024a1559185cc4b209d2a2c21150d8044db3ac"
+    }
+  ]
+}
