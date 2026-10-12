@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-12T12:39:31.242206+00:00",
+  "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch.git",
+  "revision": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "revision_evidence": "git ls-remote HEAD and checkout HEAD matched on 2026-10-12",
+  "models": {
+    "LSTM": {
+      "directory": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch",
+      "npu_validation": "not_started",
+      "official_reference_files": [
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/README.md",
+          "bytes": 5446,
+          "sha256": "6380b6a377a8bb860f43903d3efd8d9f9819bfdcc31dccc05dc3382f3924146c"
+        },
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/NPU/1p/models/model_ctc.py",
+          "bytes": 11220,
+          "sha256": "6255d53decab93359cf73632145266ee72c1eeba7ef9b5ae6ee35aa9b44bd064"
+        },
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/NPU/1p/steps/train_ctc.py",
+          "bytes": 13577,
+          "sha256": "5e97f97af7e937f555df2a1a1d0792949952a7d63a7398955d5bbe2de0d74a21"
+        },
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/NPU/1p/conf/ctc_config.yaml",
+          "bytes": 1106,
+          "sha256": "0a556d955bf7eacdea8166b61c655564b77e1c249b10a0cbb33e021d13f3d21d"
+        },
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/test/train_full_1p.sh",
+          "bytes": 7858,
+          "sha256": "5d9354b3555a05a4103b139e816e919b5d70273fc28cc2c2a4bafb56f4beb17f"
+        },
+        {
+          "path": "PyTorch/built-in/nlp/LSTM_ID0468_for_PyTorch/test/train_full_8p.sh",
+          "bytes": 8020,
+          "sha256": "0d160d326d2db23083a54b2c83aabaf7fb4ba8c0c5ff13a7a6f8ad56c942b81f"
+        }
+      ]
+    },
+    "ST-GCN": {
+      "directory": "PyTorch/contrib/cv/pose_estimation/ST-GCN",
+      "npu_validation": "not_started",
+      "official_reference_files": [
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/README.md",
+          "bytes": 3909,
+          "sha256": "c3b8033cd45925c52382c885ce2c3a2381de2e1bccd716141d514d920dd65e2a"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/net/st_gcn.py",
+          "bytes": 7618,
+          "sha256": "a247d09aa1a1b62bb47f3abcae7b2bfea1fd5a012647158de642915618b6fb76"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/net/utils/tgcn.py",
+          "bytes": 3370,
+          "sha256": "f9170d47a597651811fdc013bf60389ff28a373a9f0924a368c295a652031b55"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/net/utils/graph.py",
+          "bytes": 7039,
+          "sha256": "9525b3c75be8275e5550e6c6d3777f3cbc045e93b7d0f452c84ba51a7a8cc3b7"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/processor/processor.py",
+          "bytes": 12144,
+          "sha256": "dfa042275d88abf863cecb8b2bc73cf635aa942e4bf21e21de3e208f3ea14637"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/config/st_gcn/kinetics-skeleton/train.yaml",
+          "bytes": 796,
+          "sha256": "87810c9e46077a636c03131f89f0648a516b27491af5e9def766342462232023"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/test/train_full_1p.sh",
+          "bytes": 5856,
+          "sha256": "16610ec77d455b18d9b94c6618cb19baaa78fdde11940431244d31ec2884e897"
+        },
+        {
+          "path": "PyTorch/contrib/cv/pose_estimation/ST-GCN/test/train_full_8p.sh",
+          "bytes": 5804,
+          "sha256": "8cc3fe0f16aa25c37da9ecff7f4ec63bf4a4faf5cf0101950c20427ec6402dbf"
+        }
+      ]
+    },
+    "MobileNetV2": {
+      "directory": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch",
+      "npu_validation": "not_started",
+      "official_reference_files": [
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/README.md",
+          "bytes": 6649,
+          "sha256": "f4c23578632defd9f8add61930a6db0a3c9156518f320fdbdbcc0925191f7ec6"
+        },
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/2.4_requirements.txt",
+          "bytes": 34,
+          "sha256": "d8175320543a16012e6fea0c818ab97175d7f43629cc06fe741a898001aede9d"
+        },
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/train/mobilenet.py",
+          "bytes": 7172,
+          "sha256": "fdc76902190ab777d76030907e9f03576d942919aa14272487df1db1837282b2"
+        },
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/train/mobilenetv2_8p_main_anycard.py",
+          "bytes": 27889,
+          "sha256": "bf708cf9a92c5704616bce25c82a295ad9567d14774c1ea3de3a7512b00f4777"
+        },
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/test/train_full_1p.sh",
+          "bytes": 5696,
+          "sha256": "b17d0a306ccffd6ec8b3e21f11a9ebaa9200b1de03142554edce1903d9535aa6"
+        },
+        {
+          "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/test/train_full_8p.sh",
+          "bytes": 5551,
+          "sha256": "7d6c25857d3fd600cd45a9ab6f5ef846c3854f5af4f5e0176f380c02d396d1b7"
+        }
+      ]
+    }
+  },
+  "name_pending": [
+    "Resword"
+  ],
+  "host_review": {
+    "checked_at_utc": "2026-10-12T12:37:01.730926+00:00",
+    "architecture": "arm64",
+    "physical_cards": 8,
+    "logical_devices": 16,
+    "all_health_ok": true,
+    "running_npu_processes": 0,
+    "running_docker_containers": 0,
+    "new_model_compute_executed": false
+  },
+  "candidate_environment": {
+    "status": "candidate_only_not_validated_for_new_models",
+    "role": "drivingsdk_headless",
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+    "versions": {
+      "cann": "9.1.0",
+      "python": "3.10.21",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post6",
+      "mx_driving": "26.1.0.post2"
+    },
+    "archive": {
+      "filename": "drivingsdk_headless.tar.gz",
+      "bytes": 9272909176,
+      "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+      "saved_image_count": 1
+    }
+  },
+  "maintenance_references": [
+    {
+      "path": "PyTorch/README.CN.md",
+      "sha256": "070a31f07abda142f772e68cc627b202d45d1fc694562b8ee34dde30ff747414",
+      "bytes": 7240
+    },
+    {
+      "path": "PyTorch/docs/zh/model_usage.md",
+      "sha256": "4134e4dbb3dbfc446fc0358763fbf21e82d952bcea68bafa244d374936c9fc5d",
+      "bytes": 905
+    }
+  ]
+}
