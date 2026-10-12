@@ -1,0 +1,20 @@
+{
+  "revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "changes": [
+    {
+      "path": "projects/mmdet3d_plugin/core/bbox/structures/lidar_box3d.py",
+      "upstream_sha256": "52b462c913bf43fbf47a39779b94263391c8427eb63ca4af6de6c7d0dd249675",
+      "adapted_sha256": "402d2bda0a70edcfcff09c7655e544b09f67f31b964151f2ddd6d0417b29af8f"
+    },
+    {
+      "path": "projects/mmdet3d_plugin/resworld/bevdet.py",
+      "upstream_sha256": "f0202b18e7bf4e637787c7a8f0f22659603a6be3528a5d0ae8737fe3da7134ee",
+      "adapted_sha256": "ca1bd137de915213cc6cea86239c29e77eab82b17d9f02947c0f66f36e47ef40"
+    },
+    {
+      "path": "tools/generate_point_label.py",
+      "upstream_sha256": "b173db7d056db9b3779b5d411111b4e82852c9269d6efbe79f6ba041c3bd0af5",
+      "adapted_sha256": "0bfb00378ded6f60731e1d6648e75ab9bfe61c74c8d15efd7f08213489a90edc"
+    }
+  ]
+}

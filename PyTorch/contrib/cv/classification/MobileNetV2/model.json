@@ -1,0 +1,25 @@
+{
+  "model": "mobilenetv2",
+  "python": "/opt/conda/envs/bevformer/bin/python",
+  "host_devices": "0,2",
+  "data": {
+    "functional": "data/functional",
+    "full": "data/imagenet"
+  },
+  "optimizer_has_tensor_state": true,
+  "training": {
+    "functional": {
+      "steps": 10,
+      "epochs": 10,
+      "batch_size": 4,
+      "lr": 0.001
+    },
+    "full": {
+      "steps": 0,
+      "epochs": 600,
+      "batch_size": 256,
+      "lr": 0.05
+    }
+  },
+  "shuffle": true
+}

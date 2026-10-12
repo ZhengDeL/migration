@@ -1,0 +1,1331 @@
+{
+  "scope": "official_argoverse_v11_train_val_functional_128_32",
+  "synthetic_data": false,
+  "obs_len": 20,
+  "pred_len": 30,
+  "source_archives": [
+    {
+      "filename": "forecasting_train_v1.1.tar.gz",
+      "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_train_v1.1.tar.gz",
+      "bytes": 3751225856,
+      "sha256": "a6fdd1b9d26e167ca2b07d12e55705d2c1c673483a1676b7950e197b16bb8cdb",
+      "official_source_page": "https://www.argoverse.org/av1.html"
+    },
+    {
+      "filename": "forecasting_val_v1.1.tar.gz",
+      "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_val_v1.1.tar.gz",
+      "bytes": 659666087,
+      "sha256": "79777058538dac003e910824d5fcceec27e76072afbdacd3935cb73cbd1b4857",
+      "official_source_page": "https://www.argoverse.org/av1.html"
+    }
+  ],
+  "coordinate_system": "Argoverse city XY, meters",
+  "train_sequences": [
+    "train/85927.csv",
+    "train/11800.csv",
+    "train/95563.csv",
+    "train/187154.csv",
+    "train/106639.csv",
+    "train/136133.csv",
+    "train/186293.csv",
+    "train/16177.csv",
+    "train/96350.csv",
+    "train/167841.csv",
+    "train/65255.csv",
+    "train/20804.csv",
+    "train/35305.csv",
+    "train/208898.csv",
+    "train/4674.csv",
+    "train/198617.csv",
+    "train/77822.csv",
+    "train/100499.csv",
+    "train/147134.csv",
+    "train/97577.csv",
+    "train/193760.csv",
+    "train/207679.csv",
+    "train/40764.csv",
+    "train/31341.csv",
+    "train/30414.csv",
+    "train/164591.csv",
+    "train/893.csv",
+    "train/68950.csv",
+    "train/38439.csv",
+    "train/53760.csv",
+    "train/142965.csv",
+    "train/143762.csv",
+    "train/71268.csv",
+    "train/112402.csv",
+    "train/162681.csv",
+    "train/90171.csv",
+    "train/175155.csv",
+    "train/2468.csv",
+    "train/119998.csv",
+    "train/157114.csv",
+    "train/179790.csv",
+    "train/36858.csv",
+    "train/33333.csv",
+    "train/165065.csv",
+    "train/177005.csv",
+    "train/113340.csv",
+    "train/34151.csv",
+    "train/161781.csv",
+    "train/5851.csv",
+    "train/136395.csv",
+    "train/130908.csv",
+    "train/154778.csv",
+    "train/91426.csv",
+    "train/181831.csv",
+    "train/124078.csv",
+    "train/75298.csv",
+    "train/92681.csv",
+    "train/6033.csv",
+    "train/137493.csv",
+    "train/166049.csv",
+    "train/149438.csv",
+    "train/120778.csv",
+    "train/116479.csv",
+    "train/99659.csv",
+    "train/62470.csv",
+    "train/196956.csv",
+    "train/12857.csv",
+    "train/44274.csv",
+    "train/111396.csv",
+    "train/44911.csv",
+    "train/179714.csv",
+    "train/6121.csv",
+    "train/181593.csv",
+    "train/210842.csv",
+    "train/11854.csv",
+    "train/188687.csv",
+    "train/93179.csv",
+    "train/71007.csv",
+    "train/151201.csv",
+    "train/155159.csv",
+    "train/101578.csv",
+    "train/187608.csv",
+    "train/157837.csv",
+    "train/181246.csv",
+    "train/33235.csv",
+    "train/146404.csv",
+    "train/16055.csv",
+    "train/82154.csv",
+    "train/68848.csv",
+    "train/117657.csv",
+    "train/137324.csv",
+    "train/23470.csv",
+    "train/202185.csv",
+    "train/202574.csv",
+    "train/27751.csv",
+    "train/57014.csv",
+    "train/143494.csv",
+    "train/147508.csv",
+    "train/106290.csv",
+    "train/142164.csv",
+    "train/126718.csv",
+    "train/65753.csv",
+    "train/118563.csv",
+    "train/126769.csv",
+    "train/152007.csv",
+    "train/181227.csv",
+    "train/133299.csv",
+    "train/50363.csv",
+    "train/33542.csv",
+    "train/207571.csv",
+    "train/191930.csv",
+    "train/23277.csv",
+    "train/148845.csv",
+    "train/88463.csv",
+    "train/115452.csv",
+    "train/67031.csv",
+    "train/94644.csv",
+    "train/42925.csv",
+    "train/134177.csv",
+    "train/169334.csv",
+    "train/192659.csv",
+    "train/7989.csv",
+    "train/129602.csv",
+    "train/113115.csv",
+    "train/97996.csv",
+    "train/90031.csv",
+    "train/175611.csv",
+    "train/132998.csv"
+  ],
+  "val_sequences": [
+    "val/16177.csv",
+    "val/20804.csv",
+    "val/35305.csv",
+    "val/4674.csv",
+    "val/40764.csv",
+    "val/31341.csv",
+    "val/30414.csv",
+    "val/893.csv",
+    "val/38439.csv",
+    "val/2468.csv",
+    "val/36858.csv",
+    "val/33333.csv",
+    "val/34151.csv",
+    "val/5851.csv",
+    "val/6033.csv",
+    "val/12857.csv",
+    "val/6121.csv",
+    "val/11854.csv",
+    "val/30327.csv",
+    "val/33235.csv",
+    "val/16055.csv",
+    "val/23470.csv",
+    "val/27751.csv",
+    "val/33542.csv",
+    "val/23277.csv",
+    "val/7989.csv",
+    "val/26919.csv",
+    "val/12474.csv",
+    "val/14181.csv",
+    "val/23490.csv",
+    "val/38577.csv",
+    "val/23443.csv"
+  ],
+  "train_csv_sha256": [
+    "aac402a6de895fb75c5f12f31bacc6a87c751d763528340f7a7c0d01eaf36f68",
+    "8c71ba0f4054c89e85ee35f95b225c06f13b3c4994e77424ff50567bdb6b2769",
+    "2394df8b8ee901361f2acec19eafef983d7f545b3a19d8742734ea1dba35902e",
+    "568aa634a1190cbc1bf589562838afadec93a420303cc5febf9c454d28c1e4a8",
+    "89969f174d80f7302dc6b9dcf0e8f2996f114c87fe2b5137247e8dfd62826a66",
+    "a40c2c4398f8feccb5e38fdeb4bdc1517eb7ce6ce0f8b84091c3d225b4b012e9",
+    "e4077143c58c0d1ede029607e36ac4d1b639b996821e8c56e9fe4d0a8e57df28",
+    "3b6712f1395876d0e6e717ed544ca121b82b9c0b66c43c563598f9aee2a1c28c",
+    "2e43ef65252d3fe402513f9ebb326d87a2ea221092bf9ce56282bed6805257f2",
+    "80282beea35dbe9e522fee8f133ed43876332999a6c9e7d9a109ba9ae5e73811",
+    "a03ca4dc1842622b0f6945ff66b255d46c9e77f538644ec7fda08a6dad0de5fd",
+    "71d6196f699de4c32843ea99bd93c2645aa7b3bb108e3bdf2725a9a80478dcda",
+    "4fa2efd895b112bff91f0d6eb4a610e1b47661efea4bc0d8a34938b13e83c75b",
+    "553313987e304037e6cac0bbbc998c2967d401c78e7ed81ba59c65424460a4cd",
+    "6369abc03db78f526b076b1e963a6e178b1ee737d8b885763865b139d321e4cf",
+    "652e03d72a7d24a50fb900a55f3d68bd700afbf3ad5ee5e2a12159422e2889f6",
+    "a0d41c3a5bcc9fd077daafc520cb52f3572472a598e56390c7c0e2ed5c91c7e0",
+    "acf3edd6a09d948bae72cf88078bdbc4e8ed109c8b1d8d7cca02f325ea722a38",
+    "2a8516361339c130b0ae2d32e683702ea95f2b1bc29fc6fefb618d76538d8050",
+    "a16ab38d01d9497146fd3c879a59011b9508206fb7f250c14ea71baa13057082",
+    "a4187f7861923710a77a4bf3ad268620a33cd38a7bce95156490f15488e4abc2",
+    "23a1a6c3868879db0f59a4cdbb429815997008ca894ac6d558e1bdc6c9af0dc9",
+    "adec8b4c60a49f755eb9918f69b6cd2ae2526e87b04df0b5d03d2f843556d0b6",
+    "c3fb34096dfef1dcf4735aed650b19b1eb6a809c5ebf08fabf91984204cb06d1",
+    "3eb14971a5e4269d29d23ae091bab6cb172d660febee76d005b14f29d795bdd8",
+    "228e84e7cdd24c11526471d8bbc15386272bdc0a1a3bc750cd3a26f32bd2d94b",
+    "95b20a48111a8daba7c3dac32ecc0de8cdd8fce0765caf5ad362b1994780254a",
+    "25059ec3c87d3a19479e1bd02a42968bfb211f7d885d98298be23649a91166cc",
+    "409b0d2e734022ae4e06b0858294ce490b1a11c713ccc96e19349e003def1364",
+    "0edb7c6cb6aa1f28ce29602d8cc5695ab9fb1170fff8141a61c80dcd0d1e642d",
+    "463c60112addc07404d77806e5f5a08a4ffc7f303e54f05bb9441c0ee4934c0c",
+    "06009d0bb54d05f404b3893c841d6178b15665ae8b391037ce4263869d5ed99b",
+    "8c2b87cca878d954c9e3a7a28b0aafbbe79d8b9b6d726cedab002386f387e20c",
+    "08080084fe0b30a0d17b9b3319b401a13d8af4f3fadf293f8b47c8352e06db69",
+    "3b9c2a74aa23ac494f07e337cc50aa333ac274175a7fbfb5b5021c59e308de04",
+    "9b67ca2ba0598a296c078318e0664b3d1c6f0027eca28599addd4350a205fc33",
+    "54c0e1a3a651043260d4d72dd7c0439da17fa6acb25e5cf137b5a113e8122be7",
+    "8a44fba90a64efac05bf10ec70d255636316db8590e31860c092b868300f24dc",
+    "e2fc82ead89f0187a885efac8053b7df0d41a54b3e6c71a3cedac9c42054a709",
+    "454b8f529c2d3e87d464872a0742c4717ca5141b7f55a929a490e079a965e8eb",
+    "32cf35d0336d3b9a9d4cbc3ec2c8e3b32c6d064d1302b3f85bf18b5bafea326a",
+    "5115b1f457ddfc2105161cc09dcc153516be4c77368ee4b41ecdad9b0a834493",
+    "c4c0f486005c804d6f8cc35d07a41ed6ef6f6ecd12d07a51849d0f93109db747",
+    "f803d6ea0dbfd7fe31c521f80ce21c4f489dba843e1c92ac791dc9ebb383bd13",
+    "3f3bf9229e80fd3662b556bfdeb1a875c4da770f3b25cff5f081df77bab4d521",
+    "64d81ac4b115b41c10fcbd27daa664d7fd54424262a0d84a133408c5fe540484",
+    "f0f1b20406a609d5ec21a13cf8d10f60d9a50c89da6b4eaba076747f2b5e0b6f",
+    "e17c0d9729aee5aceaec741a74b6018ff8d9756be13dac17a077590652acfc6a",
+    "69aa0ba85abb47dee5b6d415711d68391d4f32aa53a3cacff3752ade7717bb77",
+    "696d7be6421e97ac6cee13540e0f9d29c86feb4d5df7777232a90e836c69439c",
+    "abfbfda402220b4a3f64b6826f0fadc1606d08f2822c898730867cdc0d65679f",
+    "dad5307009fc6626eb3abdb2885fcd4853aecda5501de0c5128ef8039c409d4c",
+    "2941dcec3db035098eba0f877191d8764c44cd9568cb658be60241a1659bfaba",
+    "1bab16d07f01cef5b4d0d92341c855b6a5ed6d22d65fd13ac636b545ea0c567e",
+    "54132f8ca6ce48fff528c1f931fc459622d99681dc7828bbb9131a7d5620d6e8",
+    "51f19d6bf17152f4ff1d5b5338b74c1e05e58bceb0ef42d90613b9d7fdf35a77",
+    "86f64eb2cc16456423b7bb1597407af3d4c0cd053be0498859a0f9c3f0acaa44",
+    "968845da20fbd9a21316fd5ece814028487bda04c1aa7c61978cce28e87db60b",
+    "42616a4e6237034545c530671c54567526c4bd4d6ce9fcd52962a1689e7a72c3",
+    "e7602010bce8bb35d8652434cfc80a78f0d8261bcba77709e129a6cdb559de64",
+    "a007d43a208ce9127a3c51c23db747f55f42b339112e3733bd3230330440bbb6",
+    "adca37ef5b27f794e9beb0fed149a3e992da3638b05cea4459e18ccd2e6e1c2d",
+    "8b3608b0a0f94ca609a8bce21f357b9cf57222b9f521759995da8cae6df47300",
+    "b6ef837d5a96c7a00fca6c07e7fd89c6128e84ca8f8a483eee2be1db82d1ccb9",
+    "770caaff36a9fd8228f93d172d9d4f44fda88835b0d068addbfc7d8d28a25bc8",
+    "721076530cc23320c467ad85310d6252ab3e942477ecc98735c10360b4363ce4",
+    "e0e56e0a10ce57858429f4e5d18771a7ef070cd515412d74df37a4e301a5e579",
+    "91154dd2e8c39cf6b98ece380f4b685263d11146bb6609dda6cb562e588ffc43",
+    "b262078f295e1afc38f0b3db19e640f0c76476c75336b296a264810e17cd2a75",
+    "9dd452c724cdce137e966966bedca3ae5be13d82a96646116237215ba150e9b7",
+    "48ab6d7be189d3123edb22d39521dfb329bed496308c93f5d6f0ce51beef700f",
+    "4ba8ec2953477094285873ca181ed5339e061d81ca9f72a294bf003a938b1e9a",
+    "1ee2ef959a3037fc0b8dd10af89deb92c8b48857742ab191e9da1379d500e84b",
+    "2b75b266f8d2908e19c7f205b79cf6ced46c9acb66f1ab8860a370e70cd6f4e7",
+    "31a1481ae8c5cc160338d4d0af981c745998095cc726402a4b8bcf1329b00ca5",
+    "0aea5fb56039b4083979c421ae105fab28975aa7bda5d867ff4b5d66382a96bd",
+    "b9e218919b8a60adcfaebc9ef3119a09681ca9c6752f44c10f7ad41ceb4c824c",
+    "a5713fb45d0f45a08a74fda6d4cfed82e4f4ccb25b745a900549990494caba8f",
+    "5c166613f8344148a901d111b167b2967534a351224c4caaabee5290527d9c3e",
+    "58cfb16afd3de48efdeb721e82d552e6b0f5f0cb389743eff2bf71f527d22120",
+    "8fd28cb3b54d02ebc8575e36576965463a5c67ef0e5e9fca15e49e70755acda2",
+    "4f5d4d21775509d7cb3d75b33caf7cf95e49aa3f12c9ffc25046cee424d8a46b",
+    "f3d68d911409b7d0500bc3da37a08c0780a620ce72114f5dd8783ac8ba725e6c",
+    "5d4c0a20bff86870bcf6f1d21aa2c86b3cbd9059caccbba67168baa5eab9cda5",
+    "25e125a5bfbbc42f37750cc05285269bee848d7f899c3e90ad555d0aa9eea9d8",
+    "8728fa090a0983a0c4a7224958b10a4acdcc649716b3d518fece8e8776abf930",
+    "cb0f2da821dafcecf3adfe7e5ac7109884745195941e6916b2f2c93c2f953e6d",
+    "110b78dfa240f55d3f900ef15ab9e4c12442a75016c0171cef836110bc99ce75",
+    "19c5112949523b41042d11e5c3a707664678653612d94720a8b3139fda334438",
+    "c3a095361d549b5fd05f0affc56c25504567b009e6a26fdb61281746020be48f",
+    "008f47a6c1e0b3da0eaf28ea1c2aa122bbf0e9ddbcdea6ba21abc0e3b74e6655",
+    "6d88d2f1362213c559e3120990d1ac1fa783d799cf4add939d02224f8fceb5c4",
+    "96d0204f027290da5b21062dd98fb1a6e1be0bcb70aeabbc19950d8e9584ef1c",
+    "9b3174c6a13100513fbbebf04b9f2c26810967d1eb618119157954f6acffe459",
+    "85676505ca947ddb5310390faab3ba837efd4b1a172ea2232ce31a15356a8ce8",
+    "bbfade1f85ede899368a8b014f9ce02ebcc634f9e500e56f890053bcab5b1d92",
+    "a364eaca5d66a4db4df99af94fb4126bf312c2cd05b25c560fb65d17e5cad14a",
+    "7b7618aece6b9c800e18e144bb9e2492c8fcdb9761ad0c72b5e37aecd01cf81f",
+    "19808aedda583e55855223f1fb50740b5fdf65ed1f5557e59a8ad48cd9169855",
+    "0b2db75ae3648006cb461fbba60ecac631f5770ccd25fd565d457abeb847d49b",
+    "92538ac02cf37e2e1f79ce306d9b1c745cfddcd7447b6a918ec3255a604f3162",
+    "3f2d701e4f3cd4cd1b28de5ab25815012cf5da28aa8734bd56eacd0c55599957",
+    "8e0f09cd387690beff51cb751788c8cf469b8265c5db35b09afec0975307ab2b",
+    "c6a31e3dbf1a39744bfad78c52a0e04da5b82ee6143d259446463988596116af",
+    "4b8c3db6661b0ad60f7ca8bd617cced5b197adeca6a02a50ec8a48b32bfea838",
+    "bff21d8c59b3591366f2fccfb3458a0e07d1c4966a1e6bf57b1b9ec06fdd143c",
+    "6acf981c65d20e7f870e3a78bbf4477a30b7502873ce0cf6c703e365e2bf21f2",
+    "994ce8549be2cb9935e7a76ed1b5bb92d182110a008e3df6cb4d3b552ffc8d7e",
+    "000a4460ef7bb996fc7febd611e1eeaa01ac0f5e75b304a9dfe022ec2ce19f91",
+    "5b333c98890bb83614ef2fbf8de1ace94f762cbf83966b69a2df3e3f03c047eb",
+    "87533fab31279a2261d5c252eec00460d66e35c62f7c3ebba2ff0b5bfa75d6b1",
+    "3c45178894cb5b5fc6fbe36d60e76781235f69749fdc63312f320fad95b7fbda",
+    "d463b187dd1a1844d5f359e5a49cce6162314da8bba8834af33e9744d7b96a0f",
+    "d145c5a460ebe6abd1a77a97bd14c51a4659237073a71ccfab3a8d8f2b5f3571",
+    "738819bf722f574291a43ab547c891409fe43b64f102668d913a19ee20c4df50",
+    "0242cf84ac6305880203f994dbb379e2a99fbf6e6f9342cad25841c7a979b79c",
+    "c69f26e94515b00d967a5ae4810d7b0a1e3278599acb9d9f2deea7818662f377",
+    "c3ced5824cd3be15405cb19537b99fbbdad3878a7ef150143c6b980ff9da8671",
+    "dedffb1e5aaebcdca5a9537f5998b5175d72d0c8c0c2c3924a4f5922de2e5c55",
+    "5168f52d2a61c741e0d0675b1099cdd506a9907c662290a2bf115348146c6c22",
+    "76c70fbec4a2bb5499b443b2d97256aa595fbb6ec2a0dbfbcfc4c88cf06f5312",
+    "fb355c8c258083fe0e568a02c9bfa98fb2bc5d4f3283bdb6bb068c8877bd8fb6",
+    "450f47d6aea6bf90d39fed52d7be6268e526e8c09a0fd678f3bbc8f620f335a2",
+    "e7ddca2fe11a3bc074268b9d41abe799a221694558a36274d29139c7aab81793",
+    "1584fd2c587fbf22390efc6cd114165e9085d43462c7463ead50795a0017a505",
+    "d27745b2033659f8e1bb7c053284eb86ef58bd8046a03d4c8d5acfda2cb1e85f",
+    "cb8ee22f9744242ec06501273dd24cd7b0a62894407e0fcd07177eeb43dc3ef2",
+    "ab54a8d895bbd7bdd7c50954e0c46ea5e40fd313c3d230ff4d56b2987c161ae4"
+  ],
+  "val_csv_sha256": [
+    "b035a38fd198d5e95c6d37be66284f407487b030685972722a9f3afc16df9b91",
+    "fc0443bb9c08a3d3a7058992a47ff237bd0bfa1edcf2b3787e7982aab3f500f8",
+    "351b2cc2174b47f8d0a9b5d7be9ccf2337c3a48d8547c4cc4d0bbdc86d39ca29",
+    "68a5256e01d435f7fa58f481536707bc3248c2e6ea6229a2418d9d41036365a6",
+    "eb2cde8a350465b1a3119c96fad1d3d59dc186965b3671eb7d7c392b5f256ce2",
+    "f4749983ad872b73dd00de2cafab8c1e6fb97a7aa9d610298dc5379e0e493e0c",
+    "23abe4d459fcf80d4386599fbd19c85c14b61e8e074dfa6762e5079a42b84385",
+    "32ecd0430c91894c65bd6fb2ac14e000df43edce6314086dedecf2fb6acdf41e",
+    "2ed669272930d8546fc7fa40a6b3452aba9cb1d2c28039b19431bb83d29a2d4c",
+    "b3b537244fdf0bfaeeea78a5541e512eb235a3ef84224b4b1251246cab5980e0",
+    "846aebce3d6e23a87daad293ccba153cdd4d0a910065bbd659e9300fdb94bbaa",
+    "0b8d78cebf862fe274328c26f7df302aeca5f3db83fcae7857aa4f4929e732ed",
+    "e8913955369b6133b0b4950f69640a52a74840e748809dcfb0074db1fc2d541f",
+    "5008b1754db2adbe40463211f28f96e9099c7ba99d2654ca3c73b30ab3259666",
+    "6efb97e479442c7143ed70b1668f99112ceaaff214d77fbcff1268089bbd22eb",
+    "c374160a7e5ff69256482a3fe68aa594019f9d68635388bf56277162cf03ba93",
+    "e391ba63bc71ebaca4be28dc3d329e15c9421214538559bf13bf188f0ec35b5f",
+    "183f0b82aaf5efcc39cdf8383e9c221595d1bb7209d9336a626e1062eabb3750",
+    "0d5134182d6b56563e7a5d652d5f21a141251b73a11ad6288718e27389705bbb",
+    "994135af2ccd11ed87b954a760c8fea70a0c0195ff527fa26d6db99a3703a15a",
+    "7fec8d73a70de049ba93cb72224f01769eae1724f516d0f81a71ecb2f8277109",
+    "2e47e472edd94cc8d10f13f967e47f1aa8b3349546a6857986b1a46512aa6d11",
+    "69df196e0a66cf647867fb3e4174eb21a050601bb70c46285b1cc7045dab9bcb",
+    "8617f78fe2e07239f1ffe48e0ad0ee83f36440cfe661f49996656bf7b7f28731",
+    "cccc7713db663a0248890a5c29f9b106ad32841ca855471a097ab960a1ce8542",
+    "17421e337f10322237d18e97f2521e810032530ef8aeb7cb4bb0148bae0e18de",
+    "3573a65641f53c13f9ad672bd7f31c5fc328e4b796f2b9c726fc9ada5d973841",
+    "ce6b6df1e344bdae2b737736f974d78af2bcfaf5f25b96e5e9677f4af2d22243",
+    "f86f1b90151df6bdbb3f44fec0aae16c324b7c3b270f9f9794dd6e9422474135",
+    "16f91ae64c744de2063972bddc20c4e329ed77a31e5432b53cc37f3cdf6da7a1",
+    "35ed720937c495b38a27beade4f88751287357e6627eef38ec8349e54d5b1e42",
+    "3cb335b483f9b294805a0626f1b31f58df19e2197d4557d1896c24a578015ad5"
+  ],
+  "coordinate_roundtrip_max_error_m": 0.0,
+  "history_normalization_uses_only_observed_positions": true,
+  "formal_accuracy_claimed": false,
+  "actual_timestamp_intervals": {
+    "train": [
+      {
+        "sequence": "train/85927.csv",
+        "mean_dt_seconds": 0.14550106622734849,
+        "min_dt_seconds": 0.11587166786193848,
+        "max_dt_seconds": 0.20323139429092407
+      },
+      {
+        "sequence": "train/11800.csv",
+        "mean_dt_seconds": 0.10494017722655316,
+        "min_dt_seconds": 0.08798819780349731,
+        "max_dt_seconds": 0.12008309364318848
+      },
+      {
+        "sequence": "train/95563.csv",
+        "mean_dt_seconds": 0.11782869392511797,
+        "min_dt_seconds": 0.08446460962295532,
+        "max_dt_seconds": 0.1521572470664978
+      },
+      {
+        "sequence": "train/187154.csv",
+        "mean_dt_seconds": 0.09966756008109268,
+        "min_dt_seconds": 0.09059953689575195,
+        "max_dt_seconds": 0.11241352558135986
+      },
+      {
+        "sequence": "train/106639.csv",
+        "mean_dt_seconds": 0.1000806567620258,
+        "min_dt_seconds": 0.09692823886871338,
+        "max_dt_seconds": 0.10332423448562622
+      },
+      {
+        "sequence": "train/136133.csv",
+        "mean_dt_seconds": 0.10004580264188806,
+        "min_dt_seconds": 0.09829294681549072,
+        "max_dt_seconds": 0.10185950994491577
+      },
+      {
+        "sequence": "train/186293.csv",
+        "mean_dt_seconds": 0.11868687795133007,
+        "min_dt_seconds": 0.09300237894058228,
+        "max_dt_seconds": 0.16692638397216797
+      },
+      {
+        "sequence": "train/16177.csv",
+        "mean_dt_seconds": 0.10055545154882937,
+        "min_dt_seconds": 0.08021706342697144,
+        "max_dt_seconds": 0.12537193298339844
+      },
+      {
+        "sequence": "train/96350.csv",
+        "mean_dt_seconds": 0.11415581678857609,
+        "min_dt_seconds": 0.09095430374145508,
+        "max_dt_seconds": 0.15075111389160156
+      },
+      {
+        "sequence": "train/167841.csv",
+        "mean_dt_seconds": 0.10025770323617118,
+        "min_dt_seconds": 0.08436501026153564,
+        "max_dt_seconds": 0.11510580778121948
+      },
+      {
+        "sequence": "train/65255.csv",
+        "mean_dt_seconds": 0.18279601481496072,
+        "min_dt_seconds": 0.14408808946609497,
+        "max_dt_seconds": 0.268970787525177
+      },
+      {
+        "sequence": "train/20804.csv",
+        "mean_dt_seconds": 0.09967861248522389,
+        "min_dt_seconds": 0.09101217985153198,
+        "max_dt_seconds": 0.11333107948303223
+      },
+      {
+        "sequence": "train/35305.csv",
+        "mean_dt_seconds": 0.09994930758768199,
+        "min_dt_seconds": 0.09153318405151367,
+        "max_dt_seconds": 0.11039990186691284
+      },
+      {
+        "sequence": "train/208898.csv",
+        "mean_dt_seconds": 0.17978626003070752,
+        "min_dt_seconds": 0.1246231198310852,
+        "max_dt_seconds": 0.21596038341522217
+      },
+      {
+        "sequence": "train/4674.csv",
+        "mean_dt_seconds": 0.10064298279431401,
+        "min_dt_seconds": 0.05828505754470825,
+        "max_dt_seconds": 0.1422581672668457
+      },
+      {
+        "sequence": "train/198617.csv",
+        "mean_dt_seconds": 0.0997679987732245,
+        "min_dt_seconds": 0.08653664588928223,
+        "max_dt_seconds": 0.10910022258758545
+      },
+      {
+        "sequence": "train/77822.csv",
+        "mean_dt_seconds": 0.10017030701345327,
+        "min_dt_seconds": 0.08349442481994629,
+        "max_dt_seconds": 0.1142416000366211
+      },
+      {
+        "sequence": "train/100499.csv",
+        "mean_dt_seconds": 0.12846606969833374,
+        "min_dt_seconds": 0.09143543243408203,
+        "max_dt_seconds": 0.2109735608100891
+      },
+      {
+        "sequence": "train/147134.csv",
+        "mean_dt_seconds": 0.1016204977522091,
+        "min_dt_seconds": 0.09451919794082642,
+        "max_dt_seconds": 0.11247247457504272
+      },
+      {
+        "sequence": "train/97577.csv",
+        "mean_dt_seconds": 0.10010305959351208,
+        "min_dt_seconds": 0.09043341875076294,
+        "max_dt_seconds": 0.10848116874694824
+      },
+      {
+        "sequence": "train/193760.csv",
+        "mean_dt_seconds": 0.0999755749897081,
+        "min_dt_seconds": 0.09695398807525635,
+        "max_dt_seconds": 0.10485482215881348
+      },
+      {
+        "sequence": "train/207679.csv",
+        "mean_dt_seconds": 0.09987581141140996,
+        "min_dt_seconds": 0.08806729316711426,
+        "max_dt_seconds": 0.11209285259246826
+      },
+      {
+        "sequence": "train/40764.csv",
+        "mean_dt_seconds": 0.09949393053444064,
+        "min_dt_seconds": 0.08292496204376221,
+        "max_dt_seconds": 0.11516034603118896
+      },
+      {
+        "sequence": "train/31341.csv",
+        "mean_dt_seconds": 0.13714333942958287,
+        "min_dt_seconds": 0.11421680450439453,
+        "max_dt_seconds": 0.1692677140235901
+      },
+      {
+        "sequence": "train/30414.csv",
+        "mean_dt_seconds": 0.09996473667572955,
+        "min_dt_seconds": 0.08939206600189209,
+        "max_dt_seconds": 0.10707181692123413
+      },
+      {
+        "sequence": "train/164591.csv",
+        "mean_dt_seconds": 0.09990235859034013,
+        "min_dt_seconds": 0.08687031269073486,
+        "max_dt_seconds": 0.11647182703018188
+      },
+      {
+        "sequence": "train/893.csv",
+        "mean_dt_seconds": 0.1351584183926485,
+        "min_dt_seconds": 0.10958665609359741,
+        "max_dt_seconds": 0.16549140214920044
+      },
+      {
+        "sequence": "train/68950.csv",
+        "mean_dt_seconds": 0.0999597675946294,
+        "min_dt_seconds": 0.08801048994064331,
+        "max_dt_seconds": 0.11157107353210449
+      },
+      {
+        "sequence": "train/38439.csv",
+        "mean_dt_seconds": 0.10003839706888004,
+        "min_dt_seconds": 0.09263849258422852,
+        "max_dt_seconds": 0.105976402759552
+      },
+      {
+        "sequence": "train/53760.csv",
+        "mean_dt_seconds": 0.11922773049802196,
+        "min_dt_seconds": 0.09576201438903809,
+        "max_dt_seconds": 0.1450536847114563
+      },
+      {
+        "sequence": "train/142965.csv",
+        "mean_dt_seconds": 0.10184169545465586,
+        "min_dt_seconds": 0.09134668111801147,
+        "max_dt_seconds": 0.11615818738937378
+      },
+      {
+        "sequence": "train/143762.csv",
+        "mean_dt_seconds": 0.10021944678559595,
+        "min_dt_seconds": 0.0872679352760315,
+        "max_dt_seconds": 0.11747109889984131
+      },
+      {
+        "sequence": "train/71268.csv",
+        "mean_dt_seconds": 0.09979256075255725,
+        "min_dt_seconds": 0.08797329664230347,
+        "max_dt_seconds": 0.11089366674423218
+      },
+      {
+        "sequence": "train/112402.csv",
+        "mean_dt_seconds": 0.10037109924822438,
+        "min_dt_seconds": 0.08757591247558594,
+        "max_dt_seconds": 0.11323553323745728
+      },
+      {
+        "sequence": "train/162681.csv",
+        "mean_dt_seconds": 0.09975889021036577,
+        "min_dt_seconds": 0.0803871750831604,
+        "max_dt_seconds": 0.11936992406845093
+      },
+      {
+        "sequence": "train/90171.csv",
+        "mean_dt_seconds": 0.10002230138194804,
+        "min_dt_seconds": 0.028198301792144775,
+        "max_dt_seconds": 0.1583048701286316
+      },
+      {
+        "sequence": "train/175155.csv",
+        "mean_dt_seconds": 0.10142978356809032,
+        "min_dt_seconds": 0.09154278039932251,
+        "max_dt_seconds": 0.11938953399658203
+      },
+      {
+        "sequence": "train/2468.csv",
+        "mean_dt_seconds": 0.10180561396540427,
+        "min_dt_seconds": 0.09181225299835205,
+        "max_dt_seconds": 0.11696881055831909
+      },
+      {
+        "sequence": "train/119998.csv",
+        "mean_dt_seconds": 0.10928678512573242,
+        "min_dt_seconds": 0.08595585823059082,
+        "max_dt_seconds": 0.16666001081466675
+      },
+      {
+        "sequence": "train/157114.csv",
+        "mean_dt_seconds": 0.1072609120485734,
+        "min_dt_seconds": 0.09720218181610107,
+        "max_dt_seconds": 0.12036526203155518
+      },
+      {
+        "sequence": "train/179790.csv",
+        "mean_dt_seconds": 0.13354573931012834,
+        "min_dt_seconds": 0.11529499292373657,
+        "max_dt_seconds": 0.15696847438812256
+      },
+      {
+        "sequence": "train/36858.csv",
+        "mean_dt_seconds": 0.1002435818010447,
+        "min_dt_seconds": 0.08826982975006104,
+        "max_dt_seconds": 0.11191397905349731
+      },
+      {
+        "sequence": "train/33333.csv",
+        "mean_dt_seconds": 0.1740743724667296,
+        "min_dt_seconds": 0.11783963441848755,
+        "max_dt_seconds": 0.2511023283004761
+      },
+      {
+        "sequence": "train/165065.csv",
+        "mean_dt_seconds": 0.13045776376918872,
+        "min_dt_seconds": 0.11008298397064209,
+        "max_dt_seconds": 0.16120374202728271
+      },
+      {
+        "sequence": "train/177005.csv",
+        "mean_dt_seconds": 0.10009428797935953,
+        "min_dt_seconds": 0.08919644355773926,
+        "max_dt_seconds": 0.11066073179244995
+      },
+      {
+        "sequence": "train/113340.csv",
+        "mean_dt_seconds": 0.10002612094489896,
+        "min_dt_seconds": 0.09749925136566162,
+        "max_dt_seconds": 0.1026872992515564
+      },
+      {
+        "sequence": "train/34151.csv",
+        "mean_dt_seconds": 0.14709777856359676,
+        "min_dt_seconds": 0.11051315069198608,
+        "max_dt_seconds": 0.20166075229644775
+      },
+      {
+        "sequence": "train/161781.csv",
+        "mean_dt_seconds": 0.11197523681484924,
+        "min_dt_seconds": 0.09346884489059448,
+        "max_dt_seconds": 0.12639331817626953
+      },
+      {
+        "sequence": "train/5851.csv",
+        "mean_dt_seconds": 0.1000175488238432,
+        "min_dt_seconds": 0.09312885999679565,
+        "max_dt_seconds": 0.10933142900466919
+      },
+      {
+        "sequence": "train/136395.csv",
+        "mean_dt_seconds": 0.12076971482257454,
+        "min_dt_seconds": 0.10824340581893921,
+        "max_dt_seconds": 0.1346750259399414
+      },
+      {
+        "sequence": "train/130908.csv",
+        "mean_dt_seconds": 0.10252571470883427,
+        "min_dt_seconds": 0.0904618501663208,
+        "max_dt_seconds": 0.11775797605514526
+      },
+      {
+        "sequence": "train/154778.csv",
+        "mean_dt_seconds": 0.110140965909374,
+        "min_dt_seconds": 0.09266304969787598,
+        "max_dt_seconds": 0.1372014284133911
+      },
+      {
+        "sequence": "train/91426.csv",
+        "mean_dt_seconds": 0.09983639692773624,
+        "min_dt_seconds": 0.08819609880447388,
+        "max_dt_seconds": 0.11417746543884277
+      },
+      {
+        "sequence": "train/181831.csv",
+        "mean_dt_seconds": 0.1499163994983751,
+        "min_dt_seconds": 0.11965930461883545,
+        "max_dt_seconds": 0.2391408085823059
+      },
+      {
+        "sequence": "train/124078.csv",
+        "mean_dt_seconds": 0.22341181550707137,
+        "min_dt_seconds": 0.1626482605934143,
+        "max_dt_seconds": 0.3779682517051697
+      },
+      {
+        "sequence": "train/75298.csv",
+        "mean_dt_seconds": 0.10007831393455972,
+        "min_dt_seconds": 0.09067040681838989,
+        "max_dt_seconds": 0.10741317272186279
+      },
+      {
+        "sequence": "train/92681.csv",
+        "mean_dt_seconds": 0.09994136314002836,
+        "min_dt_seconds": 0.08482891321182251,
+        "max_dt_seconds": 0.11458081007003784
+      },
+      {
+        "sequence": "train/6033.csv",
+        "mean_dt_seconds": 0.11977665035092101,
+        "min_dt_seconds": 0.1021122932434082,
+        "max_dt_seconds": 0.14096099138259888
+      },
+      {
+        "sequence": "train/137493.csv",
+        "mean_dt_seconds": 0.10157643167340026,
+        "min_dt_seconds": 0.09158957004547119,
+        "max_dt_seconds": 0.11860769987106323
+      },
+      {
+        "sequence": "train/166049.csv",
+        "mean_dt_seconds": 0.09993856780383052,
+        "min_dt_seconds": 0.09333163499832153,
+        "max_dt_seconds": 0.10866767168045044
+      },
+      {
+        "sequence": "train/149438.csv",
+        "mean_dt_seconds": 0.09999607898751084,
+        "min_dt_seconds": 0.0986490249633789,
+        "max_dt_seconds": 0.10117411613464355
+      },
+      {
+        "sequence": "train/120778.csv",
+        "mean_dt_seconds": 0.100631874434802,
+        "min_dt_seconds": 0.08809405565261841,
+        "max_dt_seconds": 0.1547289490699768
+      },
+      {
+        "sequence": "train/116479.csv",
+        "mean_dt_seconds": 0.10024258555198202,
+        "min_dt_seconds": 0.08414590358734131,
+        "max_dt_seconds": 0.11570382118225098
+      },
+      {
+        "sequence": "train/99659.csv",
+        "mean_dt_seconds": 0.09990310060734651,
+        "min_dt_seconds": 0.08677148818969727,
+        "max_dt_seconds": 0.11972147226333618
+      },
+      {
+        "sequence": "train/62470.csv",
+        "mean_dt_seconds": 0.09999341867407974,
+        "min_dt_seconds": 0.09882700443267822,
+        "max_dt_seconds": 0.10108643770217896
+      },
+      {
+        "sequence": "train/196956.csv",
+        "mean_dt_seconds": 0.12026615167150692,
+        "min_dt_seconds": 0.10671401023864746,
+        "max_dt_seconds": 0.14131510257720947
+      },
+      {
+        "sequence": "train/12857.csv",
+        "mean_dt_seconds": 0.09996676445007324,
+        "min_dt_seconds": 0.0893934965133667,
+        "max_dt_seconds": 0.10690498352050781
+      },
+      {
+        "sequence": "train/44274.csv",
+        "mean_dt_seconds": 0.11398745677909072,
+        "min_dt_seconds": 0.09699046611785889,
+        "max_dt_seconds": 0.13996320962905884
+      },
+      {
+        "sequence": "train/111396.csv",
+        "mean_dt_seconds": 0.1000556933636568,
+        "min_dt_seconds": 0.0939984917640686,
+        "max_dt_seconds": 0.10606980323791504
+      },
+      {
+        "sequence": "train/44911.csv",
+        "mean_dt_seconds": 0.10144894950243892,
+        "min_dt_seconds": 0.09223878383636475,
+        "max_dt_seconds": 0.11929577589035034
+      },
+      {
+        "sequence": "train/179714.csv",
+        "mean_dt_seconds": 0.09964272683980513,
+        "min_dt_seconds": 0.0806732177734375,
+        "max_dt_seconds": 0.10846495628356934
+      },
+      {
+        "sequence": "train/6121.csv",
+        "mean_dt_seconds": 0.159978237687325,
+        "min_dt_seconds": 0.03168433904647827,
+        "max_dt_seconds": 0.25142449140548706
+      },
+      {
+        "sequence": "train/181593.csv",
+        "mean_dt_seconds": 0.17219163933578802,
+        "min_dt_seconds": 0.14982223510742188,
+        "max_dt_seconds": 0.22177118062973022
+      },
+      {
+        "sequence": "train/210842.csv",
+        "mean_dt_seconds": 0.10019107740752552,
+        "min_dt_seconds": 0.09127938747406006,
+        "max_dt_seconds": 0.10570120811462402
+      },
+      {
+        "sequence": "train/11854.csv",
+        "mean_dt_seconds": 0.0999132260984304,
+        "min_dt_seconds": 0.09098851680755615,
+        "max_dt_seconds": 0.10947436094284058
+      },
+      {
+        "sequence": "train/188687.csv",
+        "mean_dt_seconds": 0.09998770879239452,
+        "min_dt_seconds": 0.08070951700210571,
+        "max_dt_seconds": 0.11926734447479248
+      },
+      {
+        "sequence": "train/93179.csv",
+        "mean_dt_seconds": 0.11654437318140147,
+        "min_dt_seconds": 0.10005384683609009,
+        "max_dt_seconds": 0.1351601481437683
+      },
+      {
+        "sequence": "train/71007.csv",
+        "mean_dt_seconds": 0.10005071090192211,
+        "min_dt_seconds": 0.08937984704971313,
+        "max_dt_seconds": 0.11546957492828369
+      },
+      {
+        "sequence": "train/151201.csv",
+        "mean_dt_seconds": 0.1003920460233883,
+        "min_dt_seconds": 0.09311354160308838,
+        "max_dt_seconds": 0.11187756061553955
+      },
+      {
+        "sequence": "train/155159.csv",
+        "mean_dt_seconds": 0.10380195963139437,
+        "min_dt_seconds": 0.09480035305023193,
+        "max_dt_seconds": 0.12618118524551392
+      },
+      {
+        "sequence": "train/101578.csv",
+        "mean_dt_seconds": 0.0999249876761923,
+        "min_dt_seconds": 0.08889532089233398,
+        "max_dt_seconds": 0.11159008741378784
+      },
+      {
+        "sequence": "train/187608.csv",
+        "mean_dt_seconds": 0.09957579690582898,
+        "min_dt_seconds": 0.08270978927612305,
+        "max_dt_seconds": 0.12004697322845459
+      },
+      {
+        "sequence": "train/157837.csv",
+        "mean_dt_seconds": 0.09962675766069062,
+        "min_dt_seconds": 0.08569568395614624,
+        "max_dt_seconds": 0.11022412776947021
+      },
+      {
+        "sequence": "train/181246.csv",
+        "mean_dt_seconds": 0.10015275405377758,
+        "min_dt_seconds": 0.08137869834899902,
+        "max_dt_seconds": 0.11809629201889038
+      },
+      {
+        "sequence": "train/33235.csv",
+        "mean_dt_seconds": 0.10000595754506636,
+        "min_dt_seconds": 0.09354954957962036,
+        "max_dt_seconds": 0.10917198657989502
+      },
+      {
+        "sequence": "train/146404.csv",
+        "mean_dt_seconds": 0.09952234613652132,
+        "min_dt_seconds": 0.0868147611618042,
+        "max_dt_seconds": 0.11551910638809204
+      },
+      {
+        "sequence": "train/16055.csv",
+        "mean_dt_seconds": 0.13094426661121603,
+        "min_dt_seconds": 0.11088579893112183,
+        "max_dt_seconds": 0.19958120584487915
+      },
+      {
+        "sequence": "train/82154.csv",
+        "mean_dt_seconds": 0.09987621526328885,
+        "min_dt_seconds": 0.09744960069656372,
+        "max_dt_seconds": 0.10178041458129883
+      },
+      {
+        "sequence": "train/68848.csv",
+        "mean_dt_seconds": 0.14285843348016544,
+        "min_dt_seconds": 0.0981479287147522,
+        "max_dt_seconds": 0.17391735315322876
+      },
+      {
+        "sequence": "train/117657.csv",
+        "mean_dt_seconds": 0.1083868596018577,
+        "min_dt_seconds": 0.07789820432662964,
+        "max_dt_seconds": 0.17497855424880981
+      },
+      {
+        "sequence": "train/137324.csv",
+        "mean_dt_seconds": 0.099922742162432,
+        "min_dt_seconds": 0.07826888561248779,
+        "max_dt_seconds": 0.11932206153869629
+      },
+      {
+        "sequence": "train/23470.csv",
+        "mean_dt_seconds": 0.1100628765261903,
+        "min_dt_seconds": 0.09339636564254761,
+        "max_dt_seconds": 0.13296842575073242
+      },
+      {
+        "sequence": "train/202185.csv",
+        "mean_dt_seconds": 0.10971127967445218,
+        "min_dt_seconds": 0.09805691242218018,
+        "max_dt_seconds": 0.13595986366271973
+      },
+      {
+        "sequence": "train/202574.csv",
+        "mean_dt_seconds": 0.10713595151901245,
+        "min_dt_seconds": 0.09576612710952759,
+        "max_dt_seconds": 0.13345485925674438
+      },
+      {
+        "sequence": "train/27751.csv",
+        "mean_dt_seconds": 0.100075008917828,
+        "min_dt_seconds": 0.09178167581558228,
+        "max_dt_seconds": 0.10771876573562622
+      },
+      {
+        "sequence": "train/57014.csv",
+        "mean_dt_seconds": 0.11530549672185159,
+        "min_dt_seconds": 0.1016421914100647,
+        "max_dt_seconds": 0.12929624319076538
+      },
+      {
+        "sequence": "train/143494.csv",
+        "mean_dt_seconds": 0.10376879876973677,
+        "min_dt_seconds": 0.08025813102722168,
+        "max_dt_seconds": 0.13099509477615356
+      },
+      {
+        "sequence": "train/147508.csv",
+        "mean_dt_seconds": 0.10025356375441259,
+        "min_dt_seconds": 0.09112280607223511,
+        "max_dt_seconds": 0.1179540753364563
+      },
+      {
+        "sequence": "train/106290.csv",
+        "mean_dt_seconds": 0.10072301601877018,
+        "min_dt_seconds": 0.08045148849487305,
+        "max_dt_seconds": 0.11713159084320068
+      },
+      {
+        "sequence": "train/142164.csv",
+        "mean_dt_seconds": 0.09959762072076603,
+        "min_dt_seconds": 0.09035992622375488,
+        "max_dt_seconds": 0.11309510469436646
+      },
+      {
+        "sequence": "train/126718.csv",
+        "mean_dt_seconds": 0.10005804835533609,
+        "min_dt_seconds": 0.08888804912567139,
+        "max_dt_seconds": 0.11435306072235107
+      },
+      {
+        "sequence": "train/65753.csv",
+        "mean_dt_seconds": 0.12420706116423315,
+        "min_dt_seconds": 0.08476972579956055,
+        "max_dt_seconds": 0.14436101913452148
+      },
+      {
+        "sequence": "train/118563.csv",
+        "mean_dt_seconds": 0.12395823610072233,
+        "min_dt_seconds": 0.10577589273452759,
+        "max_dt_seconds": 0.15113717317581177
+      },
+      {
+        "sequence": "train/126769.csv",
+        "mean_dt_seconds": 0.10912964295367805,
+        "min_dt_seconds": 0.08920001983642578,
+        "max_dt_seconds": 0.1386532187461853
+      },
+      {
+        "sequence": "train/152007.csv",
+        "mean_dt_seconds": 0.13814542488175996,
+        "min_dt_seconds": 0.12074017524719238,
+        "max_dt_seconds": 0.1555485725402832
+      },
+      {
+        "sequence": "train/181227.csv",
+        "mean_dt_seconds": 0.10034444137495391,
+        "min_dt_seconds": 0.09389597177505493,
+        "max_dt_seconds": 0.1081387996673584
+      },
+      {
+        "sequence": "train/133299.csv",
+        "mean_dt_seconds": 0.10253479772684526,
+        "min_dt_seconds": 0.09177392721176147,
+        "max_dt_seconds": 0.11710506677627563
+      },
+      {
+        "sequence": "train/50363.csv",
+        "mean_dt_seconds": 0.09996246196785752,
+        "min_dt_seconds": 0.08280473947525024,
+        "max_dt_seconds": 0.11972278356552124
+      },
+      {
+        "sequence": "train/33542.csv",
+        "mean_dt_seconds": 0.10023437349163757,
+        "min_dt_seconds": 0.0559161901473999,
+        "max_dt_seconds": 0.14564430713653564
+      },
+      {
+        "sequence": "train/207571.csv",
+        "mean_dt_seconds": 0.1001506934360582,
+        "min_dt_seconds": 0.08926522731781006,
+        "max_dt_seconds": 0.10685861110687256
+      },
+      {
+        "sequence": "train/191930.csv",
+        "mean_dt_seconds": 0.10068912530431942,
+        "min_dt_seconds": 0.08501100540161133,
+        "max_dt_seconds": 0.12726658582687378
+      },
+      {
+        "sequence": "train/23277.csv",
+        "mean_dt_seconds": 0.1003432383342665,
+        "min_dt_seconds": 0.08157175779342651,
+        "max_dt_seconds": 0.12006878852844238
+      },
+      {
+        "sequence": "train/148845.csv",
+        "mean_dt_seconds": 0.09988682975574416,
+        "min_dt_seconds": 0.08988118171691895,
+        "max_dt_seconds": 0.10795187950134277
+      },
+      {
+        "sequence": "train/88463.csv",
+        "mean_dt_seconds": 0.10016096733054336,
+        "min_dt_seconds": 0.0904882550239563,
+        "max_dt_seconds": 0.11307144165039062
+      },
+      {
+        "sequence": "train/115452.csv",
+        "mean_dt_seconds": 0.0999727042353883,
+        "min_dt_seconds": 0.09699511528015137,
+        "max_dt_seconds": 0.10282450914382935
+      },
+      {
+        "sequence": "train/67031.csv",
+        "mean_dt_seconds": 0.11016373366725687,
+        "min_dt_seconds": 0.09563320875167847,
+        "max_dt_seconds": 0.12480127811431885
+      },
+      {
+        "sequence": "train/94644.csv",
+        "mean_dt_seconds": 0.12720072269439697,
+        "min_dt_seconds": 0.11155873537063599,
+        "max_dt_seconds": 0.15116846561431885
+      },
+      {
+        "sequence": "train/42925.csv",
+        "mean_dt_seconds": 0.10003302170305836,
+        "min_dt_seconds": 0.08793860673904419,
+        "max_dt_seconds": 0.11353474855422974
+      },
+      {
+        "sequence": "train/134177.csv",
+        "mean_dt_seconds": 0.09999066834547082,
+        "min_dt_seconds": 0.09047400951385498,
+        "max_dt_seconds": 0.1118311882019043
+      },
+      {
+        "sequence": "train/169334.csv",
+        "mean_dt_seconds": 0.1037419353212629,
+        "min_dt_seconds": 0.0897214412689209,
+        "max_dt_seconds": 0.12423950433731079
+      },
+      {
+        "sequence": "train/192659.csv",
+        "mean_dt_seconds": 0.10003405201191805,
+        "min_dt_seconds": 0.08713901042938232,
+        "max_dt_seconds": 0.11647135019302368
+      },
+      {
+        "sequence": "train/7989.csv",
+        "mean_dt_seconds": 0.1260449083483949,
+        "min_dt_seconds": 0.1037258505821228,
+        "max_dt_seconds": 0.15222430229187012
+      },
+      {
+        "sequence": "train/129602.csv",
+        "mean_dt_seconds": 0.12202700425167473,
+        "min_dt_seconds": 0.10136616230010986,
+        "max_dt_seconds": 0.14405030012130737
+      },
+      {
+        "sequence": "train/113115.csv",
+        "mean_dt_seconds": 0.10111601985230738,
+        "min_dt_seconds": 0.09069317579269409,
+        "max_dt_seconds": 0.11655056476593018
+      },
+      {
+        "sequence": "train/97996.csv",
+        "mean_dt_seconds": 0.115520356869211,
+        "min_dt_seconds": 0.09036529064178467,
+        "max_dt_seconds": 0.15705019235610962
+      },
+      {
+        "sequence": "train/90031.csv",
+        "mean_dt_seconds": 0.10999603052528537,
+        "min_dt_seconds": 0.09705513715744019,
+        "max_dt_seconds": 0.1304175853729248
+      },
+      {
+        "sequence": "train/175611.csv",
+        "mean_dt_seconds": 0.10116886119453275,
+        "min_dt_seconds": 0.08062773942947388,
+        "max_dt_seconds": 0.12948745489120483
+      },
+      {
+        "sequence": "train/132998.csv",
+        "mean_dt_seconds": 0.19339583601270402,
+        "min_dt_seconds": 0.15184485912322998,
+        "max_dt_seconds": 0.33176422119140625
+      }
+    ],
+    "val": [
+      {
+        "sequence": "val/16177.csv",
+        "mean_dt_seconds": 0.09999732581936584,
+        "min_dt_seconds": 0.09062743186950684,
+        "max_dt_seconds": 0.10881102085113525
+      },
+      {
+        "sequence": "val/20804.csv",
+        "mean_dt_seconds": 0.10505942179232228,
+        "min_dt_seconds": 0.0927780270576477,
+        "max_dt_seconds": 0.12032449245452881
+      },
+      {
+        "sequence": "val/35305.csv",
+        "mean_dt_seconds": 0.15671463158665871,
+        "min_dt_seconds": 0.13181811571121216,
+        "max_dt_seconds": 0.18944984674453735
+      },
+      {
+        "sequence": "val/4674.csv",
+        "mean_dt_seconds": 0.11656726866352315,
+        "min_dt_seconds": 0.09734809398651123,
+        "max_dt_seconds": 0.15269839763641357
+      },
+      {
+        "sequence": "val/40764.csv",
+        "mean_dt_seconds": 0.10027030171180258,
+        "min_dt_seconds": 0.09353089332580566,
+        "max_dt_seconds": 0.11615896224975586
+      },
+      {
+        "sequence": "val/31341.csv",
+        "mean_dt_seconds": 0.09986438799877556,
+        "min_dt_seconds": 0.09749776124954224,
+        "max_dt_seconds": 0.10200870037078857
+      },
+      {
+        "sequence": "val/30414.csv",
+        "mean_dt_seconds": 0.10019149585646026,
+        "min_dt_seconds": 0.09013676643371582,
+        "max_dt_seconds": 0.11901307106018066
+      },
+      {
+        "sequence": "val/893.csv",
+        "mean_dt_seconds": 0.10528991417009004,
+        "min_dt_seconds": 0.0950053334236145,
+        "max_dt_seconds": 0.1222308874130249
+      },
+      {
+        "sequence": "val/38439.csv",
+        "mean_dt_seconds": 0.0998845489657655,
+        "min_dt_seconds": 0.09386575222015381,
+        "max_dt_seconds": 0.10661143064498901
+      },
+      {
+        "sequence": "val/2468.csv",
+        "mean_dt_seconds": 0.10014234392010436,
+        "min_dt_seconds": 0.08617669343948364,
+        "max_dt_seconds": 0.11944937705993652
+      },
+      {
+        "sequence": "val/36858.csv",
+        "mean_dt_seconds": 0.09986062804046943,
+        "min_dt_seconds": 0.09259200096130371,
+        "max_dt_seconds": 0.10860121250152588
+      },
+      {
+        "sequence": "val/33333.csv",
+        "mean_dt_seconds": 0.10018014421268386,
+        "min_dt_seconds": 0.09134829044342041,
+        "max_dt_seconds": 0.10884308815002441
+      },
+      {
+        "sequence": "val/34151.csv",
+        "mean_dt_seconds": 0.10009957211358207,
+        "min_dt_seconds": 0.08249640464782715,
+        "max_dt_seconds": 0.12200814485549927
+      },
+      {
+        "sequence": "val/5851.csv",
+        "mean_dt_seconds": 0.16147433251750712,
+        "min_dt_seconds": 0.12808048725128174,
+        "max_dt_seconds": 0.20004552602767944
+      },
+      {
+        "sequence": "val/6033.csv",
+        "mean_dt_seconds": 0.1008975870755254,
+        "min_dt_seconds": 0.08709651231765747,
+        "max_dt_seconds": 0.12711673974990845
+      },
+      {
+        "sequence": "val/12857.csv",
+        "mean_dt_seconds": 0.09991352168881164,
+        "min_dt_seconds": 0.08925718069076538,
+        "max_dt_seconds": 0.10978710651397705
+      },
+      {
+        "sequence": "val/6121.csv",
+        "mean_dt_seconds": 0.10031551001023273,
+        "min_dt_seconds": 0.08870929479598999,
+        "max_dt_seconds": 0.11317974328994751
+      },
+      {
+        "sequence": "val/11854.csv",
+        "mean_dt_seconds": 0.11078320838967148,
+        "min_dt_seconds": 0.09610819816589355,
+        "max_dt_seconds": 0.149647057056427
+      },
+      {
+        "sequence": "val/30327.csv",
+        "mean_dt_seconds": 0.10004834861171488,
+        "min_dt_seconds": 0.08540046215057373,
+        "max_dt_seconds": 0.1205490231513977
+      },
+      {
+        "sequence": "val/33235.csv",
+        "mean_dt_seconds": 0.09993752411433629,
+        "min_dt_seconds": 0.07721000909805298,
+        "max_dt_seconds": 0.12321048974990845
+      },
+      {
+        "sequence": "val/16055.csv",
+        "mean_dt_seconds": 0.09993403055229966,
+        "min_dt_seconds": 0.09352695941925049,
+        "max_dt_seconds": 0.1054999828338623
+      },
+      {
+        "sequence": "val/23470.csv",
+        "mean_dt_seconds": 0.09944399035706812,
+        "min_dt_seconds": 0.07541245222091675,
+        "max_dt_seconds": 0.10760599374771118
+      },
+      {
+        "sequence": "val/27751.csv",
+        "mean_dt_seconds": 0.1001678194318499,
+        "min_dt_seconds": 0.08580726385116577,
+        "max_dt_seconds": 0.11486232280731201
+      },
+      {
+        "sequence": "val/33542.csv",
+        "mean_dt_seconds": 0.10003336959955644,
+        "min_dt_seconds": 0.09216111898422241,
+        "max_dt_seconds": 0.10809576511383057
+      },
+      {
+        "sequence": "val/23277.csv",
+        "mean_dt_seconds": 0.1003549439566476,
+        "min_dt_seconds": 0.09254151582717896,
+        "max_dt_seconds": 0.1091231107711792
+      },
+      {
+        "sequence": "val/7989.csv",
+        "mean_dt_seconds": 0.10015074817501769,
+        "min_dt_seconds": 0.0933307409286499,
+        "max_dt_seconds": 0.10907512903213501
+      },
+      {
+        "sequence": "val/26919.csv",
+        "mean_dt_seconds": 0.09970673249692333,
+        "min_dt_seconds": 0.08968144655227661,
+        "max_dt_seconds": 0.11023014783859253
+      },
+      {
+        "sequence": "val/12474.csv",
+        "mean_dt_seconds": 0.09999076200991261,
+        "min_dt_seconds": 0.09211486577987671,
+        "max_dt_seconds": 0.10820621252059937
+      },
+      {
+        "sequence": "val/14181.csv",
+        "mean_dt_seconds": 0.12157710231080347,
+        "min_dt_seconds": 0.09372633695602417,
+        "max_dt_seconds": 0.1484287977218628
+      },
+      {
+        "sequence": "val/23490.csv",
+        "mean_dt_seconds": 0.100195261896873,
+        "min_dt_seconds": 0.09190082550048828,
+        "max_dt_seconds": 0.11930632591247559
+      },
+      {
+        "sequence": "val/38577.csv",
+        "mean_dt_seconds": 0.09999670422807032,
+        "min_dt_seconds": 0.09831839799880981,
+        "max_dt_seconds": 0.10202211141586304
+      },
+      {
+        "sequence": "val/23443.csv",
+        "mean_dt_seconds": 0.10143932396051836,
+        "min_dt_seconds": 0.09263086318969727,
+        "max_dt_seconds": 0.13538241386413574
+      }
+    ]
+  },
+  "timestamp_resampling_applied": false,
+  "files": [
+    {
+      "path": "train.npz",
+      "sha256": "c19dd8db06ebd2d22e223021bbe33dc36322afe6e01428876876731693b45bf5"
+    },
+    {
+      "path": "val.npz",
+      "sha256": "810ce10a1324ac43df9c93977b7b5ed58476f4dda2fff67c20af18eb7b466cce"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "model": "stgcn-traffic",
+  "mode": "functional",
+  "result": "pass_functional_training",
+  "world_size": 2,
+  "optimizer_steps": 10,
+  "dataset_digest": "81b2e35852637e95f6f7879e0e920d7fa890bd8efc82e4858d221986e1fd53a4",
+  "checkpoint_sha256": "420ef3aec85224d9192105e3fd28f3f0775043c888260fec1ed34e6d6b62d914",
+  "settings": {
+    "steps": 10,
+    "epochs": 10,
+    "batch_size": 8,
+    "lr": 0.001
+  },
+  "data_scope": "pemsd7-m_functional_subset",
+  "formal_accuracy_claimed": false,
+  "resume_from": null,
+  "resume_is_weight_optimizer_continuation_not_bit_exact_replay": false,
+  "data_path": "data/functional"
+}

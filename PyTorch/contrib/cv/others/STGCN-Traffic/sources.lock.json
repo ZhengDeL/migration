@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/hazdzz/STGCN.git",
+  "revision": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+  "original_paper_repository": "https://github.com/VeritasYin/STGCN_IJCAI-18",
+  "original_paper_revision": "4ab75ab69af354d6a0ab86aefa082d389b187127",
+  "modifications": [
+    "Register nonpersistent graph-shift buffers for correct NPU/CPU placement"
+  ],
+  "files": [
+    {
+      "path": "vendor/graph_utils.py",
+      "sha256": "291f6612b0a93f59ce865e5f8ea1daff3fd4c4fc3cb83b70be6f576bfd378eb8"
+    },
+    {
+      "path": "vendor/LICENSE.STGCN",
+      "sha256": "7ffe1954587c77dfba1cf8eb9b2ea743671fa6e63f9e7a2f258119d42e14eefe"
+    },
+    {
+      "path": "vendor/LICENSE.STGCN_author",
+      "sha256": "031929beb30f101c90b81608898e4caffbdfd9ecd7c3f174361c89a6bf6fd04e"
+    },
+    {
+      "path": "vendor/model/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "vendor/model/layers.py",
+      "sha256": "638ea8ff6f05353e70298243f7dbc94dd8da9cead24a7e1f5356fdcf903e4831"
+    },
+    {
+      "path": "vendor/model/models.py",
+      "sha256": "847e891053169b4e3e65335eb5b975e70bd19bc4c83e520346665afb2229aa81"
+    }
+  ]
+}

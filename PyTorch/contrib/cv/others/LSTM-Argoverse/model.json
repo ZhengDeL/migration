@@ -1,0 +1,25 @@
+{
+  "model": "lstm-argoverse",
+  "python": "/opt/conda/envs/bevformer/bin/python",
+  "host_devices": "0,2",
+  "dataset_source": "official_subset",
+  "data": {
+    "functional": "data/functional",
+    "full": "data/full"
+  },
+  "shuffle": true,
+  "training": {
+    "functional": {
+      "steps": 10,
+      "epochs": 10,
+      "batch_size": 8,
+      "lr": 0.001
+    },
+    "full": {
+      "steps": 0,
+      "epochs": 10000,
+      "batch_size": 512,
+      "lr": 0.001
+    }
+  }
+}

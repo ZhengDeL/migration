@@ -1,0 +1,957 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/mengtan00/ResWorld",
+  "revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "path": "vendor/ResWorld/LICENSE",
+      "upstream_path": "LICENSE",
+      "bytes": 11372,
+      "sha256": "95beab1d79883f4965c2473be3d4ee4363f44558cc854b43d991f7fc584a2e81"
+    },
+    {
+      "path": "vendor/ResWorld/README.md",
+      "upstream_path": "README.md",
+      "bytes": 3766,
+      "sha256": "64c8cd53ee800413b43d5e823f66974ad64b2ce0e0f22ef6f087eb622341768f"
+    },
+    {
+      "path": "vendor/ResWorld/projects/__init__.py",
+      "upstream_path": "projects/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/coco_instance.py",
+      "upstream_path": "projects/configs/_base_/datasets/coco_instance.py",
+      "bytes": 1718,
+      "sha256": "1306f8c091776ad10a8cdc871c47e4e451490b7b3686c2c5c787cf3666398f6a"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/kitti-3d-3class.py",
+      "upstream_path": "projects/configs/_base_/datasets/kitti-3d-3class.py",
+      "bytes": 4597,
+      "sha256": "248b74f968fa20413e7064b52a4d7e4fb236ea025e6fb00634eda929b25af4a7"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/kitti-3d-car.py",
+      "upstream_path": "projects/configs/_base_/datasets/kitti-3d-car.py",
+      "bytes": 4503,
+      "sha256": "045cc89e3e3d34fd5027d549aaca3fbd8706947fb3d9c34e64d35aa99f62aa7e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/lyft-3d.py",
+      "upstream_path": "projects/configs/_base_/datasets/lyft-3d.py",
+      "bytes": 4568,
+      "sha256": "5d4ed5b36fc6d178b87686493a5dd199ed82f016ba06c1a15ebe949ef6bca817"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/nuim_instance.py",
+      "upstream_path": "projects/configs/_base_/datasets/nuim_instance.py",
+      "bytes": 1991,
+      "sha256": "b6bf9ae488b3c56b04666d2a6ce769ed012880887311aea5fe82ac0ce707779c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/nus-3d.py",
+      "upstream_path": "projects/configs/_base_/datasets/nus-3d.py",
+      "bytes": 4915,
+      "sha256": "89f7e6d1fa1707826b6d409d522cddea06ab6489ab030222e25cd83af7e77445"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/nus-mono3d.py",
+      "upstream_path": "projects/configs/_base_/datasets/nus-mono3d.py",
+      "bytes": 3236,
+      "sha256": "c8d44052e8444e9292511c8dc654f2cff468ba5421b40b6b4c7deb308f979e83"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/range100_lyft-3d.py",
+      "upstream_path": "projects/configs/_base_/datasets/range100_lyft-3d.py",
+      "bytes": 4572,
+      "sha256": "73311a145fba735ae5360de7ab8c7461b464256f6a88497b97284cda52ed2451"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/s3dis-3d-5class.py",
+      "upstream_path": "projects/configs/_base_/datasets/s3dis-3d-5class.py",
+      "bytes": 3562,
+      "sha256": "5f6110beb0b28900bbb5c6bfe26b453ca2f48596e970fdeda4f08be2edbfbc97"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/s3dis_seg-3d-13class.py",
+      "upstream_path": "projects/configs/_base_/datasets/s3dis_seg-3d-13class.py",
+      "bytes": 4323,
+      "sha256": "18f113eb8e2fcf1784a711d4ca2e11b5319ed52828501c7c6b66a4e5b951bd00"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/scannet-3d-18class.py",
+      "upstream_path": "projects/configs/_base_/datasets/scannet-3d-18class.py",
+      "bytes": 4037,
+      "sha256": "dad612b78d80a76a0101bbb01cdd9e9bb5bc3953972ca28aeca71b82a2cc43bd"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/scannet_seg-3d-20class.py",
+      "upstream_path": "projects/configs/_base_/datasets/scannet_seg-3d-20class.py",
+      "bytes": 4253,
+      "sha256": "4a898d55a252131dd6a8237179364c5e3d321d0ce57beb4bf6f051953449c8a9"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/sunrgbd-3d-10class.py",
+      "upstream_path": "projects/configs/_base_/datasets/sunrgbd-3d-10class.py",
+      "bytes": 3289,
+      "sha256": "3d3a48580c8378d74eb31e63d2d58044ebfa423970d26041b58d2a3f68526f87"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/waymoD5-3d-3class.py",
+      "upstream_path": "projects/configs/_base_/datasets/waymoD5-3d-3class.py",
+      "bytes": 4789,
+      "sha256": "cc5c0704f04bb03c580f10bf1ceeefc1d171cbb01c382519afed3eae8595ae1c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/datasets/waymoD5-3d-car.py",
+      "upstream_path": "projects/configs/_base_/datasets/waymoD5-3d-car.py",
+      "bytes": 4683,
+      "sha256": "870ca5cca4f4d01c23a791bfaf31e7a8d706c8008463a7b1b931441438be93b5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/default_runtime.py",
+      "upstream_path": "projects/configs/_base_/default_runtime.py",
+      "bytes": 485,
+      "sha256": "778df7b551bf0348f09490f0e8df0252d2bd8c006ba916153a6b0f74e4b5c988"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/3dssd.py",
+      "upstream_path": "projects/configs/_base_/models/3dssd.py",
+      "bytes": 3085,
+      "sha256": "d5d7cf484537d442ada2c9662d0f1f139d98c11b04f15ec5aea7646a034dd646"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/cascade_mask_rcnn_r50_fpn.py",
+      "upstream_path": "projects/configs/_base_/models/cascade_mask_rcnn_r50_fpn.py",
+      "bytes": 6976,
+      "sha256": "621113589edd597c560fda1c8f7099a0d5af5500c549d0a58e8ffa462910ecb7"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/centerpoint_01voxel_second_secfpn_nus.py",
+      "upstream_path": "projects/configs/_base_/models/centerpoint_01voxel_second_secfpn_nus.py",
+      "bytes": 3275,
+      "sha256": "f6163544fe3e3418b515313057fec34242126440fb278684cc055f210f2a5b04"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/centerpoint_02pillar_second_secfpn_nus.py",
+      "upstream_path": "projects/configs/_base_/models/centerpoint_02pillar_second_secfpn_nus.py",
+      "bytes": 3183,
+      "sha256": "413c49c57712f4e623db37dc62173daad04760aa71c32a030322547c88f6caf2"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/fcos3d.py",
+      "upstream_path": "projects/configs/_base_/models/fcos3d.py",
+      "bytes": 2279,
+      "sha256": "bab967a7491acbdf3924ce743dc581b91156ec1bef13548ac6bb9885722c4621"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/groupfree3d.py",
+      "upstream_path": "projects/configs/_base_/models/groupfree3d.py",
+      "bytes": 2593,
+      "sha256": "fbbe18add44f9b13cc41bdebf77c4fffcef90bf903b5738a816b5a6d0e18d1ca"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/h3dnet.py",
+      "upstream_path": "projects/configs/_base_/models/h3dnet.py",
+      "bytes": 10970,
+      "sha256": "9aa03ba4e3a8345421ed525ea601d76f79c13038a89a79b811f86de1acafe46e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_pointpillars_fpn_lyft.py",
+      "upstream_path": "projects/configs/_base_/models/hv_pointpillars_fpn_lyft.py",
+      "bytes": 963,
+      "sha256": "cb0a3ab6233900184a8a2e97031d0ced8d4980254752f620d0f9296a4c977433"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_pointpillars_fpn_nus.py",
+      "upstream_path": "projects/configs/_base_/models/hv_pointpillars_fpn_nus.py",
+      "bytes": 3314,
+      "sha256": "f417182670ab50b553b29db05d4b2b8df68a7f676d6bf1e078bc0f91ebe2f995"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_pointpillars_fpn_range100_lyft.py",
+      "upstream_path": "projects/configs/_base_/models/hv_pointpillars_fpn_range100_lyft.py",
+      "bytes": 975,
+      "sha256": "4928c31fcbc6ff33c9a97e5e76c329fb5b534eacbabb0604005c5c5d23f7cd50"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_pointpillars_secfpn_kitti.py",
+      "upstream_path": "projects/configs/_base_/models/hv_pointpillars_secfpn_kitti.py",
+      "bytes": 3136,
+      "sha256": "2480a7d3cbc41f30b601e69106327a5b69636c4a049ae4a45047283fcede5a66"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_pointpillars_secfpn_waymo.py",
+      "upstream_path": "projects/configs/_base_/models/hv_pointpillars_secfpn_waymo.py",
+      "bytes": 3987,
+      "sha256": "37455b4c78dfb4ed1c7c3dab5e59d269887852abefb2a83e55576883ba2194a9"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_second_secfpn_kitti.py",
+      "upstream_path": "projects/configs/_base_/models/hv_second_secfpn_kitti.py",
+      "bytes": 2909,
+      "sha256": "0cb5d1a3581c7c6443b379c02c766f77c2840c4e492ee5598adc4de71dea508f"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/hv_second_secfpn_waymo.py",
+      "upstream_path": "projects/configs/_base_/models/hv_second_secfpn_waymo.py",
+      "bytes": 3503,
+      "sha256": "2c35d39544abcfe6f904e1eeeef477fec6b1040c54e3735e8279ab6dd586130f"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/imvotenet_image.py",
+      "upstream_path": "projects/configs/_base_/models/imvotenet_image.py",
+      "bytes": 3563,
+      "sha256": "795e83d38570572f16dee355fb616162206e5e0afe3c05686e5628a16be68936"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/mask_rcnn_r50_fpn.py",
+      "upstream_path": "projects/configs/_base_/models/mask_rcnn_r50_fpn.py",
+      "bytes": 4080,
+      "sha256": "ff1bedf9c7428fa5ce86db3cfa8e9b72d3c6ede6745175cc88fee08a0bb72112"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/paconv_cuda_ssg.py",
+      "upstream_path": "projects/configs/_base_/models/paconv_cuda_ssg.py",
+      "bytes": 180,
+      "sha256": "47645b3f815fe910b09deabb45fab95e56944aeb0f6caf51322ed2cc288373fd"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/paconv_ssg.py",
+      "upstream_path": "projects/configs/_base_/models/paconv_ssg.py",
+      "bytes": 2005,
+      "sha256": "dfa6be75021f499fbc4b2eb664de74f99777cef6e11b1fad1b2c9ba11c8867a8"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/parta2.py",
+      "upstream_path": "projects/configs/_base_/models/parta2.py",
+      "bytes": 7012,
+      "sha256": "6864b671e942c982d96f1f80103f8262a080b7bfcb074a6589349d7b3f0503fc"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/pointnet2_msg.py",
+      "upstream_path": "projects/configs/_base_/models/pointnet2_msg.py",
+      "bytes": 1223,
+      "sha256": "a36a53be96d6698a68b88eb9aac2fc9af9288bf3f5e8f1c7fe86aba8eea2ba5d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/pointnet2_ssg.py",
+      "upstream_path": "projects/configs/_base_/models/pointnet2_ssg.py",
+      "bytes": 1266,
+      "sha256": "949499445cf609cdc1a2f3fa1e2485b11b7b15b17f57fadd7c535509e8ebaadf"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/models/votenet.py",
+      "upstream_path": "projects/configs/_base_/models/votenet.py",
+      "bytes": 2576,
+      "sha256": "c22033142265e9ea0b3154fb131ef1e32834b1363a01802243e6d879a5fd9a6d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/cosine.py",
+      "upstream_path": "projects/configs/_base_/schedules/cosine.py",
+      "bytes": 536,
+      "sha256": "6ee1342ba6d129a160971e3e963f6f45564fe14b0fafb1e15c2ec5f0b7f4c767"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/cyclic_20e.py",
+      "upstream_path": "projects/configs/_base_/schedules/cyclic_20e.py",
+      "bytes": 797,
+      "sha256": "66cf50b2bbcf06e9b2fe4f2be35f406e45d1d78bef9bea48a73335dd741295e2"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/cyclic_40e.py",
+      "upstream_path": "projects/configs/_base_/schedules/cyclic_40e.py",
+      "bytes": 1572,
+      "sha256": "c329bd5e71b8ff9234b74b07897d7a82840acd599c050ead994d49af54888187"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/mmdet_schedule_1x.py",
+      "upstream_path": "projects/configs/_base_/schedules/mmdet_schedule_1x.py",
+      "bytes": 319,
+      "sha256": "b2234be7d7e85b929c966c3c938124ac0e674a34207acf638e9a970a7c366c38"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/schedule_2x.py",
+      "upstream_path": "projects/configs/_base_/schedules/schedule_2x.py",
+      "bytes": 459,
+      "sha256": "c56ad1fad25bae260ca483bd7e62a8f2a234de944e025c952d8305e15e48b2fc"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/schedule_3x.py",
+      "upstream_path": "projects/configs/_base_/schedules/schedule_3x.py",
+      "bytes": 399,
+      "sha256": "01bc8ba7aaee522db4475a44c083d89ed2d2b75f67cbca95b397da02e0a791b6"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/seg_cosine_150e.py",
+      "upstream_path": "projects/configs/_base_/schedules/seg_cosine_150e.py",
+      "bytes": 361,
+      "sha256": "e9843bdd077a2f4ca1ada0755dd0967a45e3bca72e4ddd43aad19f78a8abd69a"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/seg_cosine_200e.py",
+      "upstream_path": "projects/configs/_base_/schedules/seg_cosine_200e.py",
+      "bytes": 349,
+      "sha256": "899e241ebd8129ece13c73a12769cb1cd9108627383e509b72e033bff517a630"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/_base_/schedules/seg_cosine_50e.py",
+      "upstream_path": "projects/configs/_base_/schedules/seg_cosine_50e.py",
+      "bytes": 347,
+      "sha256": "e5aa3d7ee0162b6b40f65bfe3661c861199d8b7b2dfe80891f548ee6fe8f30d0"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/datasets/custom_lyft-3d.py",
+      "upstream_path": "projects/configs/datasets/custom_lyft-3d.py",
+      "bytes": 4571,
+      "sha256": "d471844be37c2588fcd22fa5a4909ac8e2b805894100953718143364efe9cb77"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/datasets/custom_nus-3d.py",
+      "upstream_path": "projects/configs/datasets/custom_nus-3d.py",
+      "bytes": 4902,
+      "sha256": "4834a86419d4320d743eea4b67c0109512c0450d268c2fc738ec475f93a15e3c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/datasets/custom_waymo-3d.py",
+      "upstream_path": "projects/configs/datasets/custom_waymo-3d.py",
+      "bytes": 3914,
+      "sha256": "2d8f7946948535c894a62d02493269e74e06c473196bb508b3e9650c695e6cb5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/configs/resworld/resworld_config.py",
+      "upstream_path": "projects/configs/resworld/resworld_config.py",
+      "bytes": 11780,
+      "sha256": "b89aa5ef85d36cee8b896ef619e57a39fd34c65a606c8a9635b6f15456317d66"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/__init__.py",
+      "bytes": 511,
+      "sha256": "b8942cf8258d8b1e82da85d054d6ca71722c91d74b5df4a37fee52db5ccb0232"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/assigners/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/assigners/__init__.py",
+      "bytes": 178,
+      "sha256": "87bbdafccd3e8b6e1e3f510642e4dcdb20dde3eb926ad84e569082a6bb300ab1"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/assigners/hungarian_assigner_3d.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/assigners/hungarian_assigner_3d.py",
+      "bytes": 6404,
+      "sha256": "ceb59550dbb3299bdcdefae096d8c42c98525949d25288a0d05585cbd5a218e7"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/assigners/map_hungarian_assigner_3d.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/assigners/map_hungarian_assigner_3d.py",
+      "bytes": 7939,
+      "sha256": "8ff41de2819cf1577096de7ed5a62c03525e2a43185bef5e36cc9966ebb1e7d0"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/coders/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/coders/__init__.py",
+      "bytes": 231,
+      "sha256": "10604f7a036af2acd6a8ba6311be356c68db22f6ba47472a9c7f9fc2c92f880d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/coders/fut_nms_free_coder.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/coders/fut_nms_free_coder.py",
+      "bytes": 4728,
+      "sha256": "7b511c4d481b20670e3e84285045e5da9072e16bc981a380f05590f9e37d6412"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/coders/map_nms_free_coder.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/coders/map_nms_free_coder.py",
+      "bytes": 4883,
+      "sha256": "0456600fc9a6c693728a96b1eef62661a20c69f5430c78840d3bb56958bd1abf"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/coders/nms_free_coder.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/coders/nms_free_coder.py",
+      "bytes": 4476,
+      "sha256": "f9cd5871541d3074b29bcdb0a4f458cd2e1164fcefe3379890e6d59bb1ea66bb"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/match_costs/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/match_costs/__init__.py",
+      "bytes": 141,
+      "sha256": "40ac90fcc6638f6efcddb38be08aec3504ba326a302366e94b2959796185c1b3"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/match_costs/match_cost.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/match_costs/match_cost.py",
+      "bytes": 852,
+      "sha256": "49be3e98a3d9547e5d60f74978f9ee701f9cb5ec5f0e2b9e0708b7d50ecb02e6"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/structures/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/structures/__init__.py",
+      "bytes": 93,
+      "sha256": "7e33c8bdc14f47496c7f0f96215db367c247ac048c2b32facb282a509db5492f"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/structures/lidar_box3d.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/structures/lidar_box3d.py",
+      "bytes": 11061,
+      "sha256": "52b462c913bf43fbf47a39779b94263391c8427eb63ca4af6de6c7d0dd249675"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/structures/nuscenes_box.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/structures/nuscenes_box.py",
+      "bytes": 20755,
+      "sha256": "cebd7a265abec5965c44bcf96f2bbe30f6d1681d93c75a8c7ddf8d26583eeae1"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/bbox/util.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/bbox/util.py",
+      "bytes": 1467,
+      "sha256": "d24c61941209fa7a7be18d3b4c628dc06006f692fde0e7863fb54bca50282beb"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/evaluation/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/evaluation/__init__.py",
+      "bytes": 42,
+      "sha256": "f2bf99095c9fe232bde6c2e26dd94097dfbc6f6407270e31d72b669a828a5c05"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/evaluation/eval_hooks.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/evaluation/eval_hooks.py",
+      "bytes": 3626,
+      "sha256": "50244bfc3f8d9163c2204866e107166be10679f7009ed57cd93b47733d25e54a"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/evaluation/kitti2waymo.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/evaluation/kitti2waymo.py",
+      "bytes": 9736,
+      "sha256": "6a7eab0e433c2516f6dc79e90e3082f8254ca82449ac18a11642f02033f01678"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/core/evaluation/metric_motion.py",
+      "upstream_path": "projects/mmdet3d_plugin/core/evaluation/metric_motion.py",
+      "bytes": 2257,
+      "sha256": "9b18df447068e0d186e249ac66e5a52c54a077b9e02464096e99315f080a8628"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/__init__.py",
+      "bytes": 173,
+      "sha256": "d84bb4084d1a1ac955277fc6795e39da84a139f1b4972269407abf17e7af91d1"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/builder.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/builder.py",
+      "bytes": 6042,
+      "sha256": "9636bc147740f9640c7b6a25072d34caae49f8b264d062985f34c912e1da3ba5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/detection_cvpr_2019.json",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/detection_cvpr_2019.json",
+      "bytes": 419,
+      "sha256": "217f96cca4e80f790c4674ef72257a6863ee9a85b0ce185bc56488afc32c7a0b"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/map_utils/mean_ap.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/map_utils/mean_ap.py",
+      "bytes": 14378,
+      "sha256": "a596641ddf1b4ca92782f81418a59530d2b26c6cdaf47127a233ecb2923d832d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/map_utils/tpfp.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/map_utils/tpfp.py",
+      "bytes": 11791,
+      "sha256": "90e79a98951db1c47233e63beff3f441d849b060d8a8e2b471e4600cfd61f994"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/map_utils/tpfp_chamfer.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/map_utils/tpfp_chamfer.py",
+      "bytes": 11126,
+      "sha256": "352897f15d71a02ce3ca712047888f8c067f35d7f84782f26677d11a196db04e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/nuscenes_eval.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/nuscenes_eval.py",
+      "bytes": 33180,
+      "sha256": "77f949293d9e8d87792d0ffd38418f61cda944e7e12d0964384bf04bbff2495d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/nuscenes_resworld_dataset.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/nuscenes_resworld_dataset.py",
+      "bytes": 8754,
+      "sha256": "065ddb277e9d5cfeb579312e6f8e260b1b78fed8bcec0006bf36abd063bef33d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/nuscenes_vad_dataset.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/nuscenes_vad_dataset.py",
+      "bytes": 82224,
+      "sha256": "5eebf71805ce3128081cef3fef6b2c8e59ba9a62c180929c5e44395b81aaa116"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/pipelines/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/pipelines/__init__.py",
+      "bytes": 550,
+      "sha256": "035fbb254a75ba4cbb56d5dd33cd53a405e6cc460538e167986e67a7f7ac9dc1"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/pipelines/formating.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/pipelines/formating.py",
+      "bytes": 2724,
+      "sha256": "ec7c5301ebde23f199b16c8d30e09cb2afd73e10feffef28007ac46e8d345762"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/pipelines/loading.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/pipelines/loading.py",
+      "bytes": 26678,
+      "sha256": "a26760ae26cf28bce594376331d0ddf1703feda013be8a06c20d61e047ca3c79"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/pipelines/transform_3d.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/pipelines/transform_3d.py",
+      "bytes": 17378,
+      "sha256": "56623217271309973c8a9ead8bb26f172966865a0a9a0494715edb8c86e7d529"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/samplers/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/samplers/__init__.py",
+      "bytes": 148,
+      "sha256": "27cf0eb83d29bccdb2c8d016f7fbffb241372f33c4c31056ae82536abcf05356"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/samplers/distributed_sampler.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/samplers/distributed_sampler.py",
+      "bytes": 1371,
+      "sha256": "84b977c197dbf5355c2fd1ee2fb971f32c4b07b18265113abfb9efa81fa1caec"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/samplers/group_sampler.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/samplers/group_sampler.py",
+      "bytes": 3959,
+      "sha256": "b579470c6544b3ebb71c43ccc57fda4d485a665e010b8df1bdd095fddbb7516b"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/samplers/sampler.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/samplers/sampler.py",
+      "bytes": 189,
+      "sha256": "a585ea9f5dd0ad49181cd9bf96f402279898dce760265b51994e3e5ae0f8baf0"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/vad_custom_nuscenes_eval.py",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/vad_custom_nuscenes_eval.py",
+      "bytes": 37013,
+      "sha256": "2d86fa230de93670e245835cc2415397ea20247c66fbb44a41ee56ea728346fe"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/datasets/vad_nusc_detection_cvpr_2019.json",
+      "upstream_path": "projects/mmdet3d_plugin/datasets/vad_nusc_detection_cvpr_2019.json",
+      "bytes": 738,
+      "sha256": "1838d88223162f50eedd1bd98cff754037af2d43deda48159872ef4abbc383fa"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/backbones/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/backbones/__init__.py",
+      "bytes": 48,
+      "sha256": "92129dbb7e627f4afe0d5ded49d58e1361bbfbdec875ff21a3c5745537ce71c5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/backbones/vovnet.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/backbones/vovnet.py",
+      "bytes": 11701,
+      "sha256": "e88d70d33751bd9866fcb1316ee6f3ac35930091937d5ada028ff5f8d7cdb38a"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/hooks/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/hooks/__init__.py",
+      "bytes": 30,
+      "sha256": "1a358f573ba5c067ffd79c5b48f248f890e4b1b575c96534c1393f0f649c4a3d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/hooks/hooks.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/hooks/hooks.py",
+      "bytes": 403,
+      "sha256": "74f1ace44d417bcb23db1acc3bb1e3df6a1046bae859f152ead7a72fa1e186f2"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/opt/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/opt/__init__.py",
+      "bytes": 25,
+      "sha256": "99fc2cc6052f76f7e07e848c40cf2b57c49991eec388be7fd81aaaa5e19e0ba5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/opt/adamw.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/opt/adamw.py",
+      "bytes": 5144,
+      "sha256": "305810a8d8e9168ecea7b42ac0675c53b9d5e2274f7f23ee0f856e9881886a2e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/__init__.py",
+      "bytes": 176,
+      "sha256": "3f7c6a88e3f1616bcca83a6e02d6334f897282281b07a7ae1438f3c40c840c4c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/bricks.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/bricks.py",
+      "bytes": 725,
+      "sha256": "62d1095bca8ac51c374a39f175db1d452b6670ef0bc4ab199fbec9315e584031"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/embed.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/embed.py",
+      "bytes": 3589,
+      "sha256": "0c62902f6c2d96f110a8d1ce82eb42efe1c10742ce881bea1d81496a850ede36"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/grid_mask.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/grid_mask.py",
+      "bytes": 3935,
+      "sha256": "92589caffcd8102b02cafff78e64614ecf8bc8ad548ab95cbf4d1a898327f150"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/position_embedding.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/position_embedding.py",
+      "bytes": 2589,
+      "sha256": "b5ce41ba089a6655245d426279df298e3750905d8af0e43c998d4b98ff633b93"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/models/utils/visual.py",
+      "upstream_path": "projects/mmdet3d_plugin/models/utils/visual.py",
+      "bytes": 768,
+      "sha256": "af1108b82e6e8a02664810d1bac5feb097b7422ad4d747b9f6cba9217be0b247"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/__init__.py",
+      "bytes": 208,
+      "sha256": "d661a0d5f2114ae0cf881d70d70e9829c19db0d1d77ec876099bba252b043cb3"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/apis/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/apis/__init__.py",
+      "bytes": 126,
+      "sha256": "30104937bc12c9efe7dea9c91cf1256d93fe1397dba037e51f669684b94fded9"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/apis/mmdet_train.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/apis/mmdet_train.py",
+      "bytes": 7655,
+      "sha256": "99313ccc95e725e8768bafafeb42a8d8e41585aac50dc8933619decde9a763c6"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/apis/test.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/apis/test.py",
+      "bytes": 6962,
+      "sha256": "077f461e99000010be580ec4bcb028a18cf0ed80ac8f8d5e221d180b2f170079"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/apis/train.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/apis/train.py",
+      "bytes": 1698,
+      "sha256": "00f3e48712138fa37ceaaddbec0d2502b2108eda3ceae035c26d066e16171f0e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/bevdet.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/bevdet.py",
+      "bytes": 28280,
+      "sha256": "f0202b18e7bf4e637787c7a8f0f22659603a6be3528a5d0ae8737fe3da7134ee"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/custom_module.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/custom_module.py",
+      "bytes": 21909,
+      "sha256": "83379d09f4eae1b66efc0d3b3d29914183880c13d146f0dcaa1fedaec4ef0e32"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/hooks/__init__.py",
+      "bytes": 128,
+      "sha256": "9812fb4c8cfe311b9fd010cb07a0cc602b23e41230d26b496d58db7a78864812"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/custom_hooks.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/hooks/custom_hooks.py",
+      "bytes": 820,
+      "sha256": "6adcd08f76bc845347435fcca63fdc928df0dc845d4f8496efdd577cf9b26582"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/ema.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/hooks/ema.py",
+      "bytes": 4158,
+      "sha256": "16c14477783b3860be22b0f9483470a06d21425bf5049265111e2eaf10e1ba73"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/syncbncontrol.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/hooks/syncbncontrol.py",
+      "bytes": 1109,
+      "sha256": "ce4b012dc179442f106390ab6fa45e52b6c1771a2a08b5045e8cac94bda9929c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/utils.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/hooks/utils.py",
+      "bytes": 319,
+      "sha256": "620d0583b679c290fa7d32553093e0e7b4f383024fbf9eaf5d81c71df1192df2"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/__init__.py",
+      "bytes": 296,
+      "sha256": "7cabb7aa2cdd183561f9c72305a7f84e3eeab2c17f7e5d5089f3510c29eb9a40"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/custom_base_transformer_layer.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/custom_base_transformer_layer.py",
+      "bytes": 11387,
+      "sha256": "22a94db064efc965254672655c2141ebe7334f9a31fafcc143f99ba59ac0c16c"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/decoder.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/decoder.py",
+      "bytes": 14313,
+      "sha256": "69cd2ef5a8df2b4e9a56c888841abbe275d3519399f81e9a76efe3eb562896d3"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/encoder.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/encoder.py",
+      "bytes": 16734,
+      "sha256": "eaf5880e8855bdb95ad45babfcbe3fee5273e98aae739d285b0f3f55ffbada81"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/multi_scale_deformable_attn_function.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/multi_scale_deformable_attn_function.py",
+      "bytes": 6060,
+      "sha256": "d62df975bc2405c9f4da21c825fc3983e45b04b658d51ae39ab6afaa7e13c619"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/spatial_cross_attention.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/spatial_cross_attention.py",
+      "bytes": 17724,
+      "sha256": "a876b5b0ba26dcd1b0b97d8e4910d235cad0db7f2917ffe60fb0714a098f974e"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/temporal_self_attention.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/temporal_self_attention.py",
+      "bytes": 11947,
+      "sha256": "8c8f8de6e4632d475bd02077a4e548924347d9bad540c4f6b6b934ccd3391eed"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/modules/transformer.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/modules/transformer.py",
+      "bytes": 11984,
+      "sha256": "971f7096db501866250809995ae8775996c6baf7b2201876c719118747687a4a"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/planner/metric_stp3.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/planner/metric_stp3.py",
+      "bytes": 18654,
+      "sha256": "828eefd0505768a3897a55859c26ed968a8ca88b7af898e2a3fb7c89e0b53a7d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/rcsample.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/rcsample.py",
+      "bytes": 17073,
+      "sha256": "a6da0e95c6603101dae05709f0399b47b543566a6fdf645eaf7277ec6a21f1ac"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/resworld.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/resworld.py",
+      "bytes": 16451,
+      "sha256": "358d5eccd2c5e45b560f5f5420480cd96d1641395e0fc14bd11ce74bf35f3bdc"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/resworld_head.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/resworld_head.py",
+      "bytes": 14798,
+      "sha256": "f7b36b0a0d3344f3d52a3856377f3269a02eede1671c41e72ec17f847c67442f"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/runner/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/runner/__init__.py",
+      "bytes": 54,
+      "sha256": "56a228cb6de6ec48eda2f52e3c8cfbde443e14772e8ee6dd6517f232796b836d"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/runner/epoch_based_runner.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/runner/epoch_based_runner.py",
+      "bytes": 3645,
+      "sha256": "b7a787dd065450a749ed88d8c3fcbaf0cdc92510dcb976b3e94136e9734f1986"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/tokenlearner.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/tokenlearner.py",
+      "bytes": 4211,
+      "sha256": "188f41d70c2c2e7b967d6612444a28c8f886bf9acfb49421c3ead1a9a983dda0"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/utils/CD_loss.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/utils/CD_loss.py",
+      "bytes": 26205,
+      "sha256": "8fbfc583d3d17ab603002b11472009a177f15bdb9de7a5df429f0ae9f73b4a38"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/utils/__init__.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/utils/__init__.py",
+      "bytes": 355,
+      "sha256": "e19ec9e0c3b01125894ce042524eda1d190e312ccd1b93b6c2fbcce8fe6def35"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/utils/map_utils.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/utils/map_utils.py",
+      "bytes": 1511,
+      "sha256": "30dc86db1f5b80ae95720acf69d64d0a53b4f71dc5c7ef65666d0e5da33e78d5"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/utils/plan_loss.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/utils/plan_loss.py",
+      "bytes": 19057,
+      "sha256": "63f8866b4532669e270e90da65c9d820a8d9912f9f13fe881acd2d2d9a737a14"
+    },
+    {
+      "path": "vendor/ResWorld/projects/mmdet3d_plugin/resworld/utils/traj_lr_warmup.py",
+      "upstream_path": "projects/mmdet3d_plugin/resworld/utils/traj_lr_warmup.py",
+      "bytes": 368,
+      "sha256": "6e76d85f219202df1f45b7f00351f27c6fcd79a6f337c60f60658a6a53ec4781"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/__init__.py",
+      "upstream_path": "tools/analysis_tools/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/analyze_logs.py",
+      "upstream_path": "tools/analysis_tools/analyze_logs.py",
+      "bytes": 7468,
+      "sha256": "35c6b2b264bfe3453096eb9473f747744b24c5bb98c2d67377c06a1b9fed13e0"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/benchmark.py",
+      "upstream_path": "tools/analysis_tools/benchmark.py",
+      "bytes": 3251,
+      "sha256": "6225663f3541f6cad4228b672d536fd168fa5b0697d55a4edbb23656328b3bbe"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/get_flops.py",
+      "upstream_path": "tools/analysis_tools/get_flops.py",
+      "bytes": 27031,
+      "sha256": "98d4cd4a5ce633a645ed77bf840e74681ea297576d27a63835ca050cd3d75e42"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/get_params.py",
+      "upstream_path": "tools/analysis_tools/get_params.py",
+      "bytes": 231,
+      "sha256": "f0575260ced80fc0531e6dfccfe73068869f5a850bcea0c80b24a2d2def883d7"
+    },
+    {
+      "path": "vendor/ResWorld/tools/analysis_tools/visualization.py",
+      "upstream_path": "tools/analysis_tools/visualization.py",
+      "bytes": 42897,
+      "sha256": "265c8aab675c7fb579ed0b0d2050816062abd29462fa50822fb22794b37cff28"
+    },
+    {
+      "path": "vendor/ResWorld/tools/create_data.py",
+      "upstream_path": "tools/create_data.py",
+      "bytes": 11182,
+      "sha256": "10fea6e625976aaa69f426c83dc4b97bf65fc997a28381bd511b12e5e6f370f5"
+    },
+    {
+      "path": "vendor/ResWorld/tools/data_converter/__init__.py",
+      "upstream_path": "tools/data_converter/__init__.py",
+      "bytes": 48,
+      "sha256": "3977d5ce6a7f8d8b9c01b0daa82c17214e4f3b1520320349ce34140916192c13"
+    },
+    {
+      "path": "vendor/ResWorld/tools/data_converter/create_gt_database.py",
+      "upstream_path": "tools/data_converter/create_gt_database.py",
+      "bytes": 12656,
+      "sha256": "70cf99117f064184863a7103c4475e21b82e373397f59206f4f08ac92f771902"
+    },
+    {
+      "path": "vendor/ResWorld/tools/data_converter/vad_nuscenes_converter.py",
+      "upstream_path": "tools/data_converter/vad_nuscenes_converter.py",
+      "bytes": 42317,
+      "sha256": "258c7a63fde1dba8877910a488037a423c9c6cdba8f99e2ee02cc012a32c1460"
+    },
+    {
+      "path": "vendor/ResWorld/tools/dist_test.sh",
+      "upstream_path": "tools/dist_test.sh",
+      "bytes": 284,
+      "sha256": "589dd53a4dbe3d1a0159ee339a210c377409824ed2519bcd8a68f0880866e804"
+    },
+    {
+      "path": "vendor/ResWorld/tools/dist_train.sh",
+      "upstream_path": "tools/dist_train.sh",
+      "bytes": 263,
+      "sha256": "53fb1a901c2c2cc87b99401a832893fac84d0f364002bb9074569ac15da267db"
+    },
+    {
+      "path": "vendor/ResWorld/tools/generate_point_label.py",
+      "upstream_path": "tools/generate_point_label.py",
+      "bytes": 5040,
+      "sha256": "b173db7d056db9b3779b5d411111b4e82852c9269d6efbe79f6ba041c3bd0af5"
+    },
+    {
+      "path": "vendor/ResWorld/tools/misc/browse_dataset.py",
+      "upstream_path": "tools/misc/browse_dataset.py",
+      "bytes": 8551,
+      "sha256": "0b67f0b48a75d8a01921634803f877ed9adff7259e38ab43c6bff8216b8dfa4c"
+    },
+    {
+      "path": "vendor/ResWorld/tools/misc/fuse_conv_bn.py",
+      "upstream_path": "tools/misc/fuse_conv_bn.py",
+      "bytes": 2240,
+      "sha256": "21c45da1cec6c8198f2a0ed23b4c1c2022dfe805864848e2c3d2965c416ed0e2"
+    },
+    {
+      "path": "vendor/ResWorld/tools/misc/print_config.py",
+      "upstream_path": "tools/misc/print_config.py",
+      "bytes": 638,
+      "sha256": "90d994aee46e0e0745905f0597f486e7e8c6f3f4cf3cd14c465e3c552fa7c8b6"
+    },
+    {
+      "path": "vendor/ResWorld/tools/misc/visualize_results.py",
+      "upstream_path": "tools/misc/visualize_results.py",
+      "bytes": 1447,
+      "sha256": "c1e12b28aa564cbcd9f9640b5bb188cc083b2ae29550feec4dbbae83af047b0c"
+    },
+    {
+      "path": "vendor/ResWorld/tools/model_converters/convert_votenet_checkpoints.py",
+      "upstream_path": "tools/model_converters/convert_votenet_checkpoints.py",
+      "bytes": 5090,
+      "sha256": "c6e0463583397bc020ed290076e86ccd219b5a891c725ac5695ffa89a3a4ebe0"
+    },
+    {
+      "path": "vendor/ResWorld/tools/model_converters/publish_model.py",
+      "upstream_path": "tools/model_converters/publish_model.py",
+      "bytes": 1075,
+      "sha256": "d493dd7f14f2f1b545f8b5a203ee1756f853895dbf34d67784763bd80c07df80"
+    },
+    {
+      "path": "vendor/ResWorld/tools/model_converters/regnet2mmdet.py",
+      "upstream_path": "tools/model_converters/regnet2mmdet.py",
+      "bytes": 3062,
+      "sha256": "5f932602c31a19128b8dcab9f0e39c2a0c2231febf49dac9642155ddfbb9f946"
+    },
+    {
+      "path": "vendor/ResWorld/tools/test.py",
+      "upstream_path": "tools/test.py",
+      "bytes": 11652,
+      "sha256": "0d4de86817824f60fca8cdf09608db063ed21a21b8d1b3dc0dace0633fee3f07"
+    },
+    {
+      "path": "vendor/ResWorld/tools/train.py",
+      "upstream_path": "tools/train.py",
+      "bytes": 10189,
+      "sha256": "16af14edffdc38682366743e8adcadc004cc241d06e1bd61ac901622fbefed25"
+    },
+    {
+      "path": "vendor/ResWorld/resources/resworld.png",
+      "upstream_path": "resources/resworld.png",
+      "bytes": 423783,
+      "sha256": "a812e673f29d7d48d5da34ec1487139a6e42732bc1caa15c96a80dced4b06ea8"
+    }
+  ],
+  "adaptation": "tools/prepare_source.py and tools/npu_compat.py"
+}
