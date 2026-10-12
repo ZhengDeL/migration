@@ -8,5 +8,6 @@
 .dockerignore text eol=lf
 *.Dockerfile text eol=lf
 .gitattributes text eol=lf
-# Preserve the exact pinned DrivingSDK vendor bytes, including upstream whitespace.
+# Preserve pinned upstream/vendor bytes, including original whitespace.
 PyTorch/contrib/**/vendor/** -text whitespace=-blank-at-eol
+verification/lstm_driving_research_20261012/upstream/** -text whitespace=-blank-at-eol
