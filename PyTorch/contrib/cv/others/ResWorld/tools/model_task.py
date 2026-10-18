@@ -43,12 +43,14 @@ def check_data(path, mode):
 
 def create_model(metadata):
     from npu_compat import restore_trainable_resnet_pool
+    from npu_activations import install_exact_gelu
     cfg = config()
     from mmdet3d.models import build_model
     model = build_model(cfg.model)
     # Original initialization; the functional test does not use GeoBEV weights.
     model.init_weights()
     restore_trainable_resnet_pool(model.img_backbone)
+    install_exact_gelu(model)
     return model
 
 

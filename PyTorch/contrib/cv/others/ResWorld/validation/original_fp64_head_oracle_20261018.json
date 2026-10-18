@@ -1,0 +1,208 @@
+{
+  "scope": "original two planning losses and head/input gradients; true captured feature and CAN; no depth/backbone FP64 claim",
+  "against_original_fp64": {
+    "original_cpu_fp32": {
+      "gradient_relative_l2": 0.028733437761987904,
+      "failed_parameters": [
+        {
+          "parameter": "canbus_mlp.fc1.weight",
+          "max_abs": 0.20867774937652134,
+          "ref_max": 10.211137533400779
+        },
+        {
+          "parameter": "canbus_mlp.fc1.bias",
+          "max_abs": 0.02137904027540969,
+          "ref_max": 1.0461313911141248
+        },
+        {
+          "parameter": "canbus_mlp.fc2.weight",
+          "max_abs": 0.0428740395676373,
+          "ref_max": 1.0617257199697552
+        },
+        {
+          "parameter": "canbus_mlp.fc2.bias",
+          "max_abs": 0.014093599195408027,
+          "ref_max": 0.3084253467964891
+        },
+        {
+          "parameter": "canbus_se.mlp_reduce.weight",
+          "max_abs": 0.21548539712781584,
+          "ref_max": 4.788364243814108
+        },
+        {
+          "parameter": "canbus_se.mlp_reduce.bias",
+          "max_abs": 0.11376530435139853,
+          "ref_max": 2.528015108312261
+        },
+        {
+          "parameter": "canbus_se.mlp_expand.weight",
+          "max_abs": 0.04572970980042679,
+          "ref_max": 1.40563479918743
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.attentions.0.attn.in_proj_weight",
+          "max_abs": 0.008203208258237865,
+          "ref_max": 0.2568080215868847
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.attentions.0.attn.in_proj_bias",
+          "max_abs": 0.039223798964675205,
+          "ref_max": 1.2274670235744927
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.attentions.0.attn.out_proj.weight",
+          "max_abs": 0.004298382021875026,
+          "ref_max": 0.14544892242216917
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.attentions.0.attn.out_proj.bias",
+          "max_abs": 0.03870203453040727,
+          "ref_max": 1.30924435575228
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.ffns.0.layers.0.0.weight",
+          "max_abs": 0.0056218006240220525,
+          "ref_max": 0.24252122034946522
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.ffns.0.layers.1.weight",
+          "max_abs": 0.004725277186730173,
+          "ref_max": 0.17303273542965486
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.ffns.0.layers.1.bias",
+          "max_abs": 0.001803958349436554,
+          "ref_max": 0.06589940440305381
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.norms.0.weight",
+          "max_abs": 0.004029409355552266,
+          "ref_max": 0.2141341579622341
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.norms.0.bias",
+          "max_abs": 0.00247060206778155,
+          "ref_max": 0.08600334928602428
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.norms.1.weight",
+          "max_abs": 0.0038569201151622545,
+          "ref_max": 0.19295326865560075
+        },
+        {
+          "parameter": "res_latent_decoder.layers.0.norms.1.bias",
+          "max_abs": 0.0021336515675856593,
+          "ref_max": 0.07824238133629456
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.attentions.0.attn.in_proj_weight",
+          "max_abs": 0.006528725440165528,
+          "ref_max": 0.2543156363168894
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.attentions.0.attn.in_proj_bias",
+          "max_abs": 0.002014747981893515,
+          "ref_max": 0.0783998563237247
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.attentions.0.attn.out_proj.weight",
+          "max_abs": 0.0029504344134659247,
+          "ref_max": 0.13727838964215144
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.ffns.0.layers.0.0.weight",
+          "max_abs": 0.051610253751277924,
+          "ref_max": 0.27244550446507404
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.ffns.0.layers.0.0.bias",
+          "max_abs": 0.012766229920089245,
+          "ref_max": 0.06755841375487133
+        },
+        {
+          "parameter": "res_latent_decoder.layers.1.norms.0.weight",
+          "max_abs": 0.00455148960688808,
+          "ref_max": 0.15234750072551617
+        },
+        {
+          "parameter": "res_latent_decoder.layers.2.attentions.0.attn.in_proj_weight",
+          "max_abs": 0.003306604760787507,
+          "ref_max": 0.2125131399489867
+        },
+        {
+          "parameter": "res_latent_decoder.layers.2.ffns.0.layers.0.0.weight",
+          "max_abs": 0.0265078622781119,
+          "ref_max": 0.2662653687343665
+        },
+        {
+          "parameter": "res_latent_decoder.layers.2.ffns.0.layers.0.0.bias",
+          "max_abs": 0.007428348167569102,
+          "ref_max": 0.07463531150186935
+        },
+        {
+          "parameter": "res_latent_decoder.layers.2.norms.0.weight",
+          "max_abs": 0.002746000582643765,
+          "ref_max": 0.17292146415048001
+        },
+        {
+          "parameter": "action_mln.gamma.weight",
+          "max_abs": 0.0036195013510850332,
+          "ref_max": 0.22299841166444778
+        },
+        {
+          "parameter": "action_mln.gamma.bias",
+          "max_abs": 0.004296927393595482,
+          "ref_max": 0.26473629676449284
+        },
+        {
+          "parameter": "action_mln.beta.weight",
+          "max_abs": 0.049450459540699016,
+          "ref_max": 1.31392759699397
+        },
+        {
+          "parameter": "action_mln.beta.bias",
+          "max_abs": 0.05870590942792592,
+          "ref_max": 1.5598511381698277
+        }
+      ],
+      "prediction_max_abs": 0.00013744642705271204,
+      "loss": 2.11838436126709,
+      "reference_loss": 2.118393447859569
+    },
+    "stable_cpu_fp32": {
+      "gradient_relative_l2": 1.1745830156671147e-05,
+      "failed_parameters": [],
+      "prediction_max_abs": 7.296878908880089e-06,
+      "loss": 2.118398666381836,
+      "reference_loss": 2.118393447859569
+    },
+    "stable_npu_fp32_same_features": {
+      "gradient_relative_l2": 9.332136131187707e-06,
+      "failed_parameters": [],
+      "prediction_max_abs": 7.425000657201863e-06,
+      "loss": 2.1183881759643555,
+      "reference_loss": 2.118393447859569
+    },
+    "stable_npu_fp32_actual_features": {
+      "gradient_relative_l2": 0.0004887004536854625,
+      "failed_parameters": [],
+      "prediction_max_abs": 8.855512131811238e-06,
+      "loss": 2.1183838844299316,
+      "reference_loss": 2.118393447859569
+    }
+  },
+  "stable_cpu_npu_same_features": {
+    "gradient_relative_l2": 1.504324825032042e-05,
+    "failed_parameters": [],
+    "prediction_max_abs": 1.2755393981933594e-05,
+    "loss": 2.1183881759643555,
+    "reference_loss": 2.118398666381836
+  },
+  "stable_cpu_npu_actual_features": {
+    "gradient_relative_l2": 0.0004854889728589328,
+    "failed_parameters": [],
+    "prediction_max_abs": 1.4185905456542969e-05,
+    "loss": 2.1183838844299316,
+    "reference_loss": 2.118398666381836
+  }
+}

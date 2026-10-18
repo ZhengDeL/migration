@@ -1,0 +1,25 @@
+{
+  "parameter": "img_bev_encoder_backbone.layers.0.0.conv2.weight",
+  "before": {
+    "parameter": "img_bev_encoder_backbone.layers.0.0.conv2.weight",
+    "active": true,
+    "max_absolute_error": 0.0025835130363702774,
+    "reference_max": 0.11986775696277618,
+    "pass": false
+  },
+  "after": {
+    "parameter": "img_bev_encoder_backbone.layers.0.0.conv2.weight",
+    "active": true,
+    "max_absolute_error": 9.260443039238453e-05,
+    "reference_max": 0.11986775696277618,
+    "pass": true
+  },
+  "cpu_reference_unchanged": {
+    "result": "pass",
+    "active_tensors": 446,
+    "bit_equal_gradient_tensors": 446,
+    "scope": "original stable-profile CPU gradients before/after constant projection backend unification, same historical new20 weight/batch; no gradient arithmetic modified by the observer"
+  },
+  "effective_profile": "constant_metadata_cpu_fp32_v1",
+  "neural_forward_and_backward_on_npu": true
+}

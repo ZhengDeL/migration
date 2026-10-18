@@ -29,6 +29,9 @@ for key in ['model','dataset_digest','world_size','step','state_dict','optimizer
     compare(a[key],b[key],key)
 compare(a['settings'].get('npu_precision'),b['settings'].get('npu_precision'),'settings.npu_precision')
 compare(a['settings'].get('msda_backend'),b['settings'].get('msda_backend'),'settings.msda_backend')
+compare(a['settings'].get('activation_profile'),b['settings'].get('activation_profile'),'settings.activation_profile')
+compare(a['settings'].get('temporal_residual_profile'),b['settings'].get('temporal_residual_profile'),'settings.temporal_residual_profile')
+compare(a['settings'].get('camera_projection_profile'),b['settings'].get('camera_projection_profile'),'settings.camera_projection_profile')
 print(json.dumps({'result':'fail_continuous_vs_independently_resumed_training' if mismatches else 'pass_continuous_vs_independently_resumed_training','optimizer_steps':a['step'],
     'compared':'all model state and optimizer tensors; Python/NumPy/CPU/NPU RNG per rank; exact next epoch and batch cursor',
     'rtol':1e-5,'atol':1e-6,**counts,'mismatches':mismatches},indent=2),flush=True)

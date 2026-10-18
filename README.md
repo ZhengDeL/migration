@@ -32,4 +32,4 @@ BEVFormer / Sparse4D 采用华为 DrivingSDK 固定模型补丁及必要辅助�
 
 GitHub 提供源码和指导；完整模型交付另含对应镜像、数据、权重和保存结果。内部问题台账及操作记录不进入公开交付。
 
-后四项已在用户新增机器执行 2026-10-18 完整或扩展验证：LSTM-Argoverse 完整三阶段训练，STGCN-Traffic 完整 PeMSD7(M) 训练，MobileNetV2 官方 ImageNet 五万图验证及功能训练，ResWorld 真实 mini 四卡与原作者权重规划/碰撞控制。各模型的数值通过、失败及未完成范围见自己的 FULL_VALIDATION.md 和 validation/extended_acceptance_20261018.json。ResWorld 单卡 CPU/NPU 梯度门槛仍未通过。MobileNetV2 从头完整训练、ResWorld 正式 trainval/完整训练协议尚未完成。实测设备为 Atlas 800I A3 推理系列，实验不改变官方训练支持范围。原五项保留各自带日期的历史记录。
+后四项已在用户新增机器执行 2026-10-18 完整或扩展验证：LSTM-Argoverse 完整三阶段训练，STGCN-Traffic 完整 PeMSD7(M) 训练，MobileNetV2 官方 ImageNet 五万图验证及功能训练，ResWorld 真实 mini 四卡与原作者权重规划/碰撞控制。各模型的数值通过、失败及未完成范围见自己的 FULL_VALIDATION.md 和 validation/extended_acceptance_20261018.json。ResWorld 原数值失败已修复：五份固定权重梯度、四卡严格恢复、30分钟及原65帧通过；正式trainval/12epoch仍未完成。MobileNetV2 从头完整训练、ResWorld 正式 trainval/完整训练协议尚未完成。实测设备为 Atlas 800I A3 推理系列，实验不改变官方训练支持范围。原五项保留各自带日期的历史记录。

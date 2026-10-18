@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | LSTM-Argoverse | [README](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) / [完整指导](../PyTorch/contrib/cv/others/LSTM-Argoverse/FULL_VALIDATION.md) | 全部205942 train / 39472 val；原1/10/30三阶段，725epoch、292175更新；完整预测、最终权重梯度、成熟状态断点恢复及独立重载 | val用于选模；不作为独立test、排行榜或驾驶业务精度验收 |
 | STGCN-Traffic | [README](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) / [完整指导](../PyTorch/contrib/cv/others/STGCN-Traffic/FULL_VALIDATION.md) | 完整PeMSD7(M)、52epoch/14404更新；完整val/test、恢复、梯度、1p/2p吞吐、双卡30分钟与重载 | 对应选定实现70/15/15协议；METR-LA及其他PeMS未验收 |
-| ResWorld | [README](../PyTorch/contrib/cv/others/ResWorld/README.md) / [独立指导](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md) | 完整80M网络、真实mini/CAN/深度，四卡训练、持续运行、恢复/梯度数值控制；作者完整权重原65帧规划/碰撞 | 四卡严格恢复已通过；单卡CPU/NPU梯度未通过，整体数值验收未完成；完整trainval与正式12epoch runner/hooks未完成 |
+| ResWorld | [README](../PyTorch/contrib/cv/others/ResWorld/README.md) / [独立指导](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md) | 完整80M网络、真实mini/CAN/深度，四卡训练、持续运行、恢复/梯度数值控制；作者完整权重原65帧规划/碰撞 | 原数值失败已修复，五份权重梯度、四卡严格恢复、30分钟和原65帧通过；正式trainval/12epoch未完成 |
 | MobileNetV2 | [README](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) / [独立指导](../PyTorch/contrib/cv/classification/MobileNetV2/FULL_VALIDATION.md) | Imagenette功能训练、恢复、梯度、1p/2p吞吐、双卡30分钟与重载；官方V1权重全50000图/50000000 logits对照 | ImageNet Top1=71.87%、Top5=90.294%；600epoch从头训练尚未完成 |
 
 ## 使用与交付

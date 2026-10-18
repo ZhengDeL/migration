@@ -16,7 +16,7 @@ def parser():
     p.add_argument('--devices',default=PROFILE['host_devices'])
     p.add_argument('--nproc',type=int,default=1)
     p.add_argument('--data_path',type=Path,default=ROOT/PROFILE['data']['functional'])
-    p.add_argument('--checkpoint',type=Path,default=ROOT/'test/output/delivery_verified/checkpoint.pt')
+    p.add_argument('--checkpoint',type=Path,required=True,help='Select the exact model-local checkpoint being accepted; no historical default.')
     p.add_argument('--output_dir',type=Path,required=True)
     p.add_argument('--duration_seconds',type=int,default=1800)
     p.add_argument('--warmup',type=int,default=10)
@@ -107,6 +107,12 @@ def work(a):
     settings['communication']=communication
     from npu_compat import restore_backend, attention_execution_counts
     backend=restore_backend(original['settings']);settings['msda_backend']=backend
+    from npu_activations import activation_profile, activation_execution_counts
+    settings['activation_profile']=activation_profile()
+    from temporal_residual import TEMPORAL_RESIDUAL_PROFILE
+    settings['temporal_residual_profile']=TEMPORAL_RESIDUAL_PROFILE
+    from camera_geometry import CAMERA_PROJECTION_PROFILE, projection_execution_counts
+    settings['camera_projection_profile']=CAMERA_PROJECTION_PROFILE
     if original['model']!=PROFILE['model'] or original['dataset_digest']!=sha256(data/'metadata.json'):
         raise RuntimeError('The source checkpoint model or functional data digest differs.')
     model=task.create_model(metadata).to(device);model.load_state_dict(original['state_dict'],strict=True)
@@ -121,6 +127,14 @@ def work(a):
           'communication':communication,
           'source_checkpoint_sha256':sha256(checkpoint),'world_size':world,'per_rank_batch_size':batch_size,
           'deterministic_algorithms':torch.are_deterministic_algorithms_enabled(),'formal_accuracy_claimed':False}
+    base['activation_profile']=activation_profile()
+    base['temporal_residual_profile']=TEMPORAL_RESIDUAL_PROFILE
+    base['camera_projection_profile']=CAMERA_PROJECTION_PROFILE
+    base['source_checkpoint_camera_projection_profile']=original['settings'].get('camera_projection_profile')
+    base['cpu_reference']='Original network and three losses with equivalent stable temporal reduction on both backends. Constant camera projection retains original CPU FP32 operations; original FP64 head checked separately.'
+    base['source_checkpoint_temporal_residual_profile']=original['settings'].get('temporal_residual_profile')
+    base['source_checkpoint_activation_profile']=original['settings'].get('activation_profile')
+    base['historical_activation_checkpoint_recomputed']=original['settings'].get('activation_profile')!=activation_profile()
     if a.check=='gradient':
         from training_state import batch_digest
         batch=next(iter(loader));model.eval()
@@ -130,6 +144,10 @@ def work(a):
         npu_optimizer=task.create_optimizer(model,original['settings'])
         cpu_optimizer=task.create_optimizer(cpu,original['settings'])
         loss,_=task.loss(model,batch,device);loss.backward()
+        if not all(activation_execution_counts().values()):
+            raise RuntimeError('The expected native NPU erf GELUs did not all execute.')
+        if projection_execution_counts()['npu_pipeline']==0:
+            raise RuntimeError('The constant camera projection did not execute in the NPU pipeline.')
         if backend['autograd']=='mmcv_pytorch_npu' and attention_execution_counts()['reference_autograd']==0:
             raise RuntimeError('The requested reference NPU autograd implementation did not execute.')
         expected,_=task.loss(cpu,batch,torch.device('cpu'));expected.backward()
@@ -156,6 +174,8 @@ def work(a):
         loss_pass=torch.allclose(loss.detach().cpu(),expected.detach(),rtol=0.003,atol=0.003)
         passed=matched and active>0 and relative<=0.01 and step_pass and bool(loss_pass)
         result={**base,'result':'pass' if passed else 'fail','attention_execution_counts':attention_execution_counts(),
+            'activation_execution_counts':activation_execution_counts(),
+            'projection_execution_counts':projection_execution_counts(),
             'communication_execution_counts':execution_counts(),'control_mode':'eval with autograd; identical real training batch and stored weights',
             'optimizer_state_source':'fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state',
             'cpu_loss':float(expected.detach()),'npu_loss':float(loss.detach().cpu()),'loss_close':bool(loss_pass),
@@ -185,6 +205,10 @@ def work(a):
         loss,detail=task.loss(wrapped,batch,device)
         if loss.device.type!='npu' or not bool(torch.isfinite(loss)):raise RuntimeError('Nonfinite / non-NPU sustained-training loss.')
         loss.backward()
+        if not all(activation_execution_counts().values()):
+            raise RuntimeError('The expected native NPU erf GELUs did not all execute.')
+        if projection_execution_counts()['npu_pipeline']==0:
+            raise RuntimeError('The constant camera projection did not execute in the NPU pipeline.')
         if backend['autograd']=='mmcv_pytorch_npu' and attention_execution_counts()['reference_autograd']==0:
             raise RuntimeError('The requested reference NPU training implementation did not execute.')
         if world>1 and execution_counts()['synchronous_mean_allreduce']==0:
@@ -210,6 +234,8 @@ def work(a):
         wall=torch.tensor([elapsed],device=device)
         if world>1:dist.all_reduce(durations,op=dist.ReduceOp.MAX);dist.all_reduce(wall,op=dist.ReduceOp.MAX)
         result={**base,'result':'pass_measured_real_training_throughput','attention_execution_counts':attention_execution_counts(),'warmup_updates':a.warmup,
+            'activation_execution_counts':activation_execution_counts(),
+            'projection_execution_counts':projection_execution_counts(),
             'communication_execution_counts':execution_counts(),
             'timed_updates':a.iterations,'timed_seconds':float(wall.cpu()[0]),
             'global_samples_per_second':a.iterations*batch_size*world/float(wall.cpu()[0]),
@@ -239,6 +265,8 @@ def work(a):
             codes=[torch.empty_like(code) for _ in range(world)];dist.all_gather(codes,code)
             if any(not torch.equal(code,value) for value in codes):raise RuntimeError('Sustained-training rank parameter SHA differs.')
         result={**base,'result':'pass_sustained_real_data_training','attention_execution_counts':attention_execution_counts(),
+            'activation_execution_counts':activation_execution_counts(),
+            'projection_execution_counts':projection_execution_counts(),
             'communication_execution_counts':execution_counts(),'requested_seconds':a.duration_seconds,
             'actual_training_seconds':elapsed,'updates_this_run':steps,'last_loss':last,
             'state_finite':True,'optimizer_finite':True,'parameters_updated':True,'parameter_sha256':final,

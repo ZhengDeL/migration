@@ -39,7 +39,7 @@ def run(command, log=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['setup', 'prepare', 'check', 'plan', 'functional', 'full', 'validate'])
+    parser.add_argument('action', choices=['setup', 'prepare', 'check', 'plan', 'functional', 'full', 'validate', 'numerical'])
     parser.add_argument('--nproc', type=int, choices=[1, 2, 4], default=4)
     parser.add_argument('--devices', '--device_id', dest='devices')
     parser.add_argument('--data_path', type=Path)
@@ -121,6 +121,11 @@ def main():
         if args.action == 'check':
             output.mkdir(exist_ok=False)
             return run(docker + ['tools/check_env.py', '--nproc', str(args.nproc), '--output', str(output / 'environment.json')], output / 'console.log')
+        if args.action == 'numerical':
+            if args.nproc != 1:
+                raise RuntimeError('Numerical operator control uses exactly one NPU.')
+            output.mkdir(exist_ok=False)
+            return run(docker + ['tools/validate_numerical_ops.py', '--output', str(output / 'numerical_ops.json')], output / 'console.log')
         if args.action == 'validate':
             return run(docker + ['tools/validate.py', '--data_path', str(data), '--output_dir', str(output)], output / 'console_validate.log')
         # A data guard failure must preserve the previous completed training pointer.

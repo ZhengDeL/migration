@@ -57,6 +57,19 @@ def main():
     result['npu_precision'] = precision
     result['legacy_runtime_default_precision'] = 'npu_precision' not in state['settings']
     result['msda_backend'] = backend
+    from npu_activations import activation_profile, activation_execution_counts
+    result['activation_profile'] = activation_profile()
+    result['source_checkpoint_activation_profile'] = state['settings'].get('activation_profile')
+    result['activation_execution_counts'] = activation_execution_counts()
+    from temporal_residual import TEMPORAL_RESIDUAL_PROFILE
+    result['temporal_residual_profile'] = TEMPORAL_RESIDUAL_PROFILE
+    result['source_checkpoint_temporal_residual_profile'] = state['settings'].get('temporal_residual_profile')
+    from camera_geometry import CAMERA_PROJECTION_PROFILE, projection_execution_counts
+    result['camera_projection_profile'] = CAMERA_PROJECTION_PROFILE
+    result['source_checkpoint_camera_projection_profile'] = state['settings'].get('camera_projection_profile')
+    result['projection_execution_counts'] = projection_execution_counts()
+    if projection_execution_counts()['npu_pipeline'] == 0:
+        raise RuntimeError('The constant camera projection did not execute in the NPU pipeline.')
     result['legacy_drivingsdk_autograd_profile'] = 'msda_backend' not in state['settings']
     write_json(output / 'validation_result.json', result)
     print(__import__('json').dumps(result, ensure_ascii=False, indent=2), flush=True)
