@@ -1,0 +1,128 @@
+{
+  "model": "lstm-argoverse",
+  "check": "gradient",
+  "mode": "full",
+  "data_scope": "official_argoverse_v11_full_train_val",
+  "source_checkpoint_sha256": "306ca75daba7116ed6e4cc2dc93df5c20b3ea08d6fe04995072fc957146ff29a",
+  "world_size": 1,
+  "per_rank_batch_size": 512,
+  "deterministic_algorithms": true,
+  "formal_accuracy_claimed": false,
+  "result": "pass",
+  "control_mode": "eval with autograd; identical real training batch and stored weights",
+  "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+  "optimizer_structure": "original independent encoder Adam and decoder Adam",
+  "cpu_loss": 0.10426267236471176,
+  "npu_loss": 0.10426267981529236,
+  "loss_close": true,
+  "active_gradient_tensors": 14,
+  "all_active_and_inactive_parameters_match": true,
+  "gradient_max_absolute_error": 2.0489096641540527e-08,
+  "gradient_relative_l2_error": 1.547784092281873e-06,
+  "gradient_relative_l2_limit": 0.01,
+  "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+  "optimizer_step_parameter_max_error": 1.4156103134155273e-07,
+  "optimizer_step_parameters_close": true,
+  "optimizer_parameter_rtol": 0.003,
+  "optimizer_parameter_atol": 0.0003,
+  "parameters": [
+    {
+      "parameter": "encoder.linear1.weight",
+      "active": true,
+      "max_absolute_error": 8.498318493366241e-09,
+      "reference_max": 0.0031408811919391155,
+      "pass": true
+    },
+    {
+      "parameter": "encoder.linear1.bias",
+      "active": true,
+      "max_absolute_error": 7.101334631443024e-09,
+      "reference_max": 0.0054591563530266285,
+      "pass": true
+    },
+    {
+      "parameter": "encoder.lstm1.weight_ih",
+      "active": true,
+      "max_absolute_error": 9.313225746154785e-09,
+      "reference_max": 0.004420561250299215,
+      "pass": true
+    },
+    {
+      "parameter": "encoder.lstm1.weight_hh",
+      "active": true,
+      "max_absolute_error": 4.889443516731262e-09,
+      "reference_max": 0.003936181776225567,
+      "pass": true
+    },
+    {
+      "parameter": "encoder.lstm1.bias_ih",
+      "active": true,
+      "max_absolute_error": 6.984919309616089e-09,
+      "reference_max": 0.0033791379537433386,
+      "pass": true
+    },
+    {
+      "parameter": "encoder.lstm1.bias_hh",
+      "active": true,
+      "max_absolute_error": 6.984919309616089e-09,
+      "reference_max": 0.0033791379537433386,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.linear1.weight",
+      "active": true,
+      "max_absolute_error": 2.6775524020195007e-09,
+      "reference_max": 0.002978963777422905,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.linear1.bias",
+      "active": true,
+      "max_absolute_error": 3.4924596548080444e-09,
+      "reference_max": 0.004097119905054569,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.lstm1.weight_ih",
+      "active": true,
+      "max_absolute_error": 2.0954757928848267e-09,
+      "reference_max": 0.00203203153796494,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.lstm1.weight_hh",
+      "active": true,
+      "max_absolute_error": 2.444721758365631e-09,
+      "reference_max": 0.001697953906841576,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.lstm1.bias_ih",
+      "active": true,
+      "max_absolute_error": 2.7939677238464355e-09,
+      "reference_max": 0.002182913012802601,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.lstm1.bias_hh",
+      "active": true,
+      "max_absolute_error": 2.7939677238464355e-09,
+      "reference_max": 0.002182913012802601,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.linear2.weight",
+      "active": true,
+      "max_absolute_error": 1.6763806343078613e-08,
+      "reference_max": 0.009280786849558353,
+      "pass": true
+    },
+    {
+      "parameter": "decoder.linear2.bias",
+      "active": true,
+      "max_absolute_error": 2.0489096641540527e-08,
+      "reference_max": 0.01099197007715702,
+      "pass": true
+    }
+  ]
+}

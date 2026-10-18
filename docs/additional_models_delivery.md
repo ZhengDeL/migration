@@ -1,26 +1,22 @@
-# 新增四个智驾相关模型：实测与独立交付
+# 后四个模型：独立指导与实际验证（2026-10-18）
 
-## 独立工程
+每个模型独立运行、独立记录结果，并单独提供 Word 迁移报告。先进入对应模型目录，使用自己的指导和训练脚本。
 
-| 模型 | 使用指导 | 实际物理卡 | 真实数据验证范围 |
-| --- | --- | ---: | --- |
-| LSTM-Argoverse | [独立 README](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2 | 官方轨迹 train/val 子集 128/32，10 步训练、重载、CPU 对照、ADE/FDE/Miss Rate |
-| STGCN-Traffic | [独立 README](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2 | PeMSD7(M)，10 步训练、重载、CPU 对照、241 val 窗口 |
-| ResWorld | [独立 README](../PyTorch/contrib/cv/others/ResWorld/README.md) | 4 | 真实 nuScenes mini/CAN/深度，完整 80M 网络，10 步训练、重载、CPU 对照、65 val 帧 |
-| MobileNetV2 | [独立 README](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2 | Imagenette 100 train/40 val，1000 类头，10 步训练、重载、CPU 对照 |
+| 模型 | 独立指导 | 本轮实际覆盖 | 完成边界 |
+| --- | --- | --- | --- |
+| LSTM-Argoverse | [README](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) / [完整指导](../PyTorch/contrib/cv/others/LSTM-Argoverse/FULL_VALIDATION.md) | 全部205942 train / 39472 val；原1/10/30三阶段，725epoch、292175更新；完整预测、最终权重梯度、成熟状态断点恢复及独立重载 | val用于选模；不作为独立test、排行榜或驾驶业务精度验收 |
+| STGCN-Traffic | [README](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) / [完整指导](../PyTorch/contrib/cv/others/STGCN-Traffic/FULL_VALIDATION.md) | 完整PeMSD7(M)、52epoch/14404更新；完整val/test、恢复、梯度、1p/2p吞吐、双卡30分钟与重载 | 对应选定实现70/15/15协议；METR-LA及其他PeMS未验收 |
+| ResWorld | [README](../PyTorch/contrib/cv/others/ResWorld/README.md) / [独立指导](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md) | 完整80M网络、真实mini/CAN/深度，四卡训练、持续运行、恢复/梯度数值控制；作者完整权重原65帧规划/碰撞 | 四卡严格恢复已通过；单卡CPU/NPU梯度未通过，整体数值验收未完成；完整trainval与正式12epoch runner/hooks未完成 |
+| MobileNetV2 | [README](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) / [独立指导](../PyTorch/contrib/cv/classification/MobileNetV2/FULL_VALIDATION.md) | Imagenette功能训练、恢复、梯度、1p/2p吞吐、双卡30分钟与重载；官方V1权重全50000图/50000000 logits对照 | ImageNet Top1=71.87%、Top5=90.294%；600epoch从头训练尚未完成 |
 
-以上均已在 1# 实际执行，训练每个 rank 都保留损失、梯度、参数更新和全参数 SHA256 同步证据。每项的 checkpoint 与任务指标独立记录。真实数据子集与随机初始化的短训练用于功能验证，正式精度、完整训练、性能和长稳均未验收。
+## 使用与交付
 
-## 离线文件
+GitHub 提供固定版本源码、每模型指导与必要验证摘要；完整独立 ZIP 另含本模型自己的镜像、数据、所需权重、已验证检查点、参考和 SHA256 清单。单独取得一个模型 ZIP，完整解压后即可按其 README 使用；不依赖其他模型目录。
 
-每个模型交付一份独立 ZIP，并保留对应的可直接使用的展开目录。单独取得一个模型 ZIP 即可获得它所需的指导、源码、镜像、真实功能数据、已验证 checkpoint、重载参考、必要验证 JSON 及 SHA256 清单；运行不依赖其他模型目录。
+每个模型新增 `test/revalidate_packaged_1p.sh`：一条命令校验包、准备镜像，在新输出目录独立重载随包检查点。各自的训练入口和完整/功能模式仍按各模型指导操作。完整训练状态与选择后的推理权重、作者预训练权重分别标明用途。
 
-解压后，进入该模型 README 所在目录，按该 README 的命令操作。大镜像、数据和 checkpoint 不进入 GitHub；GitHub 提供版本固定的代码、指导和去私有化的必要验证结果。网盘由用户自行上传。
+LSTM 包同时包含官方完整 train/val 原始压缩归档及完整处理缓存；MobileNetV2 包含官方完整 val.tar、devkit、V1 权重及索引；ResWorld 包保留真实 mini 与两种作者权重。未完成的 ImageNet train 下载分块不入包。镜像固定 image ID，不能用同名滚动 tag 代替已验证镜像。
 
-本地问题记录、诊断日志、临时下载和 SSH helper 均不属于公开交付。下载缓存内的完整 Argoverse 归档未加入 LSTM 功能包，ResWorld 冗余原始 expansion ZIP 也未重复打包；每项只保留当前独立复验所需内容和来源证据。
+四份 Word 分别说明每个模型的迁移代码、原始协议、环境镜像、数据来源、失败及修复、真实测试、检查点 SHA、最终归档与工程师复现步骤。它们不是一篇合并报告。最终上传目录只放核心模型 ZIP、Word ZIP 和清单/说明，由用户自行上传百度网盘。
 
-## 版本锁和限制
-
-2026-10-13 对作者 LSTM / STGCN / ResWorld 默认分支及 ModelZoo GitCode 主仓 HEAD 再次核验，均与本次固定提交一致。ModelZoo GitHub 镜像停在旧版，主仓核验使用 GitCode。镜像使用已经实测并固定 image ID 的 CANN / TorchNPU / DrivingSDK 配套，不随 tag 自动升级。核验结果随各模型独立 `validation/upstream_status.json` 提供。
-
-Atlas 800I A3 推理系列上的成功实验不改变华为官方训练硬件支持范围。当前包没有声称复现论文精度；LSTM curriculum 和 ResWorld 正式预训练 / EMA / SyncBN / warmup / 碰撞指标仍需另行验收。
+本地问题台账、原始诊断日志、临时下载、SSH 辅助程序和凭据不进入公开仓库或核心上传包。推理系列设备上的实际训练实验不改变华为官方训练硬件支持范围。目录内的历史十步结果保留日期，新结论使用各自 `validation/extended_acceptance_20261018.json`。

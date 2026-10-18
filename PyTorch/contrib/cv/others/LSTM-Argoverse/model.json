@@ -17,7 +17,7 @@
     },
     "full": {
       "steps": 0,
-      "epochs": 10000,
+      "epochs": 5000,
       "batch_size": 512,
       "lr": 0.001
     }

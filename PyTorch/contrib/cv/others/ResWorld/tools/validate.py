@@ -28,6 +28,10 @@ def main():
     if PROFILE.get('optimizer_has_tensor_state', True) and not state['optimizer']['state']:
         raise RuntimeError('有状态优化器的 tensor state 缺失。')
     task.check_data(data, 'full' if evidence['mode'] == 'full' else 'functional')
+    from npu_precision import checkpoint_precision
+    precision = checkpoint_precision(torch_npu, state['settings'])
+    from npu_compat import restore_backend
+    backend = restore_backend(state['settings'])
     model = task.create_model(state['metadata']).to(device)
     model.load_state_dict(state['state_dict'], strict=True)
     model.eval()
@@ -50,6 +54,10 @@ def main():
         'strict_state_reload': True, 'reference_replay_matches': True,
         'cpu_npu_max_absolute_error': max_error, 'cpu_npu_rtol': 0.003, 'cpu_npu_atol': 0.003,
         'data_scope': state['metadata']['scope'], 'metrics': metrics, 'formal_accuracy_claimed': False}
+    result['npu_precision'] = precision
+    result['legacy_runtime_default_precision'] = 'npu_precision' not in state['settings']
+    result['msda_backend'] = backend
+    result['legacy_drivingsdk_autograd_profile'] = 'msda_backend' not in state['settings']
     write_json(output / 'validation_result.json', result)
     print(__import__('json').dumps(result, ensure_ascii=False, indent=2), flush=True)
 

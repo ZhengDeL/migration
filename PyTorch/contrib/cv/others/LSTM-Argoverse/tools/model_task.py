@@ -11,13 +11,16 @@ from upstream_components import neural_classes, coordinate_functions
 def check_data(path, mode):
     metadata = json.loads((path / 'metadata.json').read_text())
     if mode == 'full':
-        raise RuntimeError('完整数据和上游 1/10/30 步 rollout 协议尚未验收；当前入口仅做真实轨迹功能验证。')
-    if metadata['scope'] != 'official_argoverse_v11_train_val_functional_128_32' or len(metadata['train_sequences']) != 128 or len(metadata['val_sequences']) != 32:
+        if metadata['scope'] != 'official_argoverse_v11_full_train_val' or metadata['counts'] != {'train':205942,'val':39472}:
+            raise RuntimeError('Full training requires every official Argoverse v1.1 train/val trajectory.')
+        if not metadata['train_val_raw_csv_hashes_disjoint']:
+            raise RuntimeError('Full trajectory train/validation CSV content overlap.')
+    elif metadata['scope'] != 'official_argoverse_v11_train_val_functional_128_32' or len(metadata['train_sequences']) != 128 or len(metadata['val_sequences']) != 32:
         raise RuntimeError('The delivered official 128 train / 32 val trajectory subset is required.')
     for item in metadata['files']:
         if sha256(path / item['path']) != item['sha256']:
             raise RuntimeError('Real trajectory data SHA256 mismatch: ' + item['path'])
-    if set(metadata['train_sequences']) & set(metadata['val_sequences']):
+    if mode != 'full' and set(metadata['train_sequences']) & set(metadata['val_sequences']):
         raise RuntimeError('Trajectory train/validation sequence overlap.')
     if metadata['synthetic_data'] or metadata['coordinate_roundtrip_max_error_m'] > 1e-7:
         raise RuntimeError('Real coordinates and the original normalization round trip must pass.')
@@ -31,7 +34,9 @@ class MotionLSTM(torch.nn.Module):
         self.encoder = Encoder()
         self.decoder = Decoder()
 
-    def forward(self, history):
+    def forward(self, history, rollout_steps=30):
+        if rollout_steps not in [1, 10, 30]:
+            raise RuntimeError('The official curriculum uses rollout lengths 1, 10 and 30.')
         real_batch = len(history)
         # The fixed runtime's native LSTMCell is unstable at NPU batch=1.
         # An independent duplicate row pads the kernel batch; it is excluded
@@ -44,7 +49,7 @@ class MotionLSTM(torch.nn.Module):
             state = self.encoder(history[:, index], state)
         current = history[:, -1]
         output = []
-        for _ in range(30):
+        for _ in range(rollout_steps):
             current, state = self.decoder(current, state)
             output.append(current)
         return torch.stack(output, dim=1)[:real_batch]

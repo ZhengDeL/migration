@@ -1,0 +1,279 @@
+{
+  "model": "stgcn-traffic",
+  "check": "gradient",
+  "mode": "full",
+  "data_scope": "pemsd7-m_full_chronological",
+  "npu_precision": {
+    "conv_allow_hf32": false,
+    "matmul_allow_hf32": false
+  },
+  "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+  "world_size": 1,
+  "per_rank_batch_size": 16,
+  "deterministic_algorithms": true,
+  "formal_accuracy_claimed": false,
+  "result": "pass",
+  "control_mode": "eval with autograd; identical real training batch and stored weights",
+  "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+  "cpu_loss": 0.08269216120243073,
+  "npu_loss": 0.08269216120243073,
+  "loss_close": true,
+  "active_gradient_tensors": 28,
+  "all_active_and_inactive_parameters_match": true,
+  "gradient_max_absolute_error": 8.568167686462402e-08,
+  "gradient_relative_l2_error": 8.635463798401314e-07,
+  "gradient_relative_l2_limit": 0.01,
+  "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+  "optimizer_step_parameter_max_error": 2.2798776626586914e-06,
+  "optimizer_step_parameters_close": true,
+  "optimizer_parameter_rtol": 0.003,
+  "optimizer_parameter_atol": 0.0003,
+  "parameters": [
+    {
+      "parameter": "st_blocks.0.tmp_conv1.align.align_conv.weight",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv1.align.align_conv.bias",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv1.causal_conv.weight",
+      "active": true,
+      "max_absolute_error": 2.130400389432907e-08,
+      "reference_max": 0.004774198401719332,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv1.causal_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.30385160446167e-08,
+      "reference_max": 0.010336441919207573,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.graph_conv.align.align_conv.weight",
+      "active": true,
+      "max_absolute_error": 2.0954757928848267e-09,
+      "reference_max": 0.0028275148943066597,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.graph_conv.align.align_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.257285475730896e-08,
+      "reference_max": 0.006379337981343269,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.graph_conv.cheb_graph_conv.weight",
+      "active": true,
+      "max_absolute_error": 2.7008354663848877e-08,
+      "reference_max": 0.004215477500110865,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.graph_conv.cheb_graph_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.6298145055770874e-09,
+      "reference_max": 0.0038096040952950716,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv2.align.align_conv.weight",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv2.align.align_conv.bias",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv2.causal_conv.weight",
+      "active": true,
+      "max_absolute_error": 1.862645149230957e-09,
+      "reference_max": 0.0031565274111926556,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.tmp_conv2.causal_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.862645149230957e-09,
+      "reference_max": 0.0024709373246878386,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.tc2_ln.weight",
+      "active": true,
+      "max_absolute_error": 1.8917489796876907e-10,
+      "reference_max": 0.0001884982193587348,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.0.tc2_ln.bias",
+      "active": true,
+      "max_absolute_error": 1.4551915228366852e-10,
+      "reference_max": 0.00022081221686676145,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv1.align.align_conv.weight",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv1.align.align_conv.bias",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv1.causal_conv.weight",
+      "active": true,
+      "max_absolute_error": 1.2514647096395493e-09,
+      "reference_max": 0.0007725557661615312,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv1.causal_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.7462298274040222e-10,
+      "reference_max": 0.0005209833034314215,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.graph_conv.align.align_conv.weight",
+      "active": true,
+      "max_absolute_error": 2.8994691092520952e-09,
+      "reference_max": 0.0038705645129084587,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.graph_conv.align.align_conv.bias",
+      "active": true,
+      "max_absolute_error": 3.1141098588705063e-09,
+      "reference_max": 0.0007483267690986395,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.graph_conv.cheb_graph_conv.weight",
+      "active": true,
+      "max_absolute_error": 1.862645149230957e-08,
+      "reference_max": 0.01841125823557377,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.graph_conv.cheb_graph_conv.bias",
+      "active": true,
+      "max_absolute_error": 2.9103830456733704e-10,
+      "reference_max": 0.0005850208690389991,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv2.align.align_conv.weight",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv2.align.align_conv.bias",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv2.causal_conv.weight",
+      "active": true,
+      "max_absolute_error": 1.862645149230957e-09,
+      "reference_max": 0.001870187115855515,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tmp_conv2.causal_conv.bias",
+      "active": true,
+      "max_absolute_error": 1.1641532182693481e-10,
+      "reference_max": 0.0001857249008025974,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tc2_ln.weight",
+      "active": true,
+      "max_absolute_error": 3.2741809263825417e-10,
+      "reference_max": 0.0002301913482369855,
+      "pass": true
+    },
+    {
+      "parameter": "st_blocks.1.tc2_ln.bias",
+      "active": true,
+      "max_absolute_error": 3.710738383233547e-10,
+      "reference_max": 0.0007340205484069884,
+      "pass": true
+    },
+    {
+      "parameter": "output.tmp_conv1.align.align_conv.weight",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "output.tmp_conv1.align.align_conv.bias",
+      "active": false,
+      "both_inactive": true
+    },
+    {
+      "parameter": "output.tmp_conv1.causal_conv.weight",
+      "active": true,
+      "max_absolute_error": 1.862645149230957e-09,
+      "reference_max": 0.0036347885616123676,
+      "pass": true
+    },
+    {
+      "parameter": "output.tmp_conv1.causal_conv.bias",
+      "active": true,
+      "max_absolute_error": 3.7834979593753815e-10,
+      "reference_max": 0.0005775073659606278,
+      "pass": true
+    },
+    {
+      "parameter": "output.fc1.weight",
+      "active": true,
+      "max_absolute_error": 8.381903171539307e-09,
+      "reference_max": 0.011811040341854095,
+      "pass": true
+    },
+    {
+      "parameter": "output.fc1.bias",
+      "active": true,
+      "max_absolute_error": 3.4924596548080444e-10,
+      "reference_max": 0.001506234984844923,
+      "pass": true
+    },
+    {
+      "parameter": "output.fc2.weight",
+      "active": true,
+      "max_absolute_error": 8.568167686462402e-08,
+      "reference_max": 0.05091685429215431,
+      "pass": true
+    },
+    {
+      "parameter": "output.fc2.bias",
+      "active": true,
+      "max_absolute_error": 7.450580596923828e-09,
+      "reference_max": 0.06904243677854538,
+      "pass": true
+    },
+    {
+      "parameter": "output.tc1_ln.weight",
+      "active": true,
+      "max_absolute_error": 1.1059455573558807e-09,
+      "reference_max": 0.0014090382028371096,
+      "pass": true
+    },
+    {
+      "parameter": "output.tc1_ln.bias",
+      "active": true,
+      "max_absolute_error": 2.9103830456733704e-10,
+      "reference_max": 0.000565638649277389,
+      "pass": true
+    }
+  ]
+}

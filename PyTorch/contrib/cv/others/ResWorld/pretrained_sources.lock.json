@@ -1,0 +1,18 @@
+{
+  "source": "https://github.com/mengtan00/ResWorld/tree/a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "digest_provenance": "SHA256 measured after downloading from the author's README link; the author does not publish a separate signed checksum.",
+  "files": {
+    "geobev-r50-nuimage-cbgs.pth": {
+      "url": "https://drive.google.com/file/d/1B8Bz4_CpHGjgBrD84JbBJrAtx4TOnUG0/view",
+      "bytes": 303540281,
+      "sha256": "d7076e95611b2057ee1612e2e7b896c88a5c703374e6c1935d4f54786ffa19cb",
+      "role": "GeoBEV partial backbone initialization; not a complete ResWorld model"
+    },
+    "resworld-official-final.pth": {
+      "url": "https://drive.google.com/file/d/12mlspkNBLhMrwpRZJGlC4hfWU07Yt9V9/view",
+      "bytes": 323621057,
+      "sha256": "3a605c0d79baea5d4d6b5de6440c4b24be6d7ded90c2610b5503537e8cd05c34",
+      "role": "Author's complete pretrained 704-tensor ResWorld state_dict; no optimizer or training resume state"
+    }
+  }
+}

@@ -32,6 +32,6 @@
   "modifications": [
     "Execute only original neural and coordinate definitions; native NPU and HCCL launcher",
     "NPU batch=1 pads one independent duplicate row to batch=2, then trims it before loss/metrics",
-    "Functional fixed 30-step rollout, one Adam optimizer for independent parameter states; full curriculum not claimed"
+    "Functional 30-step rollout retained; full_data preparation and original 1/10/30 curriculum with independent encoder/decoder Adam are implemented in model-local tools; completion requires separate actual validation evidence"
   ]
 }

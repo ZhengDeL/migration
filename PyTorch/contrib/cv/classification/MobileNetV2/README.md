@@ -1,5 +1,19 @@
 # MobileNetV2：Ascend A3 独立训练与验证
 
+
+## 离线包快速复验
+
+完整解压本模型最新 ZIP 后，在本目录执行：
+
+```bash
+bash test/revalidate_packaged_1p.sh --devices 0
+```
+
+该入口自动校验完整文件清单、准备固定镜像，并将随包检查点复制到新的输出目录完成独立 NPU 重载与真实数据验证。结果路径由命令输出给出。重新训练及当前验收边界见 [完整验证指南](FULL_VALIDATION.md)。
+
+
+扩展数值验证、显式 FP32 配置和官方 ImageNet 全集评测入口见 [完整验证指南](FULL_VALIDATION.md)。本页原指标为首次功能基线。
+
 ## 模型介绍
 
 图像分类基础网络。采用华为 Ascend ModelZoo 的 MobileNetV2，保留 width_mult=1.0 和原始 1000 类输出头，作为智驾视觉骨干的迁移参考。
@@ -62,9 +76,9 @@ bash test/train_1p.sh --devices 0
 bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt" --steps 20
 ```
 
-续训接口恢复权重和优化器状态；本轮未做续训验收，也不承诺随机数 / sampler 状态逐 bit 重放。保留旧输出，每次新运行会建立新目录；指定 `--output_dir` 时必须选择不存在的本模型内目录。
+新 schema2 检查点恢复权重、优化器、epoch/batch 游标和全部 rank Python/NumPy/Torch/NPU RNG，并校验精度、batch 和学习率。显式 FP32 配置下已完成 10＋10 与连续20步控制，478 个状态张量全部逐位相同。旧 schema1 只支持历史权重/优化器续训，不承诺精确重放。指定输出目录必须不存在。
 
-## 已执行验证
+## 首次十步功能结果（历史基线）
 
 | 检查 | 本次实测结果 |
 | --- | --- |
@@ -114,4 +128,4 @@ bash test/train_full_2p.sh
 
 在相同固定镜像下，重新执行真实数据 2 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `3.11657786369e-05`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
 
-本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。
+本节为第二台机器十步功能复验的历史记录。后续已完成显式 FP32 数值/恢复/吞吐/双卡30分钟，以及官方 V1 权重 ImageNet 全50000图验证，见完整验证指南；600epoch 从头训练、驾驶业务和官方训练硬件支持范围未因此验收。

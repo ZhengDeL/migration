@@ -1,6 +1,27 @@
 """Process-local adaptations for the pinned training image and CPU reference."""
 import torch
 
+_autograd_backend = 'drivingsdk'
+_attention_calls = {'reference_autograd': 0, 'drivingsdk': 0}
+
+
+def attention_execution_counts():
+    return dict(_attention_calls)
+
+
+def configure_training_backend():
+    """Use the original MMCV formula with native NPU autograd for new training."""
+    return restore_backend({'msda_backend': {'autograd': 'mmcv_pytorch_npu', 'no_grad': 'drivingsdk'}})
+
+
+def restore_backend(settings):
+    global _autograd_backend
+    profile = settings.get('msda_backend', {'autograd': 'drivingsdk', 'no_grad': 'drivingsdk'})
+    if set(profile) != {'autograd', 'no_grad'} or profile['autograd'] not in ['drivingsdk', 'mmcv_pytorch_npu'] or profile['no_grad'] != 'drivingsdk':
+        raise RuntimeError('Unsupported stored ResWorld attention execution profile.')
+    _autograd_backend = profile['autograd']
+    return dict(profile)
+
 
 def install():
     import mx_driving
@@ -8,6 +29,18 @@ def install():
     if getattr(attention.MultiScaleDeformableAttnFunction, '_resworld_npu', False):
         return
     original_attention = attention.MultiScaleDeformableAttnFunction.apply
+    original_driving_attention = mx_driving.multi_scale_deformable_attn
+
+    def driving_dispatch(value, shapes, starts, locations, weights):
+        # The pinned image also calls this public API directly from MMCV.
+        if value.device.type == 'npu' and torch.is_grad_enabled() and _autograd_backend == 'mmcv_pytorch_npu':
+            _attention_calls['reference_autograd'] += 1
+            return attention.multi_scale_deformable_attn_pytorch(value, shapes, locations, weights)
+        if value.device.type == 'npu':
+            _attention_calls['drivingsdk'] += 1
+        return original_driving_attention(value, shapes, starts, locations, weights)
+
+    mx_driving.multi_scale_deformable_attn = driving_dispatch
 
     def dispatch(value, shapes, starts, locations, weights, im2col_step):
         if value.device.type == 'npu':

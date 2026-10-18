@@ -1,0 +1,663 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-18",
+  "model": "LSTM-Argoverse",
+  "machine": "user_provided_second_A3_validation_host",
+  "actual_npu_execution": true,
+  "architecture": "aarch64",
+  "board": "IT22HMDA_4_S",
+  "hardware_series": "Atlas 800I A3 inference series; experiments do not change official training support",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image": {
+    "role": "runtime",
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+    "models": [
+      "lstm-argoverse"
+    ],
+    "versions": {
+      "cann": "9.1.0",
+      "python": "3.10.21",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post6",
+      "mx_driving": "26.1.0.post2"
+    },
+    "archive": {
+      "filename": "drivingsdk_headless.tar.gz",
+      "bytes": 9272909176,
+      "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+      "saved_image_count": 1
+    }
+  },
+  "runtime": {
+    "python": "3.10.21",
+    "CANN": "9.1.0",
+    "torch": "2.7.1+cpu",
+    "torch_npu": "2.7.1.post6",
+    "mx_driving": "26.1.0.post2"
+  },
+  "numerical_gates": "Declared before evaluation; not a Huawei business-accuracy or performance standard.",
+  "performance_context": "Other model jobs shared host CPU, storage and different physical NPUs. No production throughput target provided.",
+  "formal_business_acceptance_claimed": false,
+  "result": "pass_full_data_curriculum_and_extended_checks",
+  "tested_host_logical_ids": [
+    4,
+    6
+  ],
+  "tested_physical_ids": [
+    2,
+    3
+  ],
+  "full_training": {
+    "model": "lstm-argoverse",
+    "mode": "full",
+    "result": "full_curriculum_run_finished",
+    "stop_reason": "all_curriculum_stages_advanced_by_reference_rule",
+    "epochs_completed": 725,
+    "optimizer_steps": 292175,
+    "world_size": 2,
+    "stage_epochs": {
+      "1": 165,
+      "10": 150,
+      "30": 410
+    },
+    "selected_epoch": 535,
+    "selected_checkpoint_has_30step_validation_selection": true,
+    "dataset_digest": "8c7d2a49b582ef5f974577284cdbe9e54beb788b824afcc54e6cbfc7b139130e",
+    "data_scope": "official_argoverse_v11_full_train_val",
+    "data_path": "data/full",
+    "settings": {
+      "epochs": 5000,
+      "lr": 0.001,
+      "steps": 0,
+      "batch_size": 256,
+      "global_batch_size": 512,
+      "rollouts": [
+        1,
+        10,
+        30
+      ],
+      "validation_every_epochs": 5,
+      "advance_after_increases": 3
+    },
+    "checkpoint_sha256": "306ca75daba7116ed6e4cc2dc93df5c20b3ea08d6fe04995072fc957146ff29a",
+    "latest_checkpoint_sha256": "6cd47a245016d786a5ec971851e2852bd8d566ad91643e09aa81d9773172bb91",
+    "cpu_npu_max_absolute_error": 7.152557373046875e-07,
+    "full_reference_protocol_completed": true,
+    "metrics": {
+      "held_out_sequences": 39472,
+      "ade_m": 1.7011764258908424,
+      "fde_m": 3.8735608772930945,
+      "miss_rate": 0.6511197811106607,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_full_train_val",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false,
+    "resume_from": "<VALIDATION_ROOT>/LSTM-Argoverse/test/output/full_resume_epoch2_20261018/latest.pt"
+  },
+  "full_prediction_control": {
+    "model": "lstm-argoverse",
+    "result": "pass",
+    "checkpoint_sha256": "306ca75daba7116ed6e4cc2dc93df5c20b3ea08d6fe04995072fc957146ff29a",
+    "data_scope": "official_argoverse_v11_full_train_val",
+    "validation_sequences": 39472,
+    "coordinate_elements_compared": 2368320,
+    "prediction_rtol": 0.003,
+    "prediction_atol": 0.003,
+    "normalized_prediction_max_absolute_error": 4.250556230545044e-06,
+    "elements_outside_tolerance": 0,
+    "cpu_city_coordinate_metrics": {
+      "held_out_sequences": 39472,
+      "ade_m": 1.7011764339782518,
+      "fde_m": 3.873560907546983,
+      "miss_rate": 0.6511197811106607,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_full_train_val",
+      "formal_accuracy_claimed": false
+    },
+    "npu_city_coordinate_metrics": {
+      "held_out_sequences": 39472,
+      "ade_m": 1.7011764258908424,
+      "fde_m": 3.8735608772930945,
+      "miss_rate": 0.6511197811106607,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_full_train_val",
+      "formal_accuracy_claimed": false
+    },
+    "paired_metric_batch_size": 512,
+    "metrics_units": "meters after the original coordinate inverse; miss rate threshold 2m, K=1",
+    "validation_used_for_checkpoint_selection": true,
+    "independent_test_or_leaderboard_claimed": false,
+    "formal_business_accuracy_claimed": false
+  },
+  "independent_reload": {
+    "model": "lstm-argoverse",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "306ca75daba7116ed6e4cc2dc93df5c20b3ea08d6fe04995072fc957146ff29a",
+    "optimizer_steps": 215605,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 7.152557373046875e-07,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "official_argoverse_v11_full_train_val",
+    "metrics": {
+      "held_out_sequences": 39472,
+      "ade_m": 1.7011764258908428,
+      "fde_m": 3.8735608772930976,
+      "miss_rate": 0.6511197811106607,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_full_train_val",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false,
+    "checkpoint_role": "curriculum_selected_model",
+    "optimizer_state_checked": false,
+    "complete_validation_prediction_control": true
+  },
+  "resume_control": {
+    "result": "pass_uninterrupted_vs_epoch_boundary_resume",
+    "epochs": 2,
+    "optimizer_steps": 806,
+    "compared": "original encoder/decoder, both Adam states, curriculum and every rank RNG",
+    "rtol": 1e-05,
+    "atol": 1e-06,
+    "tensors": 60,
+    "bit_equal_tensors": 60,
+    "max_absolute_error": 0.0
+  },
+  "mature_curriculum_resume_control": {
+    "result": "pass_uninterrupted_vs_epoch_boundary_resume",
+    "epochs": 691,
+    "optimizer_steps": 278473,
+    "compared": "original encoder/decoder, both Adam states, curriculum and every rank RNG",
+    "rtol": 1e-05,
+    "atol": 1e-06,
+    "tensors": 102,
+    "bit_equal_tensors": 102,
+    "max_absolute_error": 0.0,
+    "snapshot": {
+      "epoch": 689,
+      "stage_index": 2,
+      "increases": 0,
+      "best_states": [
+        "1",
+        "10",
+        "30"
+      ],
+      "checkpoint_role": "curriculum_continuation"
+    },
+    "snapshot_sha256": "c3f0b4316bf3ae85bff02c2eaf94cb77841dc4734fe5133943ebaf6393b552cc",
+    "validation_boundary_epoch": 690,
+    "nonempty_all_three_stage_best_states_tested": true,
+    "main_training_interrupted": false,
+    "separate_host_logical_ids": [
+      12,
+      14
+    ],
+    "separate_physical_cards": [
+      6,
+      7
+    ]
+  },
+  "gradient_control": {
+    "model": "lstm-argoverse",
+    "check": "gradient",
+    "mode": "full",
+    "data_scope": "official_argoverse_v11_full_train_val",
+    "source_checkpoint_sha256": "306ca75daba7116ed6e4cc2dc93df5c20b3ea08d6fe04995072fc957146ff29a",
+    "world_size": 1,
+    "per_rank_batch_size": 512,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass",
+    "control_mode": "eval with autograd; identical real training batch and stored weights",
+    "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+    "optimizer_structure": "original independent encoder Adam and decoder Adam",
+    "cpu_loss": 0.10426267236471176,
+    "npu_loss": 0.10426267981529236,
+    "loss_close": true,
+    "active_gradient_tensors": 14,
+    "all_active_and_inactive_parameters_match": true,
+    "gradient_max_absolute_error": 2.0489096641540527e-08,
+    "gradient_relative_l2_error": 1.547784092281873e-06,
+    "gradient_relative_l2_limit": 0.01,
+    "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+    "optimizer_step_parameter_max_error": 1.4156103134155273e-07,
+    "optimizer_step_parameters_close": true,
+    "optimizer_parameter_rtol": 0.003,
+    "optimizer_parameter_atol": 0.0003,
+    "failed_parameter_count": 0,
+    "failed_parameter_examples": []
+  },
+  "functional_gradient_control": {
+    "model": "lstm-argoverse",
+    "check": "gradient",
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "source_checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "world_size": 1,
+    "per_rank_batch_size": 8,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass",
+    "control_mode": "eval with autograd; identical real training batch and stored weights",
+    "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+    "cpu_loss": 0.3266654312610626,
+    "npu_loss": 0.3266654312610626,
+    "loss_close": true,
+    "active_gradient_tensors": 14,
+    "all_active_and_inactive_parameters_match": true,
+    "gradient_max_absolute_error": 5.960464477539063e-08,
+    "gradient_relative_l2_error": 8.612285958610344e-08,
+    "gradient_relative_l2_limit": 0.01,
+    "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+    "optimizer_step_parameter_max_error": 1.4901161193847656e-08,
+    "optimizer_step_parameters_close": true,
+    "optimizer_parameter_rtol": 0.003,
+    "optimizer_parameter_atol": 0.0003,
+    "failed_parameter_count": 0,
+    "failed_parameter_examples": []
+  },
+  "benchmark_1p": {
+    "model": "lstm-argoverse",
+    "check": "benchmark",
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "source_checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "world_size": 1,
+    "per_rank_batch_size": 8,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 2.24822735786438,
+    "global_samples_per_second": 177.91794882345224,
+    "latency_p50_seconds": 0.044877154752612114,
+    "latency_p95_seconds": 0.047871786169707775,
+    "peak_allocated_bytes_local_rank": 34072576,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "benchmark_2p": {
+    "model": "lstm-argoverse",
+    "check": "benchmark",
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "source_checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "world_size": 2,
+    "per_rank_batch_size": 8,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 2.19521164894104,
+    "global_samples_per_second": 364.4295530164102,
+    "latency_p50_seconds": 0.04366524517536163,
+    "latency_p95_seconds": 0.04535373952239752,
+    "peak_allocated_bytes_local_rank": 34086912,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "full_rank_results": [
+    {
+      "rank": 0,
+      "world_size": 2,
+      "epochs_completed": 725,
+      "optimizer_steps": 292175,
+      "parameters_on_npu": true,
+      "parameter_sha256": "ff1d93e170586b6e98a4ff0da2d12aaa8527997cef221839375b420870663912",
+      "state_finite": true,
+      "optimizer_finite": true,
+      "all_rank_parameter_hashes_match": true,
+      "stage_epochs": {
+        "1": 165,
+        "10": 150,
+        "30": 410
+      }
+    },
+    {
+      "rank": 1,
+      "world_size": 2,
+      "epochs_completed": 725,
+      "optimizer_steps": 292175,
+      "parameters_on_npu": true,
+      "parameter_sha256": "ff1d93e170586b6e98a4ff0da2d12aaa8527997cef221839375b420870663912",
+      "state_finite": true,
+      "optimizer_finite": true,
+      "all_rank_parameter_hashes_match": true,
+      "stage_epochs": {
+        "1": 165,
+        "10": 150,
+        "30": 410
+      }
+    }
+  ],
+  "full_data_rebuild_control": {
+    "result": "pass_pinned_container_all_csv_rebuild",
+    "environment": {
+      "python": "3.10.21",
+      "numpy": "1.23.5",
+      "pandas": "2.3.3",
+      "shapely": "2.0.7"
+    },
+    "client_preprocessing_environment": {
+      "python": "3.12.7",
+      "numpy": "2.4.4",
+      "pandas": "3.0.2",
+      "shapely": "2.2.0",
+      "platform": "Windows"
+    },
+    "active_training_data_replaced": false,
+    "arrays": [
+      {
+        "split": "train",
+        "array": "x",
+        "shape": [
+          205942,
+          20,
+          2
+        ],
+        "dtype": "float32",
+        "bit_equal": false,
+        "max_absolute_error": 7.105427357601002e-15,
+        "absolute_tolerance": 1e-07,
+        "close": true
+      },
+      {
+        "split": "train",
+        "array": "y",
+        "shape": [
+          205942,
+          30,
+          2
+        ],
+        "dtype": "float32",
+        "bit_equal": false,
+        "max_absolute_error": 2.842170943040401e-14,
+        "absolute_tolerance": 1e-07,
+        "close": true
+      },
+      {
+        "split": "train",
+        "array": "truth_city",
+        "shape": [
+          205942,
+          30,
+          2
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "train",
+        "array": "reference",
+        "shape": [
+          205942,
+          2
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "train",
+        "array": "translation",
+        "shape": [
+          205942,
+          6
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "train",
+        "array": "rotation",
+        "shape": [
+          205942
+        ],
+        "dtype": "float64",
+        "bit_equal": false,
+        "max_absolute_error": 5.684341886080802e-14,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "train",
+        "source_provenance_rows": 205942,
+        "different_source_provenance_rows": 0
+      },
+      {
+        "split": "val",
+        "array": "x",
+        "shape": [
+          39472,
+          20,
+          2
+        ],
+        "dtype": "float32",
+        "bit_equal": false,
+        "max_absolute_error": 7.105427357601002e-15,
+        "absolute_tolerance": 1e-07,
+        "close": true
+      },
+      {
+        "split": "val",
+        "array": "y",
+        "shape": [
+          39472,
+          30,
+          2
+        ],
+        "dtype": "float32",
+        "bit_equal": false,
+        "max_absolute_error": 2.842170943040401e-14,
+        "absolute_tolerance": 1e-07,
+        "close": true
+      },
+      {
+        "split": "val",
+        "array": "truth_city",
+        "shape": [
+          39472,
+          30,
+          2
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "val",
+        "array": "reference",
+        "shape": [
+          39472,
+          2
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "val",
+        "array": "translation",
+        "shape": [
+          39472,
+          6
+        ],
+        "dtype": "float64",
+        "bit_equal": true,
+        "max_absolute_error": 0.0,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "val",
+        "array": "rotation",
+        "shape": [
+          39472
+        ],
+        "dtype": "float64",
+        "bit_equal": false,
+        "max_absolute_error": 5.684341886080802e-14,
+        "absolute_tolerance": 1e-09,
+        "close": true
+      },
+      {
+        "split": "val",
+        "source_provenance_rows": 39472,
+        "different_source_provenance_rows": 0
+      }
+    ],
+    "derived_metadata_sha_not_required_identical": "gzip metadata and software versions may change serialized hashes; existing checkpoints retain their original dataset digest"
+  },
+  "full_data_rebuild_runtime": {
+    "status": "completed",
+    "phase": "compare_all_regenerated_arrays_and_source_csv_provenance",
+    "started_at": "2026-10-18T09:06:48.592762+00:00",
+    "active_training_dataset_modified": false,
+    "finished_at": "2026-10-18T09:09:09.954513+00:00"
+  },
+  "execution": {
+    "model": "LSTM-Argoverse",
+    "status": "completed",
+    "started_at": "2026-10-18T07:56:42.024049+00:00",
+    "phases": [
+      {
+        "phase": "lstm_prepare_full_verify",
+        "exit_code": 0,
+        "seconds": 2.276844024658203
+      },
+      {
+        "phase": "lstm_epoch1_pause",
+        "exit_code": 0,
+        "seconds": 65.70719146728516
+      },
+      {
+        "phase": "lstm_epoch2_resumed",
+        "exit_code": 0,
+        "seconds": 75.09256219863892
+      },
+      {
+        "phase": "lstm_epoch2_control",
+        "exit_code": 0,
+        "seconds": 82.01557445526123
+      },
+      {
+        "phase": "lstm_resume_state_control",
+        "exit_code": 0,
+        "seconds": 2.068876028060913
+      },
+      {
+        "phase": "lstm_full_reference",
+        "exit_code": 0,
+        "seconds": 10636.994854450226
+      },
+      {
+        "phase": "lstm_independent_best_reload",
+        "exit_code": 0,
+        "seconds": 70.67536067962646
+      }
+    ],
+    "phase": "lstm_independent_best_reload",
+    "final_output": "<VALIDATION_ROOT>/LSTM-Argoverse/test/output/full_reference_20261018",
+    "finished_at": "2026-10-18T10:58:56.863666+00:00"
+  },
+  "extended_execution": {
+    "model": "LSTM-Argoverse",
+    "status": "completed",
+    "started_at": "2026-10-18T09:44:35.523042+00:00",
+    "phases": [
+      {
+        "phase": "lstm_acceptance_gradient_1p_20261018",
+        "exit_code": 0,
+        "seconds": 34.40788714005612
+      },
+      {
+        "phase": "lstm_acceptance_benchmark_1p_20261018",
+        "exit_code": 0,
+        "seconds": 35.068038519937545
+      },
+      {
+        "phase": "lstm_acceptance_benchmark_2p_20261018",
+        "exit_code": 0,
+        "seconds": 39.2150055199163
+      }
+    ],
+    "phase": "lstm_acceptance_benchmark_2p_20261018",
+    "finished_at": "2026-10-18T09:46:48.239786+00:00"
+  },
+  "full_gradient_execution": {
+    "status": "completed",
+    "phase": "full_selected_weights_original_two_adam_gradient_control",
+    "started_at": "2026-10-18T10:13:08.845429+00:00",
+    "exit_code": 0,
+    "output": "<VALIDATION_ROOT>/LSTM-Argoverse/test/output/full_selected_gradient_20261018",
+    "finished_at": "2026-10-18T10:59:45.262254+00:00"
+  },
+  "remaining": [
+    "Validation split was also used for checkpoint selection; no independent leaderboard/test claim.",
+    "No driving-business accuracy threshold or production performance target was supplied."
+  ],
+  "sustained_training": {
+    "source": "Actual complete curriculum, rather than an additional short-data stress loop.",
+    "epochs": 725,
+    "summed_epoch_training_seconds": 10449.386131689884,
+    "minimum_1800_seconds_exceeded": true,
+    "finite_loss_each_update": true,
+    "all_14_gradients_finite_checked_every_updates": 100,
+    "final_model_optimizer_finite_and_all_rank_parameter_hashes_match": true,
+    "independent_checkpoint_reload_passed": true
+  },
+  "source_files_sha256": {
+    "tools/check_env.py": "a22e88246ec2f1272ab3f1cb6d275f0dcb2b310fe4cebfe95bd56abbe9c44c23",
+    "tools/check_idle_cards.py": "4eff86932c78cc88bb6781e8144af6a6ad5584cfcea704d09fc16ae5397dad84",
+    "tools/common.py": "c3761f8395157190c454a65faa73f60924cc7e017c26ea08d510d3bb3fbbd40c",
+    "tools/container.py": "edbdabafa347435fd95e18b2a8c7eae26e2b1ab7715f563cf76cbfe6545d3c49",
+    "tools/container_resume_control.py": "04dccbe30c7ea1bc245a3fe4d88d3afd4c7de818e922255c8d3ca4016eb7c4b7",
+    "tools/full_training.py": "a7d2592b2ffe803060975ce839620e0c2cacff396cf10d3b239bb084fa271868",
+    "tools/full_validation.py": "e2d73803678c3f6ff4b74c431733937dc97ad7bb396da3a776c1ed08afc1a57c",
+    "tools/model_task.py": "ba1021de56ef5a24b0cb7e1996711e641977103c9cee5606bf7b9cdf193097c1",
+    "tools/prepare_data.py": "608e7bc282b74fce07b3c788d095f5ed2b0b96a63bba2b31a2c36f7a1b0ccf1b",
+    "tools/prepare_full_data.py": "be31a0d370e8b4433c2993d8d92b520eee920a8ba6119ef3af3b463d41b159c9",
+    "tools/resume_control.py": "85a08121ea4be4280bf54643a2f0eeff8f6d9c6ae406520610e31337b4fa46df",
+    "tools/revalidate_packaged.py": "5b155addeb20be1ea877383c72c191a185335ac6849dcf2899dcada65537ecc6",
+    "tools/train.py": "e9a5d26a560f48e70ce59179ca3d54a559f4b37b0144ec57ece66f4f1ac9755b",
+    "tools/upstream_components.py": "0ea769ff578d5060409fa27a20b5a6eda34cdae6d846688e8e1dfdec59224a92",
+    "tools/validate.py": "6c809e4b5532b73b405e4098cfc2441fd4dbe1c6cc79cddbddbbad914796dac4",
+    "tools/validate_extended.py": "60ea088702f51ae48f09534833011e498e97ee181bb08ec2f5ab0f93ab919637",
+    "tools/verify_package.py": "e7a5a3829c66f57a82d41d29812aab79af7ffa1b80a0a1e91dae3e29389f120d"
+  }
+}

@@ -11,8 +11,21 @@ sys.path.insert(0, str(ROOT / 'vendor'))
 
 def check_data(path, mode):
     metadata = json.loads((path / 'metadata.json').read_text())
-    if mode == 'full' and metadata['scope'] != 'imagenet_2012_full':
-        raise RuntimeError('完整训练需要 ImageNet-2012；Imagenette 功能子集不满足该入口。')
+    expected_scope = 'imagenet_2012_full' if mode == 'full' else 'public_imagenette_functional_subset'
+    expected_counts = {'train': 1281167, 'val': 50000} if mode == 'full' else {'train': 100, 'val': 40}
+    if metadata['scope'] != expected_scope or metadata.get('counts') != expected_counts:
+        raise RuntimeError('数据范围和完整样本数不匹配；不能把功能子集改名为 ImageNet 全集。')
+    if metadata.get('head_classes') != 1000 or not metadata.get('training_validation_image_hashes_disjoint'):
+        raise RuntimeError('必须保留原 1000 类和训练 / 验证图像内容互斥。')
+    entries = metadata['files']
+    if len({item['path'] for item in entries}) != len(entries):
+        raise RuntimeError('数据清单出现重复路径。')
+    for split, count in expected_counts.items():
+        images = [item for item in entries if item['path'].startswith(split + '/')]
+        if len(images) != count:
+            raise RuntimeError('数据清单未覆盖全部图像：' + split)
+    if {item['sha256'] for item in entries if item['path'].startswith('train/')} & {item['sha256'] for item in entries if item['path'].startswith('val/')}:
+        raise RuntimeError('训练和验证集出现相同图像内容。')
     for item in metadata['files']:
         if sha256(path / item['path']) != item['sha256']:
             raise RuntimeError('图片 / 类别映射 SHA256 不一致：' + item['path'])
@@ -63,7 +76,7 @@ def loss(model, batch, device):
 
 def evaluate(model, dataset, device, batch_size, metadata):
     model.eval()
-    total = correct = 0
+    total = correct = correct_top5 = 0
     with torch.no_grad():
         for batch in DataLoader(dataset, batch_size=batch_size, num_workers=0):
             output = predict(model, batch, device)
@@ -71,7 +84,9 @@ def evaluate(model, dataset, device, batch_size, metadata):
                 raise RuntimeError('独立验证图像输出不是有限数。')
             total += len(batch[1])
             correct += int((output.argmax(dim=1).cpu() == batch[1]).sum())
+            correct_top5 += int((output.topk(5,dim=1).indices.cpu() == batch[1][:,None]).any(dim=1).sum())
     return {'held_out_images': total, 'correct_top1': correct, 'top1': correct / total,
+        'correct_top5':correct_top5,'top5':correct_top5/total,
         'class_head': 1000, 'claim': 'subset_functionality_only' if metadata['scope'] != 'imagenet_2012_full' else 'measured_on_supplied_dataset'}
 
 

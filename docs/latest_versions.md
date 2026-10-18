@@ -1,12 +1,23 @@
-# 版本核验（原五项 2026-10-12；新增四项 2026-10-13）
+# 版本核验：后四项 2026-10-18；原五项保留历史日期
 
-本次独立交付使用当前核验的上游提交、配套官方发布镜像和完整权重；具体 image ID 和归档 SHA 固定在每个模型自己的 images.lock.json。后续滚动标签变化时需重新验证后再更新交付。
+## 后四项最新源码与已验证环境
 
-新增 LSTM / STGCN / ResWorld / MobileNetV2 使用各自 `validation/upstream_status.json` 记录的 2026-10-13 默认分支或 canonical HEAD 核验。LSTM `27696a19`、STGCN PyTorch `5cfa82c7`、STGCN 作者 `4ab75ab6`、ResWorld `a5ae9730`、ModelZoo GitCode `e779117e` 均与此次核验一致。ModelZoo 的 GitHub 镜像停在旧版，采用 GitCode 主仓核验结果。新增四项使用经过实测的 DrivingSDK 26.1 A3 headless 派生镜像，保持原始 26.1 发布配套，不切换尚未完成本项目训练验证的开发分支。
+LSTM-Argoverse、STGCN-Traffic、ResWorld 的默认分支 HEAD 已实时刷新，与各自锁定提交一致。MobileNetV2 的 ModelZoo GitCode 主仓 HEAD 已前进至 `4f2041b142e599f79acfd0b5f68b2699d65b4f58`，其 MobileNetV2 子树与锁定提交 `e779117e8cfeba296a7105e26adac0741ab04768` 完全相同，tree 为 `75fd4c46d94f560f776c57f48a53dc705c682de3`。GitHub 镜像不作为 ModelZoo 主仓最新性的依据。
 
-新增四项的 checkpoint 是本项目随机初始化短训练保存的功能产物，未被描述为官方完整预训练或精度达标权重。模型、任务和指标范围见 [新增四项实测](additional_models_delivery.md)。
+| 模型 | 已验证上游提交 | 核验材料 |
+| --- | --- | --- |
+| LSTM-Argoverse | `27696a19b3753a4ad8dcae3ad9c6107c5e4e237c` | [本模型来源核验](../PyTorch/contrib/cv/others/LSTM-Argoverse/validation/source_audit_20261018.json) |
+| STGCN-Traffic | `5cfa82c78984fc58fafe4841c35618c6647c4219` | [本模型来源核验](../PyTorch/contrib/cv/others/STGCN-Traffic/validation/source_audit_20261018.json) |
+| ResWorld | `a5ae973001dd6001d95b3389020a9e263d73a56e` | [本模型来源核验](../PyTorch/contrib/cv/others/ResWorld/validation/source_audit_20261018.json) |
+| MobileNetV2 | `e779117e8cfeba296a7105e26adac0741ab04768`；当前主仓模型子树相同 | [本模型来源核验](../PyTorch/contrib/cv/classification/MobileNetV2/validation/source_audit_20261018.json) |
 
-## 上游和数据
+核验的准确 UTC 时间写在每模型 JSON。复现固定已经测试的源码和环境，没有自动升级依赖。后四项使用 `local/migration-drivingsdk:26.1.0-a3-headless-20261010`，精确 image ID 为 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`；CANN9.1.0、Torch2.7.1+cpu、TorchNPU2.7.1.post6、mx_driving26.1.0.post2。镜像归档字节和 SHA 固定在各自 `images.lock.json`。
+
+后四项当前检查点已包含本项目完整数据训练或扩展训练产物；MobileNetV2 官方 V1 和 ResWorld 作者最终权重分别作为预训练评估使用。不得把这些权重说成本项目完成了600epoch ImageNet或正式12epoch ResWorld训练。当前逐模型结果见[独立交付索引](additional_models_delivery.md)。
+
+以下原五项是带日期的历史快照，不代表在2026-10-18重新完成了最新源码、数据或完整训练验收。
+
+## 原五项的历史核验（2026-10-12）
 
 | 项目 | 固定提交 | 2026-10-12 核验 |
 | --- | --- | --- |

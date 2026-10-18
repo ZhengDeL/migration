@@ -1,0 +1,8 @@
+{
+  "dataset": "Argoverse 1.1 Motion Forecasting",
+  "source_page": "https://www.argoverse.org/av1.html",
+  "archives": {
+    "train": {"filename": "forecasting_train_v1.1.tar.gz", "bytes": 3751225856, "sha256": "a6fdd1b9d26e167ca2b07d12e55705d2c1c673483a1676b7950e197b16bb8cdb", "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_train_v1.1.tar.gz", "sequences": 205942},
+    "val": {"filename": "forecasting_val_v1.1.tar.gz", "bytes": 659666087, "sha256": "79777058538dac003e910824d5fcceec27e76072afbdacd3935cb73cbd1b4857", "url": "https://s3.amazonaws.com/argoverse/datasets/av1.1/tars/forecasting_val_v1.1.tar.gz", "sequences": 39472}
+  }
+}
