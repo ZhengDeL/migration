@@ -1,21 +1,39 @@
 # 独立模型离线交付
 
-本页保留 2026-10-12 原五项交付。新增四项的实测与独立包见 [新增四模型交付](additional_models_delivery.md)；最终九项上传目录只包含各模型 ZIP、必要说明和校验清单。
+每个模型单独交付一个完整 ZIP。取得所需模型 ZIP，校验外部 SHA256 清单，完整解压，再按其中 README 执行。每个模型拥有自己的运行镜像、代码、数据、权重、训练与验证入口，可独立使用。
 
-每个模型单独交付一个可直接查看的展开目录，以及一个对应的完整归档。模型目录中包含自己的指导、脚本、固定上游源码、运行镜像、功能数据、初始化权重和实测结果。镜像使用独立的 Docker save 归档，setup 导入后核对实际 image ID。
+## 各模型入口
 
-取用哪个模型，就按它的 README 执行。每份包的 `package_manifest.json` 和 `tools/verify_package.py` 校验本模型文件；归档另有 SHA256。目录名及上级路径可以改变，setup 会重建当前目录的数据路径。训练需要对应 Ascend ARM64 Linux 服务器；Windows 可查看文件并校验下载完整性。
-
-| 单独交付目录 | 指导 |
+| 模型指导 | 数据与权重范围 |
 | --- | --- |
-| BEVFormer | [独立部署与训练](../PyTorch/contrib/cv/detection/BEVFormer/README.md) |
-| Sparse4D | [独立部署与训练](../PyTorch/contrib/cv/detection/Sparse4D/README.md) |
-| Qwen3-VL-8B | [独立部署与训练](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) |
-| WorldEngine | [独立部署与训练](../PyTorch/contrib/cv/others/WorldEngine/README.md) |
-| Apollo-Vision-Net | [独立部署与训练](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) |
+| [BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md) | 功能数据 / 本模型所需初始化与产物 |
+| [Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md) | 功能数据 / 本模型所需初始化与产物 |
+| [Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 功能数据 / 官方权重与本项目产物 |
+| [WorldEngine](../PyTorch/contrib/cv/others/WorldEngine/README.md) | 功能数据 / 官方权重与本项目产物 |
+| [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 功能数据 / 官方权重与本项目产物 |
+| [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 完整参考训练数据 / 本模型所需初始化与产物 |
+| [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 完整参考训练数据 / 本模型所需初始化与产物 |
+| [ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 功能数据 / 官方权重与本项目产物 |
+| [MobileNetV2](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 功能数据 / 官方 ImageNet 全 val |
 
-包内 `validation/` 保存本模型的验证依据和参考结果。setup 在本模型 `test/output/` 建立参考结果的工作副本；重新训练生成新的输出目录，并更新最近一次运行指针。原参考结果保留，最近一次失败也不会被旧结果掩盖。
+## 每个 ZIP 包含什么
 
-公开交付仅包含运行和复验必要资产。内部问题台账、操作记录、失败尝试和服务排查日志保留在本机。原来的五模型合并分卷属于历史交付，当前独立目录不依赖它。
+- 本模型 README、适配源码、固定来源/镜像/资产锁和所需上游文件。
+- 一份 `images/` 运行镜像归档；导入后按本模型 `images.lock.json` 核对 image ID。
+- 本模型已准备的数据与初始化权重，以及已验证的参考检查点；范围以模型说明为准。
+- 独立的 `test/` 训练/验证入口及 `tools/` 实现。
+- `validation/` 测试依据、`package_manifest.json` 与 `SHA256SUMS` 文件校验清单。
 
-功能数据与正式训练数据的区别、卡数、检查内容和尚未验收的指标，均在每个模型自己的指导和验证报告中列明。完整数据精度、性能、长期稳定性以及正式训练硬件支持需另行验收。
+## 工程师使用顺序
+
+1. 校验 ZIP 外部 SHA256，完整解压到 ARM64 Ascend Linux 服务器。Windows 可查看说明和校验归档。
+2. 进入这个模型目录，按 README 校验包并执行 setup，导入镜像和准备路径。
+3. 检查环境、物理卡号和数据计划。功能子集与 full 模式分别按指导操作。
+4. 使用本模型 `test/train_*p.sh` 训练，运行本模型独立验证入口；后四项还提供随包产物复验入口，详见各自指导。
+5. 检查本次退出码、报告和检查点身份，对照[验证总表](validation.md)。`test/output/` 保存本次输出，参考结果与新结果按运行目录区分。
+
+LSTM 包含完整 train/val 原始归档和处理缓存；MobileNetV2 提供完整 ImageNet val 与 V1 权重，其功能训练仍使用 Imagenette。ResWorld 提供真实 mini 和所需作者权重，正式 trainval/12 epoch 尚未完成。已准备的完整数据不能代表所有训练协议均已通过。
+
+后四项各有独立 Word 迁移报告。最终网盘上传内容为核心模型 ZIP、报告 ZIP 与必要说明/校验清单，由用户自行上传。交付包不收录本地问题台账、服务排查日志、临时下载或 SSH 辅助程序。
+
+GitHub 文档可随整理持续更新；离线 ZIP 内文档与内容以该 ZIP 清单为准。只有重新打包、校验并复验后才产生新的归档版本，不能用 GitHub 新提交号推断旧 ZIP 已更新。
