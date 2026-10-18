@@ -1,0 +1,10 @@
+{
+  "model": "STGCN-Traffic",
+  "repository": "https://github.com/hazdzz/STGCN.git",
+  "pinned": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+  "current_head": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+  "verification": "Live GitHub REST default-branch commit checked immediately before publication.",
+  "checked_at": "2026-10-18T12:00:57.409278+00:00",
+  "runtime_image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "automatic_dependency_upgrade_performed": false
+}

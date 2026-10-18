@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-18",
+  "model": "MobileNetV2",
+  "machine": "user_provided_second_A3_validation_host",
+  "actual_npu_execution": true,
+  "architecture": "aarch64",
+  "board": "IT22HMDA_4_S",
+  "hardware_series": "Atlas 800I A3 inference series; experiments do not change official training support",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image": {
+    "role": "runtime",
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+    "models": [
+      "mobilenetv2"
+    ],
+    "versions": {
+      "cann": "9.1.0",
+      "python": "3.10.21",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post6",
+      "mx_driving": "26.1.0.post2"
+    },
+    "archive": {
+      "filename": "drivingsdk_headless.tar.gz",
+      "bytes": 9272909176,
+      "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+      "saved_image_count": 1
+    }
+  },
+  "runtime": {
+    "python": "3.10.21",
+    "CANN": "9.1.0",
+    "torch": "2.7.1+cpu",
+    "torch_npu": "2.7.1.post6",
+    "mx_driving": "26.1.0.post2"
+  },
+  "numerical_gates": "Declared before evaluation; not a Huawei business-accuracy or performance standard.",
+  "performance_context": "Other model jobs shared host CPU, storage and different physical NPUs. No production throughput target provided.",
+  "formal_business_acceptance_claimed": false,
+  "result": "pass_official_pretrained_full_validation_and_functional_training_checks",
+  "tested_host_logical_ids": [
+    0,
+    2
+  ],
+  "tested_physical_ids": [
+    0,
+    1
+  ],
+  "functional_training": {
+    "model": "mobilenetv2",
+    "mode": "functional",
+    "result": "pass_functional_training",
+    "world_size": 2,
+    "optimizer_steps": 20,
+    "dataset_digest": "8f6aabd09a99781f87bfa39b2b2dd3c6492bd04109fda3ea3e68759317486464",
+    "checkpoint_sha256": "7e19d3cd2ef79a126adbd7a18866db990676f3ff753e9d3565c7fbf39edb8b88",
+    "settings": {
+      "steps": 20,
+      "epochs": 10,
+      "batch_size": 4,
+      "lr": 0.001,
+      "deterministic_algorithms": true,
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      }
+    },
+    "data_scope": "public_imagenette_functional_subset",
+    "formal_accuracy_claimed": false,
+    "resume_from": "<VALIDATION_ROOT>/MobileNetV2/test/output/acceptance_first10_fp32_20261018/checkpoint.pt",
+    "resume_semantics": "all_rank_rng_and_epoch_batch_cursor_restored",
+    "bit_exact_replay_claimed": false,
+    "resume_cursor": {
+      "epoch": 1,
+      "batch_index": 8
+    },
+    "data_path": "data/functional"
+  },
+  "resume_control": {
+    "result": "pass_continuous_vs_independently_resumed_training",
+    "optimizer_steps": 20,
+    "compared": "all model state and optimizer tensors; Python/NumPy/CPU/NPU RNG per rank; exact next epoch and batch cursor",
+    "rtol": 1e-05,
+    "atol": 1e-06,
+    "tensors": 478,
+    "bit_equal_tensors": 478,
+    "max_absolute_error": 0.0
+  },
+  "independent_reload": {
+    "model": "mobilenetv2",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "7e19d3cd2ef79a126adbd7a18866db990676f3ff753e9d3565c7fbf39edb8b88",
+    "optimizer_steps": 20,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 1.3113021850585938e-06,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "public_imagenette_functional_subset",
+    "metrics": {
+      "held_out_images": 40,
+      "correct_top1": 4,
+      "top1": 0.1,
+      "correct_top5": 20,
+      "top5": 0.5,
+      "class_head": 1000,
+      "claim": "subset_functionality_only"
+    },
+    "formal_accuracy_claimed": false,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "legacy_runtime_default_precision": false
+  },
+  "gradient_control": {
+    "model": "mobilenetv2",
+    "check": "gradient",
+    "data_scope": "public_imagenette_functional_subset",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+    "world_size": 1,
+    "per_rank_batch_size": 4,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass",
+    "control_mode": "eval with autograd; identical real training batch and stored weights",
+    "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+    "cpu_loss": 6.4581804275512695,
+    "npu_loss": 6.4581804275512695,
+    "loss_close": true,
+    "active_gradient_tensors": 158,
+    "all_active_and_inactive_parameters_match": true,
+    "gradient_max_absolute_error": 0.00011292734416201711,
+    "gradient_relative_l2_error": 0.00011653562200776036,
+    "gradient_relative_l2_limit": 0.01,
+    "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+    "optimizer_step_parameter_max_error": 1.1362135410308838e-07,
+    "optimizer_step_parameters_close": true,
+    "optimizer_parameter_rtol": 0.003,
+    "optimizer_parameter_atol": 0.0003,
+    "failed_parameter_count": 0,
+    "failed_parameter_examples": []
+  },
+  "selected20_gradient_control": {
+    "model": "mobilenetv2",
+    "check": "gradient",
+    "data_scope": "public_imagenette_functional_subset",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "7e19d3cd2ef79a126adbd7a18866db990676f3ff753e9d3565c7fbf39edb8b88",
+    "world_size": 1,
+    "per_rank_batch_size": 4,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass",
+    "control_mode": "eval with autograd; identical real training batch and stored weights",
+    "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+    "cpu_loss": 5.61367130279541,
+    "npu_loss": 5.61367130279541,
+    "loss_close": true,
+    "active_gradient_tensors": 158,
+    "all_active_and_inactive_parameters_match": true,
+    "gradient_max_absolute_error": 0.000729717779904604,
+    "gradient_relative_l2_error": 0.0004033544527197348,
+    "gradient_relative_l2_limit": 0.01,
+    "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+    "optimizer_step_parameter_max_error": 7.292255759239197e-07,
+    "optimizer_step_parameters_close": true,
+    "optimizer_parameter_rtol": 0.003,
+    "optimizer_parameter_atol": 0.0003,
+    "failed_parameter_count": 0,
+    "failed_parameter_examples": []
+  },
+  "benchmark_1p": {
+    "model": "mobilenetv2",
+    "check": "benchmark",
+    "data_scope": "public_imagenette_functional_subset",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+    "world_size": 1,
+    "per_rank_batch_size": 4,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 2.285564661026001,
+    "global_samples_per_second": 87.50572819507065,
+    "latency_p50_seconds": 0.04522515647113323,
+    "latency_p95_seconds": 0.04741714745759964,
+    "peak_allocated_bytes_local_rank": 384053248,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "benchmark_2p": {
+    "model": "mobilenetv2",
+    "check": "benchmark",
+    "data_scope": "public_imagenette_functional_subset",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+    "world_size": 2,
+    "per_rank_batch_size": 4,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 2.6126365661621094,
+    "global_samples_per_second": 153.1020445708562,
+    "latency_p50_seconds": 0.051396483555436134,
+    "latency_p95_seconds": 0.056474670022726055,
+    "peak_allocated_bytes_local_rank": 398892032,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "stability": [
+    {
+      "model": "mobilenetv2",
+      "check": "stability",
+      "data_scope": "public_imagenette_functional_subset",
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      },
+      "source_checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+      "world_size": 2,
+      "per_rank_batch_size": 4,
+      "deterministic_algorithms": true,
+      "formal_accuracy_claimed": false,
+      "result": "pass_sustained_real_data_training",
+      "requested_seconds": 1800,
+      "actual_training_seconds": 1800.5013743699528,
+      "updates_this_run": 33570,
+      "last_loss": 0.26151686906814575,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "parameters_updated": true,
+      "parameter_sha256": "27f49666ad5e3adba3be2c05678d9ee5b74fc3014c2702812d1bfeba4daa1f57",
+      "all_rank_parameter_hashes_match": true,
+      "batchnorm_buffers_not_claimed_identical": true
+    },
+    {
+      "model": "mobilenetv2",
+      "check": "stability",
+      "data_scope": "public_imagenette_functional_subset",
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      },
+      "source_checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+      "world_size": 2,
+      "per_rank_batch_size": 4,
+      "deterministic_algorithms": true,
+      "formal_accuracy_claimed": false,
+      "result": "pass_sustained_real_data_training",
+      "requested_seconds": 1800,
+      "actual_training_seconds": 1800.4966850799974,
+      "updates_this_run": 33570,
+      "last_loss": 0.11707395315170288,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "parameters_updated": true,
+      "parameter_sha256": "27f49666ad5e3adba3be2c05678d9ee5b74fc3014c2702812d1bfeba4daa1f57",
+      "all_rank_parameter_hashes_match": true,
+      "batchnorm_buffers_not_claimed_identical": true
+    }
+  ],
+  "stability_reload": {
+    "model": "mobilenetv2",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "2beb523ac36f0eb19c78c0205e35c1cdfad29d7c9750b1dc46aac9ee5991dcf9",
+    "optimizer_steps": 33580,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 2.47955322265625e-05,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "public_imagenette_functional_subset",
+    "metrics": {
+      "held_out_images": 40,
+      "correct_top1": 19,
+      "top1": 0.475,
+      "correct_top5": 37,
+      "top5": 0.925,
+      "class_head": 1000,
+      "claim": "subset_functionality_only"
+    },
+    "formal_accuracy_claimed": false,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "legacy_runtime_default_precision": false
+  },
+  "official_imagenet_cpu": {
+    "model": "mobilenetv2",
+    "backend": "cpu",
+    "result": "pass_official_full_validation",
+    "data_scope": "imagenet_2012_official_validation_only",
+    "images_evaluated": 50000,
+    "classes": 1000,
+    "top1_correct": 35935,
+    "top5_correct": 45147,
+    "top1_percent": 71.87,
+    "top5_percent": 90.294,
+    "accuracy_deltas_percentage_points": [
+      0.007999999999995566,
+      0.007999999999995566
+    ],
+    "comparison": "published V1 reference",
+    "weight_sha256": "b03531047ffacf1e2488318dcd2aba1126cde36e3bfe1aa5cb07700aeeee9889",
+    "index_metadata_sha256": "b18b00e747704a66d4c7d9923acbe454c0c2371b0281e9e131e67be9655964e4",
+    "source_architecture_control_passed": true,
+    "every_logit_compared": false,
+    "logits_compared": 0,
+    "logit_max_absolute_error": null,
+    "logits_outside_tolerance": 0,
+    "engineering_acceptance": {
+      "all_logit_rtol": 0.003,
+      "all_logit_atol": 0.003,
+      "top1_top5_delta_percentage_points": 0.1,
+      "note": "Project numerical gates declared before the full evaluation; not a Huawei published accuracy standard."
+    },
+    "total_evaluation_seconds": 1137.1730032600462,
+    "training_from_scratch_claimed": false,
+    "official_pretrained_weights_used": true,
+    "npu_precision": null,
+    "logits_sha256": "496c54e4ae31ce85732cc26a77e03edcd1bdf2eb477b233af95f0ec3d7e0638b"
+  },
+  "official_imagenet_npu": {
+    "model": "mobilenetv2",
+    "backend": "npu",
+    "result": "pass_official_full_validation",
+    "data_scope": "imagenet_2012_official_validation_only",
+    "images_evaluated": 50000,
+    "classes": 1000,
+    "top1_correct": 35935,
+    "top5_correct": 45147,
+    "top1_percent": 71.87,
+    "top5_percent": 90.294,
+    "accuracy_deltas_percentage_points": [
+      0.0,
+      0.0
+    ],
+    "comparison": "independent complete CPU evaluation",
+    "weight_sha256": "b03531047ffacf1e2488318dcd2aba1126cde36e3bfe1aa5cb07700aeeee9889",
+    "index_metadata_sha256": "b18b00e747704a66d4c7d9923acbe454c0c2371b0281e9e131e67be9655964e4",
+    "source_architecture_control_passed": true,
+    "every_logit_compared": true,
+    "logits_compared": 50000000,
+    "logit_max_absolute_error": 6.866455078125e-05,
+    "logits_outside_tolerance": 0,
+    "engineering_acceptance": {
+      "all_logit_rtol": 0.003,
+      "all_logit_atol": 0.003,
+      "top1_top5_delta_percentage_points": 0.1,
+      "note": "Project numerical gates declared before the full evaluation; not a Huawei published accuracy standard."
+    },
+    "total_evaluation_seconds": 76.22194607998244,
+    "training_from_scratch_claimed": false,
+    "official_pretrained_weights_used": true,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    }
+  },
+  "full_data_guard_control": {
+    "model": "mobilenetv2",
+    "result": "pass_actual_functional_manifest_and_two_negative_full_scope_controls",
+    "actual_counts": {
+      "train": 100,
+      "val": 40
+    },
+    "negative_cases": [
+      {
+        "case": "renamed_scope",
+        "result": "rejected",
+        "reason": "数据范围和完整样本数不匹配；不能把功能子集改名为 ImageNet 全集。"
+      },
+      {
+        "case": "renamed_scope_and_declared_counts",
+        "result": "rejected",
+        "reason": "数据清单未覆盖全部图像：train"
+      }
+    ],
+    "source_data_modified": false
+  },
+  "execution": {
+    "model": "MobileNetV2",
+    "status": "completed",
+    "started_at": "2026-10-18T08:49:17.772260+00:00",
+    "phases": [
+      {
+        "phase": "mobilenetv2_fp32_resume_first10",
+        "exit_code": 0,
+        "seconds": 34.76379656791687
+      },
+      {
+        "phase": "mobilenetv2_fp32_resume_target20",
+        "exit_code": 0,
+        "seconds": 41.48923397064209
+      },
+      {
+        "phase": "mobilenetv2_fp32_continuous_target20",
+        "exit_code": 0,
+        "seconds": 41.657949686050415
+      },
+      {
+        "phase": "mobilenetv2_fp32_resume_comparison",
+        "exit_code": 0,
+        "seconds": 2.441662549972534
+      },
+      {
+        "phase": "mobilenetv2_fp32_independent_resumed_reload",
+        "exit_code": 0,
+        "seconds": 16.376410484313965
+      },
+      {
+        "phase": "mobilenetv2_fp32_acceptance_gradient_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 23.67288851737976
+      },
+      {
+        "phase": "mobilenetv2_fp32_acceptance_benchmark1p_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 26.691238403320312
+      },
+      {
+        "phase": "mobilenetv2_fp32_acceptance_benchmark2p_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 29.646152019500732
+      },
+      {
+        "phase": "mobilenetv2_fp32_acceptance_stability_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 1828.4965810775757
+      },
+      {
+        "phase": "mobilenetv2_fp32_independent_stability_reload",
+        "exit_code": 0,
+        "seconds": 18.07296061515808
+      }
+    ],
+    "formal_full_data_accuracy_status": "pending licensed full dataset",
+    "phase": "mobilenetv2_fp32_independent_stability_reload",
+    "resume_input_batch_hashes_all_ranks_match": true,
+    "finished_at": "2026-10-18T09:23:41.096089+00:00"
+  },
+  "official_execution": {
+    "status": "completed",
+    "phase": "imagenet_official_npu_50000",
+    "phases": [
+      {
+        "phase": "imagenet_official_cpu_50000",
+        "exit_code": 0,
+        "seconds": 1177.1654388904572
+      },
+      {
+        "phase": "imagenet_official_npu_50000",
+        "exit_code": 0,
+        "seconds": 105.13854646682739
+      }
+    ],
+    "started_at": "2026-10-18T08:49:36.057388+00:00",
+    "training_from_scratch_claimed": false,
+    "finished_at": "2026-10-18T09:45:00.009942+00:00"
+  },
+  "historical_failures": {
+    "runtime_default_hf32_long_checkpoint": {
+      "result": "measured_precision_configuration_control",
+      "same_weights_same_input": true,
+      "comparison_rtol": 0.003,
+      "comparison_atol": 0.003,
+      "variants": [
+        {
+          "variant": "runtime_default",
+          "conv_allow_hf32": true,
+          "matmul_allow_hf32": false,
+          "cpu_npu_max_error": 0.007048606872558594,
+          "elements_outside_original_tolerance": 1,
+          "matches_original_saved_prediction": true,
+          "saved_prediction_max_error": 0.0
+        },
+        {
+          "variant": "hf32_off",
+          "conv_allow_hf32": false,
+          "matmul_allow_hf32": false,
+          "cpu_npu_max_error": 2.09808349609375e-05,
+          "elements_outside_original_tolerance": 0,
+          "matches_original_saved_prediction": false,
+          "saved_prediction_max_error": 0.007046699523925781
+        }
+      ]
+    }
+  },
+  "remaining": [
+    "600-epoch ImageNet training from scratch has not completed. Full 1281167-image training data and training convergence remain separate gates.",
+    "Imagenette 100/40 functional training and official ImageNet V1 pretrained validation use different weights and are reported separately.",
+    "Classification quality does not validate autonomous-driving detection, segmentation or planning."
+  ],
+  "source_files_sha256": {
+    "tools/check_env.py": "a22e88246ec2f1272ab3f1cb6d275f0dcb2b310fe4cebfe95bd56abbe9c44c23",
+    "tools/check_idle_cards.py": "4eff86932c78cc88bb6781e8144af6a6ad5584cfcea704d09fc16ae5397dad84",
+    "tools/common.py": "c3761f8395157190c454a65faa73f60924cc7e017c26ea08d510d3bb3fbbd40c",
+    "tools/container.py": "cb7a091cee71d43fcb159059806a311fad40c0a75440490604a2edbed004c553",
+    "tools/container_resume_control.py": "04dccbe30c7ea1bc245a3fe4d88d3afd4c7de818e922255c8d3ca4016eb7c4b7",
+    "tools/imagenet_archive.py": "a849e6180196a7841da60b03cf0eb354b9c07ff53403bbb58bf9a5bc7be24fc2",
+    "tools/model_task.py": "c081fa0dd963c52eaa8f4a9cc104be09100032bb60a503a2afdb953985d39adc",
+    "tools/npu_precision.py": "82693d12a85794ed59ac0b7f0a8a4ae5eec224e7770979edf6c13d2ad90b0f27",
+    "tools/prepare_data.py": "00d116758e14640f49fd427f7ef471b5322edbfe67ea594418d7a85d02384a12",
+    "tools/resume_control.py": "f8bee4f78f1119df2f04febc81b688ba2b2af127ba5a3f4159ca117b3b080db6",
+    "tools/revalidate_packaged.py": "5b155addeb20be1ea877383c72c191a185335ac6849dcf2899dcada65537ecc6",
+    "tools/train.py": "72e60faac2da5c6ffdbeb21e0e66592a1191628d9e2773ec7d7ac87d2a590494",
+    "tools/training_state.py": "48f266fbc002e4da8599e2afd401e7b66aafafa820dce50843e4234186950f56",
+    "tools/validate.py": "28918aec59ececec1da2d51fe97b32692ca79afca82a7a7e2d9c76eb7b0ac294",
+    "tools/validate_extended.py": "371088f2cb47662bcfc3940b5a7d5080a98b8bf16ebfb8528e372c9951dbf319",
+    "tools/validate_imagenet.py": "ce249841f8c6b40569e9b0a578035750086fbd9bee24240acdb0424ef401e475",
+    "tools/verify_package.py": "e7a5a3829c66f57a82d41d29812aab79af7ffa1b80a0a1e91dae3e29389f120d"
+  }
+}

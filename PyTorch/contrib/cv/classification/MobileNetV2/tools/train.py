@@ -4,9 +4,11 @@ import datetime
 import json
 import math
 import os
+import random
 from pathlib import Path
 from common import ROOT, PROFILE, own_path, write_json, sha256, finite_tree, parameter_sha, tensor_tree_cpu
 import model_task as task
+from training_state import capture_rng, restore_rng, epoch_loader, batch_digest
 
 
 def main():
@@ -37,6 +39,7 @@ def main():
     import numpy as np
     import torch
     import torch_npu
+    from npu_precision import configure_fp32
     import torch.distributed as dist
     from torch.nn.parallel import DistributedDataParallel
     from torch.utils.data import DataLoader, DistributedSampler
@@ -44,6 +47,9 @@ def main():
     local_rank = int(os.environ.get('LOCAL_RANK', '0'))
     world = int(os.environ.get('WORLD_SIZE', '1'))
     torch.set_num_threads(2)
+    torch.use_deterministic_algorithms(True)
+    settings["deterministic_algorithms"] = True
+    settings['npu_precision'] = configure_fp32(torch_npu)
     torch.manual_seed(42)
     np.random.seed(42)
     torch_npu.npu.set_device(local_rank)
@@ -66,7 +72,12 @@ def main():
     wrapped = DistributedDataParallel(model, device_ids=[local_rank],
         find_unused_parameters=PROFILE.get('find_unused_parameters', False)) if world > 1 else model
     dataset_digest = sha256(data / 'metadata.json')
-    step, start_epoch = 0, 0
+    torch.manual_seed(42 + rank)
+    torch_npu.npu.manual_seed(42 + rank)
+    np.random.seed(42 + rank)
+    random.seed(42 + rank)
+    step, start_epoch, start_batch = 0, 0, 0
+    restored_complete_cursor = False
     if args.resume:
         previous = torch.load(own_path(args.resume, exists=True), map_location='cpu', weights_only=True)
         if previous['model'] != PROFILE['model'] or previous['dataset_digest'] != dataset_digest:
@@ -76,17 +87,31 @@ def main():
         model.load_state_dict(previous['state_dict'], strict=True)
         optimizer.load_state_dict(previous['optimizer'])
         step, start_epoch = previous['step'], previous['epoch']
+        if previous.get('checkpoint_schema_version') == 2:
+            if previous['settings'].get('npu_precision') != settings['npu_precision']:
+                raise RuntimeError('Exact cursor continuation requires identical recorded NPU precision; preserve the old run and start a new FP32 run.')
+            if previous['settings']['batch_size'] != settings['batch_size'] or previous['settings']['lr'] != settings['lr']:
+                raise RuntimeError('Exact cursor continuation requires the original batch size and base learning rate.')
+            start_epoch = previous['resume_cursor']['epoch']
+            start_batch = previous['resume_cursor']['batch_index']
+            restore_rng(previous['rank_rng'][rank], torch_npu, local_rank)
+            restored_complete_cursor = True
+    if settings['steps'] and step >= settings['steps']:
+        raise RuntimeError('The target cumulative update count must exceed the saved update count.')
     initial = parameter_sha(model)
     records = []
     epoch = start_epoch
+    cursor = {"epoch": start_epoch, "batch_index": start_batch}
     for epoch in range(start_epoch, settings['epochs']):
         sampler.set_epoch(epoch)
         model.train()
         if hasattr(task, 'begin_epoch'):
             task.begin_epoch()
-        for batch in loader:
-            if settings['steps'] and step >= settings['steps']:
-                break
+        skip = start_batch if epoch == start_epoch else 0
+        remaining = settings['steps'] - step if settings['steps'] else 0
+        active_loader, total_epoch_batches = epoch_loader(loader, epoch, rank, skip, remaining)
+        for batch_index, batch in enumerate(active_loader, start=skip):
+            input_sha = batch_digest(batch) if args.mode == 'functional' else None
             if args.mode == 'full':
                 task.adjust_learning_rate(optimizer, step, len(loader), settings)
             optimizer.zero_grad(set_to_none=True)
@@ -105,7 +130,9 @@ def main():
             optimizer.step()
             step += 1
             row = {'step': step, 'loss': float(loss.detach().cpu()), 'gradient_norm': gradient_norm,
-                'gradient_tensors': len(gradients), **detail}
+                'gradient_tensors': len(gradients), 'epoch': epoch,
+                'batch_index': batch_index, 'input_batch_sha256': input_sha, **detail}
+            cursor = {'epoch': epoch + 1, 'batch_index': 0} if batch_index + 1 == total_epoch_batches else {'epoch': epoch, 'batch_index': batch_index + 1}
             records.append(row)
             print(json.dumps({'rank': rank, **row}), flush=True)
         if args.mode == 'full' and not hasattr(task, 'adjust_learning_rate'):
@@ -133,10 +160,15 @@ def main():
         'initial_parameter_sha256': initial, 'final_parameter_sha256': final,
         'parameters_updated': True, 'all_parameter_rank_hashes_match': True,
         'state_finite': True, 'optimizer_finite': True, 'records': records})
+    torch.save(capture_rng(torch_npu, local_rank), output / ('checkpoint_rng_rank_' + str(rank) + '.pt'))
+    if world > 1:
+        dist.barrier()
     if rank == 0:
         checkpoint = {'model': PROFILE['model'], 'state_dict': tensor_tree_cpu(model.state_dict()),
             'optimizer': tensor_tree_cpu(optimizer.state_dict()), 'step': step, 'epoch': epoch,
-            'world_size': world, 'dataset_digest': dataset_digest, 'metadata': metadata, 'settings': settings}
+             'world_size': world, 'dataset_digest': dataset_digest, 'metadata': metadata, 'settings': settings,
+            'checkpoint_schema_version': 2, 'resume_cursor': cursor,
+            'rank_rng': [torch.load(output / ('checkpoint_rng_rank_' + str(r) + '.pt'), weights_only=True) for r in range(world)]}
         torch.save(checkpoint, output / 'checkpoint.pt')
         sample = next(iter(DataLoader(validation, batch_size=settings['batch_size'],
             num_workers=0, collate_fn=task.collate)))
@@ -151,7 +183,9 @@ def main():
             'checkpoint_sha256': sha256(output / 'checkpoint.pt'), 'settings': settings,
             'data_scope': metadata['scope'], 'formal_accuracy_claimed': False,
             'resume_from': str(args.resume) if args.resume else None,
-            'resume_is_weight_optimizer_continuation_not_bit_exact_replay': bool(args.resume)})
+             'resume_semantics': 'all_rank_rng_and_epoch_batch_cursor_restored' if restored_complete_cursor else 'legacy_weight_optimizer_continuation' if args.resume else 'new_training',
+            'bit_exact_replay_claimed': False,
+            'resume_cursor': cursor})
     if world > 1:
         dist.barrier()
         dist.destroy_process_group()

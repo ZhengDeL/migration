@@ -19,8 +19,12 @@ def main():
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--lr', type=float)
     parser.add_argument('--resume', type=Path)
+    parser.add_argument('--pause_after_epochs', type=int, help='full-curriculum epoch boundary restart validation')
     parser.add_argument('--plan', action='store_true')
     args = parser.parse_args()
+    if args.mode == 'full':
+        from full_training import main as train_full
+        return train_full(args)
     data = own_path(args.data_path, exists=True)
     metadata = task.check_data(data, args.mode)
     settings = dict(PROFILE['training'][args.mode])

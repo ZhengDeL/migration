@@ -1,8 +1,22 @@
 # ResWorld：Ascend A3 独立训练与验证
 
+
+## 离线包快速复验
+
+完整解压本模型最新 ZIP 后，在本目录执行：
+
+```bash
+bash test/revalidate_packaged_1p.sh --devices 0
+```
+
+该入口自动校验完整文件清单、准备固定镜像，并将随包检查点复制到新的输出目录完成独立 NPU 重载与真实数据验证。结果路径由命令输出给出。重新训练及当前验收边界见 [完整验证指南](FULL_VALIDATION.md)。
+
+
+严格续训、梯度、持续训练、作者权重和原规划/碰撞评测见 [独立扩展验收](FULL_VALIDATION.md)。该指南保留实际失败和正式 full 入口的限制；下文为首次十步功能基线。
+
 ## 模型介绍与来源
 
-使用作者 [mengtan00/ResWorld](https://github.com/mengtan00/ResWorld) 的完整网络与 `resworld_config.py`，固定提交 `a5ae973001dd6001d95b3389020a9e263d73a56e`，2026-10-13 核验仍为默认分支最新提交。网络有 **80,766,238 个参数**，六相机输入、当前帧与两帧历史、R50、256×704 图像、100×100 BEV，输出 3 个导航命令各自的 6 步规划轨迹。
+使用作者 [mengtan00/ResWorld](https://github.com/mengtan00/ResWorld) 的完整网络与 `resworld_config.py`，固定提交 `a5ae973001dd6001d95b3389020a9e263d73a56e`，2026-10-18 核验仍与默认分支 HEAD 一致。网络有 **80,766,238 个参数**，六相机输入、当前帧与两帧历史、R50、256×704 图像、100×100 BEV，输出 3 个导航命令各自的 6 步规划轨迹。
 
 本项目目录参考华为 ModelZoo 的独立 README、test 脚本、训练输出及验证记录组织方式。作者原始 CUDA 配套为 PyTorch 1.9.1、MMCV 1.4.0、MMDetection3D 0.17.1；以下是本项目实际验证的昇腾配套。
 
@@ -10,15 +24,15 @@
 
 | 项目 | 本次实测 |
 | --- | --- |
-| 机器 | 用户提供的 1#，ARM64 Atlas 800I A3 |
-| 卡数 | 4 张物理卡，宿主逻辑 ID `0,2,4,6` |
+| 机器 | 本轮为用户新增 ARM64 Atlas 800I A3；早期1#结果保留历史日期 |
+| 卡数 | 本轮4张物理卡，实测逻辑 ID `4,6,12,14`；默认示例 `0,2,4,6` 可按空闲卡调整 |
 | 镜像 tag | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` |
 | 实际 image ID | `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2` |
 | 官方基镜像 manifest | `swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801` |
 | 配套 | CANN 9.1.0，Python 3.10.21，PyTorch 2.7.1+cpu，TorchNPU 2.7.1.post6，DrivingSDK 26.1.0.post2 |
 | MMLab | MMCV 1.7.2，MMDetection 2.24.0，MMDetection3D 1.0.0rc4 |
 | 容器资源 | 主机内存上限 96 GiB、16 CPU、8 GiB shm |
-| 精度 / 通信 | FP32 / 原生 HCCL DDP |
+| 精度 / 通信 | 显式FP32 / 确定性同步HCCL mean allreduce；按检查点记录核对 |
 
 一张 A3 物理卡有两个逻辑 ID，这里每张物理卡只选择一个。Atlas 800I A3 是推理系列；本次实验成功不改变官方训练硬件支持范围。镜像包含本次验证的头部无显示 OpenCV 依赖，实际镜像归档和 hash 固定于 `images.lock.json`。
 
@@ -65,7 +79,8 @@ NPU 容器退出后可能需数秒释放设备。入口记录本模型上一容�
 | 改动 | 实际依据及范围 |
 | --- | --- |
 | 旧 ROI 接口 import | 当前 MMLab 使用 `mmcv.ops.points_in_boxes_part` 兼容旧名称；完整网络 import / 训练已通过，该方法没有被当前相机规划训练调用，未声明 ROI 算子数值验收 |
-| 可变形注意力 | NPU 明确调用 DrivingSDK 公共 `multi_scale_deformable_attn`，保持原始 query / heads / sampling 配置；CPU 使用 MMCV 原始 PyTorch 对照 |
+| 可变形注意力 | 新训练autograd使用原MMCV公式与原生NPU算子；no_grad推理仍调用DrivingSDK公共API，保持query/heads/sampling配置；CPU使用原MMCV公式 |
+| 梯度通信 | 显式启用HCCL确定性，公开DDP hook在NPU同步平均归约；保存配置并记录实际调用，严格续训拒绝跨配置 |
 | ResNet MaxPool | 镜像内的 fused MaxPool 无 backward；以可训练 ATen MaxPool 恢复原始 3×3、stride 2、padding 1、ceil_mode=False 几何 |
 | 标定矩阵 | 原始 FP64 inverse / matrix product 在 CPU 计算后转 FP32 NPU，避免不受支持的 NPU double 隐式降精度；标定数据无梯度 |
 | 数据传送 | 读取原始 DataContainer 后显式传送实际输入 Tensor，避开旧 CUDA scatter stream API；未使用伪造设备状态 |
@@ -75,13 +90,17 @@ NPU 容器退出后可能需数秒释放设备。入口记录本模型上一容�
 
 本次功能训练为随机初始化、每 rank batch=1、AdamW lr=1e-4、weight_decay=0.01、gradient clip=35，四卡各 10 个优化器 step（全局累计为 10）。保留作者网络、深度损失和两项规划损失。功能协议未加载 GeoBEV 预训练，也未实现作者完整 12 epoch、500 iteration warmup、EMA 与 SyncBN hook 的验收；full 入口会拒绝运行，避免误称完整训练已可验收。
 
-续训接口恢复权重 / 优化器并核对模型、数据和 rank 数；本轮未做续训验收，随机数及 sampler 逐 bit 重放也未验收：
+新 schema2 保存完整游标和各 rank RNG，并核对模型、数据、rank、精度和注意力/通信配置。当前公开入口已完成四卡10＋10与连续20步控制：2054/2054状态张量逐位相同。CPU/NPU梯度仍有未通过项，不能据此宣布整体数值验收通过。使用新输出目录保存初始10步，再从该配置检查点恢复：
 
 ```bash
-bash test/train_4p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt" --steps 20
+bash test/train_4p.sh --devices 0,2,4,6 --steps 10 \
+  --output_dir "$PWD/test/output/first10_new"
+bash test/train_4p.sh --devices 0,2,4,6 --steps 20 \
+  --resume "$PWD/test/output/first10_new/checkpoint.pt" \
+  --output_dir "$PWD/test/output/resumed20_new"
 ```
 
-## 实机验证结果
+## 首次十步功能结果（历史基线）
 
 | 项目 | 本次实测 |
 | --- | --- |
@@ -93,7 +112,7 @@ bash test/train_4p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 | 3s 终点误差 | 6.76100 m |
 | checkpoint SHA256 | `7005808e22a08884bacd10f620b308858f1f0a40aa17dfa2961ff009b2ff0ebf` |
 
-规划指标按命令选择一条轨迹、累计预测 offset，在前 2 / 4 / 6 个点计算平均欧氏误差，保留全部有效未来帧。**没有完成碰撞率、论文整套指标、正式任务精度或生产安全验收**。随机初始化 10 步的数值不能与作者完整训练精度表比较。
+上表为首次十步功能基线，未做碰撞控制。后续已用作者完整权重完成65帧原规划/碰撞CPU/NPU对照，见独立扩展指南；完整trainval、论文精度和生产安全未验收。随机初始化短训练指标不能与作者完整训练精度表比较。
 
 证据：[训练摘要](validation/train_result.json)、[rank 0](validation/rank_0.json)、[rank 1](validation/rank_1.json)、[rank 2](validation/rank_2.json)、[rank 3](validation/rank_3.json)、[独立重载与验证](validation/validation_result.json)、[数据范围](validation/data_summary.json)、[显式 patch](validation/patch_manifest.json)。
 
@@ -117,4 +136,4 @@ bash test/train_4p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 python3 test/test_prepare_source_concurrency.py --workers 4 --rounds 16 --output "$PWD/test/output/source_concurrency.json"
 ```
 
-本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。
+本节是第二台机器十步功能复验及文件锁修复的历史记录。随后扩展的严格恢复、梯度、吞吐、30分钟与作者权重评测按独立指南逐项判定；正式trainval/12epoch与驾驶业务未验收，CPU/NPU梯度失败仍需解决。

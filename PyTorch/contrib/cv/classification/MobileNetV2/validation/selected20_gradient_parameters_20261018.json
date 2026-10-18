@@ -1,0 +1,1138 @@
+{
+  "model": "mobilenetv2",
+  "check": "gradient",
+  "data_scope": "public_imagenette_functional_subset",
+  "npu_precision": {
+    "conv_allow_hf32": false,
+    "matmul_allow_hf32": false
+  },
+  "source_checkpoint_sha256": "7e19d3cd2ef79a126adbd7a18866db990676f3ff753e9d3565c7fbf39edb8b88",
+  "world_size": 1,
+  "per_rank_batch_size": 4,
+  "deterministic_algorithms": true,
+  "formal_accuracy_claimed": false,
+  "result": "pass",
+  "control_mode": "eval with autograd; identical real training batch and stored weights",
+  "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+  "cpu_loss": 5.61367130279541,
+  "npu_loss": 5.61367130279541,
+  "loss_close": true,
+  "active_gradient_tensors": 158,
+  "all_active_and_inactive_parameters_match": true,
+  "gradient_max_absolute_error": 0.000729717779904604,
+  "gradient_relative_l2_error": 0.0004033544527197348,
+  "gradient_relative_l2_limit": 0.01,
+  "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+  "optimizer_step_parameter_max_error": 7.292255759239197e-07,
+  "optimizer_step_parameters_close": true,
+  "optimizer_parameter_rtol": 0.003,
+  "optimizer_parameter_atol": 0.0003,
+  "parameters": [
+    {
+      "parameter": "features.0.0.weight",
+      "active": true,
+      "max_absolute_error": 3.078071131312754e-11,
+      "reference_max": 4.751163942273706e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.3102408047416247e-11,
+      "reference_max": 2.4326146785824676e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.582378672537743e-11,
+      "reference_max": 2.1139481987120234e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 8.320510946902004e-11,
+      "reference_max": 6.802306415920611e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.971756091734278e-11,
+      "reference_max": 1.794800112975281e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 5.413269832388323e-11,
+      "reference_max": 2.843678146291495e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.1.weight",
+      "active": true,
+      "max_absolute_error": 2.6048496692965273e-11,
+      "reference_max": 2.214548402434957e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 2.3453239350601507e-11,
+      "reference_max": 1.182247046926932e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.1.conv.2.bias",
+      "active": true,
+      "max_absolute_error": 3.807087978202617e-11,
+      "reference_max": 2.4087586325549637e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 1.0733458566392073e-10,
+      "reference_max": 4.3390440396251506e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 2.5011104298755527e-11,
+      "reference_max": 2.2160078572142083e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 6.306777322606649e-11,
+      "reference_max": 2.505811664832436e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 3.380625912541291e-08,
+      "reference_max": 1.5146415535127744e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.659827830735594e-11,
+      "reference_max": 1.765435087008882e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 1.6123502533105238e-10,
+      "reference_max": 9.56798885454191e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 6.122924389728723e-11,
+      "reference_max": 2.4993090619318536e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 5.701394911739044e-11,
+      "reference_max": 3.283354601535393e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.2.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.8327739326196024e-10,
+      "reference_max": 8.519316452293424e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 7.172573646130331e-11,
+      "reference_max": 2.3047262232012145e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1581846592889633e-11,
+      "reference_max": 7.164677384707829e-08,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 3.8198777474462986e-11,
+      "reference_max": 1.6308707984080684e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.7829472060147964e-10,
+      "reference_max": 4.997828000341542e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.517896919267514e-11,
+      "reference_max": 8.050588462538144e-08,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 1.5061596414511769e-10,
+      "reference_max": 7.090662279551907e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 2.9655167210762556e-11,
+      "reference_max": 7.583727068549706e-08,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 7.30508986634959e-11,
+      "reference_max": 5.338289383871597e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.3.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.851709896527609e-10,
+      "reference_max": 6.935705414434779e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 9.954099766673608e-10,
+      "reference_max": 2.0889469851681497e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.6291923365940875e-10,
+      "reference_max": 7.478715815523174e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 5.329389152208819e-10,
+      "reference_max": 1.2272921594558284e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.542587935749907e-07,
+      "reference_max": 5.827261702506803e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 9.7323538117422e-13,
+      "reference_max": 5.695933964489086e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 2.379188401846477e-09,
+      "reference_max": 3.0611395231971983e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 3.979039320256561e-13,
+      "reference_max": 6.267206913435075e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 1.0231815394945443e-12,
+      "reference_max": 1.1263502983638318e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.4.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.3642420526593924e-12,
+      "reference_max": 2.92221238851198e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 8.242295734817162e-13,
+      "reference_max": 8.398911290896649e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.0658141036401503e-13,
+      "reference_max": 2.5569440254002984e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.8421709430404007e-13,
+      "reference_max": 6.376800456564524e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 7.73070496506989e-12,
+      "reference_max": 4.994701612304198e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1546319456101628e-13,
+      "reference_max": 3.2935116678345366e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 1.1652900866465643e-12,
+      "reference_max": 2.3492304990213597e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.9184653865522705e-13,
+      "reference_max": 2.965205965210771e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 7.958078640513122e-13,
+      "reference_max": 1.3522439985536039e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.5.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.3073986337985843e-12,
+      "reference_max": 2.837860847648699e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 5.684341886080801e-13,
+      "reference_max": 1.0186992085436941e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.4210854715202004e-13,
+      "reference_max": 4.1553525420567894e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.2737367544323206e-13,
+      "reference_max": 5.495675168276648e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 6.366462912410498e-12,
+      "reference_max": 4.25644338974962e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 8.526512829121202e-14,
+      "reference_max": 3.2035836738941725e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 1.0800249583553523e-12,
+      "reference_max": 2.0621948806365253e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.8474111129762605e-13,
+      "reference_max": 2.6881957637669984e-07,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 1.0800249583553523e-12,
+      "reference_max": 1.6897062096177251e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.6.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.3642420526593924e-12,
+      "reference_max": 2.5166739305859664e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 8.640199666842818e-12,
+      "reference_max": 1.4824867321294732e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1368683772161603e-12,
+      "reference_max": 3.3514340884721605e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.2737367544323206e-12,
+      "reference_max": 7.137240572774317e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 6.408727131201886e-06,
+      "reference_max": 2.633004987728782e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 7.958078640513122e-13,
+      "reference_max": 1.7680310975265456e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 9.094947017729282e-12,
+      "reference_max": 1.892801810754463e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.8189894035458565e-12,
+      "reference_max": 3.1562403819407336e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 5.9117155615240335e-12,
+      "reference_max": 1.954665822267998e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.7.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.1368683772161603e-11,
+      "reference_max": 1.9358654753887095e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 1.0913936421275139e-11,
+      "reference_max": 1.8529888620832935e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 2.085442929455894e-12,
+      "reference_max": 2.301210770383477e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.7284841053187847e-12,
+      "reference_max": 6.852342266938649e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.000888343900442e-11,
+      "reference_max": 1.945042095030658e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.3251622021925868e-12,
+      "reference_max": 1.7379645669279853e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-12,
+      "reference_max": 2.1406773157650605e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.3642420526593924e-12,
+      "reference_max": 2.7868838969880017e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 8.86757334228605e-12,
+      "reference_max": 1.1234698831685819e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.8.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.1823431123048067e-11,
+      "reference_max": 1.953825085365679e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 8.185452315956354e-12,
+      "reference_max": 9.080597919819411e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.7053025658242404e-12,
+      "reference_max": 1.861987698248413e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.7284841053187847e-12,
+      "reference_max": 3.82319240088691e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 3.092281986027956e-11,
+      "reference_max": 2.6530195100349374e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.0800249583553523e-12,
+      "reference_max": 1.8391223193248152e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-12,
+      "reference_max": 1.7528784155729227e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.0231815394945443e-12,
+      "reference_max": 1.8190738728662836e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 5.7980287238024175e-12,
+      "reference_max": 1.6214793504332192e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.9.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.1368683772161603e-11,
+      "reference_max": 2.0157041944912635e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 5.229594535194337e-12,
+      "reference_max": 1.4340038433147129e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.5916157281026244e-12,
+      "reference_max": 3.0695423447468784e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.2737367544323206e-12,
+      "reference_max": 6.430886060115881e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.3646862246096134e-11,
+      "reference_max": 2.5535693566780537e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 9.57456336436735e-13,
+      "reference_max": 1.4009191318109515e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-12,
+      "reference_max": 1.4757045391888823e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.1368683772161603e-12,
+      "reference_max": 2.022517492150655e-06,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 9.094947017729282e-12,
+      "reference_max": 1.92724746739259e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.10.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.0913936421275139e-11,
+      "reference_max": 2.0125533410464413e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.00014224371989257634,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.8189894035458565e-11,
+      "reference_max": 1.6991134543786757e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.8189894035458565e-11,
+      "reference_max": 4.2436357034603134e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 3.2014213502407074e-10,
+      "reference_max": 0.00036876898957416415,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.2732925824820995e-11,
+      "reference_max": 2.1574987840722315e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-11,
+      "reference_max": 0.00020319994655437768,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 2.000888343900442e-11,
+      "reference_max": 4.4964737753616646e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 6.548361852765083e-11,
+      "reference_max": 0.000169720224221237,
+      "pass": true
+    },
+    {
+      "parameter": "features.11.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-11,
+      "reference_max": 0.00024632993154227734,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.00015711491869296879,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.0913936421275139e-11,
+      "reference_max": 4.294590689823963e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.2732925824820995e-11,
+      "reference_max": 5.483113636728376e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.6193447411060333e-10,
+      "reference_max": 0.000473585823783651,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 8.185452315956354e-12,
+      "reference_max": 2.683582169993315e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.0002050304610747844,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.0913936421275139e-11,
+      "reference_max": 2.2740803615306504e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-11,
+      "reference_max": 0.00018516347336117178,
+      "pass": true
+    },
+    {
+      "parameter": "features.12.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-11,
+      "reference_max": 0.0002550340723246336,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-11,
+      "reference_max": 0.00018302009266335517,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.0913936421275139e-11,
+      "reference_max": 4.038017868879251e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.4551915228366852e-11,
+      "reference_max": 7.768815703457221e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 3.2014213502407074e-10,
+      "reference_max": 0.00044284851173870265,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 5.4569682106375694e-12,
+      "reference_max": 1.6639032764942385e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.00018706009723246098,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.1823431123048067e-11,
+      "reference_max": 2.354539537918754e-05,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.00020956872322130948,
+      "pass": true
+    },
+    {
+      "parameter": "features.13.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-11,
+      "reference_max": 0.0002494392974767834,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 4.0745362639427185e-10,
+      "reference_max": 0.0012856717221438885,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1641532182693481e-10,
+      "reference_max": 0.00032187486067414284,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.8189894035458565e-10,
+      "reference_max": 0.0004906319081783295,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 0.000729717779904604,
+      "reference_max": 0.005560827907174826,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 9.640643838793039e-11,
+      "reference_max": 0.00022661453112959862,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 8.003553375601768e-10,
+      "reference_max": 0.002875897567719221,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 2.000888343900442e-10,
+      "reference_max": 0.0005443713162094355,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 6.984919309616089e-10,
+      "reference_max": 0.002144447062164545,
+      "pass": true
+    },
+    {
+      "parameter": "features.14.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 9.313225746154785e-10,
+      "reference_max": 0.0028787897899746895,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 3.4924596548080444e-10,
+      "reference_max": 0.0009800468105822802,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 5.820766091346741e-11,
+      "reference_max": 0.0002528386248741299,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.3096723705530167e-10,
+      "reference_max": 0.0003594813751988113,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.7939677238464355e-09,
+      "reference_max": 0.004269097000360489,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 7.275957614183426e-11,
+      "reference_max": 0.00019065880042035133,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 8.149072527885437e-10,
+      "reference_max": 0.0021739823278039694,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-11,
+      "reference_max": 0.00021387732704170048,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 8.003553375601768e-10,
+      "reference_max": 0.0023341146297752857,
+      "pass": true
+    },
+    {
+      "parameter": "features.15.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 9.89530235528946e-10,
+      "reference_max": 0.002817843807861209,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 2.9103830456733704e-10,
+      "reference_max": 0.0011357518378645182,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1641532182693481e-10,
+      "reference_max": 0.0005278267781250179,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 1.0186340659856796e-10,
+      "reference_max": 0.0004032455035485327,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 2.7939677238464355e-09,
+      "reference_max": 0.006621321197599173,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-11,
+      "reference_max": 0.00041491148294880986,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 8.149072527885437e-10,
+      "reference_max": 0.002449962543323636,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 1.6007106751203537e-10,
+      "reference_max": 0.0003587134415283799,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 8.731149137020111e-10,
+      "reference_max": 0.002336477395147085,
+      "pass": true
+    },
+    {
+      "parameter": "features.16.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.0186340659856796e-09,
+      "reference_max": 0.0027206966187804937,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.0.0.weight",
+      "active": true,
+      "max_absolute_error": 5.587935447692871e-09,
+      "reference_max": 0.016220105811953545,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.0.1.weight",
+      "active": true,
+      "max_absolute_error": 1.6298145055770874e-09,
+      "reference_max": 0.003298280294984579,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.0.1.bias",
+      "active": true,
+      "max_absolute_error": 2.0954757928848267e-09,
+      "reference_max": 0.0053819892928004265,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.1.0.weight",
+      "active": true,
+      "max_absolute_error": 4.0978193283081055e-08,
+      "reference_max": 0.09169615060091019,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.1.1.weight",
+      "active": true,
+      "max_absolute_error": 1.3969838619232178e-09,
+      "reference_max": 0.0027132516261190176,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.1.1.bias",
+      "active": true,
+      "max_absolute_error": 1.4901161193847656e-08,
+      "reference_max": 0.040973223745822906,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.2.weight",
+      "active": true,
+      "max_absolute_error": 2.6775524020195007e-09,
+      "reference_max": 0.006989079061895609,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.3.weight",
+      "active": true,
+      "max_absolute_error": 1.3969838619232178e-08,
+      "reference_max": 0.05538574233651161,
+      "pass": true
+    },
+    {
+      "parameter": "features.17.conv.3.bias",
+      "active": true,
+      "max_absolute_error": 1.4493707567453384e-08,
+      "reference_max": 0.04333161190152168,
+      "pass": true
+    },
+    {
+      "parameter": "features.18.0.weight",
+      "active": true,
+      "max_absolute_error": 4.470348358154297e-08,
+      "reference_max": 0.04693062603473663,
+      "pass": true
+    },
+    {
+      "parameter": "features.18.1.weight",
+      "active": true,
+      "max_absolute_error": 1.210719347000122e-08,
+      "reference_max": 0.020154237747192383,
+      "pass": true
+    },
+    {
+      "parameter": "features.18.1.bias",
+      "active": true,
+      "max_absolute_error": 2.421438694000244e-08,
+      "reference_max": 0.02593197673559189,
+      "pass": true
+    },
+    {
+      "parameter": "classifier.1.weight",
+      "active": true,
+      "max_absolute_error": 1.1920928955078125e-07,
+      "reference_max": 0.7110477089881897,
+      "pass": true
+    },
+    {
+      "parameter": "classifier.1.bias",
+      "active": true,
+      "max_absolute_error": 1.4901161193847656e-08,
+      "reference_max": 0.4958150386810303,
+      "pass": true
+    }
+  ]
+}

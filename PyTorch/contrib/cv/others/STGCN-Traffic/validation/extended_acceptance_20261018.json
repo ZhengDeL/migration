@@ -1,0 +1,564 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-18",
+  "model": "STGCN-Traffic",
+  "machine": "user_provided_second_A3_validation_host",
+  "actual_npu_execution": true,
+  "architecture": "aarch64",
+  "board": "IT22HMDA_4_S",
+  "hardware_series": "Atlas 800I A3 inference series; experiments do not change official training support",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image": {
+    "role": "runtime",
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+    "models": [
+      "stgcn-traffic"
+    ],
+    "versions": {
+      "cann": "9.1.0",
+      "python": "3.10.21",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post6",
+      "mx_driving": "26.1.0.post2"
+    },
+    "archive": {
+      "filename": "drivingsdk_headless.tar.gz",
+      "bytes": 9272909176,
+      "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+      "saved_image_count": 1
+    }
+  },
+  "runtime": {
+    "python": "3.10.21",
+    "CANN": "9.1.0",
+    "torch": "2.7.1+cpu",
+    "torch_npu": "2.7.1.post6",
+    "mx_driving": "26.1.0.post2"
+  },
+  "numerical_gates": "Declared before evaluation; not a Huawei business-accuracy or performance standard.",
+  "performance_context": "Other model jobs shared host CPU, storage and different physical NPUs. No production throughput target provided.",
+  "formal_business_acceptance_claimed": false,
+  "result": "pass_full_pemsd7_training_numerical_resume_and_stability_checks",
+  "tested_host_logical_ids": [
+    12,
+    14
+  ],
+  "tested_physical_ids": [
+    6,
+    7
+  ],
+  "full_training": {
+    "model": "stgcn-traffic",
+    "mode": "full",
+    "result": "complete_epoch_training_and_held_out_test_finished",
+    "world_size": 2,
+    "optimizer_steps": 14404,
+    "epochs_completed": 52,
+    "stop_reason": "early_stopping",
+    "best_epoch": 42,
+    "best_validation_mse": 0.1616048514842987,
+    "dataset_digest": "f235b6ef348fff340cb1794b8dc8d02d763da80f3d6cc80adfa45ae85f5357fc",
+    "data_scope": "pemsd7-m_full_chronological",
+    "settings": {
+      "steps": 0,
+      "epochs": 1000,
+      "batch_size": 16,
+      "lr": 0.001,
+      "global_batch_size": 32,
+      "early_stopping_patience": 10,
+      "deterministic_algorithms": true,
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      }
+    },
+    "data_path": "data/full",
+    "checkpoint_sha256": "cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae",
+    "latest_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+    "cpu_npu_max_absolute_error": 1.2516975402832031e-06,
+    "full_validation": {
+      "windows": 1885,
+      "points": 429780,
+      "mae": 2.407789175985689,
+      "rmse": 4.205520891037929,
+      "wmape_ratio": 0.04128161225029809,
+      "wmape_percent": 4.128161225029809,
+      "forecast_minutes": 15,
+      "units": "original_speed_values"
+    },
+    "held_out_test": {
+      "windows": 1885,
+      "points": 429780,
+      "mae": 2.3743455410531493,
+      "rmse": 4.129394309690578,
+      "wmape_ratio": 0.0408839459785719,
+      "wmape_percent": 4.0883945978571905,
+      "forecast_minutes": 15,
+      "units": "original_speed_values"
+    },
+    "full_reference_protocol_completed": true,
+    "test_split_used_for_selection": false,
+    "formal_accuracy_claimed": false,
+    "resume_from": "<VALIDATION_ROOT>/STGCN-Traffic/test/output/full_resume_epoch2_fp32_20261018/latest.pt"
+  },
+  "full_prediction_control": {
+    "model": "stgcn-traffic",
+    "result": "pass",
+    "checkpoint_sha256": "cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae",
+    "data_scope": "pemsd7-m_full_chronological",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "prediction_rtol": 0.003,
+    "prediction_atol": 0.003,
+    "splits": {
+      "val": {
+        "windows": 1885,
+        "output_elements_compared": 429780,
+        "max_absolute_error_normalized": 4.5299530029296875e-06,
+        "elements_outside_tolerance": 0,
+        "cpu_metrics": {
+          "windows": 1885,
+          "points": 429780,
+          "mae": 2.407789174480778,
+          "rmse": 4.205520879510333,
+          "wmape_ratio": 0.04128161222449635,
+          "wmape_percent": 4.128161222449635,
+          "forecast_minutes": 15,
+          "units": "original_speed_values"
+        },
+        "npu_metrics": {
+          "windows": 1885,
+          "points": 429780,
+          "mae": 2.407789175985689,
+          "rmse": 4.205520891037929,
+          "wmape_ratio": 0.04128161225029809,
+          "wmape_percent": 4.128161225029809,
+          "forecast_minutes": 15,
+          "units": "original_speed_values"
+        }
+      },
+      "test": {
+        "windows": 1885,
+        "output_elements_compared": 429780,
+        "max_absolute_error_normalized": 4.76837158203125e-06,
+        "elements_outside_tolerance": 0,
+        "cpu_metrics": {
+          "windows": 1885,
+          "points": 429780,
+          "mae": 2.3743455323266267,
+          "rmse": 4.129394297554209,
+          "wmape_ratio": 0.04088394582830958,
+          "wmape_percent": 4.088394582830958,
+          "forecast_minutes": 15,
+          "units": "original_speed_values"
+        },
+        "npu_metrics": {
+          "windows": 1885,
+          "points": 429780,
+          "mae": 2.3743455410531493,
+          "rmse": 4.129394309690578,
+          "wmape_ratio": 0.0408839459785719,
+          "wmape_percent": 4.0883945978571905,
+          "forecast_minutes": 15,
+          "units": "original_speed_values"
+        }
+      }
+    },
+    "validation_used_for_selection": true,
+    "test_used_for_selection": false,
+    "formal_business_accuracy_claimed": false
+  },
+  "independent_reload": {
+    "model": "stgcn-traffic",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae",
+    "optimizer_steps": 11634,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 1.2516975402832031e-06,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "pemsd7-m_full_chronological",
+    "metrics": {
+      "held_out_windows": 1885,
+      "mae": 2.4077891572977745,
+      "rmse": 4.205520886457858,
+      "mape_percent": 6.11192000184642,
+      "forecast_minutes": 15,
+      "metric_units": "original_speed_values",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false,
+    "checkpoint_role": "validation_selected_best_model",
+    "optimizer_state_checked": false,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "legacy_runtime_default_precision": false
+  },
+  "resume_control": {
+    "result": "pass_uninterrupted_vs_epoch_boundary_resume",
+    "epochs": 2,
+    "optimizer_steps": 554,
+    "compared": "all model tensors, optimizer, scheduler, selected-best model, counters and every rank RNG",
+    "rtol": 1e-05,
+    "atol": 1e-06,
+    "tensors": 164,
+    "bit_equal_tensors": 164,
+    "max_absolute_error": 0.0
+  },
+  "gradient_control": {
+    "model": "stgcn-traffic",
+    "check": "gradient",
+    "mode": "full",
+    "data_scope": "pemsd7-m_full_chronological",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+    "world_size": 1,
+    "per_rank_batch_size": 16,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass",
+    "control_mode": "eval with autograd; identical real training batch and stored weights",
+    "optimizer_state_source": "fresh identical optimizers for a one-step numerical control; separate continuation tests restore saved optimizer state",
+    "cpu_loss": 0.08269216120243073,
+    "npu_loss": 0.08269216120243073,
+    "loss_close": true,
+    "active_gradient_tensors": 28,
+    "all_active_and_inactive_parameters_match": true,
+    "gradient_max_absolute_error": 8.568167686462402e-08,
+    "gradient_relative_l2_error": 8.635463798401314e-07,
+    "gradient_relative_l2_limit": 0.01,
+    "gradient_per_tensor_limit": "0.001 + 0.01 * reference_max",
+    "optimizer_step_parameter_max_error": 2.2798776626586914e-06,
+    "optimizer_step_parameters_close": true,
+    "optimizer_parameter_rtol": 0.003,
+    "optimizer_parameter_atol": 0.0003,
+    "failed_parameter_count": 0,
+    "failed_parameter_examples": []
+  },
+  "benchmark_1p": {
+    "model": "stgcn-traffic",
+    "check": "benchmark",
+    "mode": "full",
+    "data_scope": "pemsd7-m_full_chronological",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+    "world_size": 1,
+    "per_rank_batch_size": 16,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 0.6235396862030029,
+    "global_samples_per_second": 1282.997726851259,
+    "latency_p50_seconds": 0.012228779960423708,
+    "latency_p95_seconds": 0.013566862046718597,
+    "peak_allocated_bytes_local_rank": 155953152,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "benchmark_2p": {
+    "model": "stgcn-traffic",
+    "check": "benchmark",
+    "mode": "full",
+    "data_scope": "pemsd7-m_full_chronological",
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+    "world_size": 2,
+    "per_rank_batch_size": 16,
+    "deterministic_algorithms": true,
+    "formal_accuracy_claimed": false,
+    "result": "pass_measured_real_training_throughput",
+    "warmup_updates": 10,
+    "timed_updates": 50,
+    "timed_seconds": 0.9454732537269592,
+    "global_samples_per_second": 1692.2742062696782,
+    "latency_p50_seconds": 0.01885743997991085,
+    "latency_p95_seconds": 0.021097044926136732,
+    "peak_allocated_bytes_local_rank": 159904256,
+    "includes": "real data loading, host-to-NPU, forward, backward, optimizer; synchronized each update",
+    "scaling_method": "constant per-rank batch; compare separately measured 1p and multiprocess runs",
+    "performance_target_provided": false
+  },
+  "stability": [
+    {
+      "model": "stgcn-traffic",
+      "check": "stability",
+      "mode": "full",
+      "data_scope": "pemsd7-m_full_chronological",
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      },
+      "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+      "world_size": 2,
+      "per_rank_batch_size": 16,
+      "deterministic_algorithms": true,
+      "formal_accuracy_claimed": false,
+      "result": "pass_sustained_real_data_training",
+      "requested_seconds": 1800,
+      "actual_training_seconds": 1800.1396107500186,
+      "updates_this_run": 86190,
+      "last_loss": 0.14918221533298492,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "parameters_updated": true,
+      "parameter_sha256": "474bcdaf04eb12c1fcef288d4bc50cc75210ad77ad27be5a8a892387deed43c7",
+      "all_rank_parameter_hashes_match": true,
+      "batchnorm_buffers_not_claimed_identical": true
+    },
+    {
+      "model": "stgcn-traffic",
+      "check": "stability",
+      "mode": "full",
+      "data_scope": "pemsd7-m_full_chronological",
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      },
+      "source_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+      "world_size": 2,
+      "per_rank_batch_size": 16,
+      "deterministic_algorithms": true,
+      "formal_accuracy_claimed": false,
+      "result": "pass_sustained_real_data_training",
+      "requested_seconds": 1800,
+      "actual_training_seconds": 1800.128566290019,
+      "updates_this_run": 86190,
+      "last_loss": 0.12293706834316254,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "parameters_updated": true,
+      "parameter_sha256": "474bcdaf04eb12c1fcef288d4bc50cc75210ad77ad27be5a8a892387deed43c7",
+      "all_rank_parameter_hashes_match": true,
+      "batchnorm_buffers_not_claimed_identical": true
+    }
+  ],
+  "stability_reload": {
+    "model": "stgcn-traffic",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "545fa2aadffe73e6dff527cd6b9c29999cf0520c8f39dcc42f5bbf06582443c2",
+    "optimizer_steps": 100594,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 2.1457672119140625e-06,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "pemsd7-m_full_chronological",
+    "metrics": {
+      "held_out_windows": 1885,
+      "mae": 2.3702748353808927,
+      "rmse": 4.1671574337457615,
+      "mape_percent": 5.691353672185047,
+      "forecast_minutes": 15,
+      "metric_units": "original_speed_values",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false,
+    "checkpoint_role": "model_and_optimizer",
+    "optimizer_state_checked": true,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "legacy_runtime_default_precision": false
+  },
+  "execution": {
+    "model": "STGCN-Traffic",
+    "status": "completed",
+    "started_at": "2026-10-18T09:23:20.750634+00:00",
+    "phases": [
+      {
+        "phase": "stgcn_fp32_prepare_full",
+        "exit_code": 0,
+        "seconds": 2.1992199420928955
+      },
+      {
+        "phase": "stgcn_fp32_epoch1_pause",
+        "exit_code": 0,
+        "seconds": 41.76968288421631
+      },
+      {
+        "phase": "stgcn_fp32_epoch2_resumed",
+        "exit_code": 0,
+        "seconds": 46.54828906059265
+      },
+      {
+        "phase": "stgcn_fp32_epoch2_control",
+        "exit_code": 0,
+        "seconds": 53.090099811553955
+      },
+      {
+        "phase": "stgcn_fp32_resume_state_control",
+        "exit_code": 0,
+        "seconds": 2.1342759132385254
+      },
+      {
+        "phase": "stgcn_fp32_full_reference",
+        "exit_code": 0,
+        "seconds": 383.2745716571808
+      },
+      {
+        "phase": "stgcn_fp32_independent_best_reload",
+        "exit_code": 0,
+        "seconds": 18.856984853744507
+      }
+    ],
+    "phase": "stgcn_fp32_independent_best_reload",
+    "final_output": "<VALIDATION_ROOT>/STGCN-Traffic/test/output/full_reference_fp32_20261018",
+    "finished_at": "2026-10-18T09:32:28.634792+00:00"
+  },
+  "extended_execution": {
+    "status": "completed",
+    "model": "STGCN-Traffic",
+    "phase": "stgcn_fp32_independent_stability_reload",
+    "started_at": "2026-10-18T09:23:20.753266+00:00",
+    "phases": [
+      {
+        "phase": "stgcn_fp32_all_held_out_prediction_control",
+        "exit_code": 0,
+        "seconds": 60.17656993865967
+      },
+      {
+        "phase": "stgcn_fp32_acceptance_full_gradient_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 24.22927737236023
+      },
+      {
+        "phase": "stgcn_fp32_acceptance_full_benchmark1p_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 26.527491331100464
+      },
+      {
+        "phase": "stgcn_fp32_acceptance_full_benchmark2p_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 28.901887893676758
+      },
+      {
+        "phase": "stgcn_fp32_acceptance_full_stability_fp32_20261018",
+        "exit_code": 0,
+        "seconds": 1827.967467546463
+      },
+      {
+        "phase": "stgcn_fp32_independent_stability_reload",
+        "exit_code": 0,
+        "seconds": 17.74021863937378
+      }
+    ],
+    "finished_at": "2026-10-18T10:05:42.192424+00:00"
+  },
+  "historical_failures": {
+    "without_deterministic_algorithms": "Strict full-state replay failed; original logs retained privately.",
+    "runtime_default_hf32": {
+      "result": "fail",
+      "test_output_elements": 429780,
+      "elements_outside_original_tolerance": 1,
+      "same_weights_fp32_control": {
+        "model": "stgcn-traffic",
+        "result": "pass",
+        "checkpoint_sha256": "80d5a4fdffc8c8e26c789a8ad4fa8c10c5074353fea7b2e4b8821a5d10871557",
+        "data_scope": "pemsd7-m_full_chronological",
+        "prediction_rtol": 0.003,
+        "prediction_atol": 0.003,
+        "splits": {
+          "val": {
+            "windows": 1885,
+            "output_elements_compared": 429780,
+            "max_absolute_error_normalized": 5.7220458984375e-06,
+            "elements_outside_tolerance": 0,
+            "cpu_metrics": {
+              "windows": 1885,
+              "points": 429780,
+              "mae": 2.4031470854833388,
+              "rmse": 4.222185765981319,
+              "wmape_ratio": 0.041202023479794396,
+              "wmape_percent": 4.120202347979439,
+              "forecast_minutes": 15,
+              "units": "original_speed_values"
+            },
+            "npu_metrics": {
+              "windows": 1885,
+              "points": 429780,
+              "mae": 2.403147118891696,
+              "rmse": 4.222185796795441,
+              "wmape_ratio": 0.04120202405258161,
+              "wmape_percent": 4.12020240525816,
+              "forecast_minutes": 15,
+              "units": "original_speed_values"
+            }
+          },
+          "test": {
+            "windows": 1885,
+            "output_elements_compared": 429780,
+            "max_absolute_error_normalized": 4.76837158203125e-06,
+            "elements_outside_tolerance": 0,
+            "cpu_metrics": {
+              "windows": 1885,
+              "points": 429780,
+              "mae": 2.3668837785320034,
+              "rmse": 4.1415433898790575,
+              "wmape_ratio": 0.040755461606544,
+              "wmape_percent": 4.0755461606544,
+              "forecast_minutes": 15,
+              "units": "original_speed_values"
+            },
+            "npu_metrics": {
+              "windows": 1885,
+              "points": 429780,
+              "mae": 2.366883802514942,
+              "rmse": 4.141543401720157,
+              "wmape_ratio": 0.04075546201950713,
+              "wmape_percent": 4.075546201950713,
+              "forecast_minutes": 15,
+              "units": "original_speed_values"
+            }
+          }
+        },
+        "validation_used_for_selection": true,
+        "test_used_for_selection": false,
+        "formal_business_accuracy_claimed": false
+      }
+    }
+  },
+  "remaining": [
+    "This is the selected PyTorch implementation and its 70/15/15 PeMSD7(M) protocol; not the original paper 60/20/20 protocol.",
+    "METR-LA and other PeMS datasets were not validated in this run.",
+    "No driving-business accuracy or production performance target was supplied."
+  ],
+  "source_files_sha256": {
+    "tools/check_env.py": "a22e88246ec2f1272ab3f1cb6d275f0dcb2b310fe4cebfe95bd56abbe9c44c23",
+    "tools/check_idle_cards.py": "4eff86932c78cc88bb6781e8144af6a6ad5584cfcea704d09fc16ae5397dad84",
+    "tools/common.py": "c3761f8395157190c454a65faa73f60924cc7e017c26ea08d510d3bb3fbbd40c",
+    "tools/container.py": "b4615b49d491ea76e403daafce454c3c670be21eaaea92278745401718206306",
+    "tools/container_resume_control.py": "04dccbe30c7ea1bc245a3fe4d88d3afd4c7de818e922255c8d3ca4016eb7c4b7",
+    "tools/full_training.py": "490d97d055eb9ed0a747ac0025cfff7f6ced0d9eb5c737efb311751434495f91",
+    "tools/model_task.py": "a9b41addc0178304faf8ec120f975ba2bb44b683771fbe8b245c3d34cd98e7c6",
+    "tools/npu_precision.py": "82693d12a85794ed59ac0b7f0a8a4ae5eec224e7770979edf6c13d2ad90b0f27",
+    "tools/prepare_data.py": "9d73fea7142d8e80c07970007d8c70f749312f9ea4d4fcd10ccdc4a12b5d33ef",
+    "tools/resume_control.py": "a96ddf9704fe6e6a3b820e2c722a13b44ebae17789e96ecc8daaf2daa1663180",
+    "tools/revalidate_packaged.py": "5b155addeb20be1ea877383c72c191a185335ac6849dcf2899dcada65537ecc6",
+    "tools/train.py": "1d35a5a53074aed98fbfab9c0c0970dd93d8da62933f7c49c783af5e8a425502",
+    "tools/validate.py": "4660c358398267b1ccd07ddaf92c747301120302b46fba0e021fccac6c8e858c",
+    "tools/validate_extended.py": "c5c87068a73986e5d6cb6f27e9ad61cbd03dcef4a6bed5738877014aeb51c85c",
+    "tools/validate_full_predictions.py": "1293190e45756303d4f85e2f27b36e6f349cf8289c98711a6cfd50c38ce87e24",
+    "tools/verify_package.py": "e7a5a3829c66f57a82d41d29812aab79af7ffa1b80a0a1e91dae3e29389f120d"
+  }
+}

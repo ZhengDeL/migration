@@ -1,0 +1,54 @@
+{
+  "model": "stgcn-traffic",
+  "mode": "full",
+  "result": "complete_epoch_training_and_held_out_test_finished",
+  "world_size": 2,
+  "optimizer_steps": 14404,
+  "epochs_completed": 52,
+  "stop_reason": "early_stopping",
+  "best_epoch": 42,
+  "best_validation_mse": 0.1616048514842987,
+  "dataset_digest": "f235b6ef348fff340cb1794b8dc8d02d763da80f3d6cc80adfa45ae85f5357fc",
+  "data_scope": "pemsd7-m_full_chronological",
+  "settings": {
+    "steps": 0,
+    "epochs": 1000,
+    "batch_size": 16,
+    "lr": 0.001,
+    "global_batch_size": 32,
+    "early_stopping_patience": 10,
+    "deterministic_algorithms": true,
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    }
+  },
+  "data_path": "data/full",
+  "checkpoint_sha256": "cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae",
+  "latest_checkpoint_sha256": "1b415dd83f9ff2ca34076f90744bb57bc8c16ad2e8ea1d550d792611061517e9",
+  "cpu_npu_max_absolute_error": 1.2516975402832031e-06,
+  "full_validation": {
+    "windows": 1885,
+    "points": 429780,
+    "mae": 2.407789175985689,
+    "rmse": 4.205520891037929,
+    "wmape_ratio": 0.04128161225029809,
+    "wmape_percent": 4.128161225029809,
+    "forecast_minutes": 15,
+    "units": "original_speed_values"
+  },
+  "held_out_test": {
+    "windows": 1885,
+    "points": 429780,
+    "mae": 2.3743455410531493,
+    "rmse": 4.129394309690578,
+    "wmape_ratio": 0.0408839459785719,
+    "wmape_percent": 4.0883945978571905,
+    "forecast_minutes": 15,
+    "units": "original_speed_values"
+  },
+  "full_reference_protocol_completed": true,
+  "test_split_used_for_selection": false,
+  "formal_accuracy_claimed": false,
+  "resume_from": "<VALIDATION_ROOT>/STGCN-Traffic/test/output/full_resume_epoch2_fp32_20261018/latest.pt"
+}

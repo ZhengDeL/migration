@@ -50,6 +50,7 @@ def main():
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--lr', type=float)
     parser.add_argument('--resume', type=Path)
+    parser.add_argument('--pause_after_epochs', type=int)
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('运行环境必须是 ARM64 Linux Ascend 服务器。')
@@ -109,7 +110,7 @@ def main():
             docker += ['-e', key + '=' + value]
         docker += ['--entrypoint', PROFILE['python'], spec['tag']]
         options = ['--mode', mode, '--data_path', str(data)]
-        for key in ['steps', 'epochs', 'batch_size', 'lr']:
+        for key in ['steps', 'epochs', 'batch_size', 'lr', 'pause_after_epochs']:
             if getattr(args, key) is not None:
                 options += ['--' + key, str(getattr(args, key))]
         if args.resume:

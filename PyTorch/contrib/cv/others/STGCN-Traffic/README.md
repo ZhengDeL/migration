@@ -1,5 +1,19 @@
 # STGCN-Traffic：Ascend A3 独立训练与验证
 
+
+## 离线包快速复验
+
+完整解压本模型最新 ZIP 后，在本目录执行：
+
+```bash
+bash test/revalidate_packaged_1p.sh --devices 0
+```
+
+该入口自动校验完整文件清单、准备固定镜像，并将随包检查点复制到新的输出目录完成独立 NPU 重载与真实数据验证。结果路径由命令输出给出。重新训练及当前验收边界见 [完整验证指南](FULL_VALIDATION.md)。
+
+
+最新完整训练结果与入口见 [完整训练与验收](FULL_VALIDATION.md)。下文的十步指标为首次功能基线。
+
 ## 模型介绍
 
 道路图上的交通速度预测。使用交通 STGCN，输入 12 个 5 分钟历史窗口，预测 15 分钟后的速度。
@@ -62,9 +76,9 @@ bash test/train_1p.sh --devices 0
 bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt" --steps 20
 ```
 
-续训接口恢复权重和优化器状态；本轮未做续训验收，也不承诺随机数 / sampler 状态逐 bit 重放。保留旧输出，每次新运行会建立新目录；指定 `--output_dir` 时必须选择不存在的本模型内目录。
+上面的旧功能续训入口恢复权重和优化器状态；完整训练使用 `latest.pt` 恢复 epoch、优化器、调度器、早停和各 rank RNG，已完成独立续训数值控制，详见完整训练指南。保留旧输出，每次新运行会建立新目录；指定 `--output_dir` 时必须选择不存在的本模型内目录。
 
-## 已执行验证
+## 首次十步功能结果（历史基线）
 
 | 检查 | 本次实测结果 |
 | --- | --- |
@@ -77,7 +91,7 @@ bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 
 证据：[训练摘要](validation/train_result.json)、[rank 0](validation/rank_0.json)、[rank 1](validation/rank_1.json)、[独立验证](validation/validation_result.json)。相同权重、相同输入的 CPU/NPU 数值对照和任务精度是分别检查的两项。
 
-功能子集不能证明论文精度，未完成完整 PeMSD7(M) 精度、METR-LA、其他 PEMS 数据、性能或长期稳定性验收。完整数据入口只说明可执行的本项目配置，不声称复现原论文的 60% / 20% / 20% 协议。
+首次功能子集不能证明全量或论文精度。后续已完成本项目全量 PeMSD7(M) 训练和独立 test，详见完整训练指南；METR-LA、其他 PEMS 数据和原论文 60% / 20% / 20% 协议未因此验收。
 
 另已在服务器新的独立目录完成 setup / checkpoint 严格重载 / CPU 对照 / 真实留出验证，检查点 SHA 与指标均与原运行相同；证据见 [换目录复验](validation/independent_restore.json)。
 
@@ -99,17 +113,12 @@ bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 
 PyTorch 网络遵循 vendor/LICENSE.STGCN 的 LGPL-2.1；原作者来源许可保留于 vendor/LICENSE.STGCN_author。本项目新增脚本采用 Apache-2.0，相关修改源代码随包提供。
 
-## 完整 PeMSD7(M) 数据入口（尚未正式验收）
+## 完整 PeMSD7(M) 训练
 
-```bash
-bash test/prepare_data.sh --mode full
-bash test/train_full_2p.sh
-```
-
-此入口使用全部原始时间点、70/15/15 划分、训练集 scaler，AdamW lr=0.001、batch=32 每 rank、1000 epoch 上限，StepLR gamma=0.95 每 10 epoch。当前没有复现上游 early stopping / best checkpoint 选优，也未完成全数据精度；运行者应根据验证记录控制训练并另做 test 集验收。功能模式数据会被 full 数据守卫拒绝。
+已新增完整 epoch、全局 batch=32、验证选优、patience=10 早停、独立 test 和完整续训状态，并完成 52 epoch 实机训练。参数、命令、逐项证据及范围见 [完整训练与验收](FULL_VALIDATION.md)。
 
 ## 2026-10-18 第二台 A3 机器复验
 
 在相同固定镜像下，重新执行真实数据 2 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `8.30665230751e-05`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
 
-本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。
+本节是第二台机器的十步功能复验历史。随后新增的完整训练与验收见独立指南；正式业务精度和官方训练硬件支持须按各自证据判断。

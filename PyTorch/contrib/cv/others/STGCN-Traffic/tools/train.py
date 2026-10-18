@@ -19,8 +19,12 @@ def main():
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--lr', type=float)
     parser.add_argument('--resume', type=Path)
+    parser.add_argument('--pause_after_epochs', type=int, help='full-mode epoch boundary checkpoint/restart validation')
     parser.add_argument('--plan', action='store_true')
     args = parser.parse_args()
+    if args.mode == 'full':
+        from full_training import main as train_full
+        return train_full(args)
     data = own_path(args.data_path, exists=True)
     metadata = task.check_data(data, args.mode)
     settings = dict(PROFILE['training'][args.mode])
@@ -37,6 +41,8 @@ def main():
     import numpy as np
     import torch
     import torch_npu
+    from npu_precision import configure_fp32
+    settings['npu_precision']=configure_fp32(torch_npu)
     import torch.distributed as dist
     from torch.nn.parallel import DistributedDataParallel
     from torch.utils.data import DataLoader, DistributedSampler

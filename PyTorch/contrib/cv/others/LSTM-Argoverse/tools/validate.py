@@ -23,9 +23,10 @@ def main():
     state = torch.load(output / 'checkpoint.pt', map_location='cpu', weights_only=True)
     if state['model'] != PROFILE['model'] or sha256(data / 'metadata.json') != state['dataset_digest']:
         raise RuntimeError('checkpoint 的模型 / 数据摘要不匹配。')
-    if not finite_tree(state) or state['step'] < 1 or not state['optimizer']['param_groups']:
+    selected_only = state.get('checkpoint_role') in ['curriculum_selected_model', 'curriculum_intermediate_model']
+    if not finite_tree(state) or state['step'] < 1 or (not selected_only and not state['optimizer']['param_groups']):
         raise RuntimeError('checkpoint 状态、优化器或更新数无效。')
-    if PROFILE.get('optimizer_has_tensor_state', True) and not state['optimizer']['state']:
+    if not selected_only and PROFILE.get('optimizer_has_tensor_state', True) and not state['optimizer']['state']:
         raise RuntimeError('有状态优化器的 tensor state 缺失。')
     task.check_data(data, 'full' if evidence['mode'] == 'full' else 'functional')
     model = task.create_model(state['metadata']).to(device)
@@ -45,11 +46,18 @@ def main():
     torch.testing.assert_close(actual, expected, rtol=3e-3, atol=3e-3)
     _, dataset = task.datasets(data, state['metadata'])
     metrics = task.evaluate(model, dataset, device, state['settings']['batch_size'], state['metadata'])
+    full_control = None
+    if evidence['mode'] == 'full':
+        from full_validation import validate_all
+        full_control = validate_all(model, cpu, dataset, device, state['metadata'], metrics, output)
     result = {'model': PROFILE['model'], 'result': 'pass_checkpoint_reload_and_validation',
         'checkpoint_sha256': evidence['checkpoint_sha256'], 'optimizer_steps': state['step'],
         'strict_state_reload': True, 'reference_replay_matches': True,
         'cpu_npu_max_absolute_error': max_error, 'cpu_npu_rtol': 0.003, 'cpu_npu_atol': 0.003,
         'data_scope': state['metadata']['scope'], 'metrics': metrics, 'formal_accuracy_claimed': False}
+    result['checkpoint_role'] = state.get('checkpoint_role', 'model_and_optimizer')
+    result['optimizer_state_checked'] = not selected_only
+    result['complete_validation_prediction_control'] = full_control is not None
     write_json(output / 'validation_result.json', result)
     print(__import__('json').dumps(result, ensure_ascii=False, indent=2), flush=True)
 

@@ -1,0 +1,14 @@
+{
+  "model": "MobileNetV2",
+  "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch.git",
+  "pinned": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "current_head": "4f2041b142e599f79acfd0b5f68b2699d65b4f58",
+  "verification": "Live GitCode git ls-remote HEAD refreshed before publication; unchanged repository commit retains the previously verified identical model subtree.",
+  "validated_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+  "current_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+  "subtree_identical": true,
+  "checked_at": "2026-10-18T12:00:59.937639+00:00",
+  "runtime_image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "automatic_dependency_upgrade_performed": false,
+  "subtree_identity_verified_at": "2026-10-18T09:01:26.448622+00:00"
+}

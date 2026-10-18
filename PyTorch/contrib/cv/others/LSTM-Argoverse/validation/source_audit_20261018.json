@@ -1,0 +1,10 @@
+{
+  "model": "LSTM-Argoverse",
+  "repository": "https://github.com/jagjeet-singh/argoverse-forecasting",
+  "pinned": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+  "current_head": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+  "verification": "Live GitHub REST default-branch commit checked immediately before publication.",
+  "checked_at": "2026-10-18T12:00:56.266129+00:00",
+  "runtime_image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "automatic_dependency_upgrade_performed": false
+}

@@ -35,7 +35,7 @@ def main():
             raise RuntimeError('原始交通数据来源摘要不一致：' + entry['path'])
     with zipfile.ZipFile(ROOT / 'data/raw/PeMSD7_Full.zip') as archive:
         with archive.open('PeMSD7_V_228.csv') as stream:
-            velocity = np.loadtxt(stream, delimiter=',', dtype=np.float32)
+            velocity = np.loadtxt(stream, delimiter=',', dtype=np.float64 if args.full else np.float32)
     if velocity.shape != (12672,228) or not np.isfinite(velocity).all():
         raise RuntimeError('作者发布的 PeMSD7(M) shape 或数值不符。')
     # Official PyTorch recipe: 70% / 15% / 15% chronological split.

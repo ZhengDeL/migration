@@ -1,5 +1,19 @@
 # LSTM-Argoverse：Ascend A3 独立训练与验证
 
+
+## 离线包快速复验
+
+完整解压本模型最新 ZIP 后，在本目录执行：
+
+```bash
+bash test/revalidate_packaged_1p.sh --devices 0
+```
+
+该入口自动校验完整文件清单、准备固定镜像，并将随包检查点复制到新的输出目录完成独立 NPU 重载与真实数据验证。结果路径由命令输出给出。重新训练及当前验收边界见 [完整验证指南](FULL_VALIDATION.md)。
+
+
+完整数据、curriculum、续训与验收方法见 [完整训练与验收](FULL_VALIDATION.md)。下文保留首次十步功能基线。
+
 ## 模型介绍
 
 Argoverse 1 车辆二维轨迹预测。使用官方基础 LSTM 编码器 / 解码器，观察 20 帧，递归预测未来 30 帧位置。
@@ -43,13 +57,13 @@ bash test/validate_1p.sh
 
 官方 Argoverse 1.1 完整 train / val 归档中固定选取的 128 / 32 条轨迹。归档、CSV 和生成的 NPZ 均有 SHA256；训练 / 验证 sequence 不重叠。每条 AGENT 保留 50 个真实时刻，坐标归一化与逆变换使用上游函数。历史输入归一化独立核对，不使用未来轨迹确定历史变换。
 
-`bash test/setup.sh` 校验并准备 `data/raw/argoverse_official_functional_subset.tar.gz`。完整上游归档没有打进功能包。子集内的 `source_manifest.json` 记录原归档与每条 CSV 的来源和 hash。
+`bash test/setup.sh` 校验并准备 `data/raw/argoverse_official_functional_subset.tar.gz`。子集内的 `source_manifest.json` 记录原归档与每条 CSV 的来源和 hash。最新独立包另含完整官方 train/val 原始归档和 `data/full/` 缓存；按完整训练指南使用，功能数据与完整数据分别核对摘要。
 
 数据及输出路径必须在本模型目录内，便于整个目录迁移。复用已经准备的数据时先核对 hash；出现摘要不一致不要覆盖旧数据。
 
 ## 训练与适配
 
-保留原生 `nn.LSTMCell`。当前固定镜像中，NPU batch=1 出现重复执行不一致；适配将一条独立轨迹复制补成 batch=2，再在损失和指标前去掉补齐行。实际前向、14 个参数梯度及独立 checkpoint 重载已与原始 CPU batch=1 对照。CPU/NPU 梯度最大误差为 1.49e-8。训练 batch=8 不触发补齐。上游完整 1/10/30 步 curriculum 未验收，full 模式明确拒绝执行。
+保留原生 `nn.LSTMCell`。当前固定镜像中，NPU batch=1 出现重复执行不一致；适配将一条独立轨迹复制补成 batch=2，再在损失和指标前去掉补齐行。实际前向、14 个参数梯度及独立 checkpoint 重载已与原始 CPU batch=1 对照。CPU/NPU 梯度最大误差为 1.49e-8。训练 batch=8 不触发补齐。独立 full 入口已完成原始 1/10/30 步 curriculum：725 epoch、292175 更新；完整数据、成熟状态恢复和最终权重数值/梯度结果见完整训练指南。
 
 默认功能运行：每 rank batch=8，lr=0.001，双卡各执行 10 次优化器更新。10 次更新是整个 DDP 训练的 10 个全局 step，不相加成 20 步。
 
@@ -62,9 +76,9 @@ bash test/train_1p.sh --devices 0
 bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt" --steps 20
 ```
 
-续训接口恢复权重和优化器状态；本轮未做续训验收，也不承诺随机数 / sampler 状态逐 bit 重放。保留旧输出，每次新运行会建立新目录；指定 `--output_dir` 时必须选择不存在的本模型内目录。
+上述为旧功能检查点的权重/优化器续训。完整训练从 `latest.pt` 恢复两个 Adam、curriculum、各阶段最佳模型和全部 rank RNG；早期 60 张量及成熟状态 102 张量控制均逐位相同。完整选定的 `checkpoint.pt` 用于推理，不能代替 `latest.pt` 续训。每次新运行使用不存在的输出目录。
 
-## 已执行验证
+## 首次十步功能结果（历史基线）
 
 | 检查 | 本次实测结果 |
 | --- | --- |
@@ -77,7 +91,7 @@ bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 
 证据：[训练摘要](validation/train_result.json)、[rank 0](validation/rank_0.json)、[rank 1](validation/rank_1.json)、[独立验证](validation/validation_result.json)。相同权重、相同输入的 CPU/NPU 数值对照和任务精度是分别检查的两项。
 
-这是随机初始化、10 次优化器更新的功能检查，轨迹质量差，不能用于驾驶决策或作为论文精度复现。尚未完成完整数据训练、curriculum、业务精度、性能及长期稳定性验收。
+上表是首次随机初始化、10 次更新的历史功能检查，轨迹质量差。后续完整数据训练、curriculum、全量数值、恢复、吞吐和长时间运行已另行实测，见完整训练指南；业务精度和独立排行榜未验收。
 
 另已在服务器新的独立目录完成 setup / checkpoint 严格重载 / CPU 对照 / 真实留出验证，检查点 SHA 与指标均与原运行相同；证据见 [换目录复验](validation/independent_restore.json)。
 
@@ -105,4 +119,4 @@ bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 
 补充真实 batch=1 的 CPU / NPU 补齐路径前向、loss 和 14 参数梯度对照通过，最大梯度误差 `1.49011611938e-08`，见 [新机 B1 控制](validation/batch1_control_20261018.json)。未重定位原生 B1 底层机制。
 
-本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。
+本节为第二台机器的十步功能复验历史；后续完整训练及验证使用独立 full 入口和结果，见完整训练指南。正式业务精度与官方训练硬件支持不能由功能结果推定。

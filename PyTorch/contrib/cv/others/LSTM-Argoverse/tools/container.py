@@ -50,6 +50,7 @@ def main():
     parser.add_argument('--batch_size', type=int)
     parser.add_argument('--lr', type=float)
     parser.add_argument('--resume', type=Path)
+    parser.add_argument('--pause_after_epochs', type=int)
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('运行环境必须是 ARM64 Linux Ascend 服务器。')
@@ -109,13 +110,13 @@ def main():
             docker += ['-e', key + '=' + value]
         docker += ['--entrypoint', PROFILE['python'], spec['tag']]
         options = ['--mode', mode, '--data_path', str(data)]
-        for key in ['steps', 'epochs', 'batch_size', 'lr']:
+        for key in ['steps', 'epochs', 'batch_size', 'lr', 'pause_after_epochs']:
             if getattr(args, key) is not None:
                 options += ['--' + key, str(getattr(args, key))]
         if args.resume:
             options += ['--resume', str(own_path(args.resume, exists=True))]
         if args.action == 'prepare':
-            return run(docker + ['tools/prepare_data.py'])
+            return run(docker + (['tools/prepare_full_data.py', '--workers', '4'] if mode == 'full' else ['tools/prepare_data.py']))
         if args.action == 'plan':
             return run(docker + ['tools/train.py', '--plan'] + options)
         if args.action == 'check':
