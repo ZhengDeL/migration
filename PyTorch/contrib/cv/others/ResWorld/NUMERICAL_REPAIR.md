@@ -10,7 +10,7 @@
 
 仅绑定原三个GELU的NPU路径，使用官方原生前后向；CPU默认erf保持。仅这一项修复后整网仍约2.6149%误差，未将它当成唯一原因。
 
-定义依据：[PyTorch2.7.1 GELU](https://github.com/pytorch/pytorch/blob/v2.7.1/torch/nn/modules/activation.py#L654)、[华为npu_gelu接口](https://www.hiascend.com/document/detail/zh/Pytorch/700/apiref/apilist/ptaoplist_000155.html)。数值来自本项目固定镜像实测，不外推到其他版本。
+定义依据：[PyTorch2.7.1 GELU](https://github.com/pytorch/pytorch/blob/v2.7.1/torch/nn/modules/activation.py#L654)、[华为npu_gelu接口及原生gelu语义说明](https://www.hiascend.com/document/detail/en/Pytorch/2610/apiref/customapi/docs/en/custom_APIs/torch_npu/torch_npu-npu_gelu.md)。官方当前文档明确说明原生NPU gelu默认使用tanh，指定erf应调用npu_gelu。数值来自本项目固定镜像实测，不外推到其他版本。
 
 ## 3. 时序残差的FP32相消
 
