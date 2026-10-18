@@ -22,6 +22,8 @@ BEVFormer / Sparse4D 采用华为 DrivingSDK 固定模型补丁及必要辅助�
 
 ## 交付和证据
 
+- [原仓指导与本仓格式对应](docs/readme_reference_alignment.md)：固定 ModelZoo / DrivingSDK 原文、九模型来源和实际入口区别。
+
 - [独立模型离线交付](docs/offline_delivery.md)：每个模型独立目录及归档，单独取得即可使用。
 - [新增四模型实测与交付](docs/additional_models_delivery.md)：逐模型独立训练、重载、真实留出验证及离线包说明。
 - [社区调研](docs/community_research.md)：华为 / Ascend 已有实现与上游依据。
