@@ -141,53 +141,39 @@ bash test/revalidate_packaged_1p.sh --devices 0
 
 # 训练结果展示
 
-## 当前结果
+## 本项目实测（2026-10-18）
 
-| 检查 | 当前实测结果 |
+设备为 ARM64 Atlas 800I A3（`IT22HMDA_4_S`），驱动 26.1.1 / 固件 9.0.0.9.220；固定镜像及软件版本见本页环境表。
+
+| 检查项目 | 本项目实测数据 |
 | --- | --- |
-| 完整训练 | PeMSD7(M) 70/15/15 协议；52 epoch / 14,404 更新，最佳 epoch=42。 |
-| 独立 test | MAE=2.3743455411，RMSE=4.1293943097，WMAPE=4.0883945979%；沿用原始速度数值单位。 |
-| 数值／续训／长稳 | 859,560 个 val/test 输出与全部 28 个有效梯度通过；164 张量恢复逐位相同；双卡至少 1,800 秒通过。 |
-| 未覆盖 | 原论文 60/20/20、METR-LA、其他 PEMS、驾驶业务指标未验收。 |
+| 数据与协议 | PeMSD7(M)，228 传感器；70/15/15 时间划分；8,857 train / 1,885 val / 1,885 test 窗口；预测 15 min |
+| 完整训练 | 2 张物理卡；全局 batch=32；52 epoch / 14,404 次更新；最佳 epoch=42；验证早停 |
+| 独立 test | MAE=2.3743455411；RMSE=4.1293943097；WMAPE=4.0883945979%；沿用原始速度数值单位 |
+| CPU/NPU 全量输出 | 859,560 个 val/test 输出，超差 0；归一化最大误差 val=4.529953e-6 / test=4.768372e-6；rtol=atol=0.003 |
+| 梯度 | 28/28 个有效梯度通过；整体相对 L2=8.6354638e-7，上限 0.01 |
+| 严格续训 | 164/164 完整状态张量逐位相同；最大误差 0 |
+| 持续训练 | 双卡 1,800.139611 s / 新增 86,190 次更新；保存状态及独立重载通过 |
+| 未完成 | 这是所选社区 PyTorch 协议；原论文 60/20/20、METR-LA 和其他 PeMS 未验收 |
 
-当前判定：`pass_full_pemsd7_training_numerical_resume_and_stability_checks`。依据：[逐项实机结果](validation/extended_acceptance_20261018.json)、[完整训练与验证指导](FULL_VALIDATION.md)。以下十步表格保留首次功能基线，不与本次完整或扩展结果混用。
+当前判定：`pass_full_pemsd7_training_numerical_resume_and_stability_checks`。
 
-## 首次十步功能结果（历史基线）
+当前主要权重 SHA256：`cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae`。用途：按 val 选择的最佳模型，不能用于完整状态续训；续训使用 latest 检查点。
 
-| 检查 | 本次实测结果 |
-| --- | --- |
-| 真实数据、NPU 前向 / 反向 / 参数更新 | 双卡各 10 步通过 |
-| HCCL 参数一致性 | 两个 rank 的全部参数 SHA256 一致 |
-| checkpoint | 保存模型及优化器状态，独立进程 strict reload 通过 |
-| 重放与 CPU 对照 | 同一 checkpoint / 同一留出输入，最大绝对误差 `7.2658062e-05` |
-| 留出集指标 | MAE=7.46664，RMSE=10.90627，MAPE=18.46566%，241 个 val 窗口。MAE/RMSE 使用原始速度数值单位；不擅自标注为 km/h 或 mph。MAPE 排除绝对真值 ≤1e-6 的位置。 |
-| checkpoint SHA256 | `420ef3aec85224d9192105e3fd28f3f0775043c888260fec1ed34e6d6b62d914` |
+## 训练性能实测
 
-证据：[训练摘要](validation/train_result.json)、[rank 0](validation/rank_0.json)、[rank 1](validation/rank_1.json)、[独立验证](validation/validation_result.json)。相同权重、相同输入的 CPU/NPU 数值对照和任务精度是分别检查的两项。
+| 进程数 | 全局吞吐（窗口/s） | 每 rank batch | 预热更新 | 计时更新 |
+| --- | --- | --- | --- | --- |
+| 1p | 1282.998 | 16 | 10 | 50 |
+| 2p | 1692.274 | 16 | 10 | 50 |
 
-首次功能子集不能证明全量或论文精度。后续已完成本项目全量 PeMSD7(M) 训练和独立 test，详见完整训练指南；METR-LA、其他 PEMS 数据和原论文 60% / 20% / 20% 协议未因此验收。
+实测包含真实数据加载、传输、前向、反向及优化器更新，各更新同步；使用不同物理卡的单个逻辑芯片。主机 CPU/存储有其他任务共享，没有提供生产性能目标；本表不作为官方 FPS 或性能达标证明。
 
-另已在服务器新的独立目录完成 setup / checkpoint 严格重载 / CPU 对照 / 真实留出验证，检查点 SHA 与指标均与原运行相同；证据见 [换目录复验](validation/independent_restore.json)。
+## 验证依据与复现
 
-## 2026-10-18 新机功能复验（历史）
+[逐项实机结果及原门槛](validation/extended_acceptance_20261018.json)记录实际执行阶段、退出码、输入范围、权重身份、数值/恢复/持续训练及未完成项。复现命令和结果文件见[完整训练与验证指导](FULL_VALIDATION.md)。旧十步基线保留在 `validation/train_result.json` 和 `validation/validation_result.json`，不能覆盖本节当前结果。
 
-在相同固定镜像下，重新执行真实数据 2 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `8.30665230751e-05`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
-
-本节是第二台机器的十步功能复验历史。随后新增的完整训练与验收见独立指南；正式业务精度和官方训练硬件支持须按各自证据判断。
-
-## 输出文件与通过判据
-
-| 位置 | 用途 |
-| --- | --- |
-| `test/` | 本模型环境检查、训练和独立验证脚本 |
-| `tools/`、`vendor/` | 本模型适配及固定源码 |
-| `data/` | 本模型原始和预处理数据，离线包中提供 |
-| `images/` | 本模型运行镜像，离线包中提供 |
-| `test/output/delivery_verified/` | 本次已验证 checkpoint、重载输入和摘要，离线包中提供 |
-| `validation/` | 可公开的验证结果 |
-| `package_manifest.json`、`SHA256SUMS` | 独立离线包的文件完整性清单 |
-
-训练日志应有每个 rank 的 1–10 step，`train_result.json` 为 `pass_functional_training`；独立验证产生 `validation_result.json`，其结果为 `pass_checkpoint_reload_and_validation`。退出码非 0、非有限 loss / 梯度、参数未更新、rank hash 不一致、重载或 CPU 对照失败，均不得判定通过。
+恢复测试比较完整模型、优化器及适用的调度器、训练游标和各 rank RNG；单纯能加载模型不等于续训通过。CPU/NPU 使用相同输入与相同权重的数值对照，与数据集任务指标分别报告。
 
 # 版本说明
 

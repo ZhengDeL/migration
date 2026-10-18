@@ -113,25 +113,37 @@ bash test/train_full_2p.sh --device_id=0,2 --dataset_id=业务数据集名
 
 # 训练结果展示
 
-## 本项目实测
+## 本项目实测（2026-10-12）
 
-独立训练／验证入口实机执行均退出 0；移动本模型目录后再次完成 setup、环境检查、数据计划及独立验证。依据：[入口实测](validation/entry_acceptance.json)、[换目录复验](validation/path_relocation.json)、[单镜像导入](validation/single_image_import.json)。
+设备为 ARM64 Atlas 800I A3（`IT22HMDA_4_S`），不是官方训练系列。以下为本仓独立入口的实际结果。
 
-本页仅列本项目功能配置。完整数据的训练收敛、任务指标及性能以实际完成的独立验收为准。
+| 检查项目 | 本项目实测数据 |
+| --- | --- |
+| 数据范围 | 完整官方 8B 基座；mllm_demo 6 条演示图文；另用独立合成图片检查内容 |
+| 训练配置 | 2 张物理卡；BF16 LoRA SFT；10 次更新；20261012 固定镜像 |
+| 保存状态 | 504 个适配器张量有限；252/252 个 LoRA B 非零；504 组优化器状态 step=10；2 rank 产物 |
+| loss | 首条 3.2745351791，末条 2.5068483353；仅为十步记录，非收敛验收 |
+| 独立验证 | 重新加载适配器，正确描述独立图片中的红色正方形；检查 1 张合成图 |
+| 未完成 | 真实业务图文任务精度、完整训练、吞吐、续训及长稳 |
+
+当前检查点 SHA256：`7ee34281193045e042789faa20a570fb6cf3ddc16df1c8aee0923c5640839c7e`。
+
+执行时间（UTC）：`2026-10-12T10:43:46.947257+00:00` 至 `2026-10-12T10:47:42.245356+00:00`。原始执行命令：
+
+```bash
+bash test/train_2p.sh --device_id=0,2
+bash test/validate_1p.sh --device_id=0
+```
+
+两条命令退出码均为 0。宿主卡号是当次资源分配记录；复现时按本页环境与卡号映射选择空闲设备。
+
+证据：[执行与退出码](validation/entry_acceptance.json)、[训练摘要](validation/reference_run/train_result.json)、[模型/优化器检查](validation/reference_run/saved_state_check.json)、[独立验证数据](validation/reference_run/validation_result.json)。
+
+另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)及[完整数据负向门禁](validation/full_data_guard.json)。功能数据不能作为完整训练数据通过门禁。
 
 ## 通过判据
 
-| 检查 | 判断方法 |
-| --- | --- |
-| 包完整性 | verify_package 退出0、文件大小与 SHA 匹配 |
-| 环境 | `test/output/environment.json` 为 pass 或 pass_with_warnings，failures 为空；管理面告警须结合宿主 npu-smi 与实际计算判定 |
-| 数据计划 | plan 的 missing_data 必须为 []；仅有文件还不代表训练通过 |
-| 功能训练 | 命令退出0，当前运行目录 `train_result.json` 为 pass_functional_training；保存内容检查通过 |
-| 独立验证 | validate 退出0，当前运行目录 `validation_result.json` 为 pass_independent_functional_validation |
-
-验证内容：逐步 loss/梯度、LoRA 更新、优化器 step10、两 rank 保存文件；重载完整模型及 adapter，对独立红色正方形图文推理。 每次新训练文件 SHA 可以不同，验收依据为对应本次运行的记录和检查内容。
-
-一张合成验证图不代表业务图文精度；正式训练必须注册业务数据，不能用 mllm_demo。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
+训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
 
 # 版本说明
 

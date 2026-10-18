@@ -110,25 +110,36 @@ bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
 
 # 训练结果展示
 
-## 本项目实测
+## 本项目实测（2026-10-12）
 
-独立训练／验证入口实机执行均退出 0；移动本模型目录后再次完成 setup、环境检查、数据计划及独立验证。依据：[入口实测](validation/entry_acceptance.json)、[换目录复验](validation/path_relocation.json)、[单镜像导入](validation/single_image_import.json)。
+设备为 ARM64 Atlas 800I A3（`IT22HMDA_4_S`），不是官方训练系列。以下为本仓独立入口的实际结果。
 
-本页仅列本项目功能配置。完整数据的训练收敛、任务指标及性能以实际完成的独立验收为准。
+| 检查项目 | 本项目实测数据 |
+| --- | --- |
+| 数据范围 | nuScenes mini：323 train / 81 val；CAN 扩展缺失的 404 条记录使用零填充 |
+| 训练配置 | 2 张物理卡；FP16 混合精度（loss_scale=512）；全局 batch=2；1 epoch / 162 次更新 |
+| 保存状态 | 1,089 个模型张量、557 组优化器状态有限；优化器 step=162 |
+| 独立验证 | strict 重载；1 帧真实输入推理输出有限 |
+| 未完成 | 完整 nuScenes mAP/NDS、收敛、吞吐、续训及长稳；单帧有限性不等于检测精度 |
+
+当前检查点 SHA256：`51af21f51b5696fba4336055598a6cd2ea9cdc1fae97c9879fcfad06b8c49458`。
+
+执行时间（UTC）：`2026-10-12T09:22:45.452936+00:00` 至 `2026-10-12T09:30:26.027942+00:00`。原始执行命令：
+
+```bash
+bash test/train_2p.sh --device_id=0,2
+bash test/validate_1p.sh --device_id=0
+```
+
+两条命令退出码均为 0。宿主卡号是当次资源分配记录；复现时按本页环境与卡号映射选择空闲设备。
+
+证据：[执行与退出码](validation/entry_acceptance.json)、[训练摘要](validation/reference_run/train_result.json)、[模型/优化器检查](validation/reference_run/saved_state_check.json)、[独立验证数据](validation/reference_run/validation_result.json)。
+
+另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)及[完整数据负向门禁](validation/full_data_guard.json)。功能数据不能作为完整训练数据通过门禁。
 
 ## 通过判据
 
-| 检查 | 判断方法 |
-| --- | --- |
-| 包完整性 | verify_package 退出0、文件大小与 SHA 匹配 |
-| 环境 | `test/output/environment.json` 为 pass 或 pass_with_warnings，failures 为空；管理面告警须结合宿主 npu-smi 与实际计算判定 |
-| 数据计划 | plan 的 missing_data 必须为 []；仅有文件还不代表训练通过 |
-| 功能训练 | 命令退出0，当前运行目录 `train_result.json` 为 pass_functional_training；保存内容检查通过 |
-| 独立验证 | validate 退出0，当前运行目录 `validation_result.json` 为 pass_independent_functional_validation |
-
-验证内容：保存模型/优化器的有限值与 step162；严格重载后对一帧 mini val 做 NPU 推理。 每次新训练文件 SHA 可以不同，验收依据为对应本次运行的记录和检查内容。
-
-本次 CAN bus 扩展缺失，按上游逻辑填零；不作为完整 mAP/NDS 精度验收。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
+训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
 
 # 版本说明
 

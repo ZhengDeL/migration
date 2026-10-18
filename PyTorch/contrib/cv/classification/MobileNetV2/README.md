@@ -150,53 +150,39 @@ bash test/validate_imagenet_1p.sh --devices 0 \
 
 # 训练结果展示
 
-## 当前结果
+## 本项目实测（2026-10-18）
 
-| 检查 | 当前实测结果 |
+设备为 ARM64 Atlas 800I A3（`IT22HMDA_4_S`），驱动 26.1.1 / 固件 9.0.0.9.220；固定镜像及软件版本见本页环境表。
+
+| 检查项目 | 本项目实测数据 |
 | --- | --- |
-| 完整预训练权重评测 | V1 权重，ImageNet 50,000 val；CPU/NPU Top-1=71.87%、Top-5=90.294%。 |
-| 数值 | 50,000,000 个 logits 全部通过；固定源和新二十步权重各 158 个有效梯度通过。 |
-| 功能训练／续训／长稳 | Imagenette 100/40；478 张量恢复逐位相同；双卡 1,800.501 秒通过。 |
-| 未覆盖 | 完整 ImageNet 600 epoch 从头训练及驾驶检测／分割／规划业务未验收。 |
+| 功能训练数据 | Imagenette：100 train / 40 val；保留 1,000 类输出头；2 张物理卡、全局 batch=8、20 步控制 |
+| 正式验证数据 | ImageNet-2012 全部 50,000 val；官方 V1 预训练权重，非本项目从头训练权重 |
+| 全量分类指标 | CPU 与 NPU：Top-1=35,935/50,000=71.87%；Top-5=45,147/50,000=90.294% |
+| CPU/NPU 全量输出 | 50,000,000 个 logits，超差 0；最大绝对误差 6.8664551e-5；完整判据见全量 JSON |
+| 梯度 | 固定源权重、新 20 步权重各 158/158 有效梯度通过；整体相对 L2 分别 1.1653562e-4 / 4.0335445e-4，上限 0.01 |
+| 严格续训 | 478/478 完整状态张量逐位相同；最大误差 0；真实增强后输入 SHA 一致 |
+| 持续训练 | 双卡 1,800.501374 s / 新增 33,570 次更新；独立重载 CPU/NPU max=2.4795532e-5 |
+| 未完成 | 完整 ImageNet 600 epoch 从头训练；驾驶检测、分割和规划业务指标 |
 
-当前判定：`pass_official_pretrained_full_validation_and_functional_training_checks`。依据：[逐项实机结果](validation/extended_acceptance_20261018.json)、[完整训练与验证指导](FULL_VALIDATION.md)。以下十步表格保留首次功能基线，不与本次完整或扩展结果混用。
+当前判定：`pass_official_pretrained_full_validation_and_functional_training_checks`。
 
-## 首次十步功能结果（历史基线）
+当前主要权重 SHA256：`b03531047ffacf1e2488318dcd2aba1126cde36e3bfe1aa5cb07700aeeee9889`。用途：ImageNet 全量评测使用的官方 V1 预训练权重；功能训练与续训使用另存的本项目检查点。
 
-| 检查 | 本次实测结果 |
-| --- | --- |
-| 真实数据、NPU 前向 / 反向 / 参数更新 | 双卡各 10 步通过 |
-| HCCL 参数一致性 | 两个 rank 的全部参数 SHA256 一致 |
-| checkpoint | 保存模型及优化器状态，独立进程 strict reload 通过 |
-| 重放与 CPU 对照 | 同一 checkpoint / 同一留出输入，最大绝对误差 `3.56137753e-05` |
-| 留出集指标 | Top-1=4/40=10%，实际留出集 40 张；输出头为 1000 类。 |
-| checkpoint SHA256 | `b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89` |
+## 训练性能实测
 
-证据：[训练摘要](validation/train_result.json)、[rank 0](validation/rank_0.json)、[rank 1](validation/rank_1.json)、[独立验证](validation/validation_result.json)。相同权重、相同输入的 CPU/NPU 数值对照和任务精度是分别检查的两项。
+| 进程数 | 全局吞吐（图像/s） | 每 rank batch | 预热更新 | 计时更新 |
+| --- | --- | --- | --- | --- |
+| 1p | 87.506 | 4 | 10 | 50 |
+| 2p | 153.102 | 4 | 10 | 50 |
 
-随机初始化和 10 次优化器更新没有达到分类精度验收。Imagenette 不是完整 ImageNet-2012，也不验证智驾检测、分割或端到端业务；ModelZoo 原有精度表不作为本项目结果。
+实测包含真实数据加载、传输、前向、反向及优化器更新，各更新同步；使用不同物理卡的单个逻辑芯片。主机 CPU/存储有其他任务共享，没有提供生产性能目标；本表不作为官方 FPS 或性能达标证明。
 
-另已在服务器新的独立目录完成 setup / checkpoint 严格重载 / CPU 对照 / 真实留出验证，检查点 SHA 与指标均与原运行相同；证据见 [换目录复验](validation/independent_restore.json)。
+## 验证依据与复现
 
-## 2026-10-18 新机功能复验（历史）
+[逐项实机结果及原门槛](validation/extended_acceptance_20261018.json)记录实际执行阶段、退出码、输入范围、权重身份、数值/恢复/持续训练及未完成项。复现命令和结果文件见[完整训练与验证指导](FULL_VALIDATION.md)。旧十步基线保留在 `validation/train_result.json` 和 `validation/validation_result.json`，不能覆盖本节当前结果。
 
-在相同固定镜像下，重新执行真实数据 2 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `3.11657786369e-05`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
-
-本节为第二台机器十步功能复验的历史记录。后续已完成显式 FP32 数值/恢复/吞吐/双卡30分钟，以及官方 V1 权重 ImageNet 全50000图验证，见完整验证指南；600epoch 从头训练、驾驶业务和官方训练硬件支持范围未因此验收。
-
-## 输出文件与通过判据
-
-| 位置 | 用途 |
-| --- | --- |
-| `test/` | 本模型环境检查、训练和独立验证脚本 |
-| `tools/`、`vendor/` | 本模型适配及固定源码 |
-| `data/` | 本模型原始和预处理数据，离线包中提供 |
-| `images/` | 本模型运行镜像，离线包中提供 |
-| `test/output/delivery_verified/` | 本次已验证 checkpoint、重载输入和摘要，离线包中提供 |
-| `validation/` | 可公开的验证结果 |
-| `package_manifest.json`、`SHA256SUMS` | 独立离线包的文件完整性清单 |
-
-训练日志应有每个 rank 的 1–10 step，`train_result.json` 为 `pass_functional_training`；独立验证产生 `validation_result.json`，其结果为 `pass_checkpoint_reload_and_validation`。退出码非 0、非有限 loss / 梯度、参数未更新、rank hash 不一致、重载或 CPU 对照失败，均不得判定通过。
+恢复测试比较完整模型、优化器及适用的调度器、训练游标和各 rank RNG；单纯能加载模型不等于续训通过。CPU/NPU 使用相同输入与相同权重的数值对照，与数据集任务指标分别报告。
 
 # 版本说明
 
