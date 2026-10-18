@@ -2,6 +2,14 @@
 
 按 [Ascend ModelZoo-PyTorch](https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/master/PyTorch/README.CN.md) 的类别和模型目录组织。每个模型独立提供来源与镜像锁、环境/数据准备、训练脚本、验证脚本和实际测试数据。
 
+## 离线模型包下载
+
+- 分享名称：`ascend-a3-9models-20261018`
+- 百度网盘：[下载九个独立模型包](https://pan.baidu.com/s/1jklwz-kzC1QQfohh1STDqQ?pwd=t8qj)
+- 提取码：`t8qj`
+
+共九个独立模型包。每个模型包包含自己的**指导、源码及适配、运行镜像、已准备的数据和权重、训练与验证脚本、检查点及测试结果**。下载所需模型的 ZIP，完整解压后按包内 README 使用。
+
 ## 选择模型
 
 | 独立模型指导 | 训练物理卡数 | 本仓最新实机记录 |
