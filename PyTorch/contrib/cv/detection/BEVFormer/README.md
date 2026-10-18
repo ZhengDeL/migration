@@ -1,16 +1,62 @@
-# BEVFormer-base：Ascend 独立训练与验证
+# BEVFormer-base for PyTorch
 
-本目录是一套单模型工程。使用本模型自己的源码、镜像、数据、训练脚本和验证脚本；可单独复制或解压到服务器，目录名与上级路径可改变。无需保留其他模型目录或迁移仓 Git 根目录。
+本目录提供 Ascend 910C/A3 的迁移指导、训练及验证入口。完整离线 ZIP 包含本模型运行资产，解压后进入含本 README 的目录操作。
 
-## 1. 官方依据与环境
+## 目录
 
-- [官方数据/项目说明](https://github.com/fundamentalvision/BEVFormer/blob/66b65f3a1f58caf0507cb2a971b9c0e7f842376c/docs/prepare_dataset.md)；[昇腾样例或官方训练说明](https://gitcode.com/Ascend/DrivingSDK/blob/0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837/model_examples/BEVFormer/README.md)。
-- 上游实现：https://github.com/fundamentalvision/BEVFormer.git，固定提交 `66b65f3a1f58caf0507cb2a971b9c0e7f842376c`。
-- 本模型镜像：`local/migration-drivingsdk:26.1.0-a3-headless-20261010`，image ID `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。原始 registry digest 与软件版本见本目录 `images.lock.json`。
+- [概述](#概述)
+- [准备训练环境](#准备训练环境)
+- [开始训练](#开始训练)
+- [训练结果展示](#训练结果展示)
+- [版本说明](#版本说明)
+
+# 概述
+
+## 简述
+
+BEVFormer 从多相机图像构建 BEV 表示。本工程迁移 BEVFormer-base，用于三维目标检测。
+
+## 参考实现
+
+- 参考实现：
+
+  ```text
+  url=https://github.com/fundamentalvision/BEVFormer.git
+  commit_id=66b65f3a1f58caf0507cb2a971b9c0e7f842376c
+  ```
+
+- 原仓训练／数据说明：[固定版本文档](https://github.com/fundamentalvision/BEVFormer/blob/66b65f3a1f58caf0507cb2a971b9c0e7f842376c/README.md)。
+- 本页章节参考：[Ascend DrivingSDK BEVFormer 原指导](https://gitcode.com/Ascend/DrivingSDK/blob/0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837/model_examples/BEVFormer/README.md)。
+- 适配文件、补丁及来源摘要见本模型 [sources.lock.json](sources.lock.json)；镜像见 [images.lock.json](images.lock.json)。
+
+本模型的 `test/`、`tools/` 是本项目独立入口；实际脚本名、卡数及实测配置在下文列出。原仓指标仍归原仓，本页结果均引用本项目实机记录。
+
+- [上游数据／项目说明](https://github.com/fundamentalvision/BEVFormer/blob/66b65f3a1f58caf0507cb2a971b9c0e7f842376c/docs/prepare_dataset.md)；[DrivingSDK 迁移说明](https://gitcode.com/Ascend/DrivingSDK/blob/0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837/model_examples/BEVFormer/README.md)。
+
+## 迁移说明
+
+使用固定 DrivingSDK BEVFormer 补丁及本目录兼容补丁；将官方八卡样例调整为两卡 mini 功能配置，并提供独立镜像、数据检查和验证入口。
+
+# 准备训练环境
+
+## 安装昇腾环境
+
 - 服务器：ARM64 Linux、配套 Ascend 驱动、Docker、Python 3.9+，训练需要 2 张空闲物理卡；模型 Python 与运行库在镜像内。`+cpu` 包版本标记不表示使用 CPU 训练，实际设备由环境检查和实测报告确认。
 - 本次 1# 为 Atlas 800I A3 推理系列，实验训练结果不改变华为官方训练硬件支持范围。
 
-## 2. 获取并准备本模型目录
+宿主驱动与容器的 CANN/TorchNPU 配套需匹配。每张物理卡只取一个宿主逻辑 ID，具体拓扑先用 `npu-smi info` 核对。
+
+## 安装模型环境
+
+| 项目 | 本项目固定版本 |
+| --- | --- |
+| 镜像 tag | `local/migration-drivingsdk:26.1.0-a3-headless-20261010` |
+| image ID | `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2` |
+| CANN | `9.1.0` |
+| Python | `3.10.21` |
+| PyTorch | `2.7.1+cpu` |
+| TorchNPU | `2.7.1.post6` |
+| DrivingSDK | `26.1.0.post2` |
 
 取得本模型完整离线包并解压，进入包含本 README 的目录。包内镜像为一个独立 Docker 归档；原始数据、源码和权重均属于本模型，数据准备不访问网络。
 
@@ -22,7 +68,21 @@ bash test/setup.sh
 
 verify_package 显示 `Single-model package verification passed` 才表示下载文件完整；setup 导入/核对本模型镜像，核验源码和补丁，重建当前目录的数据路径。setup 不启动训练。若只有 GitHub 源码，需要先补齐本目录的数据和镜像资产，不能用空目录冒充离线包。
 
-## 3. 环境检查、训练与独立验证
+## 准备数据集和预训练权重
+
+```text
+data/nuscenes/{samples,sweeps,maps,v1.0-mini}
+data/annotations_original/nuscenes_infos_temporal_{train,val}.pkl
+sources/BEVFormer/ckpts/r101_dcn_fcos3d_pretrain.pth
+```
+
+`sources.lock.json` 固定本模型源码和补丁。本模型使用本目录保存的DrivingSDK固定补丁/辅助文件，以及镜像内mx_driving。 迁移到新目录后重新运行本模型的 `bash test/prepare_data.sh`。
+
+仅源码部署时，按上述原仓数据说明补齐资产；在本模型固定镜像中运行 `tools/fetch_sources.py --execute`、`tools/prepare.py`，再遵循上述官方数据说明准备资产。离线交付已经含固定源码，不需重新下载或重新安装依赖。
+
+# 开始训练
+
+## 训练模型与独立验证
 
 ```bash
 npu-smi info
@@ -38,7 +98,25 @@ bash test/validate_1p.sh --device_id=0
 
 本次功能配置：**nuScenes mini 323 train / 81 val；FP16，2 卡每卡 batch 1，学习率 5e-5，1 epoch / 162 iter**。输出 `epoch_1.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
-## 4. 通过判据
+## 完整数据训练
+
+完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。
+
+```bash
+bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
+```
+
+完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+
+# 训练结果展示
+
+## 本项目实测
+
+独立训练／验证入口实机执行均退出 0；移动本模型目录后再次完成 setup、环境检查、数据计划及独立验证。依据：[入口实测](validation/entry_acceptance.json)、[换目录复验](validation/path_relocation.json)、[单镜像导入](validation/single_image_import.json)。
+
+本页仅列本项目功能配置。完整数据的训练收敛、任务指标及性能以实际完成的独立验收为准。
+
+## 通过判据
 
 | 检查 | 判断方法 |
 | --- | --- |
@@ -52,27 +130,14 @@ bash test/validate_1p.sh --device_id=0
 
 本次 CAN bus 扩展缺失，按上游逻辑填零；不作为完整 mAP/NDS 精度验收。 完整数据精度、性能、长期稳定性和 checkpoint 继续训练另行验收；不得把功能验证结果写成正式指标已通过。
 
-## 5. 数据布局与从零准备
+# 版本说明
 
-```text
-data/nuscenes/{samples,sweeps,maps,v1.0-mini}
-data/annotations_original/nuscenes_infos_temporal_{train,val}.pkl
-sources/BEVFormer/ckpts/r101_dcn_fcos3d_pretrain.pth
-```
+## 变更
 
-`sources.lock.json` 固定本模型源码和补丁。本模型使用本目录保存的DrivingSDK固定补丁/辅助文件，以及镜像内mx_driving。 迁移到新目录后重新运行本模型的 `bash test/prepare_data.sh`。
+- 2026-10-19：按固定版本 ModelZoo / DrivingSDK 原指导整理章节，补充原仓依据和本项目入口对应关系；训练代码、镜像、数据、已有数值门槛与实测记录保持。
+- 此前训练与修复日期、实际输入和检查点身份见本模型 `validation/`；详细实验与复验命令保留在本模型指导中。
 
-仅源码部署时先在本模型的固定镜像中运行 `tools/fetch_sources.py --execute`、`tools/prepare.py`，再遵循上述官方数据说明准备资产。离线交付已经含固定源码，不需重新下载或重新安装依赖。
-
-## 6. 正式训练与常见问题
-
-完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。
-
-```bash
-bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
-```
-
-完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+## FAQ
 
 | 提示 / 现象 | 处理 |
 | --- | --- |
