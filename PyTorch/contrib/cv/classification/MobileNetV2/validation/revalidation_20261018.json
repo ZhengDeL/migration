@@ -1,0 +1,247 @@
+{
+  "date": "2026-10-18",
+  "result": "pass_actual_multicard_training_delivery_reload_and_new_reload",
+  "machine": "second_A3_validation_host",
+  "board": "IT22HMDA_4_S",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "model": "MobileNetV2",
+  "world_size": 2,
+  "train_result": {
+    "model": "mobilenetv2",
+    "mode": "functional",
+    "result": "pass_functional_training",
+    "world_size": 2,
+    "optimizer_steps": 10,
+    "dataset_digest": "8f6aabd09a99781f87bfa39b2b2dd3c6492bd04109fda3ea3e68759317486464",
+    "checkpoint_sha256": "4db1d1095744d25cf057306312ae1e36b4e0860b8a0eeb23a1d7bc5306f53c49",
+    "settings": {
+      "steps": 10,
+      "epochs": 10,
+      "batch_size": 4,
+      "lr": 0.001
+    },
+    "data_scope": "public_imagenette_functional_subset",
+    "formal_accuracy_claimed": false,
+    "resume_from": null,
+    "resume_is_weight_optimizer_continuation_not_bit_exact_replay": false,
+    "data_path": "data/functional"
+  },
+  "delivery_checkpoint_reload": {
+    "model": "mobilenetv2",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "b7ae56ada3c51fd9d4c00c9eef1711497e996569d64eb3e27118c77327efbf89",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 3.56137752532959e-05,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "public_imagenette_functional_subset",
+    "metrics": {
+      "held_out_images": 40,
+      "correct_top1": 4,
+      "top1": 0.1,
+      "class_head": 1000,
+      "claim": "subset_functionality_only"
+    },
+    "formal_accuracy_claimed": false
+  },
+  "delivery_metrics_match_original": true,
+  "new_checkpoint_validation": {
+    "model": "mobilenetv2",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "4db1d1095744d25cf057306312ae1e36b4e0860b8a0eeb23a1d7bc5306f53c49",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 3.116577863693237e-05,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "public_imagenette_functional_subset",
+    "metrics": {
+      "held_out_images": 40,
+      "correct_top1": 4,
+      "top1": 0.1,
+      "class_head": 1000,
+      "claim": "subset_functionality_only"
+    },
+    "formal_accuracy_claimed": false
+  },
+  "rank_records": [
+    {
+      "rank": 0,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "238b04af4f78582127cac761b39267db05d020641471e85104e3ec0775b18281",
+      "final_parameter_sha256": "9ae60b90d4a8722cfab6f32c1a61f18969533e7b8489cb2434dc5ea2f01e6fb2",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 6.918211460113525,
+          "gradient_norm": 45.81347189080007,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 2,
+          "loss": 6.935271263122559,
+          "gradient_norm": 40.3252570087161,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 3,
+          "loss": 6.897334098815918,
+          "gradient_norm": 50.56703272368379,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 4,
+          "loss": 6.715641021728516,
+          "gradient_norm": 36.82303868930553,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 5,
+          "loss": 6.786249160766602,
+          "gradient_norm": 33.75220823064702,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 6,
+          "loss": 6.7211103439331055,
+          "gradient_norm": 35.58364020152918,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 7,
+          "loss": 6.964223384857178,
+          "gradient_norm": 26.47846751790296,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 8,
+          "loss": 6.502747058868408,
+          "gradient_norm": 27.03159192107687,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 9,
+          "loss": 6.393192291259766,
+          "gradient_norm": 29.810886516408953,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 10,
+          "loss": 6.3912200927734375,
+          "gradient_norm": 36.87540551374771,
+          "gradient_tensors": 158,
+          "images": 4
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "238b04af4f78582127cac761b39267db05d020641471e85104e3ec0775b18281",
+      "final_parameter_sha256": "9ae60b90d4a8722cfab6f32c1a61f18969533e7b8489cb2434dc5ea2f01e6fb2",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 6.844019412994385,
+          "gradient_norm": 45.81347189080007,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 2,
+          "loss": 6.827069282531738,
+          "gradient_norm": 40.3252570087161,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 3,
+          "loss": 6.796850204467773,
+          "gradient_norm": 50.56703272368379,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 4,
+          "loss": 6.892592906951904,
+          "gradient_norm": 36.82303868930553,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 5,
+          "loss": 6.972445011138916,
+          "gradient_norm": 33.75220823064702,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 6,
+          "loss": 6.820959091186523,
+          "gradient_norm": 35.58364020152918,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 7,
+          "loss": 6.689371585845947,
+          "gradient_norm": 26.47846751790296,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 8,
+          "loss": 6.741770267486572,
+          "gradient_norm": 27.03159192107687,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 9,
+          "loss": 6.4504008293151855,
+          "gradient_norm": 29.810886516408953,
+          "gradient_tensors": 158,
+          "images": 4
+        },
+        {
+          "step": 10,
+          "loss": 6.176926612854004,
+          "gradient_norm": 36.87540551374771,
+          "gradient_tensors": 158,
+          "images": 4
+        }
+      ]
+    }
+  ],
+  "formal_accuracy_claimed": false,
+  "offline_delivery_checkpoint": "original delivery_verified checkpoint; reloaded on the new host",
+  "retraining_checkpoint": "new training checkpoint retained separately in validation workspace"
+}

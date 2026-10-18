@@ -98,3 +98,11 @@ bash test/train_2p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 ## 许可
 
 原始网络与坐标处理代码遵循 vendor/LICENSE.Argoverse 中的 BSD 3-Clause Clear；本项目新增适配脚本采用根 LICENSE 的 Apache-2.0。
+
+## 2026-10-18 第二台 A3 机器复验
+
+在相同固定镜像下，重新执行真实数据 2 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `5.96046447754e-08`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
+
+补充真实 batch=1 的 CPU / NPU 补齐路径前向、loss 和 14 参数梯度对照通过，最大梯度误差 `1.49011611938e-08`，见 [新机 B1 控制](validation/batch1_control_20261018.json)。未重定位原生 B1 底层机制。
+
+本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。

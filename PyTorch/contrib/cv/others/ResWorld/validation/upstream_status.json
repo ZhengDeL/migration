@@ -1,9 +1,9 @@
 {
-  "repository": "https://github.com/mengtan00/ResWorld",
-  "pinned_revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
-  "current_default_branch_head": "a5ae973001dd6001d95b3389020a9e263d73a56e",
-  "pinned_is_current_default_branch_head": true,
-  "head_commit_date": "2026-02-05T12:48:37Z",
-  "verification": "official_GitHub_API",
-  "checked_at": "2026-10-13T00:49:57.826885+08:00"
+  "checked_at": "2026-10-18T15:05:42.923866+08:00",
+  "model": "ResWorld",
+  "official_repository": "https://github.com/mengtan00/ResWorld",
+  "pinned": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "current_head": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "current_commit_date": "2026-02-05T12:48:37Z",
+  "same_as_validated_pin": true
 }

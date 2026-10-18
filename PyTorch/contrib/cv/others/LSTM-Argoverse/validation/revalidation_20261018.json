@@ -1,0 +1,479 @@
+{
+  "date": "2026-10-18",
+  "result": "pass_actual_multicard_training_delivery_reload_and_new_reload",
+  "machine": "second_A3_validation_host",
+  "board": "IT22HMDA_4_S",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "model": "LSTM-Argoverse",
+  "world_size": 2,
+  "train_result": {
+    "model": "lstm-argoverse",
+    "mode": "functional",
+    "result": "pass_functional_training",
+    "world_size": 2,
+    "optimizer_steps": 10,
+    "dataset_digest": "7a3113af75b406a40c40589715da8d612b7d934a0146fa02fa87a5e4141b595c",
+    "checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "settings": {
+      "steps": 10,
+      "epochs": 10,
+      "batch_size": 8,
+      "lr": 0.001
+    },
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "formal_accuracy_claimed": false,
+    "resume_from": null,
+    "resume_is_weight_optimizer_continuation_not_bit_exact_replay": false,
+    "data_path": "data/functional"
+  },
+  "delivery_checkpoint_reload": {
+    "model": "lstm-argoverse",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 5.960464477539063e-08,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "metrics": {
+      "held_out_sequences": 32,
+      "ade_m": 13.761220409958154,
+      "fde_m": 26.48044279814375,
+      "miss_rate": 1.0,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false
+  },
+  "delivery_metrics_match_original": true,
+  "new_checkpoint_validation": {
+    "model": "lstm-argoverse",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 5.960464477539063e-08,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+    "metrics": {
+      "held_out_sequences": 32,
+      "ade_m": 13.761220409958154,
+      "fde_m": 26.48044279814375,
+      "miss_rate": 1.0,
+      "miss_threshold_m": 2.0,
+      "prediction_guesses_k": 1,
+      "observation_steps": 20,
+      "prediction_steps": 30,
+      "synthetic_data": false,
+      "data_scope": "official_argoverse_v11_train_val_functional_128_32",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false
+  },
+  "rank_records": [
+    {
+      "rank": 0,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "82b6ab0440bb558959aa4ff7fd797673ad6a961f7879654dd7007186acecc080",
+      "final_parameter_sha256": "037a807863a2061d2297328395b1bc5a266a74e2daece1f5e88ceb5c76058aae",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 0.8021029233932495,
+          "gradient_norm": 1.0902877228000039,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            44,
+            121,
+            31,
+            71,
+            105,
+            15,
+            48,
+            30
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.7542226314544678,
+          "gradient_norm": 1.0229621853386626,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            104,
+            72,
+            118,
+            53,
+            18,
+            33,
+            10,
+            101
+          ]
+        },
+        {
+          "step": 3,
+          "loss": 0.5810867547988892,
+          "gradient_norm": 1.2223013638214837,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            115,
+            35,
+            74,
+            37,
+            114,
+            41,
+            99,
+            26
+          ]
+        },
+        {
+          "step": 4,
+          "loss": 0.4367217421531677,
+          "gradient_norm": 1.1253862238829742,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            110,
+            66,
+            65,
+            23,
+            79,
+            36,
+            63,
+            52
+          ]
+        },
+        {
+          "step": 5,
+          "loss": 0.6039251089096069,
+          "gradient_norm": 1.0679992992752458,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            119,
+            57,
+            76,
+            97,
+            6,
+            21,
+            111,
+            29
+          ]
+        },
+        {
+          "step": 6,
+          "loss": 0.5309954881668091,
+          "gradient_norm": 0.9080005912997186,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            106,
+            81,
+            70,
+            75,
+            3,
+            27,
+            102,
+            95
+          ]
+        },
+        {
+          "step": 7,
+          "loss": 0.6215633153915405,
+          "gradient_norm": 1.053222160975388,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            58,
+            4,
+            117,
+            82,
+            124,
+            49,
+            50,
+            86
+          ]
+        },
+        {
+          "step": 8,
+          "loss": 0.5004487633705139,
+          "gradient_norm": 0.8677301798368647,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            5,
+            88,
+            28,
+            90,
+            60,
+            34,
+            122,
+            16
+          ]
+        },
+        {
+          "step": 9,
+          "loss": 0.6004384160041809,
+          "gradient_norm": 1.0781808352044704,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            37,
+            20,
+            103,
+            33,
+            127,
+            102,
+            56,
+            99
+          ]
+        },
+        {
+          "step": 10,
+          "loss": 0.3811706304550171,
+          "gradient_norm": 0.856002610248165,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            1,
+            2,
+            26,
+            18,
+            67,
+            10,
+            23,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "82b6ab0440bb558959aa4ff7fd797673ad6a961f7879654dd7007186acecc080",
+      "final_parameter_sha256": "037a807863a2061d2297328395b1bc5a266a74e2daece1f5e88ceb5c76058aae",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 0.579622209072113,
+          "gradient_norm": 1.0902877228000039,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            94,
+            13,
+            116,
+            84,
+            14,
+            22,
+            11,
+            77
+          ]
+        },
+        {
+          "step": 2,
+          "loss": 0.4308243989944458,
+          "gradient_norm": 1.0229621853386626,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            107,
+            126,
+            12,
+            67,
+            109,
+            125,
+            38,
+            32
+          ]
+        },
+        {
+          "step": 3,
+          "loss": 0.8844607472419739,
+          "gradient_norm": 1.2223013638214837,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            123,
+            68,
+            25,
+            69,
+            92,
+            47,
+            40,
+            0
+          ]
+        },
+        {
+          "step": 4,
+          "loss": 0.9267590045928955,
+          "gradient_norm": 1.1253862238829742,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            120,
+            39,
+            51,
+            45,
+            98,
+            2,
+            8,
+            127
+          ]
+        },
+        {
+          "step": 5,
+          "loss": 0.6970758438110352,
+          "gradient_norm": 1.0679992992752458,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            56,
+            46,
+            17,
+            1,
+            54,
+            87,
+            73,
+            112
+          ]
+        },
+        {
+          "step": 6,
+          "loss": 0.37118443846702576,
+          "gradient_norm": 0.9080005912997186,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            55,
+            19,
+            103,
+            59,
+            20,
+            108,
+            96,
+            78
+          ]
+        },
+        {
+          "step": 7,
+          "loss": 0.5566878318786621,
+          "gradient_norm": 1.053222160975388,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            61,
+            64,
+            113,
+            89,
+            91,
+            62,
+            42,
+            24
+          ]
+        },
+        {
+          "step": 8,
+          "loss": 0.49552202224731445,
+          "gradient_norm": 0.8677301798368647,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            93,
+            100,
+            80,
+            85,
+            43,
+            9,
+            7,
+            83
+          ]
+        },
+        {
+          "step": 9,
+          "loss": 0.761650562286377,
+          "gradient_norm": 1.0781808352044704,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            22,
+            121,
+            126,
+            8,
+            82,
+            50,
+            76,
+            89
+          ]
+        },
+        {
+          "step": 10,
+          "loss": 0.4029020667076111,
+          "gradient_norm": 0.856002610248165,
+          "gradient_tensors": 14,
+          "real_trajectory_sequences": 8,
+          "rollout_steps": 30,
+          "sequence_indices": [
+            92,
+            5,
+            87,
+            57,
+            59,
+            39,
+            6,
+            93
+          ]
+        }
+      ]
+    }
+  ],
+  "formal_accuracy_claimed": false,
+  "offline_delivery_checkpoint": "original delivery_verified checkpoint; reloaded on the new host",
+  "retraining_checkpoint": "new training checkpoint retained separately in validation workspace"
+}

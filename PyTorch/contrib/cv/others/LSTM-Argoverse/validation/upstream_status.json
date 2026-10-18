@@ -1,9 +1,9 @@
 {
-  "repository": "https://github.com/jagjeet-singh/argoverse-forecasting",
-  "pinned_revision": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
-  "current_default_branch_head": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
-  "pinned_is_current_default_branch_head": true,
-  "head_commit_date": "2020-05-29T11:39:19Z",
-  "verification": "official_GitHub_API",
-  "checked_at": "2026-10-13T00:49:57.882141+08:00"
+  "checked_at": "2026-10-18T15:05:42.923866+08:00",
+  "model": "LSTM-Argoverse",
+  "official_repository": "https://github.com/jagjeet-singh/argoverse-forecasting",
+  "pinned": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+  "current_head": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+  "current_commit_date": "2020-05-29T11:39:19Z",
+  "same_as_validated_pin": true
 }

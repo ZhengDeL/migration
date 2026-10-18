@@ -1,11 +1,12 @@
 """Materialize pinned upstream source and explicit compatibility edits locally."""
 import json
 import shutil
+import fcntl
 from pathlib import Path
 from common import ROOT, sha256, write_json
 
 
-def prepare_source():
+def _prepare_source_locked():
     lock = json.loads((ROOT / 'sources.lock.json').read_text())
     source = ROOT / 'vendor/ResWorld'
     target = ROOT / 'runtime/ResWorld'
@@ -53,6 +54,15 @@ def prepare_source():
                 'adapted_sha256': sha256(destination)})
     write_json(ROOT / 'runtime/patch_manifest.json', {'revision': lock['revision'], 'changes': changes})
     return target
+
+
+def prepare_source():
+    # All ranks may initialize at once. Serialize shared runtime/manifest writes.
+    runtime = ROOT / 'runtime'
+    runtime.mkdir(parents=True, exist_ok=True)
+    with (runtime / '.prepare_source.lock').open('a') as guard:
+        fcntl.flock(guard, fcntl.LOCK_EX)
+        return _prepare_source_locked()
 
 
 if __name__ == '__main__':
