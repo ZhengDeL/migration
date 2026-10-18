@@ -104,3 +104,17 @@ bash test/train_4p.sh --resume "$PWD/test/output/delivery_verified/checkpoint.pt
 新运行分别保存在 `test/output/<运行名>/`；训练成功才把 `latest_run.json` 标为 completed。已验证交付保存于 `test/output/delivery_verified/`。训练必须有四个 rank 的 1–10 step、有限真实损失和梯度、参数更新、全部参数一致；独立验证 JSON 的 result 应为 `pass_checkpoint_reload_and_validation`。任何门禁失败不作为通过。
 
 本模型独立离线包提供代码、README、data、images、checkpoint、必要验证 JSON、`package_manifest.json` 和 `SHA256SUMS`。原始 ResWorld 源码许可 Apache-2.0 保留于 `vendor/ResWorld/LICENSE`；新增适配遵循本目录 LICENSE。数据遵循各自原始数据使用条款，来源见 `assets.lock.json`。
+
+## 2026-10-18 第二台 A3 机器复验
+
+在相同固定镜像下，重新执行真实数据 4 张物理卡各 10 次优化器更新、原交付检查点严格重载与指标复现、新检查点重载 / 同输入 CPU 对照和真实留出评估，均通过。新训练 CPU/NPU 最大绝对误差 `0.000349164009094`。完整新记录见 [新机复验](validation/revalidation_20261018.json)。本页前面的指标表保留首次迁移基线，新训练指标在该 JSON 单独记录，不保证跨机器逐 bit 复现。
+
+初次四卡启动暴露共享 `runtime/patch_manifest.json.partial` 的并发重命名竞态。现对整个源码 / 清单准备使用模型内 `fcntl.LOCK_EX`，四进程 × 16 轮共 64 次真实准备与适配 SHA 检查通过，修复后完整四卡训练与新检查点验证通过。网络、算子、数据和镜像没有因这个文件锁修复改变。
+
+可在 ARM64 Linux 主机执行不使用 NPU 的并发回归：
+
+```bash
+python3 test/test_prepare_source_concurrency.py --workers 4 --rounds 16 --output "$PWD/test/output/source_concurrency.json"
+```
+
+本次仍为功能验收，完整训练、正式任务精度、性能、长期稳定性与官方训练硬件支持范围没有扩大。

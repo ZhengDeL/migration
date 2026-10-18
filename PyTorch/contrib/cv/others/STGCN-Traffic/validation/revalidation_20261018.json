@@ -1,0 +1,251 @@
+{
+  "date": "2026-10-18",
+  "result": "pass_actual_multicard_training_delivery_reload_and_new_reload",
+  "machine": "second_A3_validation_host",
+  "board": "IT22HMDA_4_S",
+  "driver": "26.1.1",
+  "firmware": "9.0.0.9.220",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "model": "STGCN-Traffic",
+  "world_size": 2,
+  "train_result": {
+    "model": "stgcn-traffic",
+    "mode": "functional",
+    "result": "pass_functional_training",
+    "world_size": 2,
+    "optimizer_steps": 10,
+    "dataset_digest": "81b2e35852637e95f6f7879e0e920d7fa890bd8efc82e4858d221986e1fd53a4",
+    "checkpoint_sha256": "b20992b8f31e659db774e1d1943bbbb5bd1ec12c4ffb3340af2c976c3f75b472",
+    "settings": {
+      "steps": 10,
+      "epochs": 10,
+      "batch_size": 8,
+      "lr": 0.001
+    },
+    "data_scope": "pemsd7-m_functional_subset",
+    "formal_accuracy_claimed": false,
+    "resume_from": null,
+    "resume_is_weight_optimizer_continuation_not_bit_exact_replay": false,
+    "data_path": "data/functional"
+  },
+  "delivery_checkpoint_reload": {
+    "model": "stgcn-traffic",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "420ef3aec85224d9192105e3fd28f3f0775043c888260fec1ed34e6d6b62d914",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 7.265806198120117e-05,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "pemsd7-m_functional_subset",
+    "metrics": {
+      "held_out_windows": 241,
+      "mae": 7.466639197514013,
+      "rmse": 10.906267185419189,
+      "mape_percent": 18.465662707214733,
+      "forecast_minutes": 15,
+      "metric_units": "original_speed_values",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false
+  },
+  "delivery_metrics_match_original": true,
+  "new_checkpoint_validation": {
+    "model": "stgcn-traffic",
+    "result": "pass_checkpoint_reload_and_validation",
+    "checkpoint_sha256": "b20992b8f31e659db774e1d1943bbbb5bd1ec12c4ffb3340af2c976c3f75b472",
+    "optimizer_steps": 10,
+    "strict_state_reload": true,
+    "reference_replay_matches": true,
+    "cpu_npu_max_absolute_error": 8.306652307510376e-05,
+    "cpu_npu_rtol": 0.003,
+    "cpu_npu_atol": 0.003,
+    "data_scope": "pemsd7-m_functional_subset",
+    "metrics": {
+      "held_out_windows": 241,
+      "mae": 7.4662677703521965,
+      "rmse": 10.906131653552235,
+      "mape_percent": 18.465266797344192,
+      "forecast_minutes": 15,
+      "metric_units": "original_speed_values",
+      "formal_accuracy_claimed": false
+    },
+    "formal_accuracy_claimed": false
+  },
+  "rank_records": [
+    {
+      "rank": 0,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "ca8532b6ea35dfc2a21d2c8dd30a2fb87d63cfa8f704c7331800519e17c7b23c",
+      "final_parameter_sha256": "2abc9209d70fd389ce9088d13d99f1cf0d8fff7a250327af5ccbef8cd5f6df1c",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 0.33753228187561035,
+          "gradient_norm": 3.204674920556432,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 2,
+          "loss": 0.17699089646339417,
+          "gradient_norm": 1.074630746824233,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 3,
+          "loss": 0.18728461861610413,
+          "gradient_norm": 1.4371960116877258,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 4,
+          "loss": 0.48722732067108154,
+          "gradient_norm": 2.182404950132945,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 5,
+          "loss": 3.0513529777526855,
+          "gradient_norm": 8.088841997784472,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 6,
+          "loss": 3.1490321159362793,
+          "gradient_norm": 6.541750155898094,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 7,
+          "loss": 0.9599696397781372,
+          "gradient_norm": 1.6783268348469682,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 8,
+          "loss": 0.5323131680488586,
+          "gradient_norm": 2.221140649787443,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 9,
+          "loss": 0.4208521842956543,
+          "gradient_norm": 2.591130457692822,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 10,
+          "loss": 0.33348387479782104,
+          "gradient_norm": 1.4956763555054737,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "world_size": 2,
+      "steps_executed_this_run": 10,
+      "total_optimizer_steps": 10,
+      "parameters_on_npu": true,
+      "initial_parameter_sha256": "ca8532b6ea35dfc2a21d2c8dd30a2fb87d63cfa8f704c7331800519e17c7b23c",
+      "final_parameter_sha256": "2abc9209d70fd389ce9088d13d99f1cf0d8fff7a250327af5ccbef8cd5f6df1c",
+      "parameters_updated": true,
+      "all_parameter_rank_hashes_match": true,
+      "state_finite": true,
+      "optimizer_finite": true,
+      "records": [
+        {
+          "step": 1,
+          "loss": 0.34892112016677856,
+          "gradient_norm": 3.204674920556432,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 2,
+          "loss": 0.18154679238796234,
+          "gradient_norm": 1.074630746824233,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 3,
+          "loss": 0.1827513575553894,
+          "gradient_norm": 1.4371960116877258,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 4,
+          "loss": 0.5785958766937256,
+          "gradient_norm": 2.182404950132945,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 5,
+          "loss": 3.246171474456787,
+          "gradient_norm": 8.088841997784472,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 6,
+          "loss": 2.900829315185547,
+          "gradient_norm": 6.541750155898094,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 7,
+          "loss": 0.9285049438476562,
+          "gradient_norm": 1.6783268348469682,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 8,
+          "loss": 0.5095762014389038,
+          "gradient_norm": 2.221140649787443,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 9,
+          "loss": 0.42533400654792786,
+          "gradient_norm": 2.591130457692822,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        },
+        {
+          "step": 10,
+          "loss": 0.3361015319824219,
+          "gradient_norm": 1.4956763555054737,
+          "gradient_tensors": 28,
+          "traffic_windows": 8
+        }
+      ]
+    }
+  ],
+  "formal_accuracy_claimed": false,
+  "offline_delivery_checkpoint": "original delivery_verified checkpoint; reloaded on the new host",
+  "retraining_checkpoint": "new training checkpoint retained separately in validation workspace"
+}

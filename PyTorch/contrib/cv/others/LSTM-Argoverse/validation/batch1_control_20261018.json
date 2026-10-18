@@ -1,0 +1,70 @@
+{
+  "result": "pass_real_input_batch1_padding_forward_backward_gradient_control",
+  "real_batch_size": 1,
+  "npu_kernel_batch_size": 2,
+  "padded_row_in_loss": false,
+  "checkpoint_sha256": "95055ffbbc17978d818ec8ce7167f34583259563a7638bb43e9ad115953d947d",
+  "cpu_npu_prediction_max_error": 4.470348358154297e-08,
+  "cpu_npu_loss_error": 0.0,
+  "max_gradient_absolute_error": 1.4901161193847656e-08,
+  "checked_parameter_gradients": 14,
+  "gradients": [
+    {
+      "parameter": "encoder.linear1.weight",
+      "max_absolute_error": 2.3283064365386963e-10
+    },
+    {
+      "parameter": "encoder.linear1.bias",
+      "max_absolute_error": 1.7462298274040222e-10
+    },
+    {
+      "parameter": "encoder.lstm1.weight_ih",
+      "max_absolute_error": 9.313225746154785e-10
+    },
+    {
+      "parameter": "encoder.lstm1.weight_hh",
+      "max_absolute_error": 3.4924596548080444e-10
+    },
+    {
+      "parameter": "encoder.lstm1.bias_ih",
+      "max_absolute_error": 4.656612873077393e-10
+    },
+    {
+      "parameter": "encoder.lstm1.bias_hh",
+      "max_absolute_error": 4.656612873077393e-10
+    },
+    {
+      "parameter": "decoder.linear1.weight",
+      "max_absolute_error": 4.656612873077393e-10
+    },
+    {
+      "parameter": "decoder.linear1.bias",
+      "max_absolute_error": 3.725290298461914e-09
+    },
+    {
+      "parameter": "decoder.lstm1.weight_ih",
+      "max_absolute_error": 7.450580596923828e-09
+    },
+    {
+      "parameter": "decoder.lstm1.weight_hh",
+      "max_absolute_error": 2.7939677238464355e-09
+    },
+    {
+      "parameter": "decoder.lstm1.bias_ih",
+      "max_absolute_error": 1.4901161193847656e-08
+    },
+    {
+      "parameter": "decoder.lstm1.bias_hh",
+      "max_absolute_error": 1.4901161193847656e-08
+    },
+    {
+      "parameter": "decoder.linear2.weight",
+      "max_absolute_error": 1.4901161193847656e-08
+    },
+    {
+      "parameter": "decoder.linear2.bias",
+      "max_absolute_error": 7.450580596923828e-09
+    }
+  ],
+  "underlying_native_batch1_kernel_root_cause_retested": false
+}

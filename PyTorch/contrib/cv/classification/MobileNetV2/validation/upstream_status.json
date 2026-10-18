@@ -1,8 +1,14 @@
 {
-  "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch",
-  "pinned_revision": "e779117e8cfeba296a7105e26adac0741ab04768",
-  "current_HEAD": "e779117e8cfeba296a7105e26adac0741ab04768",
-  "pinned_is_current_head": true,
-  "verification": "git ls-remote canonical origin HEAD",
-  "checked_at": "2026-10-13T00:50:00+08:00"
+  "checked_at": "2026-10-18T15:05:42.923866+08:00",
+  "model": "MobileNetV2",
+  "official_repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch",
+  "pinned": "e779117e8cfeba296a7105e26adac0741ab04768",
+  "current_head": "4f2041b142e599f79acfd0b5f68b2699d65b4f58",
+  "error": null,
+  "same_as_validated_pin": false,
+  "direct_exit_code": 0,
+  "model_subdirectory": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch",
+  "validated_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+  "current_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+  "model_directory_unchanged": true
 }
