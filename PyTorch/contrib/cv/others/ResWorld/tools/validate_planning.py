@@ -77,6 +77,8 @@ def main():
                 'metric_comparison':equal,'metrics':metric})
             print(json.dumps({'frames_evaluated':index+1,'expected':len(dataset),'token':example['token']}),flush=True)
     if len(rows)!=65 or len(set(row['token'] for row in rows))!=65:raise RuntimeError('Expected all 65 distinct held-out mini frames.')
+    from npu_activations import activation_profile, activation_execution_counts
+    from temporal_residual import TEMPORAL_RESIDUAL_PROFILE
     result={'model':'resworld','result':'pass_original_mini_planning_collision_control' if passed else 'fail',
         'checkpoint_sha256':sha256(checkpoint),'data_scope':metadata['scope'],'held_out_frames':len(rows),
         'checkpoint_source':locked['url'] if locked else 'project or user supplied model-local checkpoint',
@@ -89,6 +91,14 @@ def main():
         'predictions_rtol':.003,'predictions_atol':.003,'collision_gate':'identical per-frame original metric values',
         'independent_ground_truth_copies_verified':True,'rows':rows,
         'navigation_command':'official annotation; not predicted','formal_full_trainval_accuracy_claimed':False}
+    result['activation_profile']=activation_profile()
+    result['activation_execution_counts']=activation_execution_counts()
+    result['temporal_residual_profile']=TEMPORAL_RESIDUAL_PROFILE
+    from camera_geometry import CAMERA_PROJECTION_PROFILE, projection_execution_counts
+    result['camera_projection_profile']=CAMERA_PROJECTION_PROFILE
+    result['projection_execution_counts']=projection_execution_counts()
+    if projection_execution_counts()['npu_pipeline']==0:
+        raise RuntimeError('The constant camera projection did not execute in the NPU pipeline.')
     write_json(output/'planning_validation.json',result)
     print(json.dumps({k:v for k,v in result.items() if k!='rows'},indent=2),flush=True)
     if not passed:raise RuntimeError('Original planning/collision CPU/NPU control failed; all actual metrics preserved.')

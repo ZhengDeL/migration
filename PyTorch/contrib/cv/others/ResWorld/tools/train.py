@@ -59,6 +59,12 @@ def main():
     task.initialize()
     from npu_compat import configure_training_backend, attention_execution_counts
     settings['msda_backend'] = configure_training_backend()
+    from npu_activations import activation_profile, activation_execution_counts, require_same_numerical_profile
+    settings['activation_profile'] = activation_profile()
+    from temporal_residual import TEMPORAL_RESIDUAL_PROFILE
+    settings['temporal_residual_profile'] = TEMPORAL_RESIDUAL_PROFILE
+    from camera_geometry import CAMERA_PROJECTION_PROFILE, projection_execution_counts
+    settings['camera_projection_profile'] = CAMERA_PROJECTION_PROFILE
     torch.manual_seed(42)
     np.random.seed(42)
     model = task.create_model(metadata).to(device)
@@ -91,6 +97,7 @@ def main():
             raise RuntimeError('恢复权重的模型 / 数据摘要不同。')
         if previous['world_size'] != world:
             raise RuntimeError('继续训练时使用与保存 checkpoint 相同的 rank 数。')
+        require_same_numerical_profile(previous['settings'])
         model.load_state_dict(previous['state_dict'], strict=True)
         optimizer.load_state_dict(previous['optimizer'])
         step, start_epoch = previous['step'], previous['epoch']
@@ -128,6 +135,10 @@ def main():
             if loss.device.type != 'npu' or not bool(torch.isfinite(loss)):
                 raise RuntimeError('损失未在 NPU 或不是有限数。')
             loss.backward()
+            if not all(activation_execution_counts().values()):
+                raise RuntimeError('The expected native NPU erf GELUs did not all execute.')
+            if projection_execution_counts()['npu_pipeline'] == 0:
+                raise RuntimeError('The constant camera projection did not execute in the NPU pipeline.')
             if attention_execution_counts()['reference_autograd'] == 0:
                 raise RuntimeError('The expected original MMCV NPU autograd path did not execute.')
             if world > 1 and execution_counts()['synchronous_mean_allreduce'] == 0:
@@ -174,6 +185,8 @@ def main():
         'parameters_updated': True, 'all_parameter_rank_hashes_match': True,
         'state_finite': True, 'optimizer_finite': True, 'records': records,
         'attention_execution_counts': attention_execution_counts(),
+        'activation_execution_counts': activation_execution_counts(),
+        'projection_execution_counts': projection_execution_counts(),
         'communication_execution_counts': execution_counts()})
     torch.save(capture_rng(torch_npu, local_rank), output / ('checkpoint_rng_rank_' + str(rank) + '.pt'))
     if world > 1:
@@ -200,6 +213,8 @@ def main():
             'resume_from': str(args.resume) if args.resume else None,
              'resume_semantics': 'all_rank_rng_and_epoch_batch_cursor_restored' if restored_complete_cursor else 'legacy_weight_optimizer_continuation' if args.resume else 'new_training',
             'bit_exact_replay_claimed': False, 'attention_execution_counts': attention_execution_counts(),
+            'activation_execution_counts': activation_execution_counts(),
+            'projection_execution_counts': projection_execution_counts(),
             'communication_execution_counts': execution_counts(),
             'resume_cursor': cursor})
     if world > 1:

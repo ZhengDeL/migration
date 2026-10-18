@@ -1,0 +1,35 @@
+{
+  "result": "pass_native_npu_numerical_operator_regression",
+  "scope": "operator regression; real-model checks are recorded separately",
+  "gelu": {
+    "elements": 120001,
+    "official_api": "torch_npu.npu_gelu(approximate=none)",
+    "forward_max_abs_vs_fp64": 6.406080856891094e-07,
+    "backward_max_abs_vs_fp64": 5.143492618486789e-07,
+    "ordinary_functional_gelu_max_abs_vs_fp64": 0.0004734200339036043,
+    "forward_and_backward_on_npu": true
+  },
+  "temporal_residual": {
+    "profile": "difference_before_weighted_sum_v1",
+    "oracle": "unmodified separate weighted sums and subtraction, CPU float64",
+    "forward_max_abs_vs_fp64": 1.0613621945765317e-06,
+    "gradient_max_abs_vs_fp64": [
+      8.726329170372082e-07,
+      4.7494830557326395e-07,
+      8.881784197001252e-16
+    ],
+    "gradient_inputs": [
+      "selection_weights",
+      "temporal_features",
+      "repeated_position"
+    ],
+    "forward_and_backward_on_npu": true
+  },
+  "constant_camera_geometry": {
+    "profile": "constant_metadata_cpu_fp32_v1",
+    "original_cpu_fp32_projection_and_normalization_bit_equal": true,
+    "sampled_feature_gradient_device": "npu",
+    "sampled_feature_gradient_active_and_finite": true,
+    "learned_metadata_rejected": true
+  }
+}
