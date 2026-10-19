@@ -36,6 +36,8 @@ LSTM 的 val 参与选模，STGCN 使用社区 70/15/15 协议，MobileNetV2 使
 
 ## 完整数据准备与未完成项
 
+2026-10-19 新增 ResWorld 原训练组件的四卡实测：GeoBEV 548 个兼容张量核对载入、86 个 SyncBN 模块每 rank 1,824 次调用；四 rank 各 8 更新、64 个不同真实 mini 训练帧；原 EMA 从 10,560 到 10,568，原 warmup / step 边界检查通过；参数摘要一致，模型、EMA、优化器有限，模型与 EMA 保存后重读逐位相同，退出 0。见[完整逐步数据与命令](../PyTorch/contrib/cv/others/ResWorld/validation/original_protocol_preflight_20261019.json)和[独立入口](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md#9-geobevsyncbnema-与-warmup-的四卡预检)。此项是 mini 训练组件预检，完整 12 epoch、EMA 精确恢复及任务精度尚未完成。
+
 BEVFormer、Sparse4D、Apollo、ResWorld 的正式 nuScenes trainval 尚在下载/准备，当前不填完整 mAP/NDS/mIoU/规划精度结果。官方 [AWS 公开数据登记](https://registry.opendata.aws/motional-nuscenes/)提供匿名下载；本次十个完整传感器 blobs、metadata、CAN、地图归档合计 316,066,113,900 bytes，另需 ResWorld 的 lidarseg 与投影深度。完成传输、原始校验和逐文件覆盖检查后才能开始相应完整数据验收。
 
 Apollo 的完整 OCC 标签已于 2026-10-19 传输、校验及解压：700 train 场景 / 28,130 样本，150 val 场景 / 6,019 样本；全部 102,447 个标签文件的 NPY header 与数据长度检查通过，场景/样本与正式 nuScenes metadata 完全对应，train/val 无重叠。见[完整 OCC 数据检查](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/full_occ_data_20261019.json)。这只完成标签准备，相机/点云、CAN、派生 PKL 及模型完整训练/评测仍未完成。

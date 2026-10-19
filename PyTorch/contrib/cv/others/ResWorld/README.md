@@ -111,7 +111,11 @@ bash test/revalidate_packaged_1p.sh --devices 0
 
 ## 正式完整训练范围
 
-作者原指导依次准备 nuScenes trainval、CAN、地图／深度、GeoBEV 初始化，运行四卡训练与最终评估。本项目正式 trainval / 原 12 epoch runner、EMA、SyncBN 和 warmup 协议尚未完成；`full` 入口继续拒绝。当前可复现范围为本页列明的真实 mini 工程验证。
+作者原指导依次准备 nuScenes trainval、CAN、地图／深度、GeoBEV 初始化，运行四卡训练与最终评估。本项目正式 trainval、原 12 epoch runner、完整训练/EMA 恢复与最终评测尚未完成；`full` 入口继续拒绝。当前可复现范围为本页列明的真实 mini 工程验证。
+
+GeoBEV 初始化、SyncBN、原 EMA 和 warmup 可先用本模型的[四卡真实网络预检](FULL_VALIDATION.md#9-geobevsyncbnema-与-warmup-的四卡预检)分别检查。该入口使用真实 mini，保留完整逐步记录；完整数据训练仍按本节边界单独验收。
+
+2026-10-19 在新机器实际完成四卡各 8 更新、64 个不同真实训练帧；548 个兼容 GeoBEV 张量载入核对通过，86 个 SyncBN 模块每 rank 实际调用 1,824 次，原 EMA 从 10,560 更新到 10,568。四 rank 参数摘要一致，模型/EMA/优化器有限，模型和 EMA 保存后重读逐位相同。见[完整命令、逐步 loss、权重 SHA 与退出码](validation/original_protocol_preflight_20261019.json)。八步结果不表示收敛；正式完整数据精度未验收。
 
 # 训练结果展示
 
