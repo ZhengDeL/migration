@@ -32,7 +32,7 @@
 ## 文档
 
 - [模型验证结果](docs/validation.md)：八项当前范围、新实测数据、历史记录及未完成项。
-- [实测性能与 GPU 对照](docs/performance.md)：已有 NPU 吞吐、实际计时条件和待补原生 GPU 基线。
+- [实测性能与 GPU 对照](docs/performance.md)：已有 NPU 吞吐、作者/官方 GPU 参考及待补同条件基线。
 - [环境与镜像](docs/environment.md)：已验证的三个镜像组合与 image ID。
 - [独立离线交付](docs/offline_delivery.md)：每模型完整 ZIP 的内容、校验和使用方式。
 - [固定版本与核验日期](docs/latest_versions.md)：各模型来源提交及实际核验依据。
