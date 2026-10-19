@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "model": "BEVFormer",
+  "collected_utc": "2026-10-19T19:05:10.926900+00:00",
+  "result": "running_mini_training_not_final_accuracy_acceptance",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "plan": {
+    "model": "bevformer",
+    "train_frames": 323,
+    "heldout_frames": 81,
+    "train_val_disjoint": true,
+    "epochs": 24,
+    "expected_updates": 3888,
+    "nproc": 2,
+    "batch_per_rank": 1,
+    "lr": 5e-05,
+    "original_runner_type": "EpochBasedRunner_video",
+    "fp16": {
+      "loss_scale": 512.0
+    },
+    "original_lr_schedule": {
+      "policy": "CosineAnnealing",
+      "warmup": "linear",
+      "warmup_iters": 500,
+      "warmup_ratio": 0.3333333333333333,
+      "min_lr_ratio": 0.001
+    },
+    "initialization": "Original FCOS3D R101-DCN pretraining; not author BEV trained weights",
+    "initialization_sha256": "91d8a649e007663121a64c0511d486fff1d421b77d61359399dd0a821fe633e8",
+    "task_quality_accepted": false,
+    "full_trainval_training_completed": false
+  },
+  "workflow": {
+    "state": "running_mini_training",
+    "controller_pid": 3428520,
+    "started_utc": "2026-10-19T19:00:21.819708+00:00",
+    "full_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "output": "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/mini_training_quality_v2_20261020",
+    "host_logical_devices": [
+      4,
+      14
+    ],
+    "physical_cards": [
+      2,
+      7
+    ],
+    "updated_utc": "2026-10-19T19:00:21.822415+00:00",
+    "author_entry_regression": {
+      "exit_code": 0,
+      "output": "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/author_entry_regression_before_training_20261020",
+      "metrics": {
+        "pts_bbox_NuScenes/NDS": 0.4103581188760884,
+        "pts_bbox_NuScenes/mAP": 0.3623209476756284
+      }
+    },
+    "command": [
+      "bash",
+      "test/train_mini_2p.sh",
+      "--device_id=4,14",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/mini_training_quality_v2_20261020"
+    ],
+    "launcher_pid": 3428582
+  },
+  "trace_summaries": [
+    {
+      "file": "quality_training_rank0.jsonl",
+      "updates": 96,
+      "sha256": "37c295f586db660ca48f97a3a2cedf4e7590cdb489a413c72e462a290c511faf",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 63993,
+      "first_loss": 6.739850997924805,
+      "latest": {
+        "update": 96,
+        "epoch": 1,
+        "loss": 4.050954341888428,
+        "gradient_tensors": 557,
+        "raw_checks": 96,
+        "log_vars": {
+          "loss_cls": 1.2686079740524292,
+          "loss_bbox": 1.769067645072937,
+          "d0.loss_cls": 1.3358339071273804,
+          "d0.loss_bbox": 1.8794691562652588,
+          "d1.loss_cls": 1.2783602476119995,
+          "d1.loss_bbox": 1.8370535373687744,
+          "d2.loss_cls": 1.2713351249694824,
+          "d2.loss_bbox": 1.8203154802322388,
+          "d3.loss_cls": 1.2702220678329468,
+          "d3.loss_bbox": 1.7870814800262451,
+          "d4.loss_cls": 1.2558256387710571,
+          "d4.loss_bbox": 1.765658974647522,
+          "loss": 18.538829803466797
+        }
+      }
+    },
+    {
+      "file": "quality_training_rank1.jsonl",
+      "updates": 96,
+      "sha256": "627d958fdc0aab375dbe48a5a1775e3c9294212e6bdd05142b2f072ab7d3a8e5",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 63993,
+      "first_loss": 40.99939727783203,
+      "latest": {
+        "update": 96,
+        "epoch": 1,
+        "loss": 33.02670669555664,
+        "gradient_tensors": 557,
+        "raw_checks": 96,
+        "log_vars": {
+          "loss_cls": 1.2686079740524292,
+          "loss_bbox": 1.769067645072937,
+          "d0.loss_cls": 1.3358339071273804,
+          "d0.loss_bbox": 1.8794691562652588,
+          "d1.loss_cls": 1.2783602476119995,
+          "d1.loss_bbox": 1.8370535373687744,
+          "d2.loss_cls": 1.2713351249694824,
+          "d2.loss_bbox": 1.8203154802322388,
+          "d3.loss_cls": 1.2702220678329468,
+          "d3.loss_bbox": 1.7870814800262451,
+          "d4.loss_cls": 1.2558256387710571,
+          "d4.loss_bbox": 1.765658974647522,
+          "loss": 18.538829803466797
+        }
+      }
+    }
+  ],
+  "source_checksums": {
+    "tools/train_mini.py": {
+      "observed_runtime_sha256": "1f258c42e6193f940eed7296419a8ddec0a5757929bed0e68ef7d8ae9416b5b8",
+      "normalized_lf_sha256": "1f258c42e6193f940eed7296419a8ddec0a5757929bed0e68ef7d8ae9416b5b8"
+    },
+    "tools/quality_training.py": {
+      "observed_runtime_sha256": "197c232964a4ba333169076271bdedd0575428763bf320b9b96556f57c7459af",
+      "normalized_lf_sha256": "197c232964a4ba333169076271bdedd0575428763bf320b9b96556f57c7459af"
+    },
+    "tools/container.py": {
+      "observed_runtime_sha256": "83aaa9b7031ebf1a5751245f05d187ba6c06ce16f9c42f24cf808bb1aa4a9f3e",
+      "normalized_lf_sha256": "83aaa9b7031ebf1a5751245f05d187ba6c06ce16f9c42f24cf808bb1aa4a9f3e"
+    },
+    "tools/evaluate_mini.py": {
+      "observed_runtime_sha256": "f2de36180d0590ca754450eba1fb6aa72ad7baa39be4db19712c665409123317",
+      "normalized_lf_sha256": "f2de36180d0590ca754450eba1fb6aa72ad7baa39be4db19712c665409123317"
+    }
+  },
+  "observed_spawn_worker_counts_by_training_rank_pid": {
+    "3437132": 5,
+    "3437131": 5
+  },
+  "worker_processes": [
+    {
+      "pid": 3457122,
+      "parent_pid": 3437132
+    },
+    {
+      "pid": 3457326,
+      "parent_pid": 3437131
+    },
+    {
+      "pid": 3465211,
+      "parent_pid": 3437132
+    },
+    {
+      "pid": 3465524,
+      "parent_pid": 3437131
+    },
+    {
+      "pid": 3472735,
+      "parent_pid": 3437132
+    },
+    {
+      "pid": 3473008,
+      "parent_pid": 3437131
+    },
+    {
+      "pid": 3477106,
+      "parent_pid": 3437132
+    },
+    {
+      "pid": 3477765,
+      "parent_pid": 3437131
+    },
+    {
+      "pid": 3491835,
+      "parent_pid": 3437132
+    },
+    {
+      "pid": 3491836,
+      "parent_pid": 3437131
+    }
+  ],
+  "initialization_before_run_verified": true,
+  "minimum_original_backbone_tensor_matches": 100,
+  "exact_initialization_match_count_available_after_training": false,
+  "finite_checks_passed_for_recorded_updates": true,
+  "task_quality_accepted": false,
+  "full_trainval_training_completed": false,
+  "final_heldout_metrics_available": false,
+  "original_short_checkpoint_repaired": false,
+  "offline_archives_updated": false,
+  "preserved_startup_failure": {
+    "error": "BaseRunner.__init__() got an unexpected keyword argument 'eval_model'",
+    "optimizer_updates": 0,
+    "introduced_by": "New entry incorrectly replaced the original video runner with generic EpochBasedRunner",
+    "resolution": "Retain original EpochBasedRunner_video and change only max_epochs; rerun in a fresh output directory"
+  },
+  "default_author_entry_regression": {
+    "report_sha256": "74103cceeaf482509225df2228e2ce4acb9bccc34b2ea561cab18239d81cdc74",
+    "execution": {
+      "sha256": "977b327cec1d008c87f535cfc0126fca5a1da09af26e19cfd011e101317e6da9",
+      "document": {
+        "model": "bevformer",
+        "action": "evaluate-mini",
+        "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+        "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+        "host_logical_devices": [
+          "14"
+        ],
+        "physical_cards": [
+          7
+        ],
+        "container_logical_devices": [
+          0
+        ],
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "host",
+          "--memory",
+          "48g",
+          "--cpus",
+          "8",
+          "--pids-limit",
+          "1024",
+          "--shm-size",
+          "8g",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/BEVFormer:/var/aispace/lzd/migration_full_20261019/BEVFormer:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/BEVFormer",
+          "-v",
+          "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+          "-v",
+          "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+          "-v",
+          "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+          "-v",
+          "/usr/local/dcmi:/usr/local/dcmi:ro",
+          "-v",
+          "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+          "--device",
+          "/dev/davinci14",
+          "--device",
+          "/dev/davinci_manager",
+          "--device",
+          "/dev/devmm_svm",
+          "--device",
+          "/dev/hisi_hdc",
+          "-e",
+          "ASCEND_RT_VISIBLE_DEVICES=0",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "-e",
+          "OPENBLAS_NUM_THREADS=2",
+          "-e",
+          "PYTHONUNBUFFERED=1",
+          "-e",
+          "HCCL_CONNECT_TIMEOUT=120",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "TOKENIZERS_PARALLELISM=false",
+          "-e",
+          "PATH=/opt/conda/envs/bevformer/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "--entrypoint",
+          "/opt/conda/envs/bevformer/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/evaluate_mini.py",
+          "--output_dir",
+          "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/author_entry_regression_before_training_20261020",
+          "--checkpoint-profile",
+          "official-r101-24ep"
+        ],
+        "exit_code": 0,
+        "finished_utc": "2026-10-19T18:57:33.322106+00:00"
+      }
+    },
+    "frames_checked": 81,
+    "checkpoint_sha256": "5fda3ed3e0d2d1dc09baca337aa1ed64aece057fed7d8238525c5ed342649177",
+    "checkpoint_profile": "official-r101-24ep",
+    "primary_metrics": {
+      "pts_bbox_NuScenes/NDS": 0.4103581188760884,
+      "pts_bbox_NuScenes/mAP": 0.3623209476756284
+    }
+  }
+}
