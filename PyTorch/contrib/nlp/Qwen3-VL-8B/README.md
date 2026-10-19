@@ -231,6 +231,8 @@ bash test/validate_1p.sh --device_id=0
 
 训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
 
+2026-10-20 01:06 北京时间新增进度快照：完整三轮训练已推进至 **2,603 / 63,774** 更新，当前训练日志 loss=0.2327；最终完整训练与留出评测尚未完成。[原始进度 JSON](validation/full_training_progress_20261020.json)。10/19 的已发布快照保留原值。
+
 # 版本说明
 
 ## 变更

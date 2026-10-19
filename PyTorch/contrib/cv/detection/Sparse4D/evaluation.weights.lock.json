@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "official-v3-r50": {
+    "path": "weights/sparse4dv3_r50.pth",
+    "sha256": "5beed4d4933ca6448d72586b0f8812863574289ff3c4192de71dc9f46a42f0ed",
+    "bytes": 577164226,
+    "source_url": "https://github.com/HorizonRobotics/Sparse4D/releases/download/v3.0/sparse4dv3_r50.pth",
+    "release": "v3.0",
+    "observed_publisher_etag": "\"0x8DC1B0BB6A4988D\"",
+    "publisher_sha256_available": false,
+    "checksum_origin": "Locally observed SHA256 of the official HTTPS release asset, pinned for transfer integrity; not a publisher-provided digest",
+    "config": "projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py"
+  }
+}

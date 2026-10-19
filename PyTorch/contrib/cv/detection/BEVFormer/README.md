@@ -98,6 +98,18 @@ bash test/validate_1p.sh --device_id=0
 
 本次功能配置：**nuScenes mini 323 train / 81 val；FP16，2 卡每卡 batch 1，学习率 5e-5，1 epoch / 162 iter**。输出 `epoch_1.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
+## 交付 mini 检查点的完整验证集评测
+
+先完成本模型的 setup / prepare_data，在空闲单卡执行：
+
+```bash
+bash test/evaluate_mini_1p.sh --device_id=0
+```
+
+入口固定使用本模型 `validation/reference_run/epoch_1.pth`，先核对交付 SHA256，再 strict 重载模型。按原数据划分、顺序和预处理运行全部 **81 个 mini 验证帧**，计算原仓检测评测器的 mAP、NDS 及各类别 AP/误差。本轮使用已有短训检查点，完整 trainval 训练和收敛精度仍须按完整数据协议验收。
+
+每次创建新的 `test/output/evaluate-mini_<时间>/`，包含原始终端日志、逐帧检查与指标 `mini_evaluation.json`、实际镜像/卡号/命令/退出码 `evaluation_execution.json` 和原始预测文件。已有训练指针和历史结果保留。可用 `--output_dir="$PWD/test/output/自定义新目录"` 指定新的输出目录。
+
 ## 完整数据训练
 
 完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。
@@ -137,6 +149,12 @@ bash test/validate_1p.sh --device_id=0
 
 另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)及[完整数据负向门禁](validation/full_data_guard.json)。功能数据不能作为完整训练数据通过门禁。
 
+## 2026-10-20 全部 mini 验证帧与任务指标
+
+全部 81 个标准 mini_val 帧的预测有限，原仓检测评测器 mAP=0.00003540314127、NDS=0.0178060191423（均为 0～1 比例）；公开入口退出 0。检查点来自既有 162 更新短训，任务质量未验收。
+
+[逐帧 token、原始指标、检查点 SHA、镜像、实际命令及退出码](validation/complete_mini_evaluation_20261020.json)。实测来自同一固定镜像的新目录，单卡与 Qwen 双卡训练并行；计时属于并行功能验证，不作为隔离性能基线。当前完整 nuScenes trainval 训练、收敛和正式任务精度仍未完成。
+
 ## 通过判据
 
 训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
@@ -145,6 +163,7 @@ bash test/validate_1p.sh --device_id=0
 
 ## 变更
 
+- 2026-10-20：新增独立完整 mini_val 81 帧检测评测与原始低质量指标，保留旧检查点身份；新增入口不改训练结果指针。
 - 2026-10-19：按固定版本 ModelZoo / DrivingSDK 原指导整理章节，补充原仓依据和本项目入口对应关系；训练代码、镜像、数据、已有数值门槛与实测记录保持。
 - 此前训练与修复日期、实际输入和检查点身份见本模型 `validation/`；详细实验与复验命令保留在本模型指导中。
 

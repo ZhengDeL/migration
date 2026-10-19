@@ -15,7 +15,7 @@ def prepare(args):
     mini = {v['token'] for v in json.loads((args.nuscenes / 'v1.0-mini/sample.json').read_text())}
     prepared = args.prepared_dir.resolve()
     prepared.mkdir(parents=True, exist_ok=True)
-    (selected, records) = ({}, {})
+    (selected, records, invalid_records) = ({}, {}, {})
     splits = ('val',) if args.val_only else ('train', 'val')
     for split in splits:
         annotation = args.data_dir / f'nuscenes_infos_temporal_{split}_occ_gt.pkl'
@@ -46,6 +46,30 @@ def prepare(args):
             require_hash(destination, checksum)
             records[str(destination.relative_to(prepared))] = {'path': str(destination.relative_to(prepared)), 'sha256': checksum, 'bytes': destination.stat().st_size, 'shape': list(labels.shape)}
             info['occ_gt_path'] = str(destination)
+            if 'occ_invalid_path' in info:
+                invalid_name = PurePosixPath(info['occ_invalid_path'])
+                if '..' in invalid_name.parts or 'occ_gt_release_v1_0' not in invalid_name.parts:
+                    raise RuntimeError('Unexpected original OCC visibility mask path')
+                invalid_relative = PurePosixPath(*invalid_name.parts[invalid_name.parts.index('occ_gt_release_v1_0') + 1:])
+                invalid = args.occ_dir / invalid_relative
+                if not invalid.resolve().is_relative_to(args.occ_dir) or invalid.is_symlink():
+                    raise RuntimeError('Visibility mask must be a regular file inside OCC directory')
+                indices = np.load(invalid, allow_pickle=False)
+                if indices.ndim != 1 or not np.issubdtype(indices.dtype, np.integer) or (
+                        indices.size and (indices.min() < 0 or indices.max() >= 640000)):
+                    raise RuntimeError('Invalid original OCC visibility mask: ' + str(invalid))
+                invalid_destination = prepared / 'occ_gt_release_v1_0' / invalid_relative
+                if not invalid_destination.resolve().is_relative_to(prepared):
+                    raise RuntimeError('Visibility mask destination escapes prepared directory')
+                invalid_destination.parent.mkdir(parents=True, exist_ok=True)
+                invalid_checksum = digest(invalid)
+                if invalid.resolve() != invalid_destination.resolve():
+                    shutil.copyfile(invalid, invalid_destination)
+                require_hash(invalid_destination, invalid_checksum)
+                key = str(invalid_destination.relative_to(prepared))
+                invalid_records[key] = {'path': key, 'sha256': invalid_checksum,
+                    'bytes': invalid_destination.stat().st_size, 'shape': list(indices.shape)}
+                info['occ_invalid_path'] = str(invalid_destination)
             for camera in info['cams'].values():
                 name = PurePosixPath(camera['data_path'])
                 if '..' in name.parts or 'nuscenes' not in name.parts:
@@ -86,8 +110,10 @@ def prepare(args):
         if archive_report.get('archive_sha256_observed') != expected['occ_archive_sha256_observed'] or not archive_report.get('gzip_crc_checked') or (not archive_report.get('tar_members_checked')):
             raise RuntimeError('OCC archive verification stamp does not match the locked release')
     report = {'model': 'apollo_visionnet', 'dataset_scope': scope, 'train_samples': len(selected['train']['infos']), 'heldout_samples': 0 if args.val_only else len(selected['val']['infos']), 'label_files': len(records), 'labels': list(records.values()), 'label_payloads_unchanged': True, 'prepared_files': files, 'annotation_observed_checksums': {name: ANNOTATIONS[name] for name in splits}, 'occupancy_source': 'extracted directory; selected regular files checked individually', 'full_archive_checked': archive_report is not None, 'archive_verification': archive_report, 'train_val_disjoint': split_disjoint, 'mini_samples_expected': len(mini), 'can_bus_zero_samples': sum((not np.asarray(v['can_bus']).any() for v in selected['train']['infos'])), 'initialization': 'verified separately when the training configuration is generated'}
+    report.update(invalid_mask_files=len(invalid_records), invalid_masks=list(invalid_records.values()),
+        invalid_masks_payloads_unchanged=True)
     (prepared / 'manifest.json').write_text(json.dumps(report, indent=2) + '\n')
-    print(json.dumps({k: v for (k, v) in report.items() if k != 'labels'}, indent=2), flush=True)
+    print(json.dumps({k: v for (k, v) in report.items() if k not in ('labels', 'invalid_masks')}, indent=2), flush=True)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--data-dir', required=True, type=Path)

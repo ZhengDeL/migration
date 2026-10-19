@@ -20,6 +20,8 @@ Qwen 一行是 LLaMA-Factory 训练框架提交；官方 8B 权重固定为 `0c3
 
 BEVFormer / Sparse4D 使用配套 DrivingSDK `branch_v26.1.0` 固定提交 `0a34fc1fbdf5c60015b23303bd01cb3e1a7fd837`；上游模型 HEAD 与适配 SDK 是不同的版本对象。MobileNetV2 子树为 `75fd4c46d94f560f776c57f48a53dc705c682de3`，不能仅凭仓库总体 HEAD 变化判定本模型代码改变。
 
+2026-10-20 新增的 Sparse4D mini 检测控制固定使用作者 v3.0 已训练 R50 权重；来源、577,164,226 字节大小、本项目观察的 SHA256 和发布 ETag 见 [评测权重锁](../PyTorch/contrib/cv/detection/Sparse4D/evaluation.weights.lock.json)。发布方未提供 SHA256，本地观察值只作为后续文件身份/传输校验。模型源码、DrivingSDK 和镜像基线保持原版本。
+
 ## 运行环境
 
 九模型的固定 tag、Docker image ID、软件组合和镜像归档 SHA256 见[环境与镜像](environment.md)。Qwen 当前独立工程使用 `local/llamafactory:a3-arm64-20261012` / `sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5`，其独立入口已于 2026-10-12 重跑。

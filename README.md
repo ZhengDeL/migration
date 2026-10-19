@@ -10,16 +10,16 @@
 
 共九个独立模型包。每个模型包包含自己的**指导、源码及适配、运行镜像、已准备的数据和权重、训练与验证脚本、检查点及测试结果**。下载所需模型的 ZIP，完整解压后按包内 README 使用。
 
-该分享为 2026-10-18 固定版本；2026-10-19 的新测试和代码修订尚未重新打包，差异见[交付说明](docs/offline_delivery.md)。
+该分享为 2026-10-18 固定版本；2026-10-19～20 的新测试、OCC mask 修复及作者权重评测入口尚未重新打包，差异见[交付说明](docs/offline_delivery.md)。
 
 ## 选择模型
 
 | 独立模型指导 | 训练物理卡数 | 本仓最新实机记录 |
 | --- | --- | --- |
-| [BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | 2026-10-12 |
-| [Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | 2026-10-12 |
-| [Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | 2026-10-19 |
-| [Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 2026-10-12 |
+| [BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | 2026-10-20 |
+| [Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | 2026-10-20 |
+| [Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | 2026-10-20 |
+| [Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 2026-10-20 |
 | [LSTM-Argoverse](PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2 | 2026-10-19 |
 | [STGCN-Traffic](PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2 | 2026-10-19 |
 | [ResWorld](PyTorch/contrib/cv/others/ResWorld/README.md) | 4 | 2026-10-19 |

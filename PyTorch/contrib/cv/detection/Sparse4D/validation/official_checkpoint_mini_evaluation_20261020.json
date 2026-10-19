@@ -1,0 +1,1502 @@
+{
+  "schema_version": 1,
+  "model": "Sparse4D",
+  "collected_utc": "2026-10-19T17:04:46.319046+00:00",
+  "result": "pass_author_released_checkpoint_complete_mini_detection",
+  "task_quality_accepted": false,
+  "full_trainval_training_completed": false,
+  "acceptance_scope": "Author released trained checkpoint on complete official mini_val; no local full trainval training/quality parity with GPU",
+  "raw_mini_file_verification": {
+    "result": "pass_all_expected_raw_mini_file_sha256",
+    "files": 31223,
+    "bytes": 5374897297,
+    "payload_sha256": "fe1e0e637d1c13a8fa281ac3a5d23ef12a546040a0561546077f5aae481457c1",
+    "finished_utc": "2026-10-19T16:42:17.496786+00:00"
+  },
+  "weight_lock": {
+    "schema_version": 1,
+    "official-v3-r50": {
+      "path": "weights/sparse4dv3_r50.pth",
+      "sha256": "5beed4d4933ca6448d72586b0f8812863574289ff3c4192de71dc9f46a42f0ed",
+      "bytes": 577164226,
+      "source_url": "https://github.com/HorizonRobotics/Sparse4D/releases/download/v3.0/sparse4dv3_r50.pth",
+      "release": "v3.0",
+      "observed_publisher_etag": "\"0x8DC1B0BB6A4988D\"",
+      "publisher_sha256_available": false,
+      "checksum_origin": "Locally observed SHA256 of the official HTTPS release asset, pinned for transfer integrity; not a publisher-provided digest",
+      "config": "projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py"
+    }
+  },
+  "runs": [
+    {
+      "output_dir": "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/official_v3_r50_complete_mini_20261020",
+      "report": {
+        "model": "sparse4d",
+        "result": "pass_complete_mini_detection_evaluation",
+        "collected_utc": "2026-10-19T17:02:00.887028+00:00",
+        "dataset_scope": "nuScenes v1.0-mini, complete official mini_val split",
+        "expected_train_frames": 323,
+        "expected_validation_frames": 81,
+        "formal_trainval_accuracy_acceptance": false,
+        "quality_threshold_applied": false,
+        "limitation": "Author pretrained checkpoint on mini_val; no local full trainval training or same-condition GPU comparison",
+        "frames": [
+          {
+            "index": 0,
+            "token": "3e8750f331d7499e9b5123e9eb70f2e2",
+            "outputs_finite": true
+          },
+          {
+            "index": 1,
+            "token": "3950bd41f74548429c0f7700ff3d8269",
+            "outputs_finite": true
+          },
+          {
+            "index": 2,
+            "token": "c5f58c19249d4137ae063b0e9ecd8b8e",
+            "outputs_finite": true
+          },
+          {
+            "index": 3,
+            "token": "700c1a25559b4433be532de3475e58a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 4,
+            "token": "747aa46b9a4641fe90db05d97db2acea",
+            "outputs_finite": true
+          },
+          {
+            "index": 5,
+            "token": "f4f86af4da3b49e79497deda5c5f223a",
+            "outputs_finite": true
+          },
+          {
+            "index": 6,
+            "token": "6832e717621341568c759151b5974512",
+            "outputs_finite": true
+          },
+          {
+            "index": 7,
+            "token": "c59e60042a8643e899008da2e446acca",
+            "outputs_finite": true
+          },
+          {
+            "index": 8,
+            "token": "fa65a298c01f44e7a182bbf9e5fe3697",
+            "outputs_finite": true
+          },
+          {
+            "index": 9,
+            "token": "a98fba72bde9433fb882032d18aedb2e",
+            "outputs_finite": true
+          },
+          {
+            "index": 10,
+            "token": "b6b0d9f2f2e14a3aaa2c8aedeb1edb69",
+            "outputs_finite": true
+          },
+          {
+            "index": 11,
+            "token": "796b1988dd254f74bf2fb19ba9c5b8c6",
+            "outputs_finite": true
+          },
+          {
+            "index": 12,
+            "token": "0d0700a2284e477db876c3ee1d864668",
+            "outputs_finite": true
+          },
+          {
+            "index": 13,
+            "token": "de7593d76648450e947ba0c203dee1b0",
+            "outputs_finite": true
+          },
+          {
+            "index": 14,
+            "token": "f753d3f87e5b40af87ff2cbf7c8e7082",
+            "outputs_finite": true
+          },
+          {
+            "index": 15,
+            "token": "b22fa0b3c34f47b6a360b60f35d5d567",
+            "outputs_finite": true
+          },
+          {
+            "index": 16,
+            "token": "0a0d6b8c2e884134a3b48df43d54c36a",
+            "outputs_finite": true
+          },
+          {
+            "index": 17,
+            "token": "8e9c2cba0ee74056aa3746e8391d54a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 18,
+            "token": "fdc39b23ab4242eda6ec5e1e6574fe33",
+            "outputs_finite": true
+          },
+          {
+            "index": 19,
+            "token": "9ee4020153674b9e9943d395ff8cfdf3",
+            "outputs_finite": true
+          },
+          {
+            "index": 20,
+            "token": "5b03af7a953245b5a3b23191ed4da62a",
+            "outputs_finite": true
+          },
+          {
+            "index": 21,
+            "token": "d0ecf474e0e64950aa265cd44b9c9d75",
+            "outputs_finite": true
+          },
+          {
+            "index": 22,
+            "token": "456ec36cb4a44ca78f36fbd90c0c34fa",
+            "outputs_finite": true
+          },
+          {
+            "index": 23,
+            "token": "6bfd42cf0aba4f1a94ec11fa43e2dd92",
+            "outputs_finite": true
+          },
+          {
+            "index": 24,
+            "token": "0af0feb5b1394b928dd13d648de898f5",
+            "outputs_finite": true
+          },
+          {
+            "index": 25,
+            "token": "61d9340c5ad8418dafe7a4af1b96e6b9",
+            "outputs_finite": true
+          },
+          {
+            "index": 26,
+            "token": "9e7683e8586542a1b6032980c45f15ce",
+            "outputs_finite": true
+          },
+          {
+            "index": 27,
+            "token": "cc57c1ea80fe46a7abddfdb15654c872",
+            "outputs_finite": true
+          },
+          {
+            "index": 28,
+            "token": "4cf5d6c3f6ab42aab23f67b5a9782d1a",
+            "outputs_finite": true
+          },
+          {
+            "index": 29,
+            "token": "6d9984d09d52479e837da2fd09e192cc",
+            "outputs_finite": true
+          },
+          {
+            "index": 30,
+            "token": "38a28a3aaf2647f2a8c0e90e31267bf8",
+            "outputs_finite": true
+          },
+          {
+            "index": 31,
+            "token": "6402fd1ffaf041d0b9162bd92a7ba0a2",
+            "outputs_finite": true
+          },
+          {
+            "index": 32,
+            "token": "ce94ef7a0522468e81c0e2b3a2f1e12d",
+            "outputs_finite": true
+          },
+          {
+            "index": 33,
+            "token": "9fcdc52b791045e99c623c5fc643331f",
+            "outputs_finite": true
+          },
+          {
+            "index": 34,
+            "token": "1c9a906c40f6417bbe1cea06d6e55501",
+            "outputs_finite": true
+          },
+          {
+            "index": 35,
+            "token": "a771effa2a2648d78096c3e92b95b129",
+            "outputs_finite": true
+          },
+          {
+            "index": 36,
+            "token": "b9ea04a6121d4a8bb00199b885aa5ef0",
+            "outputs_finite": true
+          },
+          {
+            "index": 37,
+            "token": "87e772078a494d42bd34cd16172808bc",
+            "outputs_finite": true
+          },
+          {
+            "index": 38,
+            "token": "f40544fd4f5d42abbcfa948eeaf86850",
+            "outputs_finite": true
+          },
+          {
+            "index": 39,
+            "token": "281b92269fd648d4b52d06ac06ca6d65",
+            "outputs_finite": true
+          },
+          {
+            "index": 40,
+            "token": "b5989651183643369174912bc5641d3b",
+            "outputs_finite": true
+          },
+          {
+            "index": 41,
+            "token": "0bb62a68055249e381b039bf54b0ccf8",
+            "outputs_finite": true
+          },
+          {
+            "index": 42,
+            "token": "07fad91090c746ccaa1b2bdb55329e20",
+            "outputs_finite": true
+          },
+          {
+            "index": 43,
+            "token": "ae5004bf4ebb4db0a84cb3c27bd398d1",
+            "outputs_finite": true
+          },
+          {
+            "index": 44,
+            "token": "ac8b4d49731d43289579f014cb7c97ef",
+            "outputs_finite": true
+          },
+          {
+            "index": 45,
+            "token": "c1eed31234b94e9f8e22fbf3428b0ac2",
+            "outputs_finite": true
+          },
+          {
+            "index": 46,
+            "token": "edba7d0cf1c64d2a9c8a5ebddab507a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 47,
+            "token": "a5afebb0aa5e4d7c95665788ce51ec58",
+            "outputs_finite": true
+          },
+          {
+            "index": 48,
+            "token": "5b7cb170eee6468aa1fdbd3abcf63c5a",
+            "outputs_finite": true
+          },
+          {
+            "index": 49,
+            "token": "d8251bbc2105497ab8ec80827d4429aa",
+            "outputs_finite": true
+          },
+          {
+            "index": 50,
+            "token": "048a45dd2cf54aa5808d8ccc85731d44",
+            "outputs_finite": true
+          },
+          {
+            "index": 51,
+            "token": "858a1ece22cf45d9bc71e42336604b78",
+            "outputs_finite": true
+          },
+          {
+            "index": 52,
+            "token": "372725a4b00e49c78d6d0b1c4a38b6e0",
+            "outputs_finite": true
+          },
+          {
+            "index": 53,
+            "token": "61a7bd24f88a46c2963280d8b13ac675",
+            "outputs_finite": true
+          },
+          {
+            "index": 54,
+            "token": "609d5177362340458a3bfd4949cd1e64",
+            "outputs_finite": true
+          },
+          {
+            "index": 55,
+            "token": "b1303058fa624645b753d7283d70de45",
+            "outputs_finite": true
+          },
+          {
+            "index": 56,
+            "token": "a19a80c905674faab7203a3a4e0f5246",
+            "outputs_finite": true
+          },
+          {
+            "index": 57,
+            "token": "b6c420c3a5bd4a219b1cb82ee5ea0aa7",
+            "outputs_finite": true
+          },
+          {
+            "index": 58,
+            "token": "8092909473464f80b9f791a4d31ddcb8",
+            "outputs_finite": true
+          },
+          {
+            "index": 59,
+            "token": "e174cb43655f49dab7ffa27b973670e3",
+            "outputs_finite": true
+          },
+          {
+            "index": 60,
+            "token": "6ff9723a60bf4e14b328b3b19f04dc32",
+            "outputs_finite": true
+          },
+          {
+            "index": 61,
+            "token": "06be0e3b665c44fa8d17d9f4770bdf9c",
+            "outputs_finite": true
+          },
+          {
+            "index": 62,
+            "token": "9150678870764c1b87a649a25939c61b",
+            "outputs_finite": true
+          },
+          {
+            "index": 63,
+            "token": "8573a885a7cb41d185c05029eeb9a54e",
+            "outputs_finite": true
+          },
+          {
+            "index": 64,
+            "token": "55c258972acb4300a3a6077a531ab050",
+            "outputs_finite": true
+          },
+          {
+            "index": 65,
+            "token": "44237858a539457da65822bfcf58c414",
+            "outputs_finite": true
+          },
+          {
+            "index": 66,
+            "token": "8cd36e9531fb4eba8e6ac1d666c4641c",
+            "outputs_finite": true
+          },
+          {
+            "index": 67,
+            "token": "7bebe3c9be714f02837f8617c56df122",
+            "outputs_finite": true
+          },
+          {
+            "index": 68,
+            "token": "4b894442c95141f9affd731d9da7b43c",
+            "outputs_finite": true
+          },
+          {
+            "index": 69,
+            "token": "e00dc15130dc44e796687baadd076ae4",
+            "outputs_finite": true
+          },
+          {
+            "index": 70,
+            "token": "e63b83b436a0479db7362338cdfab118",
+            "outputs_finite": true
+          },
+          {
+            "index": 71,
+            "token": "c567f9b8e9f34817acdc9c49d791c557",
+            "outputs_finite": true
+          },
+          {
+            "index": 72,
+            "token": "8e352d4a6c6f40c8ad4f10a3d2c3f158",
+            "outputs_finite": true
+          },
+          {
+            "index": 73,
+            "token": "841dd6709e9b4d7c9d6bf888f1fe6d7e",
+            "outputs_finite": true
+          },
+          {
+            "index": 74,
+            "token": "e54b784a608644a2804fcf800c7499f7",
+            "outputs_finite": true
+          },
+          {
+            "index": 75,
+            "token": "a1289b27ca1d41deb6fc982be9a3d03c",
+            "outputs_finite": true
+          },
+          {
+            "index": 76,
+            "token": "e6e877f31dd447199b56cae07f86daad",
+            "outputs_finite": true
+          },
+          {
+            "index": 77,
+            "token": "cb4e6195faad467094fbd4d0a9e960e9",
+            "outputs_finite": true
+          },
+          {
+            "index": 78,
+            "token": "7f594234e8034228b1a7d727f1981e09",
+            "outputs_finite": true
+          },
+          {
+            "index": 79,
+            "token": "9cdbf5ff7f294549aea0a4307e5d104a",
+            "outputs_finite": true
+          },
+          {
+            "index": 80,
+            "token": "b4ff30109dd14c89b24789dc5713cf8c",
+            "outputs_finite": true
+          }
+        ],
+        "checkpoint_profile": "official-v3-r50",
+        "initialization": "Original author released trained weights",
+        "checkpoint_sha256": "5beed4d4933ca6448d72586b0f8812863574289ff3c4192de71dc9f46a42f0ed",
+        "checkpoint": "weights/sparse4dv3_r50.pth",
+        "saved_config_sha256": "50194df762e7f1ae0174899b72408c09907f2c752660e053bd86b80251010b62",
+        "checkpoint_updates": 58599,
+        "checkpoint_reload": "strict",
+        "torch_version": "2.7.1+cpu",
+        "torch_npu_version": "2.7.1.post6",
+        "train_frames": 323,
+        "validation_frames": 81,
+        "train_val_disjoint": true,
+        "annotation_sha256": "612408e47ae34bbc9601cea28f322239f0e6bd047f936226907ff425642e760d",
+        "train_annotation_sha256": "431d1da237dbf6547afc53fa786cdf24f6b116010009cf552ff01291d781f42e",
+        "detection_only": true,
+        "validation_tokens": [
+          "048a45dd2cf54aa5808d8ccc85731d44",
+          "06be0e3b665c44fa8d17d9f4770bdf9c",
+          "07fad91090c746ccaa1b2bdb55329e20",
+          "0a0d6b8c2e884134a3b48df43d54c36a",
+          "0af0feb5b1394b928dd13d648de898f5",
+          "0bb62a68055249e381b039bf54b0ccf8",
+          "0d0700a2284e477db876c3ee1d864668",
+          "1c9a906c40f6417bbe1cea06d6e55501",
+          "281b92269fd648d4b52d06ac06ca6d65",
+          "372725a4b00e49c78d6d0b1c4a38b6e0",
+          "38a28a3aaf2647f2a8c0e90e31267bf8",
+          "3950bd41f74548429c0f7700ff3d8269",
+          "3e8750f331d7499e9b5123e9eb70f2e2",
+          "44237858a539457da65822bfcf58c414",
+          "456ec36cb4a44ca78f36fbd90c0c34fa",
+          "4b894442c95141f9affd731d9da7b43c",
+          "4cf5d6c3f6ab42aab23f67b5a9782d1a",
+          "55c258972acb4300a3a6077a531ab050",
+          "5b03af7a953245b5a3b23191ed4da62a",
+          "5b7cb170eee6468aa1fdbd3abcf63c5a",
+          "609d5177362340458a3bfd4949cd1e64",
+          "61a7bd24f88a46c2963280d8b13ac675",
+          "61d9340c5ad8418dafe7a4af1b96e6b9",
+          "6402fd1ffaf041d0b9162bd92a7ba0a2",
+          "6832e717621341568c759151b5974512",
+          "6bfd42cf0aba4f1a94ec11fa43e2dd92",
+          "6d9984d09d52479e837da2fd09e192cc",
+          "6ff9723a60bf4e14b328b3b19f04dc32",
+          "700c1a25559b4433be532de3475e58a9",
+          "747aa46b9a4641fe90db05d97db2acea",
+          "796b1988dd254f74bf2fb19ba9c5b8c6",
+          "7bebe3c9be714f02837f8617c56df122",
+          "7f594234e8034228b1a7d727f1981e09",
+          "8092909473464f80b9f791a4d31ddcb8",
+          "841dd6709e9b4d7c9d6bf888f1fe6d7e",
+          "8573a885a7cb41d185c05029eeb9a54e",
+          "858a1ece22cf45d9bc71e42336604b78",
+          "87e772078a494d42bd34cd16172808bc",
+          "8cd36e9531fb4eba8e6ac1d666c4641c",
+          "8e352d4a6c6f40c8ad4f10a3d2c3f158",
+          "8e9c2cba0ee74056aa3746e8391d54a9",
+          "9150678870764c1b87a649a25939c61b",
+          "9cdbf5ff7f294549aea0a4307e5d104a",
+          "9e7683e8586542a1b6032980c45f15ce",
+          "9ee4020153674b9e9943d395ff8cfdf3",
+          "9fcdc52b791045e99c623c5fc643331f",
+          "a1289b27ca1d41deb6fc982be9a3d03c",
+          "a19a80c905674faab7203a3a4e0f5246",
+          "a5afebb0aa5e4d7c95665788ce51ec58",
+          "a771effa2a2648d78096c3e92b95b129",
+          "a98fba72bde9433fb882032d18aedb2e",
+          "ac8b4d49731d43289579f014cb7c97ef",
+          "ae5004bf4ebb4db0a84cb3c27bd398d1",
+          "b1303058fa624645b753d7283d70de45",
+          "b22fa0b3c34f47b6a360b60f35d5d567",
+          "b4ff30109dd14c89b24789dc5713cf8c",
+          "b5989651183643369174912bc5641d3b",
+          "b6b0d9f2f2e14a3aaa2c8aedeb1edb69",
+          "b6c420c3a5bd4a219b1cb82ee5ea0aa7",
+          "b9ea04a6121d4a8bb00199b885aa5ef0",
+          "c1eed31234b94e9f8e22fbf3428b0ac2",
+          "c567f9b8e9f34817acdc9c49d791c557",
+          "c59e60042a8643e899008da2e446acca",
+          "c5f58c19249d4137ae063b0e9ecd8b8e",
+          "cb4e6195faad467094fbd4d0a9e960e9",
+          "cc57c1ea80fe46a7abddfdb15654c872",
+          "ce94ef7a0522468e81c0e2b3a2f1e12d",
+          "d0ecf474e0e64950aa265cd44b9c9d75",
+          "d8251bbc2105497ab8ec80827d4429aa",
+          "de7593d76648450e947ba0c203dee1b0",
+          "e00dc15130dc44e796687baadd076ae4",
+          "e174cb43655f49dab7ffa27b973670e3",
+          "e54b784a608644a2804fcf800c7499f7",
+          "e63b83b436a0479db7362338cdfab118",
+          "e6e877f31dd447199b56cae07f86daad",
+          "edba7d0cf1c64d2a9c8a5ebddab507a9",
+          "f40544fd4f5d42abbcfa948eeaf86850",
+          "f4f86af4da3b49e79497deda5c5f223a",
+          "f753d3f87e5b40af87ff2cbf7c8e7082",
+          "fa65a298c01f44e7a182bbf9e5fe3697",
+          "fdc39b23ab4242eda6ec5e1e6574fe33"
+        ],
+        "model_tensors_loaded": 819,
+        "precision": "upstream-config FP16 wrap",
+        "predictions_sha256": "45e9f745c67c4ebfe9f2e3726491386d53ed9d56532a584a4f59c103a4bd7eee",
+        "undefined_metric_fields": [
+          "img_bbox_NuScenes/barrier_vel_err",
+          "img_bbox_NuScenes/barrier_attr_err",
+          "img_bbox_NuScenes/traffic_cone_orient_err",
+          "img_bbox_NuScenes/traffic_cone_vel_err",
+          "img_bbox_NuScenes/traffic_cone_attr_err"
+        ],
+        "undefined_metric_encoding": "null: nuScenes does not define these class-specific orientation/velocity/attribute metrics",
+        "metrics": {
+          "img_bbox_NuScenes/car_AP_dist_0.5": 0.4503,
+          "img_bbox_NuScenes/car_AP_dist_1.0": 0.7474,
+          "img_bbox_NuScenes/car_AP_dist_2.0": 0.8658,
+          "img_bbox_NuScenes/car_AP_dist_4.0": 0.9069,
+          "img_bbox_NuScenes/car_trans_err": 0.3105,
+          "img_bbox_NuScenes/car_scale_err": 0.1497,
+          "img_bbox_NuScenes/car_orient_err": 0.0664,
+          "img_bbox_NuScenes/car_vel_err": 0.0946,
+          "img_bbox_NuScenes/car_attr_err": 0.08,
+          "img_bbox_NuScenes/mATE": 0.5444,
+          "img_bbox_NuScenes/mASE": 0.4519,
+          "img_bbox_NuScenes/mAOE": 0.5686,
+          "img_bbox_NuScenes/mAVE": 0.3967,
+          "img_bbox_NuScenes/mAAE": 0.285,
+          "img_bbox_NuScenes/truck_AP_dist_0.5": 0.5852,
+          "img_bbox_NuScenes/truck_AP_dist_1.0": 0.6274,
+          "img_bbox_NuScenes/truck_AP_dist_2.0": 0.6918,
+          "img_bbox_NuScenes/truck_AP_dist_4.0": 0.7004,
+          "img_bbox_NuScenes/truck_trans_err": 0.1734,
+          "img_bbox_NuScenes/truck_scale_err": 0.149,
+          "img_bbox_NuScenes/truck_orient_err": 0.0464,
+          "img_bbox_NuScenes/truck_vel_err": 0.0446,
+          "img_bbox_NuScenes/truck_attr_err": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_trans_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_scale_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_orient_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_vel_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_attr_err": 1.0,
+          "img_bbox_NuScenes/bus_AP_dist_0.5": 0.2203,
+          "img_bbox_NuScenes/bus_AP_dist_1.0": 0.802,
+          "img_bbox_NuScenes/bus_AP_dist_2.0": 0.9996,
+          "img_bbox_NuScenes/bus_AP_dist_4.0": 0.9996,
+          "img_bbox_NuScenes/bus_trans_err": 0.5181,
+          "img_bbox_NuScenes/bus_scale_err": 0.123,
+          "img_bbox_NuScenes/bus_orient_err": 0.0719,
+          "img_bbox_NuScenes/bus_vel_err": 0.4522,
+          "img_bbox_NuScenes/bus_attr_err": 0.0529,
+          "img_bbox_NuScenes/trailer_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/trailer_trans_err": 1.0,
+          "img_bbox_NuScenes/trailer_scale_err": 1.0,
+          "img_bbox_NuScenes/trailer_orient_err": 1.0,
+          "img_bbox_NuScenes/trailer_vel_err": 1.0,
+          "img_bbox_NuScenes/trailer_attr_err": 1.0,
+          "img_bbox_NuScenes/barrier_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/barrier_trans_err": 1.0,
+          "img_bbox_NuScenes/barrier_scale_err": 1.0,
+          "img_bbox_NuScenes/barrier_orient_err": 1.0,
+          "img_bbox_NuScenes/barrier_vel_err": null,
+          "img_bbox_NuScenes/barrier_attr_err": null,
+          "img_bbox_NuScenes/motorcycle_AP_dist_0.5": 0.4108,
+          "img_bbox_NuScenes/motorcycle_AP_dist_1.0": 0.6653,
+          "img_bbox_NuScenes/motorcycle_AP_dist_2.0": 0.7939,
+          "img_bbox_NuScenes/motorcycle_AP_dist_4.0": 0.8537,
+          "img_bbox_NuScenes/motorcycle_trans_err": 0.4121,
+          "img_bbox_NuScenes/motorcycle_scale_err": 0.2908,
+          "img_bbox_NuScenes/motorcycle_orient_err": 1.0834,
+          "img_bbox_NuScenes/motorcycle_vel_err": 0.0546,
+          "img_bbox_NuScenes/motorcycle_attr_err": 0.0,
+          "img_bbox_NuScenes/bicycle_AP_dist_0.5": 0.1764,
+          "img_bbox_NuScenes/bicycle_AP_dist_1.0": 0.412,
+          "img_bbox_NuScenes/bicycle_AP_dist_2.0": 0.4301,
+          "img_bbox_NuScenes/bicycle_AP_dist_4.0": 0.4528,
+          "img_bbox_NuScenes/bicycle_trans_err": 0.4474,
+          "img_bbox_NuScenes/bicycle_scale_err": 0.2039,
+          "img_bbox_NuScenes/bicycle_orient_err": 0.5146,
+          "img_bbox_NuScenes/bicycle_vel_err": 0.3103,
+          "img_bbox_NuScenes/bicycle_attr_err": 0.0,
+          "img_bbox_NuScenes/pedestrian_AP_dist_0.5": 0.2576,
+          "img_bbox_NuScenes/pedestrian_AP_dist_1.0": 0.616,
+          "img_bbox_NuScenes/pedestrian_AP_dist_2.0": 0.7998,
+          "img_bbox_NuScenes/pedestrian_AP_dist_4.0": 0.8791,
+          "img_bbox_NuScenes/pedestrian_trans_err": 0.4526,
+          "img_bbox_NuScenes/pedestrian_scale_err": 0.2536,
+          "img_bbox_NuScenes/pedestrian_orient_err": 0.3346,
+          "img_bbox_NuScenes/pedestrian_vel_err": 0.2174,
+          "img_bbox_NuScenes/pedestrian_attr_err": 0.1471,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_0.5": 0.7492,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_1.0": 0.7978,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_2.0": 0.8244,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_4.0": 0.8262,
+          "img_bbox_NuScenes/traffic_cone_trans_err": 0.1301,
+          "img_bbox_NuScenes/traffic_cone_scale_err": 0.3489,
+          "img_bbox_NuScenes/traffic_cone_orient_err": null,
+          "img_bbox_NuScenes/traffic_cone_vel_err": null,
+          "img_bbox_NuScenes/traffic_cone_attr_err": null,
+          "img_bbox_NuScenes/NDS": 0.5071118863717216,
+          "img_bbox_NuScenes/mAP": 0.4635453125819238
+        },
+        "official_evaluator_on_mini": true,
+        "evaluator": "Original source dataset.evaluate / nuScenes DetectionEval, mini_val",
+        "frames_checked": 81,
+        "metric_files": [
+          {
+            "path": "official_detection/img_bbox/metrics_details.json",
+            "sha256": "6657270d12dcb01e9bfc17448e46fd5bd2543d9c11ef6bd36a90fd9004ab9259",
+            "bytes": 621076
+          },
+          {
+            "path": "official_detection/img_bbox/metrics_summary.json",
+            "sha256": "58c6d94aa9d2fad971298e1426aa6714f6650edc71f67acc1c2bd8b92694d261",
+            "bytes": 4800
+          },
+          {
+            "path": "official_detection/img_bbox/results_nusc.json",
+            "sha256": "b740b6f22f8d1622ad4968eb4161912e165660589d617cf531bc03ed389212e8",
+            "bytes": 8486106
+          }
+        ],
+        "elapsed_seconds": 44.17,
+        "timing_scope": "Concurrent validation wall time; not an isolated performance benchmark"
+      },
+      "execution": {
+        "model": "sparse4d",
+        "action": "evaluate-mini",
+        "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+        "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+        "host_logical_devices": [
+          "6"
+        ],
+        "physical_cards": [
+          3
+        ],
+        "container_logical_devices": [
+          0
+        ],
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "host",
+          "--memory",
+          "48g",
+          "--cpus",
+          "8",
+          "--pids-limit",
+          "1024",
+          "--shm-size",
+          "8g",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D:/var/aispace/lzd/migration_full_20261019/Sparse4D:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D",
+          "-v",
+          "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+          "-v",
+          "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+          "-v",
+          "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+          "-v",
+          "/usr/local/dcmi:/usr/local/dcmi:ro",
+          "-v",
+          "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+          "--device",
+          "/dev/davinci6",
+          "--device",
+          "/dev/davinci_manager",
+          "--device",
+          "/dev/devmm_svm",
+          "--device",
+          "/dev/hisi_hdc",
+          "-e",
+          "ASCEND_RT_VISIBLE_DEVICES=0",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "-e",
+          "OPENBLAS_NUM_THREADS=2",
+          "-e",
+          "PYTHONUNBUFFERED=1",
+          "-e",
+          "HCCL_CONNECT_TIMEOUT=120",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "TOKENIZERS_PARALLELISM=false",
+          "-e",
+          "PATH=/opt/conda/envs/sparse4d/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "--entrypoint",
+          "/opt/conda/envs/sparse4d/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/evaluate_mini.py",
+          "--output_dir",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/official_v3_r50_complete_mini_20261020",
+          "--checkpoint-profile",
+          "official-v3-r50"
+        ],
+        "exit_code": 0,
+        "finished_utc": "2026-10-19T17:02:49.032409+00:00"
+      }
+    },
+    {
+      "output_dir": "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/official_v3_r50_default_entry_final_20261020",
+      "report": {
+        "model": "sparse4d",
+        "result": "pass_complete_mini_detection_evaluation",
+        "collected_utc": "2026-10-19T17:03:42.241007+00:00",
+        "dataset_scope": "nuScenes v1.0-mini, complete official mini_val split",
+        "expected_train_frames": 323,
+        "expected_validation_frames": 81,
+        "formal_trainval_accuracy_acceptance": false,
+        "quality_threshold_applied": false,
+        "limitation": "Author pretrained checkpoint on mini_val; no local full trainval training or same-condition GPU comparison",
+        "frames": [
+          {
+            "index": 0,
+            "token": "3e8750f331d7499e9b5123e9eb70f2e2",
+            "outputs_finite": true
+          },
+          {
+            "index": 1,
+            "token": "3950bd41f74548429c0f7700ff3d8269",
+            "outputs_finite": true
+          },
+          {
+            "index": 2,
+            "token": "c5f58c19249d4137ae063b0e9ecd8b8e",
+            "outputs_finite": true
+          },
+          {
+            "index": 3,
+            "token": "700c1a25559b4433be532de3475e58a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 4,
+            "token": "747aa46b9a4641fe90db05d97db2acea",
+            "outputs_finite": true
+          },
+          {
+            "index": 5,
+            "token": "f4f86af4da3b49e79497deda5c5f223a",
+            "outputs_finite": true
+          },
+          {
+            "index": 6,
+            "token": "6832e717621341568c759151b5974512",
+            "outputs_finite": true
+          },
+          {
+            "index": 7,
+            "token": "c59e60042a8643e899008da2e446acca",
+            "outputs_finite": true
+          },
+          {
+            "index": 8,
+            "token": "fa65a298c01f44e7a182bbf9e5fe3697",
+            "outputs_finite": true
+          },
+          {
+            "index": 9,
+            "token": "a98fba72bde9433fb882032d18aedb2e",
+            "outputs_finite": true
+          },
+          {
+            "index": 10,
+            "token": "b6b0d9f2f2e14a3aaa2c8aedeb1edb69",
+            "outputs_finite": true
+          },
+          {
+            "index": 11,
+            "token": "796b1988dd254f74bf2fb19ba9c5b8c6",
+            "outputs_finite": true
+          },
+          {
+            "index": 12,
+            "token": "0d0700a2284e477db876c3ee1d864668",
+            "outputs_finite": true
+          },
+          {
+            "index": 13,
+            "token": "de7593d76648450e947ba0c203dee1b0",
+            "outputs_finite": true
+          },
+          {
+            "index": 14,
+            "token": "f753d3f87e5b40af87ff2cbf7c8e7082",
+            "outputs_finite": true
+          },
+          {
+            "index": 15,
+            "token": "b22fa0b3c34f47b6a360b60f35d5d567",
+            "outputs_finite": true
+          },
+          {
+            "index": 16,
+            "token": "0a0d6b8c2e884134a3b48df43d54c36a",
+            "outputs_finite": true
+          },
+          {
+            "index": 17,
+            "token": "8e9c2cba0ee74056aa3746e8391d54a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 18,
+            "token": "fdc39b23ab4242eda6ec5e1e6574fe33",
+            "outputs_finite": true
+          },
+          {
+            "index": 19,
+            "token": "9ee4020153674b9e9943d395ff8cfdf3",
+            "outputs_finite": true
+          },
+          {
+            "index": 20,
+            "token": "5b03af7a953245b5a3b23191ed4da62a",
+            "outputs_finite": true
+          },
+          {
+            "index": 21,
+            "token": "d0ecf474e0e64950aa265cd44b9c9d75",
+            "outputs_finite": true
+          },
+          {
+            "index": 22,
+            "token": "456ec36cb4a44ca78f36fbd90c0c34fa",
+            "outputs_finite": true
+          },
+          {
+            "index": 23,
+            "token": "6bfd42cf0aba4f1a94ec11fa43e2dd92",
+            "outputs_finite": true
+          },
+          {
+            "index": 24,
+            "token": "0af0feb5b1394b928dd13d648de898f5",
+            "outputs_finite": true
+          },
+          {
+            "index": 25,
+            "token": "61d9340c5ad8418dafe7a4af1b96e6b9",
+            "outputs_finite": true
+          },
+          {
+            "index": 26,
+            "token": "9e7683e8586542a1b6032980c45f15ce",
+            "outputs_finite": true
+          },
+          {
+            "index": 27,
+            "token": "cc57c1ea80fe46a7abddfdb15654c872",
+            "outputs_finite": true
+          },
+          {
+            "index": 28,
+            "token": "4cf5d6c3f6ab42aab23f67b5a9782d1a",
+            "outputs_finite": true
+          },
+          {
+            "index": 29,
+            "token": "6d9984d09d52479e837da2fd09e192cc",
+            "outputs_finite": true
+          },
+          {
+            "index": 30,
+            "token": "38a28a3aaf2647f2a8c0e90e31267bf8",
+            "outputs_finite": true
+          },
+          {
+            "index": 31,
+            "token": "6402fd1ffaf041d0b9162bd92a7ba0a2",
+            "outputs_finite": true
+          },
+          {
+            "index": 32,
+            "token": "ce94ef7a0522468e81c0e2b3a2f1e12d",
+            "outputs_finite": true
+          },
+          {
+            "index": 33,
+            "token": "9fcdc52b791045e99c623c5fc643331f",
+            "outputs_finite": true
+          },
+          {
+            "index": 34,
+            "token": "1c9a906c40f6417bbe1cea06d6e55501",
+            "outputs_finite": true
+          },
+          {
+            "index": 35,
+            "token": "a771effa2a2648d78096c3e92b95b129",
+            "outputs_finite": true
+          },
+          {
+            "index": 36,
+            "token": "b9ea04a6121d4a8bb00199b885aa5ef0",
+            "outputs_finite": true
+          },
+          {
+            "index": 37,
+            "token": "87e772078a494d42bd34cd16172808bc",
+            "outputs_finite": true
+          },
+          {
+            "index": 38,
+            "token": "f40544fd4f5d42abbcfa948eeaf86850",
+            "outputs_finite": true
+          },
+          {
+            "index": 39,
+            "token": "281b92269fd648d4b52d06ac06ca6d65",
+            "outputs_finite": true
+          },
+          {
+            "index": 40,
+            "token": "b5989651183643369174912bc5641d3b",
+            "outputs_finite": true
+          },
+          {
+            "index": 41,
+            "token": "0bb62a68055249e381b039bf54b0ccf8",
+            "outputs_finite": true
+          },
+          {
+            "index": 42,
+            "token": "07fad91090c746ccaa1b2bdb55329e20",
+            "outputs_finite": true
+          },
+          {
+            "index": 43,
+            "token": "ae5004bf4ebb4db0a84cb3c27bd398d1",
+            "outputs_finite": true
+          },
+          {
+            "index": 44,
+            "token": "ac8b4d49731d43289579f014cb7c97ef",
+            "outputs_finite": true
+          },
+          {
+            "index": 45,
+            "token": "c1eed31234b94e9f8e22fbf3428b0ac2",
+            "outputs_finite": true
+          },
+          {
+            "index": 46,
+            "token": "edba7d0cf1c64d2a9c8a5ebddab507a9",
+            "outputs_finite": true
+          },
+          {
+            "index": 47,
+            "token": "a5afebb0aa5e4d7c95665788ce51ec58",
+            "outputs_finite": true
+          },
+          {
+            "index": 48,
+            "token": "5b7cb170eee6468aa1fdbd3abcf63c5a",
+            "outputs_finite": true
+          },
+          {
+            "index": 49,
+            "token": "d8251bbc2105497ab8ec80827d4429aa",
+            "outputs_finite": true
+          },
+          {
+            "index": 50,
+            "token": "048a45dd2cf54aa5808d8ccc85731d44",
+            "outputs_finite": true
+          },
+          {
+            "index": 51,
+            "token": "858a1ece22cf45d9bc71e42336604b78",
+            "outputs_finite": true
+          },
+          {
+            "index": 52,
+            "token": "372725a4b00e49c78d6d0b1c4a38b6e0",
+            "outputs_finite": true
+          },
+          {
+            "index": 53,
+            "token": "61a7bd24f88a46c2963280d8b13ac675",
+            "outputs_finite": true
+          },
+          {
+            "index": 54,
+            "token": "609d5177362340458a3bfd4949cd1e64",
+            "outputs_finite": true
+          },
+          {
+            "index": 55,
+            "token": "b1303058fa624645b753d7283d70de45",
+            "outputs_finite": true
+          },
+          {
+            "index": 56,
+            "token": "a19a80c905674faab7203a3a4e0f5246",
+            "outputs_finite": true
+          },
+          {
+            "index": 57,
+            "token": "b6c420c3a5bd4a219b1cb82ee5ea0aa7",
+            "outputs_finite": true
+          },
+          {
+            "index": 58,
+            "token": "8092909473464f80b9f791a4d31ddcb8",
+            "outputs_finite": true
+          },
+          {
+            "index": 59,
+            "token": "e174cb43655f49dab7ffa27b973670e3",
+            "outputs_finite": true
+          },
+          {
+            "index": 60,
+            "token": "6ff9723a60bf4e14b328b3b19f04dc32",
+            "outputs_finite": true
+          },
+          {
+            "index": 61,
+            "token": "06be0e3b665c44fa8d17d9f4770bdf9c",
+            "outputs_finite": true
+          },
+          {
+            "index": 62,
+            "token": "9150678870764c1b87a649a25939c61b",
+            "outputs_finite": true
+          },
+          {
+            "index": 63,
+            "token": "8573a885a7cb41d185c05029eeb9a54e",
+            "outputs_finite": true
+          },
+          {
+            "index": 64,
+            "token": "55c258972acb4300a3a6077a531ab050",
+            "outputs_finite": true
+          },
+          {
+            "index": 65,
+            "token": "44237858a539457da65822bfcf58c414",
+            "outputs_finite": true
+          },
+          {
+            "index": 66,
+            "token": "8cd36e9531fb4eba8e6ac1d666c4641c",
+            "outputs_finite": true
+          },
+          {
+            "index": 67,
+            "token": "7bebe3c9be714f02837f8617c56df122",
+            "outputs_finite": true
+          },
+          {
+            "index": 68,
+            "token": "4b894442c95141f9affd731d9da7b43c",
+            "outputs_finite": true
+          },
+          {
+            "index": 69,
+            "token": "e00dc15130dc44e796687baadd076ae4",
+            "outputs_finite": true
+          },
+          {
+            "index": 70,
+            "token": "e63b83b436a0479db7362338cdfab118",
+            "outputs_finite": true
+          },
+          {
+            "index": 71,
+            "token": "c567f9b8e9f34817acdc9c49d791c557",
+            "outputs_finite": true
+          },
+          {
+            "index": 72,
+            "token": "8e352d4a6c6f40c8ad4f10a3d2c3f158",
+            "outputs_finite": true
+          },
+          {
+            "index": 73,
+            "token": "841dd6709e9b4d7c9d6bf888f1fe6d7e",
+            "outputs_finite": true
+          },
+          {
+            "index": 74,
+            "token": "e54b784a608644a2804fcf800c7499f7",
+            "outputs_finite": true
+          },
+          {
+            "index": 75,
+            "token": "a1289b27ca1d41deb6fc982be9a3d03c",
+            "outputs_finite": true
+          },
+          {
+            "index": 76,
+            "token": "e6e877f31dd447199b56cae07f86daad",
+            "outputs_finite": true
+          },
+          {
+            "index": 77,
+            "token": "cb4e6195faad467094fbd4d0a9e960e9",
+            "outputs_finite": true
+          },
+          {
+            "index": 78,
+            "token": "7f594234e8034228b1a7d727f1981e09",
+            "outputs_finite": true
+          },
+          {
+            "index": 79,
+            "token": "9cdbf5ff7f294549aea0a4307e5d104a",
+            "outputs_finite": true
+          },
+          {
+            "index": 80,
+            "token": "b4ff30109dd14c89b24789dc5713cf8c",
+            "outputs_finite": true
+          }
+        ],
+        "checkpoint_profile": "official-v3-r50",
+        "initialization": "Original author released trained weights",
+        "checkpoint_sha256": "5beed4d4933ca6448d72586b0f8812863574289ff3c4192de71dc9f46a42f0ed",
+        "checkpoint": "weights/sparse4dv3_r50.pth",
+        "config_sha256": "50194df762e7f1ae0174899b72408c09907f2c752660e053bd86b80251010b62",
+        "config_source": "projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py",
+        "checkpoint_updates": 58599,
+        "checkpoint_reload": "strict",
+        "torch_version": "2.7.1+cpu",
+        "torch_npu_version": "2.7.1.post6",
+        "train_frames": 323,
+        "validation_frames": 81,
+        "train_val_disjoint": true,
+        "annotation_sha256": "612408e47ae34bbc9601cea28f322239f0e6bd047f936226907ff425642e760d",
+        "train_annotation_sha256": "431d1da237dbf6547afc53fa786cdf24f6b116010009cf552ff01291d781f42e",
+        "detection_only": true,
+        "validation_tokens": [
+          "048a45dd2cf54aa5808d8ccc85731d44",
+          "06be0e3b665c44fa8d17d9f4770bdf9c",
+          "07fad91090c746ccaa1b2bdb55329e20",
+          "0a0d6b8c2e884134a3b48df43d54c36a",
+          "0af0feb5b1394b928dd13d648de898f5",
+          "0bb62a68055249e381b039bf54b0ccf8",
+          "0d0700a2284e477db876c3ee1d864668",
+          "1c9a906c40f6417bbe1cea06d6e55501",
+          "281b92269fd648d4b52d06ac06ca6d65",
+          "372725a4b00e49c78d6d0b1c4a38b6e0",
+          "38a28a3aaf2647f2a8c0e90e31267bf8",
+          "3950bd41f74548429c0f7700ff3d8269",
+          "3e8750f331d7499e9b5123e9eb70f2e2",
+          "44237858a539457da65822bfcf58c414",
+          "456ec36cb4a44ca78f36fbd90c0c34fa",
+          "4b894442c95141f9affd731d9da7b43c",
+          "4cf5d6c3f6ab42aab23f67b5a9782d1a",
+          "55c258972acb4300a3a6077a531ab050",
+          "5b03af7a953245b5a3b23191ed4da62a",
+          "5b7cb170eee6468aa1fdbd3abcf63c5a",
+          "609d5177362340458a3bfd4949cd1e64",
+          "61a7bd24f88a46c2963280d8b13ac675",
+          "61d9340c5ad8418dafe7a4af1b96e6b9",
+          "6402fd1ffaf041d0b9162bd92a7ba0a2",
+          "6832e717621341568c759151b5974512",
+          "6bfd42cf0aba4f1a94ec11fa43e2dd92",
+          "6d9984d09d52479e837da2fd09e192cc",
+          "6ff9723a60bf4e14b328b3b19f04dc32",
+          "700c1a25559b4433be532de3475e58a9",
+          "747aa46b9a4641fe90db05d97db2acea",
+          "796b1988dd254f74bf2fb19ba9c5b8c6",
+          "7bebe3c9be714f02837f8617c56df122",
+          "7f594234e8034228b1a7d727f1981e09",
+          "8092909473464f80b9f791a4d31ddcb8",
+          "841dd6709e9b4d7c9d6bf888f1fe6d7e",
+          "8573a885a7cb41d185c05029eeb9a54e",
+          "858a1ece22cf45d9bc71e42336604b78",
+          "87e772078a494d42bd34cd16172808bc",
+          "8cd36e9531fb4eba8e6ac1d666c4641c",
+          "8e352d4a6c6f40c8ad4f10a3d2c3f158",
+          "8e9c2cba0ee74056aa3746e8391d54a9",
+          "9150678870764c1b87a649a25939c61b",
+          "9cdbf5ff7f294549aea0a4307e5d104a",
+          "9e7683e8586542a1b6032980c45f15ce",
+          "9ee4020153674b9e9943d395ff8cfdf3",
+          "9fcdc52b791045e99c623c5fc643331f",
+          "a1289b27ca1d41deb6fc982be9a3d03c",
+          "a19a80c905674faab7203a3a4e0f5246",
+          "a5afebb0aa5e4d7c95665788ce51ec58",
+          "a771effa2a2648d78096c3e92b95b129",
+          "a98fba72bde9433fb882032d18aedb2e",
+          "ac8b4d49731d43289579f014cb7c97ef",
+          "ae5004bf4ebb4db0a84cb3c27bd398d1",
+          "b1303058fa624645b753d7283d70de45",
+          "b22fa0b3c34f47b6a360b60f35d5d567",
+          "b4ff30109dd14c89b24789dc5713cf8c",
+          "b5989651183643369174912bc5641d3b",
+          "b6b0d9f2f2e14a3aaa2c8aedeb1edb69",
+          "b6c420c3a5bd4a219b1cb82ee5ea0aa7",
+          "b9ea04a6121d4a8bb00199b885aa5ef0",
+          "c1eed31234b94e9f8e22fbf3428b0ac2",
+          "c567f9b8e9f34817acdc9c49d791c557",
+          "c59e60042a8643e899008da2e446acca",
+          "c5f58c19249d4137ae063b0e9ecd8b8e",
+          "cb4e6195faad467094fbd4d0a9e960e9",
+          "cc57c1ea80fe46a7abddfdb15654c872",
+          "ce94ef7a0522468e81c0e2b3a2f1e12d",
+          "d0ecf474e0e64950aa265cd44b9c9d75",
+          "d8251bbc2105497ab8ec80827d4429aa",
+          "de7593d76648450e947ba0c203dee1b0",
+          "e00dc15130dc44e796687baadd076ae4",
+          "e174cb43655f49dab7ffa27b973670e3",
+          "e54b784a608644a2804fcf800c7499f7",
+          "e63b83b436a0479db7362338cdfab118",
+          "e6e877f31dd447199b56cae07f86daad",
+          "edba7d0cf1c64d2a9c8a5ebddab507a9",
+          "f40544fd4f5d42abbcfa948eeaf86850",
+          "f4f86af4da3b49e79497deda5c5f223a",
+          "f753d3f87e5b40af87ff2cbf7c8e7082",
+          "fa65a298c01f44e7a182bbf9e5fe3697",
+          "fdc39b23ab4242eda6ec5e1e6574fe33"
+        ],
+        "model_tensors_loaded": 819,
+        "precision": "upstream-config FP16 wrap",
+        "predictions_sha256": "cfae13deec8a78f605770e1c963b783f92af218b28c30afcfdad059bd55fb654",
+        "undefined_metric_fields": [
+          "img_bbox_NuScenes/barrier_vel_err",
+          "img_bbox_NuScenes/barrier_attr_err",
+          "img_bbox_NuScenes/traffic_cone_orient_err",
+          "img_bbox_NuScenes/traffic_cone_vel_err",
+          "img_bbox_NuScenes/traffic_cone_attr_err"
+        ],
+        "undefined_metric_encoding": "null: nuScenes does not define these class-specific orientation/velocity/attribute metrics",
+        "metrics": {
+          "img_bbox_NuScenes/car_AP_dist_0.5": 0.4503,
+          "img_bbox_NuScenes/car_AP_dist_1.0": 0.7474,
+          "img_bbox_NuScenes/car_AP_dist_2.0": 0.8658,
+          "img_bbox_NuScenes/car_AP_dist_4.0": 0.9069,
+          "img_bbox_NuScenes/car_trans_err": 0.3105,
+          "img_bbox_NuScenes/car_scale_err": 0.1497,
+          "img_bbox_NuScenes/car_orient_err": 0.0664,
+          "img_bbox_NuScenes/car_vel_err": 0.0946,
+          "img_bbox_NuScenes/car_attr_err": 0.08,
+          "img_bbox_NuScenes/mATE": 0.5444,
+          "img_bbox_NuScenes/mASE": 0.4519,
+          "img_bbox_NuScenes/mAOE": 0.5686,
+          "img_bbox_NuScenes/mAVE": 0.3967,
+          "img_bbox_NuScenes/mAAE": 0.285,
+          "img_bbox_NuScenes/truck_AP_dist_0.5": 0.5852,
+          "img_bbox_NuScenes/truck_AP_dist_1.0": 0.6274,
+          "img_bbox_NuScenes/truck_AP_dist_2.0": 0.6918,
+          "img_bbox_NuScenes/truck_AP_dist_4.0": 0.7004,
+          "img_bbox_NuScenes/truck_trans_err": 0.1734,
+          "img_bbox_NuScenes/truck_scale_err": 0.149,
+          "img_bbox_NuScenes/truck_orient_err": 0.0464,
+          "img_bbox_NuScenes/truck_vel_err": 0.0446,
+          "img_bbox_NuScenes/truck_attr_err": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/construction_vehicle_trans_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_scale_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_orient_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_vel_err": 1.0,
+          "img_bbox_NuScenes/construction_vehicle_attr_err": 1.0,
+          "img_bbox_NuScenes/bus_AP_dist_0.5": 0.2203,
+          "img_bbox_NuScenes/bus_AP_dist_1.0": 0.802,
+          "img_bbox_NuScenes/bus_AP_dist_2.0": 0.9996,
+          "img_bbox_NuScenes/bus_AP_dist_4.0": 0.9996,
+          "img_bbox_NuScenes/bus_trans_err": 0.5181,
+          "img_bbox_NuScenes/bus_scale_err": 0.123,
+          "img_bbox_NuScenes/bus_orient_err": 0.0719,
+          "img_bbox_NuScenes/bus_vel_err": 0.4522,
+          "img_bbox_NuScenes/bus_attr_err": 0.0529,
+          "img_bbox_NuScenes/trailer_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/trailer_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/trailer_trans_err": 1.0,
+          "img_bbox_NuScenes/trailer_scale_err": 1.0,
+          "img_bbox_NuScenes/trailer_orient_err": 1.0,
+          "img_bbox_NuScenes/trailer_vel_err": 1.0,
+          "img_bbox_NuScenes/trailer_attr_err": 1.0,
+          "img_bbox_NuScenes/barrier_AP_dist_0.5": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_1.0": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_2.0": 0.0,
+          "img_bbox_NuScenes/barrier_AP_dist_4.0": 0.0,
+          "img_bbox_NuScenes/barrier_trans_err": 1.0,
+          "img_bbox_NuScenes/barrier_scale_err": 1.0,
+          "img_bbox_NuScenes/barrier_orient_err": 1.0,
+          "img_bbox_NuScenes/barrier_vel_err": null,
+          "img_bbox_NuScenes/barrier_attr_err": null,
+          "img_bbox_NuScenes/motorcycle_AP_dist_0.5": 0.4108,
+          "img_bbox_NuScenes/motorcycle_AP_dist_1.0": 0.6653,
+          "img_bbox_NuScenes/motorcycle_AP_dist_2.0": 0.7939,
+          "img_bbox_NuScenes/motorcycle_AP_dist_4.0": 0.8537,
+          "img_bbox_NuScenes/motorcycle_trans_err": 0.4121,
+          "img_bbox_NuScenes/motorcycle_scale_err": 0.2908,
+          "img_bbox_NuScenes/motorcycle_orient_err": 1.0834,
+          "img_bbox_NuScenes/motorcycle_vel_err": 0.0546,
+          "img_bbox_NuScenes/motorcycle_attr_err": 0.0,
+          "img_bbox_NuScenes/bicycle_AP_dist_0.5": 0.1764,
+          "img_bbox_NuScenes/bicycle_AP_dist_1.0": 0.412,
+          "img_bbox_NuScenes/bicycle_AP_dist_2.0": 0.4301,
+          "img_bbox_NuScenes/bicycle_AP_dist_4.0": 0.4528,
+          "img_bbox_NuScenes/bicycle_trans_err": 0.4474,
+          "img_bbox_NuScenes/bicycle_scale_err": 0.2039,
+          "img_bbox_NuScenes/bicycle_orient_err": 0.5146,
+          "img_bbox_NuScenes/bicycle_vel_err": 0.3103,
+          "img_bbox_NuScenes/bicycle_attr_err": 0.0,
+          "img_bbox_NuScenes/pedestrian_AP_dist_0.5": 0.2576,
+          "img_bbox_NuScenes/pedestrian_AP_dist_1.0": 0.616,
+          "img_bbox_NuScenes/pedestrian_AP_dist_2.0": 0.7998,
+          "img_bbox_NuScenes/pedestrian_AP_dist_4.0": 0.8791,
+          "img_bbox_NuScenes/pedestrian_trans_err": 0.4526,
+          "img_bbox_NuScenes/pedestrian_scale_err": 0.2536,
+          "img_bbox_NuScenes/pedestrian_orient_err": 0.3346,
+          "img_bbox_NuScenes/pedestrian_vel_err": 0.2174,
+          "img_bbox_NuScenes/pedestrian_attr_err": 0.1471,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_0.5": 0.7492,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_1.0": 0.7978,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_2.0": 0.8244,
+          "img_bbox_NuScenes/traffic_cone_AP_dist_4.0": 0.8262,
+          "img_bbox_NuScenes/traffic_cone_trans_err": 0.1301,
+          "img_bbox_NuScenes/traffic_cone_scale_err": 0.3489,
+          "img_bbox_NuScenes/traffic_cone_orient_err": null,
+          "img_bbox_NuScenes/traffic_cone_vel_err": null,
+          "img_bbox_NuScenes/traffic_cone_attr_err": null,
+          "img_bbox_NuScenes/NDS": 0.5071118863717216,
+          "img_bbox_NuScenes/mAP": 0.4635453125819238
+        },
+        "official_evaluator_on_mini": true,
+        "evaluator": "Original source dataset.evaluate / nuScenes DetectionEval, mini_val",
+        "frames_checked": 81,
+        "metric_files": [
+          {
+            "path": "official_detection/img_bbox/metrics_details.json",
+            "sha256": "6657270d12dcb01e9bfc17448e46fd5bd2543d9c11ef6bd36a90fd9004ab9259",
+            "bytes": 621076
+          },
+          {
+            "path": "official_detection/img_bbox/metrics_summary.json",
+            "sha256": "f27a4278de68a0f64608d57bd659fd095a14a8c81a8701569f5905c913435bc1",
+            "bytes": 4800
+          },
+          {
+            "path": "official_detection/img_bbox/results_nusc.json",
+            "sha256": "b740b6f22f8d1622ad4968eb4161912e165660589d617cf531bc03ed389212e8",
+            "bytes": 8486106
+          }
+        ],
+        "elapsed_seconds": 44.231,
+        "timing_scope": "Concurrent validation wall time; not an isolated performance benchmark"
+      },
+      "execution": {
+        "model": "sparse4d",
+        "action": "evaluate-mini",
+        "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+        "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+        "host_logical_devices": [
+          "6"
+        ],
+        "physical_cards": [
+          3
+        ],
+        "container_logical_devices": [
+          0
+        ],
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "host",
+          "--memory",
+          "48g",
+          "--cpus",
+          "8",
+          "--pids-limit",
+          "1024",
+          "--shm-size",
+          "8g",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D:/var/aispace/lzd/migration_full_20261019/Sparse4D:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D",
+          "-v",
+          "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+          "-v",
+          "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+          "-v",
+          "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+          "-v",
+          "/usr/local/dcmi:/usr/local/dcmi:ro",
+          "-v",
+          "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+          "--device",
+          "/dev/davinci6",
+          "--device",
+          "/dev/davinci_manager",
+          "--device",
+          "/dev/devmm_svm",
+          "--device",
+          "/dev/hisi_hdc",
+          "-e",
+          "ASCEND_RT_VISIBLE_DEVICES=0",
+          "-e",
+          "OMP_NUM_THREADS=2",
+          "-e",
+          "OPENBLAS_NUM_THREADS=2",
+          "-e",
+          "PYTHONUNBUFFERED=1",
+          "-e",
+          "HCCL_CONNECT_TIMEOUT=120",
+          "-e",
+          "HF_HUB_OFFLINE=1",
+          "-e",
+          "TRANSFORMERS_OFFLINE=1",
+          "-e",
+          "TOKENIZERS_PARALLELISM=false",
+          "-e",
+          "PATH=/opt/conda/envs/sparse4d/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "--entrypoint",
+          "/opt/conda/envs/sparse4d/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/evaluate_mini.py",
+          "--output_dir",
+          "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/official_v3_r50_default_entry_final_20261020",
+          "--checkpoint-profile",
+          "official-v3-r50"
+        ],
+        "exit_code": 0,
+        "finished_utc": "2026-10-19T17:04:29.974343+00:00"
+      }
+    }
+  ],
+  "source_sha256_at_default_entry_validation": {
+    "tools/container.py": "0f23ec444c632617e9dc7af15f9dd26523381a59d21eee89f8b5e35ee6faf5b2",
+    "tools/evaluate_mini.py": "82703a8da16a0ca9c5224a8445239c95db19cc4c3cfa902b0023756dfac55b70",
+    "test/evaluate_mini_1p.sh": "545f8b8a19976f4ec8fbef8522769312ccd5fa4c9c1d6d13671cda075ccd7e08",
+    "evaluation.weights.lock.json": "bd33a6178281294da690a79676a08cb8790755c4a36aaebb0c6894757d5049a9"
+  },
+  "default_and_explicit_profile_primary_metrics_equal": true
+}

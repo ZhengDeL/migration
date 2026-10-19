@@ -10,7 +10,7 @@
 
 共九个独立模型包。每个模型包包含自己的**指导、源码及适配、运行镜像、已准备的数据和权重、训练与验证脚本、检查点及测试结果**。各包独立使用，所含数据与已验证范围见下表和对应模型指导。
 
-该分享为 **2026-10-18 固定交付版本**。GitHub 于 2026-10-19 新增的三模型全量复验、Qwen 完整 DriveLM 准备及公开入口实测，以及正在准备的其他完整数据尚未重新打入这批 ZIP。包内旧记录与当天新结果分别保留；后续完整验收和重新打包完成前，不将该分享称为八模型完整数据验收包。WorldEngine AlgEngine 后续使用[独立迁移仓](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)。
+该分享为 **2026-10-18 固定交付版本**。GitHub 于 2026-10-19 新增的三模型全量复验、Qwen 完整 DriveLM 准备及公开入口实测，以及 2026-10-20 的三模型完整 mini 评测、Apollo 原 OCC mask 路径修复、Sparse4D 作者权重/默认评测入口和正在准备的其他完整数据尚未重新打入这批 ZIP。包内旧记录与当天新结果分别保留；后续完整验收和重新打包完成前，不将该分享称为八模型完整数据验收包。WorldEngine AlgEngine 后续使用[独立迁移仓](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)。
 
 ## 各模型入口
 

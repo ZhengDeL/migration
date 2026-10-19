@@ -18,7 +18,7 @@ def validate(model, prepared, data_dir):
         require_hash(path, checksum)
     if not manifest.get('label_payloads_unchanged'):
         raise RuntimeError('Apollo label verification is missing')
-    for item in manifest['labels']:
+    for item in manifest['labels'] + manifest.get('invalid_masks', []):
         path = prepared / item['path']
         if not path.resolve().is_relative_to(prepared):
             raise RuntimeError('Label path escapes prepared directory')
@@ -27,6 +27,7 @@ def validate(model, prepared, data_dir):
     if manifest.get('heldout_samples', 0) and manifest.get('train_val_disjoint') is not True:
         raise RuntimeError('Apollo heldout split has not been checked for overlap')
     tokens = []
+    invalid_paths = set()
     for annotation in annotations:
         with annotation.open('rb') as stream:
             infos = pickle.load(stream)['infos']
@@ -35,6 +36,12 @@ def validate(model, prepared, data_dir):
             raise RuntimeError('Duplicate sample tokens: ' + annotation.name)
         tokens.append(split_tokens)
         for info in infos:
+            if 'occ_invalid_path' in info:
+                invalid = Path(info['occ_invalid_path'])
+                if (not manifest.get('invalid_masks_payloads_unchanged') or
+                        not invalid.resolve().is_relative_to(prepared) or not invalid.is_file()):
+                    raise RuntimeError('Run prepare_data to restore and verify original OCC visibility masks')
+                invalid_paths.add(str(invalid.relative_to(prepared)))
             for camera in info['cams'].values():
                 if not Path(camera['data_path']).is_file():
                     raise RuntimeError('Missing real image: ' + camera['data_path'])
@@ -45,4 +52,6 @@ def validate(model, prepared, data_dir):
             raise RuntimeError('Apollo validation count or train/val overlap is invalid')
         if len(tokens[0] | tokens[1]) != manifest['mini_samples_expected']:
             raise RuntimeError('Apollo mini split does not cover the expected samples')
+    if invalid_paths != {item['path'] for item in manifest.get('invalid_masks', [])}:
+        raise RuntimeError('Original OCC visibility mask references differ from verified manifest')
     return manifest
