@@ -38,7 +38,7 @@ def latest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate'])
+    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate', 'evaluate-mini'])
     parser.add_argument('--device_id', '--devices', dest='devices', help='宿主逻辑 NPU ID；训练选不同物理卡')
     parser.add_argument('--data_path', type=Path, help='本模型目录内的数据目录')
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
@@ -66,7 +66,7 @@ def main():
             image()
             args.action = 'prepare'
         spec = image()
-        nproc = 1 if args.action == 'validate' else PROFILE['nproc']
+        nproc = 1 if args.action in ('validate', 'evaluate-mini') else PROFILE['nproc']
         host_ids = (args.devices or ('0' if nproc == 1 else PROFILE['host_devices'])).split(',')
         if args.action in ('prepare', 'plan'):
             host_ids = []
@@ -75,17 +75,17 @@ def main():
                 raise RuntimeError('设备数不匹配；训练需 ' + str(nproc) + ' 个 ID，验证需 1 个 ID。')
             if len({int(x) // 2 for x in host_ids}) != nproc:
                 raise RuntimeError('1# 双芯片卡拓扑中，每张物理卡只选一个逻辑 ID。')
-            if args.action in ('functional', 'full', 'validate'):
+            if args.action in ('functional', 'full', 'validate', 'evaluate-mini'):
                 command(sys.executable, str(ROOT / 'tools/check_idle_cards.py'), ','.join(host_ids))
         data = (args.data_path or ROOT / PROFILE['data_dir']).resolve()
         if not data.is_relative_to(ROOT):
             raise RuntimeError('--data_path 必须位于本模型目录下；先按 README 放置或迁入数据。')
-        if args.action in ('functional', 'full', 'plan'):
+        if args.action in ('functional', 'full', 'plan', 'evaluate-mini'):
             output = (args.output_dir or ROOT / 'test/output' / (args.action + '_' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))).resolve()
             if not output.is_relative_to(ROOT) or output.exists():
                 raise RuntimeError('输出目录须在本模型目录内且尚不存在。')
             output.mkdir(parents=True)
-            if args.action != 'plan':
+            if args.action not in ('plan', 'evaluate-mini'):
                 (ROOT / 'test/output/latest_run.json').write_text(json.dumps({'model': MODEL, 'state': 'running', 'output_dir': output.relative_to(ROOT).as_posix()}, indent=2) + '\n')
         elif args.action == 'validate':
             output = args.output_dir.resolve(strict=True) if args.output_dir else latest()
@@ -115,6 +115,8 @@ def main():
             launch = ['tools/prepare_data.py', '--data_path', str(data)]
         elif args.action == 'check':
             launch = ['tools/check_env.py', '--model', MODEL, '--nproc', str(nproc), '--output', 'test/output/environment.json', '--summary']
+        elif args.action == 'evaluate-mini':
+            launch = ['tools/evaluate_mini.py', '--output_dir', str(output)]
         elif args.action == 'validate':
             launch = ['tools/validate_model.py', '--output_dir', str(output)]
         else:
@@ -132,6 +134,14 @@ def main():
                 sys.stdout.buffer.write(block)
                 sys.stdout.buffer.flush()
             result_code = child.wait()
+        if args.action == 'evaluate-mini':
+            receipt = {'model': MODEL, 'action': args.action, 'image_tag': spec['tag'],
+                'image_id': spec['image_id'], 'host_logical_devices': host_ids,
+                'physical_cards': [int(value) // 2 for value in host_ids],
+                'container_logical_devices': list(range(nproc)),
+                'command': docker + launch, 'exit_code': result_code,
+                'finished_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+            (output / 'evaluation_execution.json').write_text(json.dumps(receipt, indent=2) + '\n')
         if args.action == 'prepare' and result_code == 0:
             reference = ROOT / 'validation/reference_run'
             pointer = ROOT / 'test/output/latest_run.json'

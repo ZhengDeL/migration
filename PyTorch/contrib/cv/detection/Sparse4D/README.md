@@ -99,6 +99,23 @@ bash test/validate_1p.sh --device_id=0
 
 本次功能配置：**nuScenes mini；2 卡每卡 batch 1，普通 AdamW，学习率 2.5e-5，10 次优化迭代**。输出 `iter_10.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
+## 全部 mini 验证帧的独立检测评测
+
+默认使用作者发布的 **Sparse4Dv3 R50 已训练权重**，文件身份固定在 [evaluation.weights.lock.json](evaluation.weights.lock.json)。先完成本模型 setup / prepare_data，再将权重放入本模型目录：
+
+```bash
+mkdir -p weights
+wget -c -O weights/sparse4dv3_r50.pth \
+  https://github.com/HorizonRobotics/Sparse4D/releases/download/v3.0/sparse4dv3_r50.pth
+bash test/evaluate_mini_1p.sh --device_id=0
+```
+
+离线机器将同一文件复制到 `weights/sparse4dv3_r50.pth`；入口先按 lock 的 SHA256 核验，再 strict 重载 819 个状态张量，以原配置运行全部 **81 个标准 mini_val 帧**，计算原仓 detection mAP/NDS 及各类别指标。默认权重约 577 MB，SHA256 为 `5beed4d4933ca6448d72586b0f8812863574289ff3c4192de71dc9f46a42f0ed`；这是本项目从官方 HTTPS 资产观察并固定的摘要，发布方未另提供 SHA256。
+
+每次创建新的 `test/output/evaluate-mini_<时间>/`，包含 `console_evaluate-mini.log`、逐帧检查和指标 `mini_evaluation.json`、镜像/卡号/命令/退出码 `evaluation_execution.json`、原始预测和 nuScenes 指标文件。已有训练指针和历史结果保留；可用 `--output_dir="$PWD/test/output/自定义新目录"` 指定新的输出路径。本入口只评测检测，完整 trainval 精度与本项目从头训练仍另行验收。
+
+旧十步交付检查点仅供失败复现：`bash test/evaluate_mini_1p.sh --device_id=0 --checkpoint-profile=delivered-mini`。该身份已知在第 36 帧失败，不能用于任务质量验收。当前网盘旧 ZIP 尚不包含新脚本/作者权重；新完整离线包将在本轮完整验收后按模型独立归档。
+
 ## 完整数据训练
 
 完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 按上游 kmeans 工具在完整训练标注上生成 `data/nuscenes_full/nuscenes_kmeans900.npy`；完整入口使用它，不复用 mini anchor。
@@ -138,6 +155,18 @@ bash test/validate_1p.sh --device_id=4
 
 另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)及[完整数据负向门禁](validation/full_data_guard.json)。功能数据不能作为完整训练数据通过门禁。
 
+## 2026-10-20 完整 mini 评测发现的失败
+
+固定十步交付检查点在第 36 帧（索引 35，token `a771effa2a2648d78096c3e92b95b129`）出现非有限预测；完整 81 帧评测**未通过**。固定种子复跑 FP16、FP32 均复现。FP32 解码器输入的对数尺寸为 89.4342651367，超过 FP32 `exp` 有限上限约 88.7228393555；将同一输入移到 CPU，`exp` 同样溢出。FP16 路径还捕获了 keypoint 生成中的首个非有限输出。
+
+这份未收敛检查点不能用于完整推理或任务质量验收；此前十步训练和单帧有限性结果仅保留其原有范围。未截断尺寸、跳帧、屏蔽 NaN 或填写 mAP/NDS。[失败帧、原始模块诊断、FP16/FP32 和 CPU 控制、命令/退出码及权重 SHA](validation/complete_mini_failure_20261020.json)。作者发布的已训练权重已在同一固定镜像完成 81/81 帧对照，mAP=0.4635453126、NDS=0.5071118864；该控制说明旧十步权重不可代替已训练模型。正式 trainval 训练和完整指标仍待执行。
+
+## 作者已训练权重对照（2026-10-20）
+
+同一固定镜像与标准 mini_val 81 帧，strict 重载作者 Sparse4Dv3 R50 权重，全部预测有限；原仓评测 **mAP=0.4635453126、NDS=0.5071118864**（0～1 比例）。显式 `--checkpoint-profile=official-v3-r50` 与不加该参数的默认入口分别在两个新输出目录实跑，均退出 0，主要指标一致。
+
+[全部帧、两个公开命令/退出码、镜像、权重/代码摘要及原始指标](validation/official_checkpoint_mini_evaluation_20261020.json)。这是作者已训练权重在 mini_val 的 NPU 检测控制；本项目完整 trainval 训练、全量精度及同条件 GPU/NPU 对照仍需完成。旧十步权重失败记录保留，不能将该失败权重替换身份后声称通过。
+
 ## 通过判据
 
 训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
@@ -146,6 +175,7 @@ bash test/validate_1p.sh --device_id=4
 
 ## 变更
 
+- 2026-10-20：新增完整 mini 评测和十步检查点第 36 帧真实失败/CPU exp 控制；作者权重对照按独立身份记录。
 - 2026-10-19：按固定版本 ModelZoo / DrivingSDK 原指导整理章节，补充原仓依据和本项目入口对应关系；训练代码、镜像、数据、已有数值门槛与实测记录保持。
 - 此前训练与修复日期、实际输入和检查点身份见本模型 `validation/`；详细实验与复验命令保留在本模型指导中。
 
