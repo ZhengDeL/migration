@@ -25,10 +25,19 @@ require_checkout('bevformer', source)
 verify_applied_patch(source, patch_for('bevformer', root / 'vendor'), (compat_patch_for('bevformer'),))
 from cpu_data_converter import load_author_converter
 module, loading = load_author_converter(source / 'tools/data_converter/nuscenes_converter.py')
-candidate.mkdir(parents=True)
-module.create_nuscenes_infos(str((root / 'data/nuscenes').resolve()), str(candidate),
-    str(root / 'data'), 'nuscenes', version='v1.0-mini', max_sweeps=10)
 reference = root / 'prepared/nuscenes'
+for split in ['train', 'val']:
+    with (reference / ('nuscenes_infos_temporal_' + split + '.pkl')).open('rb') as stream:
+        baseline = pickle.load(stream)
+    if any(any(float(value) != 0 for value in info['can_bus']) for info in baseline['infos']):
+        raise RuntimeError('This control expects the delivered mini zero-CAN reference; review changed input provenance')
+candidate.mkdir(parents=True)
+# Match this reference's recorded CAN input even if full CAN has since arrived.
+# Formal trainval preparation always uses the real official CAN directory.
+can_reference = candidate / 'reference_inputs'
+(can_reference / 'can_bus').mkdir(parents=True)
+module.create_nuscenes_infos(str((root / 'data/nuscenes').resolve()), str(candidate),
+    str(can_reference), 'nuscenes', version='v1.0-mini', max_sweeps=10)
 counts = Counter()
 differences = []
 
@@ -92,6 +101,7 @@ report = dict(result='pass_all_original_mini_annotation_fields' if not differenc
     collected_utc=datetime.now(timezone.utc).isoformat(), counts=dict(counts),
     difference_count=len(differences), first_differences=differences[:30], files=files,
     path_comparison='Only the samples/sweeps directory prefix is rebased; numeric arrays, class labels and metadata compared',
+    can_bus_control='Isolated empty CAN input matches all 404 delivered zero-CAN reference vectors; formal conversion uses official CAN separately',
     npu_devices_exposed=False, model_training_executed=False, full_trainval_conversion_completed=False, converter_loading=loading)
 (candidate / 'annotation_field_comparison.json').write_text(json.dumps(report, indent=2) + '\n')
 print(json.dumps(report, indent=2), flush=True)

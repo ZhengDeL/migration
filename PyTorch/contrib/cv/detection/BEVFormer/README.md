@@ -158,7 +158,7 @@ docker run --rm --network none --cpus 4 --memory 16g \
   --output_dir "$PWD/test/output/cpu_converter_control_$(date +%Y%m%d_%H%M%S)"
 ```
 
-2026-10-20 实跑退出 0：全部 mini 323 train / 81 val 的 17,980 个数组、123,038 个标量无差异；仅比较时归一化媒体路径前缀。mini 作为完整数据输入时退出 1，准备目录、源码数据链接及结果指针保持。[命令、对照结果、数据/源码摘要与队列状态](validation/original_converter_control_20261020.json)。这验证转换算法保持，不代表完整 trainval 转换已通过。
+2026-10-20 实跑退出 0：全部 mini 323 train / 81 val 的 17,980 个数组、123,038 个标量无差异；仅比较时归一化媒体路径前缀。该对照显式使用与已交付 mini 标注一致的零 CAN 参考输入，避免随后补齐正式 CAN 改变对照输入；正式转换仍必须使用真实官方 CAN。mini 作为完整数据输入时退出 1，准备目录、源码数据链接及结果指针保持。[命令、对照结果、数据/源码摘要与队列状态](validation/original_converter_control_20261020.json)。这验证转换算法保持，不代表完整 trainval 转换已通过。
 
 正式训练队列已等待原始数据全覆盖核验，之后先执行完整转换，再等待空闲双物理卡启动上述公开完整入口。**当前完整转换和完整训练尚未完成，收敛与正式精度未验收。** `validate_1p.sh` 的判据对应既有功能配置；完整训练按上游官方评估说明另行验收。
 

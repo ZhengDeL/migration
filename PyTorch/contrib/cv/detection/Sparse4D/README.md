@@ -186,6 +186,12 @@ bash test/validate_1p.sh --device_id=4
 
 [全部帧、两个公开命令/退出码、镜像、权重/代码摘要及原始指标](validation/official_checkpoint_mini_evaluation_20261020.json)。这是作者已训练权重在 mini_val 的 NPU 检测控制；本项目完整 trainval 训练、全量精度及同条件 GPU/NPU 对照仍需完成。旧十步权重失败记录保留，不能将该失败权重替换身份后声称通过。
 
+## 2026-10-20 新 mini 检查点的完整训练与复测
+
+从原 ImageNet 骨干重新训练已完成：两 rank 各 **2,600 更新**，每卡 batch=6，模型及优化器保存状态有限。新检查点自动重载完成全部 **81/81** 留出帧；另通过公开 `test/evaluate_mini_1p.sh --checkpoint=.../iter_2600.pth` 在新输出目录复测，两次均退出 0，**mAP=0.0604165495、NDS=0.1097741302** 相同。
+
+此次新检查点未复现旧十步权重的整套推理溢出；旧权重及失败证据仍保留。这是原 mini 数据上的完整声明训练流程，正式 trainval 的完整训练、收敛、任务质量和 GPU 对齐仍未验收，不能与作者全量训练权重的指标作同条件对照。[实际训练命令、各 rank 完成记录、检查点/源码 SHA 和两次全部指标](validation/mini_training_evaluation_20261020.json)。
+
 ## 通过判据
 
 训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
