@@ -42,6 +42,9 @@
 | npu_compat.py | 原可训练池化、原MMCV NPU autograd；no_grad保留DrivingSDK；CPU add/relu公式兼容 |
 | npu_precision.py / deterministic_communication.py | 关闭HF32；HCCL确定性与同步mean allreduce |
 | training_state.py / train.py / resume_control.py | 全rank RNG及游标、增强前跳过已消费批次、输入SHA与三个数值profile |
+| train_native_epochs.py / container_native_epochs.py / compare_native_epochs.py | 原 MMCV runner、作者组采样器及三项 hook；完整 mini 轮次、模型/优化器/EMA/各 rank RNG 的轮次边界恢复对照，实际梯度分桶轨迹 |
+| full_data.py / prepare_full_data.py / container_full_data.py | 完整 trainval 原始文件门禁、作者标注/深度转换及逐文件 SHA 清单；数据准备与训练、精度分别判定 |
+| cpu_data_converter.py | 从固定镜像原数据集源码提取类别映射，隔离转换器两项模型导入及导入时 CLI 解析，使元数据转换无需可用 NPU；校验原转换函数 AST 保持，单独可选 2D 导出明确拒绝 |
 
 相机标定原FP64矩阵计算和固定相机投影属于无梯度元数据处理；NN参数、特征、loss、有效梯度和采样反向均在NPU。Torch基础wheel的`+cpu`版本标签不代表NN在CPU执行，实际设备和调用守卫已实测。
 
@@ -78,7 +81,7 @@ ckpts/resworld-official-final.pth
 ckpts/geobev-r50-nuimage-cbgs.pth
 ```
 
-作者最终权重用于原 65 帧 CPU/NPU 规划与碰撞对照；GeoBEV 权重对应原仓初始化要求。当前 mini 功能训练从头运行，未将原 12 epoch / GeoBEV 初始化训练记作已完成。原权重完整性及本次数据摘要见本模型来源锁与验证 JSON。
+作者最终权重用于原 65 帧 CPU/NPU 规划与碰撞对照；GeoBEV 权重对应原仓初始化要求。下方 `train_4p.sh` 是从头运行的 mini 功能入口；原训练组件预检和原 runner 轮次控制使用 GeoBEV，命令各自列明。原 12 epoch 正式训练尚未完成。原权重完整性及本次数据摘要见本模型来源锁与验证 JSON。
 
 # 开始训练
 
@@ -111,11 +114,13 @@ bash test/revalidate_packaged_1p.sh --devices 0
 
 ## 正式完整训练范围
 
-作者原指导依次准备 nuScenes trainval、CAN、地图／深度、GeoBEV 初始化，运行四卡训练与最终评估。本项目正式 trainval、原 12 epoch runner、完整训练/EMA 恢复与最终评测尚未完成；`full` 入口继续拒绝。当前可复现范围为本页列明的真实 mini 工程验证。
+作者原指导依次准备 nuScenes trainval、CAN、地图／深度、GeoBEV 初始化，运行四卡训练与最终评估。本项目正式 trainval、原 12 epoch 完整训练及最终评测尚未完成；`full` 训练入口继续拒绝。当前可复现范围为本页列明的真实 mini 工程验证；[正式数据准备入口](FULL_VALIDATION.md#11-正式-trainval-输入准备)已增加完整性门禁，正向完整转换仍等待数据下载。
 
 GeoBEV 初始化、SyncBN、原 EMA 和 warmup 可先用本模型的[四卡真实网络预检](FULL_VALIDATION.md#9-geobevsyncbnema-与-warmup-的四卡预检)分别检查。该入口使用真实 mini，保留完整逐步记录；完整数据训练仍按本节边界单独验收。
 
 2026-10-19 在新机器实际完成四卡各 8 更新、64 个不同真实训练帧；548 个兼容 GeoBEV 张量载入核对通过，86 个 SyncBN 模块每 rank 实际调用 1,824 次，原 EMA 从 10,560 更新到 10,568。四 rank 参数摘要一致，模型/EMA/优化器有限，模型和 EMA 保存后重读逐位相同。见[完整命令、逐步 loss、权重 SHA 与退出码](validation/original_protocol_preflight_20261019.json)。八步结果不表示收敛；正式完整数据精度未验收。
+
+随后实际完成[原 runner 的完整 mini 轮次与 EMA 续训](FULL_VALIDATION.md#10-原-runner-的完整-mini-轮次与-ema-续训)：323 条标注、四卡每卡 batch=2、每轮每 rank 41 次更新；一轮后重启续至两轮，对照独立连续两轮，2,762 个完整状态张量和四 rank 第二轮共 164 条轨迹全部逐位一致。最终累计 82 次更新、EMA=10,642，两份检查点 SHA256 同为 `6efe38550d7a3688fb75168990e5375da0b89ee1dfe69458ac2d5cd704748ac4`。命令、时刻、输入/loss/分桶和状态比较见[实测 JSON](validation/native_epoch_resume_20261019.json)。此项使用 workers=0、轮次边界恢复；正式 trainval / 12 epoch / 原 workers=8 和任务精度仍未完成。
 
 # 训练结果展示
 
@@ -133,7 +138,7 @@ GeoBEV 初始化、SyncBN、原 EMA 和 warmup 可先用本模型的[四卡真�
 | 严格续训 | 四卡 10+10 对连续 20：2,054/2,054 完整状态张量逐位相同，max=0；四 rank 增强输入 SHA 匹配 |
 | 持续训练及重载 | 四卡 1,811.967955 s / 新增 660 次更新；最终累计 step=680；独立重载 CPU/NPU max=3.8146973e-6 |
 | 作者权重评测 | 原规划/碰撞函数全部 65 帧 CPU/NPU 对照通过；轨迹 rtol=atol=0.003，逐帧离散碰撞完全一致 |
-| 未完成 | 正式 nuScenes trainval、原 12 epoch / EMA / SyncBN / warmup；作者权重可能见过 mini，不作为独立驾驶精度验收 |
+| 未完成 | 正式 nuScenes trainval、原 12 epoch 完整训练及最终评测；mini 训练组件新结果另见 2026-10-19 记录；作者权重可能见过 mini，不作为独立驾驶精度验收 |
 
 当前判定：`pass_mini_numerical_and_operational_gates_full_protocol_pending`。
 
