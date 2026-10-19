@@ -4,6 +4,8 @@
 
 本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
 
+性能数据单列于[NPU 实测性能与 GPU 对照状态](performance.md)，包含原始 JSON、batch 和实际计时秒数。目前八项均缺同条件的原生 CUDA/GPU 性能基线，不能给出 GPU 快慢比例。
+
 ## 2026-10-19 新增全量复验
 
 三项均在 ARM64 Atlas 800I A3 上新建输出目录、实际执行至退出 0；使用固定镜像 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。本轮重新评测已有检查点，未将前轮训练改写为当天新训练。
@@ -31,7 +33,7 @@ LSTM 的 val 参与选模，STGCN 使用社区 70/15/15 协议，MobileNetV2 使
 | 复现对照 | 三次独立输出目录（两次未复用、一次单帧复用）的适配器 SHA256 相同：`68da404a097ff580e6676478d912619c8e188ec7e3fc4924ec0ca5113db85874`；原双卡与公开单卡重载 loss 均为 1.8978482484817505 |
 | 错误数据拦截 | Windows、ARM64 Linux 各 7 项通过；包括改名演示数据、任意目录、直接启动入口和结果指针不变检查 |
 | 完整训练启动记录 | 全部 340,119 train / 37,836 dev 已完成原生预处理；loss@10=3.2349693298、loss@20=2.8300830841，保留原启动阶段数据 |
-| 完整训练进度快照 | 2026-10-19 21:42 北京时间：1,473 / 63,774 更新（2.31%），第 1,470 步日志训练 loss=0.2752；训练及完整留出评测尚未结束，见[带时间的原生进度](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_training_progress_20261019.json) |
+| 完整训练进度快照 | 2026-10-19 22:17 北京时间：1,671 / 63,774 更新（2.62%），第 1,670 步日志训练 loss=0.2267；训练及完整留出评测尚未结束，见[带时间的原生进度](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_training_progress_20261019.json) |
 
 [完整来源、摘要、命令、时间、退出码和当前后台阶段](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/drivelm_complete_data_20261019.json)；[独立模型指导](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md#完整数据训练drivelm-nuscenes-v11)。上述重载 loss 使用同一组 16 条预检训练样本，仅证明保存与重载功能。最终三轮训练和全部本地 dev 重载仍需对应终态结果；官方隐藏评分按 [DriveLM 官方提交流程](https://github.com/OpenDriveLab/DriveLM/blob/main/challenge/README.md#submit-to-test-server)办理。
 

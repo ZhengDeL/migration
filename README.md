@@ -22,7 +22,7 @@
 | [Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 2026-10-12 |
 | [LSTM-Argoverse](PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2 | 2026-10-19 |
 | [STGCN-Traffic](PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2 | 2026-10-19 |
-| [ResWorld](PyTorch/contrib/cv/others/ResWorld/README.md) | 4 | 2026-10-18 |
+| [ResWorld](PyTorch/contrib/cv/others/ResWorld/README.md) | 4 | 2026-10-19 |
 | [MobileNetV2](PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2 | 2026-10-19 |
 
 本轮完整数据实测范围为以上八项。[WorldEngine AlgEngine 独立迁移仓](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)负责该框架，本轮不重复测试；本仓保留历史工程和已发布九模型包的对应关系。
@@ -32,6 +32,7 @@
 ## 文档
 
 - [模型验证结果](docs/validation.md)：八项当前范围、新实测数据、历史记录及未完成项。
+- [实测性能与 GPU 对照](docs/performance.md)：已有 NPU 吞吐、实际计时条件和待补原生 GPU 基线。
 - [环境与镜像](docs/environment.md)：已验证的三个镜像组合与 image ID。
 - [独立离线交付](docs/offline_delivery.md)：每模型完整 ZIP 的内容、校验和使用方式。
 - [固定版本与核验日期](docs/latest_versions.md)：各模型来源提交及实际核验依据。
