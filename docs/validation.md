@@ -8,17 +8,17 @@
 
 ## 2026-10-20 后续修复与重新训练
 
-截至 **02:25 北京时间**的后续实机快照如下。新训练均保留原网络、标签与指标，不继续使用已失败的旧十步权重；尚无新训练检查点的最终留出集指标。
+截至 **02:45 北京时间**的后续实机快照如下。新训练均保留原网络、标签与指标，不继续使用已失败的旧十步权重；Sparse4D 新训练检查点已完成末尾评测及公开入口复测；Apollo 尚无新训练检查点的最终留出集指标。
 
 | 模型 | 已执行的新操作 / 实测 | 验收边界与证据 |
 | --- | --- | --- |
 | BEVFormer | 作者 R101-DCN 24 epoch 权重；显式 profile 和默认公开入口各 81/81 帧、退出 0；两次 mAP=0.3623209477、NDS=0.4103581189 相同 | [权重 SHA、两次命令、完整逐帧与原始指标](../PyTorch/contrib/cv/detection/BEVFormer/validation/official_checkpoint_mini_evaluation_20261020.json)；不代表本项目完整 trainval 训练或 GPU 对齐通过 |
-| Apollo VisionNet | 修复 `dataset.eval_detection_configs.class_names` 的 `dict_keys` 无法 spawn/pickle；实测四组各 4 个 worker，四 rank 各完成 347 更新，465 个有效梯度/步与原始输出有限；24 epoch / 1,464 更新继续 | [失败、修复 SHA、实际 worker PID、逐 rank 数据与时间](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/mini_training_progress_20261020.json)；当前不填写新 mIoU |
-| Sparse4D | 从 ImageNet 骨干重新训练；两卡各 batch=6、全局 12、lr=1.5e-4；两 rank 各完成 1,578 更新，原始 head/keypoint/损失/梯度有限；100 个按迭代定义的 mini epoch / 2,600 更新继续 | [训练协议、逐 rank 数据、源文件 SHA 与时间](../PyTorch/contrib/cv/detection/Sparse4D/validation/mini_training_progress_20261020.json)；旧十步权重溢出保留，新权重完整 81 帧和任务精度仍待训练结束 |
+| Apollo VisionNet | 修复 `dataset.eval_detection_configs.class_names` 的 `dict_keys` 无法 spawn/pickle；实测四组各 4 个 worker，四 rank 各完成 562 更新，465 个有效梯度/步与原始输出有限；24 epoch / 1,464 更新继续 | [失败、修复 SHA、实际 worker PID、逐 rank 数据与时间](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/mini_training_progress_20261020.json)；当前不填写新 mIoU |
+| Sparse4D | 从 ImageNet 骨干重新训练；两 rank 各完成 2,600 更新；自动评测及公开单卡入口各 81/81 帧有限、退出 0；两次 mAP=0.0604165495、NDS=0.1097741302 相同 | [训练/检查点 SHA、逐 rank 数据与两次完整指标](../PyTorch/contrib/cv/detection/Sparse4D/validation/mini_training_evaluation_20261020.json)；新检查点整套推理有限，旧十步权重失败仍保留；正式 trainval 训练与精度未验收 |
 
 BEVFormer 的原转换器 CPU 入口另已实跑：全部 404 帧、17,980 个数组、123,038 个标量对照无差异，mini 冒充完整数据被拒绝且准备目录/结果指针不变。[实际命令、字段比较、源文件摘要与正式训练等待状态](../PyTorch/contrib/cv/detection/BEVFormer/validation/original_converter_control_20261020.json)。正式 trainval 转换/训练队列已等待原始数据全覆盖核验；尚未执行完整转换或完整训练。
 
-新入口分别为各模型自己的 `test/train_mini_4p.sh`、`test/train_mini_2p.sh`；结束后自动重载、完整 mini 留出评测并保存模型级结果。mini 训练用于进一步定位和修复当前质量问题，正式 trainval 训练仍需完整数据；三项均未标为正式质量验收通过。10 月 18 日旧网盘 ZIP 尚未更新。
+新入口分别为各模型自己的 `test/train_mini_4p.sh`、`test/train_mini_2p.sh`；结束后自动重载、完整 mini 留出评测并保存模型级结果；Sparse4D 已完成并另做公开单卡入口复测。mini 训练用于进一步定位和修复当前质量问题，正式 trainval 训练仍需完整数据；三项均未标为正式质量验收通过。10 月 18 日旧网盘 ZIP 尚未更新。
 
 ## 2026-10-20 早期短训检查点评测与剩余验收
 
@@ -39,7 +39,7 @@ Apollo 修复了本项目准备脚本遗漏的 `occ_invalid_path`，原 mask 字
 | 模型 | 后续必需验证 | 当前条件 |
 | --- | --- | --- |
 | BEVFormer | 正式 trainval 训练、收敛、完整 mAP/NDS；完整训练的续训/稳定性 | 作者权重及默认入口各完成 81 帧；官方完整 nuScenes 分包继续下载 |
-| Sparse4D | 正式 trainval 训练/完整检测指标；新训练检查点需验证整套推理不再溢出 | 作者权重完成 81 帧；新双卡 mini 训练继续，旧十步权重失败保留；正式 nuScenes 继续下载 |
+| Sparse4D | 正式 trainval 训练/完整检测指标；新训练检查点需验证整套推理不再溢出 | 作者权重及新 2,600 更新检查点均完成 81 帧；旧十步权重失败保留；正式 nuScenes 继续下载 |
 | Qwen3-VL-8B | 三 epoch 完整训练、37,836 条本地 dev 重载评测、完整训练检查点/续训/稳定性 | 340,119 条 train / 37,836 dev 已齐备，双卡训练运行中；官方隐藏答案仍未公开 |
 | Apollo VisionNet | 正式 trainval 完整训练、检测/OCC 指标与完整训练恢复/稳定性 | 修复 spawn 数据加载后新四卡 mini 训练继续；完整图像/点云下载中；旧十步权重 mIoU=0 不能验收 |
 | LSTM-Argoverse | 所选协议已完成；业务/隐藏排行榜另行验收 | 全部数据、数值、续训和持续训练证据已完成 |
