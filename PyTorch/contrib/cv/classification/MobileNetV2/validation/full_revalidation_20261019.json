@@ -1,0 +1,86 @@
+{
+  "validation_date": "2026-10-19",
+  "execution_kind": "new_complete_dataset_checkpoint_reevaluation_not_new_training",
+  "hardware": "Atlas 800I A3, ARM64, Ascend 910C",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "started_utc": "2026-10-19T06:57:57.862437+00:00",
+  "finished_utc": "2026-10-19T07:19:08.736175+00:00",
+  "process_wall_seconds": 1270.873738,
+  "exit_code": 0,
+  "raw_result_documents": {
+    "npu_result.json": {
+      "model": "mobilenetv2",
+      "backend": "npu",
+      "result": "pass_official_full_validation",
+      "data_scope": "imagenet_2012_official_validation_only",
+      "images_evaluated": 50000,
+      "classes": 1000,
+      "top1_correct": 35935,
+      "top5_correct": 45147,
+      "top1_percent": 71.87,
+      "top5_percent": 90.294,
+      "accuracy_deltas_percentage_points": [
+        0.0,
+        0.0
+      ],
+      "comparison": "independent complete CPU evaluation",
+      "weight_sha256": "b03531047ffacf1e2488318dcd2aba1126cde36e3bfe1aa5cb07700aeeee9889",
+      "index_metadata_sha256": "b18b00e747704a66d4c7d9923acbe454c0c2371b0281e9e131e67be9655964e4",
+      "source_architecture_control_passed": true,
+      "every_logit_compared": true,
+      "logits_compared": 50000000,
+      "logit_max_absolute_error": 6.866455078125e-05,
+      "logits_outside_tolerance": 0,
+      "engineering_acceptance": {
+        "all_logit_rtol": 0.003,
+        "all_logit_atol": 0.003,
+        "top1_top5_delta_percentage_points": 0.1,
+        "note": "Project numerical gates declared before the full evaluation; not a Huawei published accuracy standard."
+      },
+      "total_evaluation_seconds": 76.34826167998835,
+      "training_from_scratch_claimed": false,
+      "official_pretrained_weights_used": true,
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      }
+    },
+    "cpu_result.json": {
+      "model": "mobilenetv2",
+      "backend": "cpu",
+      "result": "pass_official_full_validation",
+      "data_scope": "imagenet_2012_official_validation_only",
+      "images_evaluated": 50000,
+      "classes": 1000,
+      "top1_correct": 35935,
+      "top5_correct": 45147,
+      "top1_percent": 71.87,
+      "top5_percent": 90.294,
+      "accuracy_deltas_percentage_points": [
+        0.007999999999995566,
+        0.007999999999995566
+      ],
+      "comparison": "published V1 reference",
+      "weight_sha256": "b03531047ffacf1e2488318dcd2aba1126cde36e3bfe1aa5cb07700aeeee9889",
+      "index_metadata_sha256": "b18b00e747704a66d4c7d9923acbe454c0c2371b0281e9e131e67be9655964e4",
+      "source_architecture_control_passed": true,
+      "every_logit_compared": false,
+      "logits_compared": 0,
+      "logit_max_absolute_error": null,
+      "logits_outside_tolerance": 0,
+      "engineering_acceptance": {
+        "all_logit_rtol": 0.003,
+        "all_logit_atol": 0.003,
+        "top1_top5_delta_percentage_points": 0.1,
+        "note": "Project numerical gates declared before the full evaluation; not a Huawei published accuracy standard."
+      },
+      "total_evaluation_seconds": 1135.3005984600168,
+      "training_from_scratch_claimed": false,
+      "official_pretrained_weights_used": true,
+      "npu_precision": null,
+      "logits_sha256": "496c54e4ae31ce85732cc26a77e03edcd1bdf2eb477b233af95f0ec3d7e0638b"
+    }
+  },
+  "entrypoint": "bash test/validate_imagenet_1p.sh --devices 4 --output_dir <new_model_output>",
+  "boundary": "Official torchvision V1 pretrained weights, all 50000 ImageNet val images; not 600-epoch training from scratch."
+}

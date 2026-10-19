@@ -18,6 +18,9 @@ def main():
     parser.add_argument('--dataset_id', default='mllm_demo')
     parser.add_argument('--plan', action='store_true')
     args = parser.parse_args()
+    if args.mode == 'full':
+        from prepare_full_data import require_full_protocol
+        require_full_protocol(args.data_path, args.dataset_id)
     source = ROOT / 'sources' / PROFILE['source']
     output = args.output_dir.resolve()
     if not output.is_relative_to(ROOT):

@@ -144,6 +144,10 @@ bash test/validate_1p.sh --device_id=8
 
 FocalLoss 兼容路径的 8 个有限 CPU/NPU 前后向案例通过 `atol=1e-5, rtol=1e-4`；[算子数值记录](validation/focal_parity_20261011.json)保留实际误差，不能代替整模型检测/占用指标。
 
+## 2026-10-19 完整 OCC 数据准备
+
+完整 `occ_gt_release_v1_0.tar.gz` 已校验两端 SHA256 并解压。700 train 场景 / 28,130 样本、150 val 场景 / 6,019 样本，全部 102,447 个 NPY 标签文件的 header 与数据长度通过检查；与正式 nuScenes 场景/样本完全对应，训练验证无重叠。见[完整检查数据](validation/full_occ_data_20261019.json)。相机/点云、CAN、派生标注与完整训练/评测仍在准备，不能以标签完整代替模型 mAP/mIoU。
+
 # 版本说明
 
 ## 变更

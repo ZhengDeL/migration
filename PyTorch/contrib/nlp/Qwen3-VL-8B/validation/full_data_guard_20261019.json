@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-19",
+  "result": "pass_fail_closed_full_entry_regression_only",
+  "tests": 5,
+  "local_windows_exit_code": 0,
+  "server_arm64_linux_exit_code": 0,
+  "server_raw_output": "LINUX_GUARD_REGRESSION 0  .....\n----------------------------------------------------------------------\nRan 5 tests in 0.199s\n\nOK\n\nNPU_TRAINING_EXECUTED False\n",
+  "tested_cases": [
+    "renamed_demo_directory",
+    "host_entry_before_image_device_output_mutations",
+    "direct_model_entry",
+    "direct_upstream_launcher",
+    "annotation_identity_rejects_demo"
+  ],
+  "test_command": "python3 test/test_full_data_guard.py",
+  "npu_training_executed": false,
+  "full_drivelm_protocol_supported": false,
+  "image_required_for_negative_guard": false,
+  "files_sha256": {
+    "tools\\prepare_full_data.py": "f75ef2bce2b0482e7af469b65838d20b93641fcfb9b9146ea4dc89bf93610e0f",
+    "tools\\container.py": "c8302962adafe3e5926162fc7b0b4edd2a6079754985341229f4dee6308ba0f3",
+    "tools\\train_model.py": "432728d700e4bee8892036bf27e0e05ba519fdf2834048d8e377bbeaf37d268c",
+    "tools\\run_train.py": "689d0ca46a87ccf3c32fa3119892d65621b0e6f55b96a1861e115517e431404a",
+    "test\\test_full_data_guard.py": "23035d007777139caa42cd214b80659c1e6099f027cf28f9175b5005cbcbcbef"
+  }
+}

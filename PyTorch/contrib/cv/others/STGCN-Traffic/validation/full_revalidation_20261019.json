@@ -1,0 +1,83 @@
+{
+  "validation_date": "2026-10-19",
+  "execution_kind": "new_complete_dataset_checkpoint_reevaluation_not_new_training",
+  "hardware": "Atlas 800I A3, ARM64, Ascend 910C",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "started_utc": "2026-10-19T06:57:57.859042+00:00",
+  "finished_utc": "2026-10-19T06:59:10.707088+00:00",
+  "process_wall_seconds": 72.848046,
+  "exit_code": 0,
+  "raw_result_documents": {
+    "full_prediction_control.json": {
+      "model": "stgcn-traffic",
+      "result": "pass",
+      "checkpoint_sha256": "cfbe7a2e12c838c353687ba17cb70425ddae77b167ec6e2ed9b41f16f92511ae",
+      "data_scope": "pemsd7-m_full_chronological",
+      "npu_precision": {
+        "conv_allow_hf32": false,
+        "matmul_allow_hf32": false
+      },
+      "prediction_rtol": 0.003,
+      "prediction_atol": 0.003,
+      "splits": {
+        "val": {
+          "windows": 1885,
+          "output_elements_compared": 429780,
+          "max_absolute_error_normalized": 4.5299530029296875e-06,
+          "elements_outside_tolerance": 0,
+          "cpu_metrics": {
+            "windows": 1885,
+            "points": 429780,
+            "mae": 2.407789174480778,
+            "rmse": 4.205520879510333,
+            "wmape_ratio": 0.04128161222449635,
+            "wmape_percent": 4.128161222449635,
+            "forecast_minutes": 15,
+            "units": "original_speed_values"
+          },
+          "npu_metrics": {
+            "windows": 1885,
+            "points": 429780,
+            "mae": 2.407789175985689,
+            "rmse": 4.205520891037929,
+            "wmape_ratio": 0.04128161225029809,
+            "wmape_percent": 4.128161225029809,
+            "forecast_minutes": 15,
+            "units": "original_speed_values"
+          }
+        },
+        "test": {
+          "windows": 1885,
+          "output_elements_compared": 429780,
+          "max_absolute_error_normalized": 4.76837158203125e-06,
+          "elements_outside_tolerance": 0,
+          "cpu_metrics": {
+            "windows": 1885,
+            "points": 429780,
+            "mae": 2.3743455323266267,
+            "rmse": 4.129394297554209,
+            "wmape_ratio": 0.04088394582830958,
+            "wmape_percent": 4.088394582830958,
+            "forecast_minutes": 15,
+            "units": "original_speed_values"
+          },
+          "npu_metrics": {
+            "windows": 1885,
+            "points": 429780,
+            "mae": 2.3743455410531493,
+            "rmse": 4.129394309690578,
+            "wmape_ratio": 0.0408839459785719,
+            "wmape_percent": 4.0883945978571905,
+            "forecast_minutes": 15,
+            "units": "original_speed_values"
+          }
+        }
+      },
+      "validation_used_for_selection": true,
+      "test_used_for_selection": false,
+      "formal_business_accuracy_claimed": false
+    }
+  },
+  "entrypoint": "tools/validate_full_predictions.py --data_path <full_data> --checkpoint <selected_checkpoint> --output <new_output>/full_prediction_control.json",
+  "boundary": "PeMSD7(M) community PyTorch 70/15/15 protocol; not the original paper protocol or METR-LA."
+}
