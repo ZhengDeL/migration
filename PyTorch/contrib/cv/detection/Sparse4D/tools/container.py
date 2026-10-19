@@ -38,13 +38,14 @@ def latest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate', 'evaluate-mini'])
+    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate', 'evaluate-mini', 'train-mini'])
     parser.add_argument('--device_id', '--devices', dest='devices', help='宿主逻辑 NPU ID；训练选不同物理卡')
     parser.add_argument('--data_path', type=Path, help='本模型目录内的数据目录')
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
     parser.add_argument('--dataset_id', default='mllm_demo', help='仅图文模型的注册数据集名')
     parser.add_argument('--checkpoint-profile', choices=('delivered-mini', 'official-v3-r50'),
         default='official-v3-r50', help='evaluate-mini 使用的固定权重身份')
+    parser.add_argument('--checkpoint', type=Path, help='本模型完整 mini 训练生成的检查点')
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('在有 Ascend 驱动和 Docker 的 ARM64 Linux 服务器执行本脚本。')
@@ -77,12 +78,12 @@ def main():
                 raise RuntimeError('设备数不匹配；训练需 ' + str(nproc) + ' 个 ID，验证需 1 个 ID。')
             if len({int(x) // 2 for x in host_ids}) != nproc:
                 raise RuntimeError('1# 双芯片卡拓扑中，每张物理卡只选一个逻辑 ID。')
-            if args.action in ('functional', 'full', 'validate', 'evaluate-mini'):
+            if args.action in ('functional', 'full', 'validate', 'evaluate-mini', 'train-mini'):
                 command(sys.executable, str(ROOT / 'tools/check_idle_cards.py'), ','.join(host_ids))
         data = (args.data_path or ROOT / PROFILE['data_dir']).resolve()
         if not data.is_relative_to(ROOT):
             raise RuntimeError('--data_path 必须位于本模型目录下；先按 README 放置或迁入数据。')
-        if args.action in ('functional', 'full', 'plan', 'evaluate-mini'):
+        if args.action in ('functional', 'full', 'plan', 'evaluate-mini', 'train-mini'):
             output = (args.output_dir or ROOT / 'test/output' / (args.action + '_' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))).resolve()
             if not output.is_relative_to(ROOT) or output.exists():
                 raise RuntimeError('输出目录须在本模型目录内且尚不存在。')
@@ -120,6 +121,10 @@ def main():
         elif args.action == 'evaluate-mini':
             launch = ['tools/evaluate_mini.py', '--output_dir', str(output),
                 '--checkpoint-profile', args.checkpoint_profile]
+            if args.checkpoint:
+                launch += ['--checkpoint', str(args.checkpoint.resolve(strict=True))]
+        elif args.action == 'train-mini':
+            launch = ['tools/train_mini.py', '--output_dir', str(output)]
         elif args.action == 'validate':
             launch = ['tools/validate_model.py', '--output_dir', str(output)]
         else:
@@ -155,7 +160,7 @@ def main():
                 shutil.copytree(reference, delivered)
                 pointer.write_text(json.dumps({'model': MODEL, 'state': 'completed', 'mode': 'delivered_reference', 'image_id': spec['image_id'], 'exit_code': 0, 'output_dir': delivered.relative_to(ROOT).as_posix()}, indent=2) + '\n')
                 print('Delivered reference copied to the model-local validation working directory.', flush=True)
-        if args.action in ('functional', 'full'):
+        if args.action in ('functional', 'full', 'train-mini'):
             state = {'model': MODEL, 'state': 'completed' if result_code == 0 else 'failed', 'output_dir': output.relative_to(ROOT).as_posix(), 'exit_code': result_code, 'host_devices': host_ids, 'image_id': spec['image_id'], 'mode': args.action}
             (ROOT / 'test/output/latest_run.json').write_text(json.dumps(state, indent=2) + '\n')
         return result_code

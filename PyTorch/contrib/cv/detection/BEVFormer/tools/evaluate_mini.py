@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Strictly reload this model's delivered checkpoint; evaluate every mini validation frame.
+"""Strictly reload a pinned checkpoint and evaluate every mini validation frame.
 
-This evaluates the original mini checkpoint, not a converged trainval model.
+Author trained weights and the legacy short-training checkpoint are separate profiles.
 The upstream dataset formatter and nuScenes detection evaluator calculate metrics.
 """
 import argparse
@@ -32,6 +32,8 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output_dir', required=True, type=Path)
+    parser.add_argument('--checkpoint-profile', choices=('delivered-mini', 'official-r101-24ep'),
+        default='official-r101-24ep')
     args = parser.parse_args()
     output = args.output_dir.resolve(strict=True)
     if not output.is_relative_to(ROOT) or (output / 'mini_evaluation.json').exists():
@@ -83,20 +85,36 @@ def main():
 
         torch.npu.set_device(0)
         reference = ROOT / 'validation/reference_run'
-        checkpoint = reference / CHECKPOINT
-        expected = json.loads((reference / 'validation_result.json').read_text())['saved']['sha256']
+        if args.checkpoint_profile == 'official-r101-24ep':
+            weight = json.loads((ROOT / 'evaluation.weights.lock.json').read_text())[args.checkpoint_profile]
+            checkpoint = (ROOT / weight['path']).resolve(strict=True)
+            if not checkpoint.is_relative_to(ROOT) or checkpoint.stat().st_size != weight['bytes']:
+                raise RuntimeError('Author checkpoint path/size mismatch')
+            expected = weight['sha256']
+        else:
+            checkpoint = reference / CHECKPOINT
+            expected = json.loads((reference / 'validation_result.json').read_text())['saved']['sha256']
         actual = digest(checkpoint)
         if actual != expected:
             raise RuntimeError('Reference checkpoint SHA256 mismatch')
         saved = torch.load(checkpoint, map_location='cpu', weights_only=False)
-        if not finite(saved['state_dict']) or not finite(saved['optimizer']):
+        if not finite(saved['state_dict']) or not finite(saved.get('optimizer', {})):
             raise RuntimeError('Non-finite checkpoint model/optimizer')
-        config_text = saved['meta']['config']
-        config = Config.fromstring(config_text, '.py')
+        if args.checkpoint_profile == 'official-r101-24ep':
+            config_path = ROOT / 'sources' / PROFILE['source'] / weight['config']
+            config_text = config_path.read_text()
+            config = Config.fromfile(str(config_path))
+            report.update(initialization='Original author released BEVFormer-base R101-DCN 24 epoch weights',
+                limitation='Author trained checkpoint on mini_val; local full trainval training and GPU parity remain unverified')
+        else:
+            config_text = saved['meta']['config']
+            config = Config.fromstring(config_text, '.py')
         report.update(checkpoint_sha256=actual,
             checkpoint=checkpoint.relative_to(ROOT).as_posix(),
             saved_config_sha256=hashlib.sha256(config_text.encode()).hexdigest(),
-            checkpoint_updates=162, checkpoint_reload='strict',
+            checkpoint_profile=args.checkpoint_profile,
+            checkpoint_updates=saved.get('meta', {}).get('iter') if args.checkpoint_profile == 'official-r101-24ep' else 162,
+            checkpoint_reload='strict',
             torch_version=torch.__version__, torch_npu_version=torch_npu.__version__)
         source = ROOT / 'sources' / PROFILE['source']
         from prepare import require_checkout

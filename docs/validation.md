@@ -1,12 +1,26 @@
 # 模型验证结果
 
-最近一轮实机记录：**2026-10-20**：新增 BEVFormer 全部 81 帧检测指标、Apollo 全部 162 帧 OCC 指标，发现并公开 Sparse4D 十步检查点完整 mini 推理失败及 CPU 控制；Qwen 全量训练继续。2026-10-19 的三项全量复验、ResWorld 原 runner/EMA/CPU 数据对照和更早结果保留实际执行日期。
+最近一轮实机记录：**2026-10-20**：BEVFormer 作者权重及默认入口各完成 81 帧；Apollo 修复多进程数据加载错误，四卡重新训练；Sparse4D 双卡重新训练。早期短训检查点的低指标、失败及 CPU 控制保留；Qwen 全量训练继续。2026-10-19 的三项全量复验、ResWorld 原 runner/EMA/CPU 数据对照和更早结果保留实际执行日期。
 
 本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
 
 性能数据单列于[NPU 实测性能与 GPU 对照状态](performance.md)，包含原始 JSON、batch 和实际计时秒数。目前八项均缺同条件的原生 CUDA/GPU 性能基线，不能给出 GPU 快慢比例。
 
-## 2026-10-20 并行评测与剩余验收
+## 2026-10-20 后续修复与重新训练
+
+截至 **02:25 北京时间**的后续实机快照如下。新训练均保留原网络、标签与指标，不继续使用已失败的旧十步权重；尚无新训练检查点的最终留出集指标。
+
+| 模型 | 已执行的新操作 / 实测 | 验收边界与证据 |
+| --- | --- | --- |
+| BEVFormer | 作者 R101-DCN 24 epoch 权重；显式 profile 和默认公开入口各 81/81 帧、退出 0；两次 mAP=0.3623209477、NDS=0.4103581189 相同 | [权重 SHA、两次命令、完整逐帧与原始指标](../PyTorch/contrib/cv/detection/BEVFormer/validation/official_checkpoint_mini_evaluation_20261020.json)；不代表本项目完整 trainval 训练或 GPU 对齐通过 |
+| Apollo VisionNet | 修复 `dataset.eval_detection_configs.class_names` 的 `dict_keys` 无法 spawn/pickle；实测四组各 4 个 worker，四 rank 各完成 347 更新，465 个有效梯度/步与原始输出有限；24 epoch / 1,464 更新继续 | [失败、修复 SHA、实际 worker PID、逐 rank 数据与时间](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/mini_training_progress_20261020.json)；当前不填写新 mIoU |
+| Sparse4D | 从 ImageNet 骨干重新训练；两卡各 batch=6、全局 12、lr=1.5e-4；两 rank 各完成 1,578 更新，原始 head/keypoint/损失/梯度有限；100 个按迭代定义的 mini epoch / 2,600 更新继续 | [训练协议、逐 rank 数据、源文件 SHA 与时间](../PyTorch/contrib/cv/detection/Sparse4D/validation/mini_training_progress_20261020.json)；旧十步权重溢出保留，新权重完整 81 帧和任务精度仍待训练结束 |
+
+BEVFormer 的原转换器 CPU 入口另已实跑：全部 404 帧、17,980 个数组、123,038 个标量对照无差异，mini 冒充完整数据被拒绝且准备目录/结果指针不变。[实际命令、字段比较、源文件摘要与正式训练等待状态](../PyTorch/contrib/cv/detection/BEVFormer/validation/original_converter_control_20261020.json)。正式 trainval 转换/训练队列已等待原始数据全覆盖核验；尚未执行完整转换或完整训练。
+
+新入口分别为各模型自己的 `test/train_mini_4p.sh`、`test/train_mini_2p.sh`；结束后自动重载、完整 mini 留出评测并保存模型级结果。mini 训练用于进一步定位和修复当前质量问题，正式 trainval 训练仍需完整数据；三项均未标为正式质量验收通过。10 月 18 日旧网盘 ZIP 尚未更新。
+
+## 2026-10-20 早期短训检查点评测与剩余验收
 
 在同一固定 DrivingSDK 镜像、三个独立模型目录执行；逻辑卡 4 / 6 / 8 分属物理卡 2 / 3 / 4。Qwen 保留物理卡 0、1 继续训练。全部 31,223 个 mini 原始文件逐份 SHA256 通过。表中“流程完成”仅指加载、全部推理和原仓指标计算已完成；短训权重的任务精度尚不能验收。
 
@@ -24,10 +38,10 @@ Apollo 修复了本项目准备脚本遗漏的 `occ_invalid_path`，原 mask 字
 
 | 模型 | 后续必需验证 | 当前条件 |
 | --- | --- | --- |
-| BEVFormer | 正式 trainval 训练、收敛、完整 mAP/NDS；完整训练的续训/稳定性 | 官方完整 nuScenes 分包继续下载，当前只有 mini 可完整评测 |
-| Sparse4D | 正式 trainval 训练/完整检测指标；新训练检查点需验证整套推理不再溢出 | 作者已训练权重及默认入口均完成 81 帧对照；十步权重失败保留；正式 nuScenes 继续下载 |
+| BEVFormer | 正式 trainval 训练、收敛、完整 mAP/NDS；完整训练的续训/稳定性 | 作者权重及默认入口各完成 81 帧；官方完整 nuScenes 分包继续下载 |
+| Sparse4D | 正式 trainval 训练/完整检测指标；新训练检查点需验证整套推理不再溢出 | 作者权重完成 81 帧；新双卡 mini 训练继续，旧十步权重失败保留；正式 nuScenes 继续下载 |
 | Qwen3-VL-8B | 三 epoch 完整训练、37,836 条本地 dev 重载评测、完整训练检查点/续训/稳定性 | 340,119 条 train / 37,836 dev 已齐备，双卡训练运行中；官方隐藏答案仍未公开 |
-| Apollo VisionNet | 正式 trainval 完整训练、检测/OCC 指标与完整训练恢复/稳定性 | OCC 已齐备，完整 nuScenes 图像/点云仍在下载；十步权重 mIoU=0 不能验收 |
+| Apollo VisionNet | 正式 trainval 完整训练、检测/OCC 指标与完整训练恢复/稳定性 | 修复 spawn 数据加载后新四卡 mini 训练继续；完整图像/点云下载中；旧十步权重 mIoU=0 不能验收 |
 | LSTM-Argoverse | 所选协议已完成；业务/隐藏排行榜另行验收 | 全部数据、数值、续训和持续训练证据已完成 |
 | STGCN-Traffic | 所选 PeMSD7(M) 70/15/15 协议已完成；其他数据/原论文协议另行验收 | 全量 test、数值、续训和持续训练证据已完成 |
 | ResWorld | 正式 trainval / 原 12 epoch、完整驾驶任务指标及完整数据恢复/稳定性 | mini 数值/原 runner 恢复已完成；正式数据准备队列等待原始数据全部到齐 |

@@ -15,6 +15,7 @@ from world_mini_data import digest, require_hash
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output_dir', required=True, type=Path)
+    parser.add_argument('--checkpoint', type=Path, help='A completed, verified model-local mini-training checkpoint')
     args = parser.parse_args()
     args.source = ROOT / 'sources/Apollo-Vision-Net'
     args.data_dir = ROOT / 'data/apollo'
@@ -34,20 +35,33 @@ def main():
     manifest = validate('apollo_visionnet', prepared, args.data_dir)
     if not manifest.get('heldout_samples') or manifest.get('train_val_disjoint') is not True:
         raise RuntimeError('Independent Apollo mini validation data is required; VAL reuse is not accepted')
-    reports = [json.loads((reference / f'training_check_rank{i}.json').read_text()) for i in range(4)]
-    if any((r.get('result') != 'pass_training_smoke' or r.get('iterations') != 10 for r in reports)):
-        raise RuntimeError('Complete the four-card mini training first')
-    if any((r.get('dataset_scope') != manifest['dataset_scope'] + '; official DLA depth pretrained backbone' for r in reports)):
-        raise RuntimeError('Training result does not match the prepared dataset scope')
+    if args.checkpoint:
+        checkpoint = args.checkpoint.resolve(strict=True)
+        if not checkpoint.is_relative_to(ROOT):
+            raise RuntimeError('Checkpoint must belong to this independent model directory')
+        reports = [json.loads((checkpoint.parent / f'quality_training_rank{i}.json').read_text()) for i in range(4)]
+        if any(r.get('result') != 'pass_completed_mini_training' or r.get('updates') != 1464 for r in reports):
+            raise RuntimeError('Complete the four-card 24 epoch mini training first')
+        config = checkpoint.parent / 'mini_training.py'
+        updates = 1464
+        initialization = 'official DLA depth backbone followed by 24 complete mini train epochs'
+    else:
+        reports = [json.loads((reference / f'training_check_rank{i}.json').read_text()) for i in range(4)]
+        if any((r.get('result') != 'pass_training_smoke' or r.get('iterations') != 10 for r in reports)):
+            raise RuntimeError('Complete the four-card mini training first')
+        if any((r.get('dataset_scope') != manifest['dataset_scope'] + '; official DLA depth pretrained backbone' for r in reports)):
+            raise RuntimeError('Training result does not match the prepared dataset scope')
+        checkpoint = reference / 'iter_10.pth'
+        config = reference / 'apollo_visionnet_real_smoke.py'
+        updates = 10
+        initialization = 'official DLA depth pretrained backbone before ten-step mini training'
     if any((not r.get('initialization_tensor_matches') for r in reports)):
         raise RuntimeError('Official DLA initialization was not verified before training')
-    checkpoint = reference / 'iter_10.pth'
     require_hash(checkpoint, reports[0]['checkpoint_sha256'])
-    config = reference / 'apollo_visionnet_real_smoke.py'
     report = {'model': 'apollo_visionnet', 'test': 'checkpoint_reload_heldout_inference', 'checkpoint_sha256': reports[0]['checkpoint_sha256'], 'config_sha256': digest(config), 'train_samples': manifest['train_samples'], 'heldout_samples': manifest['heldout_samples'], 'train_val_disjoint': True, 'official_accuracy_evaluation': False, 'precision': 'FP32', 'physical_cards': 1, 'initialization': 'official DLA depth pretrained backbone before ten-step mini training', 'frames': [], 'result': 'fail'}
     from datetime import datetime, timezone
     report.update(collected_utc=datetime.now(timezone.utc).isoformat(),
-        dataset_scope=manifest['dataset_scope'], checkpoint_updates=10,
+        dataset_scope=manifest['dataset_scope'], checkpoint_updates=updates, initialization=initialization,
         formal_trainval_accuracy_acceptance=False, quality_threshold_applied=False,
         detection_metrics_computed=False,
         detection_limitation='Original mini OCC heldout is 162 frames; original detection evaluator requires official mini_val (81). No split substitution.',

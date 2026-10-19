@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "model": "Apollo-Vision-Net",
+  "collected_utc": "2026-10-19T18:25:31.987165+00:00",
+  "result": "running_mini_training_not_final_accuracy_acceptance",
+  "task_quality_accepted": false,
+  "full_trainval_training_completed": false,
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "plan": {
+    "model": "apollo_visionnet",
+    "scope": "original OCC mini split: 242 train / 162 heldout; not full trainval",
+    "train_frames": 242,
+    "heldout_frames": 162,
+    "epochs": 24,
+    "nproc": 4,
+    "batch_per_rank": 1,
+    "expected_updates": 1464,
+    "initialization": "official DLA depth backbone only",
+    "formal_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "original_config": "projects/configs/bevformer/bev_tiny_det_occ_apollo.py",
+    "retained_learning_rate_schedule": {
+      "policy": "CosineAnnealing",
+      "warmup": "linear",
+      "warmup_iters": 500,
+      "warmup_ratio": 0.3333333333333333,
+      "min_lr_ratio": 0.001
+    }
+  },
+  "workflow": {
+    "state": "running_mini_training",
+    "started_utc": "2026-10-19T17:52:02.402979+00:00",
+    "controller_pid": 370967,
+    "full_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "output": "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/mini_training_quality_workers4_20261020",
+    "host_logical_devices": [
+      6,
+      8,
+      10,
+      12
+    ],
+    "physical_cards": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "command": [
+      "bash",
+      "test/train_mini_4p.sh",
+      "--device_id=6,8,10,12",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/mini_training_quality_workers4_20261020"
+    ],
+    "launcher_pid": 371022
+  },
+  "trace_summaries": [
+    {
+      "file": "quality_training_rank0.jsonl",
+      "updates": 347,
+      "sha256": "4e0d55eef70a2cebc10c6b7b08d63bbeef27a05777bf8f301ac2bff922acd941",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 3952424,
+      "first_loss": 35.28636932373047,
+      "latest": {
+        "update": 347,
+        "epoch": 6,
+        "loss": 22.073143005371094,
+        "gradient_tensors": 465,
+        "raw_head_checks": 1041,
+        "log_vars": {
+          "loss_cls": 0.8237506747245789,
+          "loss_bbox": 1.136283040046692,
+          "loss_occupancy": 4.139256477355957,
+          "loss_flow": 0.0,
+          "lovasz_softmax": 0.0,
+          "loss_sem_scal": 6.695034980773926,
+          "loss_geo_scal": 0.0,
+          "d0.loss_cls": 0.7774818539619446,
+          "d0.loss_bbox": 1.2160797119140625,
+          "d1.loss_cls": 0.7741841673851013,
+          "d1.loss_bbox": 1.16587495803833,
+          "d2.loss_cls": 0.7868678569793701,
+          "d2.loss_bbox": 1.1462788581848145,
+          "d3.loss_cls": 0.8014596104621887,
+          "d3.loss_bbox": 1.161893367767334,
+          "d4.loss_cls": 0.8096222877502441,
+          "d4.loss_bbox": 1.1506637334823608,
+          "loss": 22.584732055664062
+        }
+      }
+    },
+    {
+      "file": "quality_training_rank1.jsonl",
+      "updates": 347,
+      "sha256": "2c0d6c8b6acc7f6c177b1370351b8627bb6aba29df12913270e53ed590241cbf",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 3952383,
+      "first_loss": 51.229312896728516,
+      "latest": {
+        "update": 347,
+        "epoch": 6,
+        "loss": 14.780013084411621,
+        "gradient_tensors": 465,
+        "raw_head_checks": 1041,
+        "log_vars": {
+          "loss_cls": 0.8237506747245789,
+          "loss_bbox": 1.136283040046692,
+          "loss_occupancy": 4.139256477355957,
+          "loss_flow": 0.0,
+          "lovasz_softmax": 0.0,
+          "loss_sem_scal": 6.695034980773926,
+          "loss_geo_scal": 0.0,
+          "d0.loss_cls": 0.7774818539619446,
+          "d0.loss_bbox": 1.2160797119140625,
+          "d1.loss_cls": 0.7741841673851013,
+          "d1.loss_bbox": 1.16587495803833,
+          "d2.loss_cls": 0.7868678569793701,
+          "d2.loss_bbox": 1.1462788581848145,
+          "d3.loss_cls": 0.8014596104621887,
+          "d3.loss_bbox": 1.161893367767334,
+          "d4.loss_cls": 0.8096222877502441,
+          "d4.loss_bbox": 1.1506637334823608,
+          "loss": 22.584732055664062
+        }
+      }
+    },
+    {
+      "file": "quality_training_rank2.jsonl",
+      "updates": 347,
+      "sha256": "ce1c49d1ac4d76de27098c51e842e3b61c0411d3cbb7e109ef2b2c731dc60f89",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 3952397,
+      "first_loss": 39.216949462890625,
+      "latest": {
+        "update": 347,
+        "epoch": 6,
+        "loss": 36.55215072631836,
+        "gradient_tensors": 465,
+        "raw_head_checks": 1041,
+        "log_vars": {
+          "loss_cls": 0.8237506747245789,
+          "loss_bbox": 1.136283040046692,
+          "loss_occupancy": 4.139256477355957,
+          "loss_flow": 0.0,
+          "lovasz_softmax": 0.0,
+          "loss_sem_scal": 6.695034980773926,
+          "loss_geo_scal": 0.0,
+          "d0.loss_cls": 0.7774818539619446,
+          "d0.loss_bbox": 1.2160797119140625,
+          "d1.loss_cls": 0.7741841673851013,
+          "d1.loss_bbox": 1.16587495803833,
+          "d2.loss_cls": 0.7868678569793701,
+          "d2.loss_bbox": 1.1462788581848145,
+          "d3.loss_cls": 0.8014596104621887,
+          "d3.loss_bbox": 1.161893367767334,
+          "d4.loss_cls": 0.8096222877502441,
+          "d4.loss_bbox": 1.1506637334823608,
+          "loss": 22.584732055664062
+        }
+      }
+    },
+    {
+      "file": "quality_training_rank3.jsonl",
+      "updates": 347,
+      "sha256": "6a9b9b9ee9c055dd96bd60db1de4711e1d4c24ef6664ea51385e37a8d86ea779",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 3952405,
+      "first_loss": 57.44853210449219,
+      "latest": {
+        "update": 347,
+        "epoch": 6,
+        "loss": 16.933622360229492,
+        "gradient_tensors": 465,
+        "raw_head_checks": 1041,
+        "log_vars": {
+          "loss_cls": 0.8237506747245789,
+          "loss_bbox": 1.136283040046692,
+          "loss_occupancy": 4.139256477355957,
+          "loss_flow": 0.0,
+          "lovasz_softmax": 0.0,
+          "loss_sem_scal": 6.695034980773926,
+          "loss_geo_scal": 0.0,
+          "d0.loss_cls": 0.7774818539619446,
+          "d0.loss_bbox": 1.2160797119140625,
+          "d1.loss_cls": 0.7741841673851013,
+          "d1.loss_bbox": 1.16587495803833,
+          "d2.loss_cls": 0.7868678569793701,
+          "d2.loss_bbox": 1.1462788581848145,
+          "d3.loss_cls": 0.8014596104621887,
+          "d3.loss_bbox": 1.161893367767334,
+          "d4.loss_cls": 0.8096222877502441,
+          "d4.loss_bbox": 1.1506637334823608,
+          "loss": 22.584732055664062
+        }
+      }
+    }
+  ],
+  "source_checksums": {
+    "tools/train_mini.py": {
+      "observed_runtime_sha256": "8476f8cba0ce37295aea648065e2ec0dd28410a29a0059f467be7daf4da22645",
+      "normalized_lf_sha256": "8476f8cba0ce37295aea648065e2ec0dd28410a29a0059f467be7daf4da22645"
+    },
+    "tools/quality_training.py": {
+      "observed_runtime_sha256": "1a6e397f6ec2fa2a9bd36e1e6cb433554065e19e7d3abe9c8d8220c9f87c9ad0",
+      "normalized_lf_sha256": "1a6e397f6ec2fa2a9bd36e1e6cb433554065e19e7d3abe9c8d8220c9f87c9ad0"
+    },
+    "tools/container.py": {
+      "observed_runtime_sha256": "e44bd762a64481424b9adaa708136e01067672852a4f50d7e17ab1306307c25b",
+      "normalized_lf_sha256": "e44bd762a64481424b9adaa708136e01067672852a4f50d7e17ab1306307c25b"
+    },
+    "tools/evaluate_mini.py": {
+      "observed_runtime_sha256": "6d171060c8c6412828e167152cfa98a85551d8caf04561bda5f2d84d79004cb9",
+      "normalized_lf_sha256": "6d171060c8c6412828e167152cfa98a85551d8caf04561bda5f2d84d79004cb9"
+    }
+  },
+  "finite_checks_passed_for_recorded_updates": true,
+  "final_heldout_metrics_available": false,
+  "offline_archives_updated": false,
+  "historical_short_training_checkpoint_repaired": false,
+  "resolved_startup_defect": {
+    "error": "TypeError: cannot pickle 'dict_keys' object",
+    "object_path": "dataset.eval_detection_configs.class_names",
+    "change": "Preserve original class order as a list in the model dataset constructor",
+    "observed_spawn_worker_counts_by_training_rank_pid": {
+      "381575": 4,
+      "381577": 4,
+      "381576": 4,
+      "381574": 4
+    },
+    "worker_processes": [
+      {
+        "pid": 1708535,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 1708598,
+        "parent_pid": 381577
+      },
+      {
+        "pid": 1708601,
+        "parent_pid": 381576
+      },
+      {
+        "pid": 1708891,
+        "parent_pid": 381574
+      },
+      {
+        "pid": 1712654,
+        "parent_pid": 381577
+      },
+      {
+        "pid": 1712655,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 1712656,
+        "parent_pid": 381576
+      },
+      {
+        "pid": 1713128,
+        "parent_pid": 381574
+      },
+      {
+        "pid": 1716697,
+        "parent_pid": 381577
+      },
+      {
+        "pid": 1717078,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 1717088,
+        "parent_pid": 381576
+      },
+      {
+        "pid": 1718884,
+        "parent_pid": 381574
+      },
+      {
+        "pid": 1723012,
+        "parent_pid": 381577
+      },
+      {
+        "pid": 1723046,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 1723048,
+        "parent_pid": 381576
+      },
+      {
+        "pid": 1723183,
+        "parent_pid": 381574
+      }
+    ],
+    "compat_patch_sha256": "d1db0d2e99113ffae4aa3453fff08f9e82cd158bf78d16c0601e3c1e0613dd77"
+  }
+}

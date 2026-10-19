@@ -98,7 +98,7 @@ bash test/validate_1p.sh --device_id=0
 
 本次功能配置：**nuScenes mini 323 train / 81 val；FP16，2 卡每卡 batch 1，学习率 5e-5，1 epoch / 162 iter**。输出 `epoch_1.pth`。训练正常结束后自动检查保存内容，再运行 validate 做独立验证。
 
-## 交付 mini 检查点的完整验证集评测
+## 作者已训练权重的完整 mini 评测
 
 先完成本模型的 setup / prepare_data，在空闲单卡执行：
 
@@ -106,7 +106,26 @@ bash test/validate_1p.sh --device_id=0
 bash test/evaluate_mini_1p.sh --device_id=0
 ```
 
-入口固定使用本模型 `validation/reference_run/epoch_1.pth`，先核对交付 SHA256，再 strict 重载模型。按原数据划分、顺序和预处理运行全部 **81 个 mini 验证帧**，计算原仓检测评测器的 mAP、NDS 及各类别 AP/误差。本轮使用已有短训检查点，完整 trainval 训练和收敛精度仍须按完整数据协议验收。
+默认使用作者发布的 BEVFormer-base R101-DCN 24 epoch 权重，身份固定于 [evaluation.weights.lock.json](evaluation.weights.lock.json)。先核对 276,980,568 bytes 和 SHA256，再 strict 载入 1,089 个状态张量，按原顺序、原预处理计算全部 **81 个 mini_val 帧**的原仓 mAP/NDS。作者权重评测与本项目完整 trainval 训练分别验收。
+
+仅有 GitHub 源码时，先补齐本模型镜像、固定源码、数据资产，再取得作者权重：
+
+```bash
+mkdir -p weights
+curl --fail --location --retry 5 \
+  https://github.com/zhiqi-li/storage/releases/download/v1.0/bevformer_r101_dcn_24ep.pth \
+  -o weights/bevformer_r101_dcn_24ep.pth
+echo '5fda3ed3e0d2d1dc09baca337aa1ed64aece057fed7d8238525c5ed342649177  weights/bevformer_r101_dcn_24ep.pth' | sha256sum -c -
+bash test/evaluate_mini_1p.sh --device_id=0
+```
+
+该 SHA256 是本项目对作者官方 HTTPS 发布文件的实际观测值，作者未单独发布 SHA256。10 月 18 日旧网盘 ZIP 不包含本次新增权重和入口，不能据新指导声称旧 ZIP 已更新。
+
+历史 162 更新权重仅用于显式诊断，原失败精度记录保留：
+
+```bash
+bash test/evaluate_mini_1p.sh --device_id=0 --checkpoint-profile=delivered-mini
+```
 
 每次创建新的 `test/output/evaluate-mini_<时间>/`，包含原始终端日志、逐帧检查与指标 `mini_evaluation.json`、实际镜像/卡号/命令/退出码 `evaluation_execution.json` 和原始预测文件。已有训练指针和历史结果保留。可用 `--output_dir="$PWD/test/output/自定义新目录"` 指定新的输出目录。
 
@@ -118,7 +137,30 @@ bash test/evaluate_mini_1p.sh --device_id=0
 bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
 ```
 
-完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+正式原始数据按以下结构放入本模型目录：
+
+```text
+data/nuscenes_full/{samples,sweeps,maps,v1.0-trainval}
+data/can_bus/scene-*_pose.json
+```
+
+完整入口先核对 850 场景 / 34,149 个 sample。若两份 `nuscenes_infos_temporal_{train,val}.pkl` 均不存在，自动调用固定上游的 `create_nuscenes_infos(..., version='v1.0-trainval', max_sweeps=10)`；已有 PKL 时校验后使用，只有一份时拒绝覆盖。准备结果须有 28,130 train / 6,019 val，token 唯一、无交集、覆盖全部 sample，媒体文件存在且 CAN 向量不能全部为零。随后重建本模型完整数据路径。
+
+转换入口通过 [cpu_data_converter.py](tools/cpu_data_converter.py) 隔离两项模型算子导入，从固定镜像内的原数据集源码提取 `NameMapping`，保留作者转换函数 AST；不修改坐标、标签、CAN、sweep 规则或训练网络。独立 CPU 对照可在 setup 后执行，下面命令不挂载 NPU：
+
+```bash
+docker run --rm --network none --cpus 4 --memory 16g \
+  -e TORCH_DEVICE_BACKEND_AUTOLOAD=0 \
+  -v "${PWD}:${PWD}" -w "$PWD" \
+  --entrypoint /opt/conda/envs/bevformer/bin/python \
+  local/migration-drivingsdk:26.1.0-a3-headless-20261010 \
+  test/check_cpu_data_converter.py \
+  --output_dir "$PWD/test/output/cpu_converter_control_$(date +%Y%m%d_%H%M%S)"
+```
+
+2026-10-20 实跑退出 0：全部 mini 323 train / 81 val 的 17,980 个数组、123,038 个标量无差异；仅比较时归一化媒体路径前缀。mini 作为完整数据输入时退出 1，准备目录、源码数据链接及结果指针保持。[命令、对照结果、数据/源码摘要与队列状态](validation/original_converter_control_20261020.json)。这验证转换算法保持，不代表完整 trainval 转换已通过。
+
+正式训练队列已等待原始数据全覆盖核验，之后先执行完整转换，再等待空闲双物理卡启动上述公开完整入口。**当前完整转换和完整训练尚未完成，收敛与正式精度未验收。** `validate_1p.sh` 的判据对应既有功能配置；完整训练按上游官方评估说明另行验收。
 
 # 训练结果展示
 
@@ -151,6 +193,8 @@ bash test/validate_1p.sh --device_id=0
 
 ## 2026-10-20 全部 mini 验证帧与任务指标
 
+后续作者权重对照：全部 81 帧有限，**mAP=0.3623209477、NDS=0.4103581189**。显式 `--checkpoint-profile=official-r101-24ep` 与默认公开入口分别实跑至退出 0，原始指标相同。同一输入与评测器下，权重身份解释了此前短训检查点接近零的结果；未因此宣称本项目完整训练或 GPU/NPU 精度对齐已验收。[两次执行、原始指标、逐帧结果与权重身份](validation/official_checkpoint_mini_evaluation_20261020.json)。
+
 全部 81 个标准 mini_val 帧的预测有限，原仓检测评测器 mAP=0.00003540314127、NDS=0.0178060191423（均为 0～1 比例）；公开入口退出 0。检查点来自既有 162 更新短训，任务质量未验收。
 
 [逐帧 token、原始指标、检查点 SHA、镜像、实际命令及退出码](validation/complete_mini_evaluation_20261020.json)。实测来自同一固定镜像的新目录，单卡与 Qwen 双卡训练并行；计时属于并行功能验证，不作为隔离性能基线。当前完整 nuScenes trainval 训练、收敛和正式任务精度仍未完成。
@@ -163,7 +207,7 @@ bash test/validate_1p.sh --device_id=0
 
 ## 变更
 
-- 2026-10-20：新增独立完整 mini_val 81 帧检测评测与原始低质量指标，保留旧检查点身份；新增入口不改训练结果指针。
+- 2026-10-20：默认完整 mini 评测改用有来源、大小和摘要记录的作者已训练权重，两次 81 帧指标相同；旧短训检查点另设 profile 保留。新增原转换器 CPU 入口及全字段对照、完整数据转换准备和训练等待队列；正式任务精度继续独立验收。
 - 2026-10-19：按固定版本 ModelZoo / DrivingSDK 原指导整理章节，补充原仓依据和本项目入口对应关系；训练代码、镜像、数据、已有数值门槛与实测记录保持。
 - 此前训练与修复日期、实际输入和检查点身份见本模型 `validation/`；详细实验与复验命令保留在本模型指导中。
 

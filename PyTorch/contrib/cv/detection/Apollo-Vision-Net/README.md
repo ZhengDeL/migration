@@ -113,6 +113,25 @@ bash test/evaluate_mini_1p.sh --device_id=0
 
 Apollo mini OCC 的独立验证集为 162 帧；原仓 nuScenes detection 入口要求标准 mini_val 的 81 帧。本入口按原 OCC 划分计算占用指标，检测 mAP/NDS 留待对应正式数据协议；不修改原评测器或替换划分。IoU/mIoU 使用百分数，precision/recall 使用 0～1 比例。
 
+## 从官方骨干初始化重新训练 mini
+
+用于定位十步权重 mIoU=0：全部 242 个训练帧，四张物理卡、FP32、每卡 batch=1、24 epoch / 1,464 更新；保留原图像增强、网络、损失、24 epoch 余弦策略及 500 更新 warmup，学习率按原八卡 2e-4 缩放为四卡 1e-4。初始仅载入官方 DLA 深度骨干，不载入完整作者检测/OCC 模型。
+
+```bash
+bash test/train_mini_4p.sh --device_id=0,2,4,6
+```
+
+入口创建新的 `test/output/train-mini_<时间>/`；每一步检查原始 head、损失和梯度有限性，并写入各 rank 的 `quality_training_rank*.jsonl`。完成训练后检查最终模型/优化器，自动重载 `epoch_24.pth`，计算全部原 OCC 162 个独立留出帧指标。结果分别保存在 `quality_training_rank*.json`、`mini_evaluation.json`，不覆盖旧十步检查点。
+
+新发现并修复原数据对象的多进程兼容问题：nuScenes 配置的 `class_names` 为不可 pickle 的 `dict_keys`，在本模型构造时转为保持原顺序的列表；保留每 rank 4 个 DataLoader worker。当前训练进度和失败尝试见 [实机记录](validation/mini_training_progress_20261020.json)。训练结束前不填写新 mIoU；本流程仍为 mini 训练诊断，正式 trainval 训练独立执行。
+
+训练完成后如需重新评测，在新输出目录执行：
+
+```bash
+bash test/evaluate_mini_1p.sh --device_id=0 \
+  --checkpoint="$PWD/test/output/<本次训练目录>/epoch_24.pth"
+```
+
 ## 完整数据训练
 
 完整原始 nuScenes 放在 `data/nuscenes_full/`，完整 OCC 展开在 `data/apollo/occ_gt_release_v1_0/`；官方两份 OCC train/val PKL 放在 `data/apollo/`。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。

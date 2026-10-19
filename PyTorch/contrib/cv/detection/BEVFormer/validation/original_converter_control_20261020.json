@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "model": "BEVFormer",
+  "result": "pass_original_converter_mini_control_and_mini_rejection",
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "public_cpu_control": {
+    "exit_code": 0,
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--cpus",
+      "4",
+      "--memory",
+      "16g",
+      "-e",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+      "-v",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer:/var/aispace/lzd/migration_full_20261019/BEVFormer",
+      "-w",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer",
+      "--entrypoint",
+      "/opt/conda/envs/bevformer/bin/python",
+      "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "test/check_cpu_data_converter.py",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/public_cpu_converter_control_20261020"
+    ],
+    "npu_devices_exposed": false,
+    "result_document": {
+      "result": "pass_all_original_mini_annotation_fields",
+      "collected_utc": "2026-10-19T18:15:20.232690+00:00",
+      "counts": {
+        "sequences": 27478,
+        "scalars": 123038,
+        "arrays": 17980
+      },
+      "difference_count": 0,
+      "first_differences": [],
+      "files": [
+        {
+          "split": "train",
+          "frames": 323,
+          "reference_sha256": "388c46e3d8d1d106a59b9f4bee3c2d5d107b6f717a951b64e43d2335e16fd7ca",
+          "candidate_sha256": "dad4ccabb589b6af5ab09b03f89af966078ee730a0ab2d95d7ea912287913846"
+        },
+        {
+          "split": "val",
+          "frames": 81,
+          "reference_sha256": "c0ff513a669b045177ff50d8fd0dbd07537be14fd959a776d75d7fe9bac97704",
+          "candidate_sha256": "e526f1de8221cabeb6df9b3c97696d2d4ae2da4215c6b284f2956d9fd0e4897f"
+        }
+      ],
+      "path_comparison": "Only the samples/sweeps directory prefix is rebased; numeric arrays, class labels and metadata compared",
+      "npu_devices_exposed": false,
+      "model_training_executed": false,
+      "full_trainval_conversion_completed": false,
+      "converter_loading": {
+        "mode": "original_converter_with_metadata_only_imports",
+        "converter_sha256": "16e9b358f9aea39be134dd75c7dbf2d90339aa46a2ba5a7c2109ed990fb871b0",
+        "mapping_source": "/workspace/bevformer/mmdetection3d/mmdet3d/datasets/nuscenes_dataset.py",
+        "mapping_source_sha256": "30195c802ba8a468281a5c175823c43bad0dbc1109b6d770243c4687c341f2c1",
+        "mapping_entries": 14,
+        "isolated_imports": {
+          "mmdet3d.core.bbox.box_np_ops": "points_cam2img",
+          "mmdet3d.datasets": "NuScenesDataset"
+        },
+        "optional_2d_export": "refused",
+        "import_time_cli_parser_nodes_omitted": 0,
+        "original_function_ast_unchanged": true,
+        "conversion_algorithm_changed": false
+      }
+    }
+  },
+  "full_data_mini_rejection": {
+    "collected_utc": "2026-10-19T18:20:45.852452+00:00",
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--cpus",
+      "2",
+      "--memory",
+      "4g",
+      "-e",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+      "-v",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer:/var/aispace/lzd/migration_full_20261019/BEVFormer",
+      "-w",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer",
+      "--entrypoint",
+      "/opt/conda/envs/bevformer/bin/python",
+      "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "tools/prepare_full_data.py",
+      "--data_path",
+      "/var/aispace/lzd/migration_full_20261019/BEVFormer/data/nuscenes"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/var/aispace/lzd/migration_full_20261019/BEVFormer/tools/prepare_full_data.py\", line 115, in <module>\n    main()\n  File \"/var/aispace/lzd/migration_full_20261019/BEVFormer/tools/prepare_full_data.py\", line 54, in main\n    require(raw / name)\n  File \"/var/aispace/lzd/migration_full_20261019/BEVFormer/tools/prepare_full_data.py\", line 18, in require\n    raise RuntimeError('完整训练资产缺失：' + str(path))\nRuntimeError: 完整训练资产缺失：/var/aispace/lzd/migration_full_20261019/BEVFormer/data/nuscenes/v1.0-trainval/scene.json\n",
+    "before": {
+      "prepared/full_nuscenes": {
+        "exists": false,
+        "symlink": false,
+        "target": null,
+        "sha256": null
+      },
+      "sources/BEVFormer/data/nuscenes": {
+        "exists": true,
+        "symlink": true,
+        "target": "../../../prepared/nuscenes",
+        "sha256": null
+      },
+      "sources/BEVFormer/data/can_bus": {
+        "exists": true,
+        "symlink": true,
+        "target": "../../../data/can_bus",
+        "sha256": null
+      },
+      "test/output/latest_run.json": {
+        "exists": true,
+        "symlink": false,
+        "target": null,
+        "sha256": "fae8ec435f3c9ffda2e3a9601f7f5919dcf25854ef85f4857856912de14203f0"
+      }
+    },
+    "after": {
+      "prepared/full_nuscenes": {
+        "exists": false,
+        "symlink": false,
+        "target": null,
+        "sha256": null
+      },
+      "sources/BEVFormer/data/nuscenes": {
+        "exists": true,
+        "symlink": true,
+        "target": "../../../prepared/nuscenes",
+        "sha256": null
+      },
+      "sources/BEVFormer/data/can_bus": {
+        "exists": true,
+        "symlink": true,
+        "target": "../../../data/can_bus",
+        "sha256": null
+      },
+      "test/output/latest_run.json": {
+        "exists": true,
+        "symlink": false,
+        "target": null,
+        "sha256": "fae8ec435f3c9ffda2e3a9601f7f5919dcf25854ef85f4857856912de14203f0"
+      }
+    },
+    "state_unchanged": true,
+    "npu_devices_exposed": false
+  },
+  "full_training_queue": {
+    "pid": 1672893,
+    "status": {
+      "state": "waiting_for_complete_raw_coverage",
+      "controller_pid": 1672893,
+      "started_utc": "2026-10-19T18:20:42.392618+00:00",
+      "full_trainval_training_completed": false,
+      "task_quality_accepted": false,
+      "updated_utc": "2026-10-19T18:20:42.392959+00:00",
+      "dependency_state": "waiting_for_all_official_archives"
+    }
+  },
+  "full_trainval_conversion_completed": false,
+  "full_trainval_training_completed": false,
+  "task_quality_accepted": false,
+  "source_checksums": {
+    "tools/cpu_data_converter.py": {
+      "normalized_lf_sha256": "4fef36f5d4c36b4617bd93587ae254161782091243174e5345eaf855872494de"
+    },
+    "tools/prepare_full_data.py": {
+      "normalized_lf_sha256": "43240310c397b1c6a74c544597957bd77bab85f5733bfc2d04f7aa70e8b47767"
+    },
+    "test/check_cpu_data_converter.py": {
+      "normalized_lf_sha256": "a6036f48ea07b08bd9f0304626d7043faeb59362fd4392420dad8172dca00fdc"
+    }
+  }
+}
