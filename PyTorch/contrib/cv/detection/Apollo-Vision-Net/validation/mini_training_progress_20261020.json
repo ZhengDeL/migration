@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "model": "Apollo-Vision-Net",
-  "collected_utc": "2026-10-19T18:45:49.224441+00:00",
+  "collected_utc": "2026-10-19T19:05:10.926900+00:00",
   "result": "running_mini_training_not_final_accuracy_acceptance",
   "task_quality_accepted": false,
   "full_trainval_training_completed": false,
@@ -58,141 +58,141 @@
   "trace_summaries": [
     {
       "file": "quality_training_rank0.jsonl",
-      "updates": 562,
-      "sha256": "4fa20fd614ff91b931967ddfe44e3a50eddaa88b70969e3e7fe611a080aa27b1",
+      "updates": 773,
+      "sha256": "4dd9a89c795bfdda397ed2e43bf68cb52268548ca01e06cbf9cc86108c43b2b8",
       "checksum_scope": "complete-line file prefix at collection",
-      "prefix_bytes": 6409606,
+      "prefix_bytes": 8802065,
       "first_loss": 35.28636932373047,
       "latest": {
-        "update": 562,
-        "epoch": 10,
-        "loss": 24.965171813964844,
+        "update": 773,
+        "epoch": 13,
+        "loss": 20.942813873291016,
         "gradient_tensors": 465,
-        "raw_head_checks": 1686,
+        "raw_head_checks": 2319,
         "log_vars": {
-          "loss_cls": 0.6735409498214722,
-          "loss_bbox": 1.0364924669265747,
-          "loss_occupancy": 3.44224214553833,
+          "loss_cls": 0.6873387694358826,
+          "loss_bbox": 0.9423781037330627,
+          "loss_occupancy": 3.3066608905792236,
           "loss_flow": 0.0,
           "lovasz_softmax": 0.0,
-          "loss_sem_scal": 4.871623992919922,
+          "loss_sem_scal": 4.002083778381348,
           "loss_geo_scal": 0.0,
-          "d0.loss_cls": 0.6465178728103638,
-          "d0.loss_bbox": 1.1274828910827637,
-          "d1.loss_cls": 0.6208600997924805,
-          "d1.loss_bbox": 1.0408519506454468,
-          "d2.loss_cls": 0.6316643953323364,
-          "d2.loss_bbox": 1.0426406860351562,
-          "d3.loss_cls": 0.6437863111495972,
-          "d3.loss_bbox": 1.0330849885940552,
-          "d4.loss_cls": 0.6528551578521729,
-          "d4.loss_bbox": 1.0344326496124268,
-          "loss": 18.498075485229492
+          "d0.loss_cls": 0.6722531318664551,
+          "d0.loss_bbox": 1.0340675115585327,
+          "d1.loss_cls": 0.6401861310005188,
+          "d1.loss_bbox": 0.9786828756332397,
+          "d2.loss_cls": 0.6426976323127747,
+          "d2.loss_bbox": 0.9457008838653564,
+          "d3.loss_cls": 0.6647289395332336,
+          "d3.loss_bbox": 0.9314026832580566,
+          "d4.loss_cls": 0.6817729473114014,
+          "d4.loss_bbox": 0.9325304627418518,
+          "loss": 17.062484741210938
         }
       }
     },
     {
       "file": "quality_training_rank1.jsonl",
-      "updates": 562,
-      "sha256": "8910445f98e524d84b9ef16e1c9681dee442110d7a6ff090aa184d28acf1d72e",
+      "updates": 773,
+      "sha256": "7d6d85f09a73c59357f2bb64d41825e99c0edc9b945d8382e8a337bab18b8005",
       "checksum_scope": "complete-line file prefix at collection",
-      "prefix_bytes": 6409558,
+      "prefix_bytes": 8801984,
       "first_loss": 51.229312896728516,
       "latest": {
-        "update": 562,
-        "epoch": 10,
-        "loss": 10.65237045288086,
+        "update": 773,
+        "epoch": 13,
+        "loss": 11.42379379272461,
         "gradient_tensors": 465,
-        "raw_head_checks": 1686,
+        "raw_head_checks": 2319,
         "log_vars": {
-          "loss_cls": 0.6735409498214722,
-          "loss_bbox": 1.0364924669265747,
-          "loss_occupancy": 3.44224214553833,
+          "loss_cls": 0.6873387694358826,
+          "loss_bbox": 0.9423781037330627,
+          "loss_occupancy": 3.3066608905792236,
           "loss_flow": 0.0,
           "lovasz_softmax": 0.0,
-          "loss_sem_scal": 4.871623992919922,
+          "loss_sem_scal": 4.002083778381348,
           "loss_geo_scal": 0.0,
-          "d0.loss_cls": 0.6465178728103638,
-          "d0.loss_bbox": 1.1274828910827637,
-          "d1.loss_cls": 0.6208600997924805,
-          "d1.loss_bbox": 1.0408519506454468,
-          "d2.loss_cls": 0.6316643953323364,
-          "d2.loss_bbox": 1.0426406860351562,
-          "d3.loss_cls": 0.6437863111495972,
-          "d3.loss_bbox": 1.0330849885940552,
-          "d4.loss_cls": 0.6528551578521729,
-          "d4.loss_bbox": 1.0344326496124268,
-          "loss": 18.498075485229492
+          "d0.loss_cls": 0.6722531318664551,
+          "d0.loss_bbox": 1.0340675115585327,
+          "d1.loss_cls": 0.6401861310005188,
+          "d1.loss_bbox": 0.9786828756332397,
+          "d2.loss_cls": 0.6426976323127747,
+          "d2.loss_bbox": 0.9457008838653564,
+          "d3.loss_cls": 0.6647289395332336,
+          "d3.loss_bbox": 0.9314026832580566,
+          "d4.loss_cls": 0.6817729473114014,
+          "d4.loss_bbox": 0.9325304627418518,
+          "loss": 17.062484741210938
         }
       }
     },
     {
       "file": "quality_training_rank2.jsonl",
-      "updates": 562,
-      "sha256": "934863bca572be27e9b21a8c8e86a51695b95420edfb32804b7ea276a4ae7f9d",
+      "updates": 773,
+      "sha256": "dacf3ba52b711706c4fef65126d9138864a42fe7aca81c39f9bf05907eee5cf0",
       "checksum_scope": "complete-line file prefix at collection",
-      "prefix_bytes": 6409576,
+      "prefix_bytes": 8802026,
       "first_loss": 39.216949462890625,
       "latest": {
-        "update": 562,
-        "epoch": 10,
-        "loss": 25.166797637939453,
+        "update": 773,
+        "epoch": 13,
+        "loss": 10.579933166503906,
         "gradient_tensors": 465,
-        "raw_head_checks": 1686,
+        "raw_head_checks": 2319,
         "log_vars": {
-          "loss_cls": 0.6735409498214722,
-          "loss_bbox": 1.0364924669265747,
-          "loss_occupancy": 3.44224214553833,
+          "loss_cls": 0.6873387694358826,
+          "loss_bbox": 0.9423781037330627,
+          "loss_occupancy": 3.3066608905792236,
           "loss_flow": 0.0,
           "lovasz_softmax": 0.0,
-          "loss_sem_scal": 4.871623992919922,
+          "loss_sem_scal": 4.002083778381348,
           "loss_geo_scal": 0.0,
-          "d0.loss_cls": 0.6465178728103638,
-          "d0.loss_bbox": 1.1274828910827637,
-          "d1.loss_cls": 0.6208600997924805,
-          "d1.loss_bbox": 1.0408519506454468,
-          "d2.loss_cls": 0.6316643953323364,
-          "d2.loss_bbox": 1.0426406860351562,
-          "d3.loss_cls": 0.6437863111495972,
-          "d3.loss_bbox": 1.0330849885940552,
-          "d4.loss_cls": 0.6528551578521729,
-          "d4.loss_bbox": 1.0344326496124268,
-          "loss": 18.498075485229492
+          "d0.loss_cls": 0.6722531318664551,
+          "d0.loss_bbox": 1.0340675115585327,
+          "d1.loss_cls": 0.6401861310005188,
+          "d1.loss_bbox": 0.9786828756332397,
+          "d2.loss_cls": 0.6426976323127747,
+          "d2.loss_bbox": 0.9457008838653564,
+          "d3.loss_cls": 0.6647289395332336,
+          "d3.loss_bbox": 0.9314026832580566,
+          "d4.loss_cls": 0.6817729473114014,
+          "d4.loss_bbox": 0.9325304627418518,
+          "loss": 17.062484741210938
         }
       }
     },
     {
       "file": "quality_training_rank3.jsonl",
-      "updates": 562,
-      "sha256": "b37fc94412342620a41ccab39a32878853a4a74f43d4fecc6781d111bd4d4113",
+      "updates": 773,
+      "sha256": "22dbf7b8bff2d4e38620ff364f8789837c016874ebccf7b7cc98e78d21ffba89",
       "checksum_scope": "complete-line file prefix at collection",
-      "prefix_bytes": 6409595,
+      "prefix_bytes": 8802052,
       "first_loss": 57.44853210449219,
       "latest": {
-        "update": 562,
-        "epoch": 10,
-        "loss": 13.207962036132812,
+        "update": 773,
+        "epoch": 13,
+        "loss": 25.303396224975586,
         "gradient_tensors": 465,
-        "raw_head_checks": 1686,
+        "raw_head_checks": 2319,
         "log_vars": {
-          "loss_cls": 0.6735409498214722,
-          "loss_bbox": 1.0364924669265747,
-          "loss_occupancy": 3.44224214553833,
+          "loss_cls": 0.6873387694358826,
+          "loss_bbox": 0.9423781037330627,
+          "loss_occupancy": 3.3066608905792236,
           "loss_flow": 0.0,
           "lovasz_softmax": 0.0,
-          "loss_sem_scal": 4.871623992919922,
+          "loss_sem_scal": 4.002083778381348,
           "loss_geo_scal": 0.0,
-          "d0.loss_cls": 0.6465178728103638,
-          "d0.loss_bbox": 1.1274828910827637,
-          "d1.loss_cls": 0.6208600997924805,
-          "d1.loss_bbox": 1.0408519506454468,
-          "d2.loss_cls": 0.6316643953323364,
-          "d2.loss_bbox": 1.0426406860351562,
-          "d3.loss_cls": 0.6437863111495972,
-          "d3.loss_bbox": 1.0330849885940552,
-          "d4.loss_cls": 0.6528551578521729,
-          "d4.loss_bbox": 1.0344326496124268,
-          "loss": 18.498075485229492
+          "d0.loss_cls": 0.6722531318664551,
+          "d0.loss_bbox": 1.0340675115585327,
+          "d1.loss_cls": 0.6401861310005188,
+          "d1.loss_bbox": 0.9786828756332397,
+          "d2.loss_cls": 0.6426976323127747,
+          "d2.loss_bbox": 0.9457008838653564,
+          "d3.loss_cls": 0.6647289395332336,
+          "d3.loss_bbox": 0.9314026832580566,
+          "d4.loss_cls": 0.6817729473114014,
+          "d4.loss_bbox": 0.9325304627418518,
+          "loss": 17.062484741210938
         }
       }
     }
@@ -224,74 +224,74 @@
     "object_path": "dataset.eval_detection_configs.class_names",
     "change": "Preserve original class order as a list in the model dataset constructor",
     "observed_spawn_worker_counts_by_training_rank_pid": {
-      "381575": 4,
       "381577": 4,
       "381576": 4,
+      "381575": 4,
       "381574": 4
     },
     "worker_processes": [
       {
-        "pid": 2688305,
-        "parent_pid": 381575
-      },
-      {
-        "pid": 2688331,
+        "pid": 3469311,
         "parent_pid": 381577
       },
       {
-        "pid": 2688368,
+        "pid": 3469385,
         "parent_pid": 381576
       },
       {
-        "pid": 2689477,
+        "pid": 3469398,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 3470790,
         "parent_pid": 381574
       },
       {
-        "pid": 2692259,
-        "parent_pid": 381575
-      },
-      {
-        "pid": 2692271,
-        "parent_pid": 381577
-      },
-      {
-        "pid": 2692272,
+        "pid": 3473933,
         "parent_pid": 381576
       },
       {
-        "pid": 2692407,
+        "pid": 3473937,
+        "parent_pid": 381577
+      },
+      {
+        "pid": 3474012,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 3475301,
         "parent_pid": 381574
       },
       {
-        "pid": 2694736,
-        "parent_pid": 381575
-      },
-      {
-        "pid": 2694930,
+        "pid": 3478623,
         "parent_pid": 381577
       },
       {
-        "pid": 2694932,
+        "pid": 3478669,
         "parent_pid": 381576
       },
       {
-        "pid": 2695316,
+        "pid": 3479024,
+        "parent_pid": 381575
+      },
+      {
+        "pid": 3480373,
         "parent_pid": 381574
       },
       {
-        "pid": 2697594,
+        "pid": 3484081,
         "parent_pid": 381577
       },
       {
-        "pid": 2697599,
+        "pid": 3484163,
         "parent_pid": 381576
       },
       {
-        "pid": 2697630,
+        "pid": 3484166,
         "parent_pid": 381575
       },
       {
-        "pid": 2698380,
+        "pid": 3484412,
         "parent_pid": 381574
       }
     ],

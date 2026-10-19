@@ -34,7 +34,10 @@ def main():
     parser.add_argument('--output_dir', required=True, type=Path)
     parser.add_argument('--checkpoint-profile', choices=('delivered-mini', 'official-r101-24ep'),
         default='official-r101-24ep')
+    parser.add_argument('--checkpoint', type=Path, help='A completed, verified model-local mini-training checkpoint')
     args = parser.parse_args()
+    if args.checkpoint:
+        args.checkpoint_profile = 'trained-mini'
     output = args.output_dir.resolve(strict=True)
     if not output.is_relative_to(ROOT) or (output / 'mini_evaluation.json').exists():
         raise RuntimeError('Use a fresh output directory inside this model project')
@@ -85,7 +88,15 @@ def main():
 
         torch.npu.set_device(0)
         reference = ROOT / 'validation/reference_run'
-        if args.checkpoint_profile == 'official-r101-24ep':
+        if args.checkpoint_profile == 'trained-mini':
+            checkpoint = args.checkpoint.resolve(strict=True)
+            if not checkpoint.is_relative_to(ROOT):
+                raise RuntimeError('Checkpoint must belong to this independent model')
+            training_reports = [json.loads((checkpoint.parent / f'quality_training_rank{i}.json').read_text()) for i in range(2)]
+            if any(row.get('result') != 'pass_completed_mini_training' or row.get('updates') != 3888 for row in training_reports):
+                raise RuntimeError('Complete the two-card 24-epoch mini training first')
+            expected = training_reports[0]['checkpoint_sha256']
+        elif args.checkpoint_profile == 'official-r101-24ep':
             weight = json.loads((ROOT / 'evaluation.weights.lock.json').read_text())[args.checkpoint_profile]
             checkpoint = (ROOT / weight['path']).resolve(strict=True)
             if not checkpoint.is_relative_to(ROOT) or checkpoint.stat().st_size != weight['bytes']:
@@ -109,11 +120,14 @@ def main():
         else:
             config_text = saved['meta']['config']
             config = Config.fromstring(config_text, '.py')
+            if args.checkpoint_profile == 'trained-mini':
+                report.update(initialization='Original FCOS3D pretraining followed by 3888 real mini training updates',
+                    limitation='Complete mini training/evaluation; no local full trainval or same-condition GPU acceptance')
         report.update(checkpoint_sha256=actual,
             checkpoint=checkpoint.relative_to(ROOT).as_posix(),
             saved_config_sha256=hashlib.sha256(config_text.encode()).hexdigest(),
             checkpoint_profile=args.checkpoint_profile,
-            checkpoint_updates=saved.get('meta', {}).get('iter') if args.checkpoint_profile == 'official-r101-24ep' else 162,
+            checkpoint_updates=3888 if args.checkpoint_profile == 'trained-mini' else saved.get('meta', {}).get('iter') if args.checkpoint_profile == 'official-r101-24ep' else 162,
             checkpoint_reload='strict',
             torch_version=torch.__version__, torch_npu_version=torch_npu.__version__)
         source = ROOT / 'sources' / PROFILE['source']

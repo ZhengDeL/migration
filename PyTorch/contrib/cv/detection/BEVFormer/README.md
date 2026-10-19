@@ -129,6 +129,23 @@ bash test/evaluate_mini_1p.sh --device_id=0 --checkpoint-profile=delivered-mini
 
 每次创建新的 `test/output/evaluate-mini_<时间>/`，包含原始终端日志、逐帧检查与指标 `mini_evaluation.json`、实际镜像/卡号/命令/退出码 `evaluation_execution.json` 和原始预测文件。已有训练指针和历史结果保留。可用 `--output_dir="$PWD/test/output/自定义新目录"` 指定新的输出目录。
 
+## 从原 FCOS3D 初始化重新训练 mini
+
+用于继续定位旧 162 更新检查点的低指标，采用全部 323 train / 81 val、两张物理卡、每卡 batch=1、FP16 / loss_scale=512，原 24 epoch 日程，共 3,888 更新；学习率沿用两卡 5e-5，保留作者时序 runner、网络、增强及固定配置的 500 更新 warmup / 余弦策略。只加载原 `r101_dcn_fcos3d_pretrain.pth`，不使用作者已训练 BEV 检测权重，也不覆盖旧短训结果。
+
+```bash
+bash test/train_mini_2p.sh --device_id=0,2
+```
+
+入口创建独立 `test/output/train-mini_<时间>/`，优化前核对原骨干张量；每步记录原始 head、损失、梯度有限性及各 rank 的 `quality_training_rank*.jsonl`。完成全部 24 轮后检查 `epoch_24.pth` 的模型/优化器、摘要与 rank 完成记录，自动重载并评测全部 81 帧。单独复测使用：
+
+```bash
+bash test/evaluate_mini_1p.sh --device_id=0 \
+  --checkpoint="$PWD/test/output/<本次训练目录>/epoch_24.pth"
+```
+
+新入口首轮误覆盖原时序 runner，在首次更新前因 `eval_model` 参数失败；现保留原 runner，只修改轮数。实际启动、失败及逐 rank 更新见[实机进度](validation/mini_training_progress_20261020.json)。这仍是 mini 训练诊断，当前没有新检查点的最终指标；数据包含已声明的零 CAN 功能参考，不能代替正式 trainval 收敛或 GPU 对齐。
+
 ## 完整数据训练
 
 完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。
