@@ -1,6 +1,6 @@
 # 模型验证结果
 
-最近一轮实机记录：**2026-10-19**，重新执行 LSTM、STGCN、MobileNetV2 的全部验证数据。完整训练、数值修复、续训和长稳的前轮证据为 2026-10-18；较早功能记录为 2026-10-12。各次执行日期单独记录。
+最近一轮实机记录：**2026-10-19**，重新执行 LSTM、STGCN、MobileNetV2 的全部验证数据，并完成 Qwen 全部 DriveLM 数据检查及真实双卡公开入口预检。完整训练、数值修复、续训和长稳的前轮证据为 2026-10-18；较早功能记录为 2026-10-12。各次执行日期单独记录。
 
 本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
 
@@ -16,13 +16,31 @@
 
 LSTM 的 val 参与选模，STGCN 使用社区 70/15/15 协议，MobileNetV2 使用官方 V1 预训练权重。以上结果不表示隐藏排行榜、原论文全部协议或 MobileNetV2 从头 600 epoch 已验收。
 
+## 2026-10-19 Qwen 完整数据与公开入口实测
+
+固定镜像为 `local/llamafactory:a3-arm64-20261012`，image ID `sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5`。本轮使用 ARM64 Atlas 800I A3，逻辑设备 0、2 分属两张物理卡。
+
+| 检查 | 实际结果 |
+| --- | --- |
+| 官方媒体 | 24,432 张训练图像、4,794 张官方验证图像；全部解码及文件摘要检查通过 |
+| 有效问答 | 696 场景、4,072 帧；原始 377,956 条，明确排除 1 条空答案；626 / 70 场景划分为 340,119 train / 37,836 本地 dev |
+| 原生上下文 | 全部 377,955 条通过原生 SFT 编码；1,574～2,629 token；4,096 上限可容纳全部输入和标签 |
+| 官方验证问题 | 149 场景、799 帧、15,480 原始条目，保留并标记 1 条空问题；答案未公开 |
+| 完整数据正向校验 | 官方归档、逐个解压图像、逐条转换问答、场景划分和上下文身份均通过，退出 0 |
+| 公开双卡入口 | 4 场景 / 16 条真实问答、8 更新；训练及重载评测退出 0；504 个适配器张量、504 组优化器状态有限，252 个 LoRA B 全部非零 |
+| 复现对照 | 三次独立输出目录（两次未复用、一次单帧复用）的适配器 SHA256 相同：`68da404a097ff580e6676478d912619c8e188ec7e3fc4924ec0ca5113db85874`；原双卡与公开单卡重载 loss 均为 1.8978482484817505 |
+| 错误数据拦截 | Windows、ARM64 Linux 各 7 项通过；包括改名演示数据、任意目录、直接启动入口和结果指针不变检查 |
+| 完整训练 | 全部 340,119 train / 37,836 dev 已完成原生预处理；新三轮训练已实际执行第 20 / 63,774 更新，loss@10=3.2349693298、loss@20=2.8300830841；启动阶段记录不作为收敛验收 |
+
+[完整来源、摘要、命令、时间、退出码和当前后台阶段](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/drivelm_complete_data_20261019.json)；[独立模型指导](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md#完整数据训练drivelm-nuscenes-v11)。上述重载 loss 使用同一组 16 条预检训练样本，仅证明保存与重载功能。最终三轮训练和全部本地 dev 重载仍需对应终态结果；官方隐藏评分按 [DriveLM 官方提交流程](https://github.com/OpenDriveLab/DriveLM/blob/main/challenge/README.md#submit-to-test-server)办理。
+
 ## 完整数据准备与未完成项
 
 BEVFormer、Sparse4D、Apollo、ResWorld 的正式 nuScenes trainval 尚在下载/准备，当前不填完整 mAP/NDS/mIoU/规划精度结果。官方 [AWS 公开数据登记](https://registry.opendata.aws/motional-nuscenes/)提供匿名下载；本次十个完整传感器 blobs、metadata、CAN、地图归档合计 316,066,113,900 bytes，另需 ResWorld 的 lidarseg 与投影深度。完成传输、原始校验和逐文件覆盖检查后才能开始相应完整数据验收。
 
 Apollo 的完整 OCC 标签已于 2026-10-19 传输、校验及解压：700 train 场景 / 28,130 样本，150 val 场景 / 6,019 样本；全部 102,447 个标签文件的 NPY header 与数据长度检查通过，场景/样本与正式 nuScenes metadata 完全对应，train/val 无重叠。见[完整 OCC 数据检查](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/full_occ_data_20261019.json)。这只完成标签准备，相机/点云、CAN、派生 PKL 及模型完整训练/评测仍未完成。
 
-Qwen3-VL-8B 正式任务已选 DriveLM-nuScenes v1.1；真实训练问答已核验，696 场景、4,072 关键帧、377,956 问答记录，其中 1 条原始答案为空，需在准备报告中明确处理。六相机媒体、转换、上下文长度审计及完整训练尚未完成；[full 入口负向回归](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_data_guard_20261019.json)通过只说明错误输入被拦截。
+Qwen3-VL-8B 已完成完整 DriveLM 文件、六相机媒体、场景划分、转换和全部样本上下文检查，真实双卡公开入口预检通过。新三轮训练流程已提交后台，完整训练与 37,836 条本地留出数据的最终重载尚未完成；官方隐藏答案未公开。旧 [full 入口负向回归](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_data_guard_20261019.json)为本轮较早阶段的修复记录，当前完整协议以新增证据为准。
 
 MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行完。完整数据包、训练完成、任务精度与 CPU/NPU 一致性分别留证。
 
@@ -32,7 +50,7 @@ MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行�
 | --- | --- | --- | --- |
 | [BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2026-10-12 | nuScenes mini；双卡 162 更新、strict 重载及单帧有限性通过 | 全量 mAP/NDS、收敛、性能/续训/长稳未测 |
 | [Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2026-10-12 | nuScenes mini；双卡 10 更新、strict 重载及单帧有限性通过 | 全量检测指标、收敛、性能/续训/长稳未测 |
-| [Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2026-10-12 | 20261012 镜像；双卡 BF16 LoRA 10 更新及独立图文内容检查通过 | 演示图文和一张合成图；业务精度/性能/续训/长稳未测 |
+| [Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2026-10-12 / 19 | 完整 DriveLM 数据和 377,955 条编码检查通过；两次真实数据双卡八步预检及重载通过；新三轮流程已提交后台 | 完整训练、完整本地 dev 重载与官方隐藏评分未完成 |
 | [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 2026-10-12 | 官方 DLA 初始化；242 train/162 val；四卡 10 更新及全部 val 帧有限性通过 | 完整检测 mAP/占用 mIoU、收敛、性能/续训/长稳未测 |
 | [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2026-10-18 训练 / 19 复验 | 全 train/val 三阶段 725 epoch / 292,175 更新；全输出、梯度、严格续训通过 | val 参与选模；独立排行榜/驾驶业务目标未验收 |
 | [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2026-10-18 训练 / 19 复验 | PeMSD7(M) 全量 52 epoch / 14,404 更新；独立 test、数值、续训、30 分钟通过 | 70/15/15 社区协议；原论文划分/METR-LA/其他 PeMS 未验收 |
@@ -65,7 +83,7 @@ MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行�
 
 [实际结果 JSON](../PyTorch/contrib/cv/detection/Sparse4D/validation/reference_run/validation_result.json)；[复现指导](../PyTorch/contrib/cv/detection/Sparse4D/README.md)。
 
-### Qwen3-VL-8B
+### Qwen3-VL-8B（2026-10-12 历史演示）
 
 | 检查项目 | 本项目实测数据 |
 | --- | --- |

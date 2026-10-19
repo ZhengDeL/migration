@@ -29,27 +29,37 @@ class FullDataGuardTest(unittest.TestCase):
 
     def test_renamed_demo_directory_is_not_full_data(self):
         self.assert_rejected(['tools/prepare_full_data.py', '--data_path', str(self.data),
-                              '--dataset_id', 'renamed_business_data'], 'DriveLM 正式训练入口尚未完成')
+                              '--dataset_id', 'renamed_business_data'], 'DriveLM 完整数据校验失败')
 
     def test_container_rejects_before_image_device_and_output_changes(self):
         self.assert_rejected(['tools/container.py', 'full', '--data_path', str(self.data),
                               '--dataset_id', 'renamed_business_data',
-                              '--output_dir', str(self.output)], 'DriveLM 正式训练入口尚未完成')
+                              '--output_dir', str(self.output)], 'DriveLM 完整数据校验失败')
 
     def test_direct_model_entry_cannot_bypass_guard(self):
         self.assert_rejected(['tools/train_model.py', '--mode', 'full',
                               '--data_path', str(self.data), '--output_dir', str(self.output),
-                              '--dataset_id', 'renamed_business_data'], 'DriveLM 正式训练入口尚未完成')
+                              '--dataset_id', 'renamed_business_data'], 'DriveLM 完整数据校验失败')
 
     def test_direct_upstream_launcher_cannot_bypass_guard(self):
         self.assert_rejected(['tools/run_train.py', 'qwen3vl8b', '--source', str(self.data),
                               '--devices', '0,1', '--output-dir', str(self.output),
                               '--model-path', str(self.data), '--dataset-id', 'renamed_business_data',
-                              '--execute'], 'DriveLM 正式训练入口尚未完成')
+                              '--execute'], 'DriveLM 完整数据校验失败')
+
+    def test_real_data_preflight_also_rejects_renamed_demo(self):
+        self.assert_rejected(['tools/container.py', 'preflight-full', '--data_path', str(self.data),
+                              '--dataset_id', 'renamed_business_data',
+                              '--output_dir', str(self.output)], 'DriveLM 完整数据校验失败')
 
     def test_annotation_check_rejects_demo_content(self):
         self.assert_rejected(['tools/prepare_full_data.py', '--data_path', str(self.data),
                               '--verify-annotations-only'], '缺少完整官方 DriveLM')
+
+    def test_correct_dataset_name_does_not_allow_arbitrary_directory(self):
+        self.assert_rejected(['tools/container.py', 'full', '--data_path', str(self.data),
+                              '--dataset_id', 'drivelm_nus_v11_train',
+                              '--output_dir', str(self.output)], 'DriveLM 完整数据校验失败')
 
 
 if __name__ == '__main__':

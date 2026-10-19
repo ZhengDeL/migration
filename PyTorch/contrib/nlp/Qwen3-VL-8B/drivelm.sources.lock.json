@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "dataset": "DriveLM-nuScenes v1.1",
+  "repository": "https://huggingface.co/datasets/OpenDriveLab/DriveLM",
+  "revision": "ae973fbd4e8d4684af4ab234d504bd6c5e946868",
+  "official_instructions": "https://github.com/OpenDriveLab/DriveLM/blob/main/challenge/README.md",
+  "assets": [
+    {
+      "filename": "drivelm_nus_imgs_train.zip",
+      "bytes": 3483205396,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/drivelm_nus_imgs_train.zip",
+      "sha256": "2cb95fafac00ca058c04735c339a183657d60962afee12d782b410c602eab936"
+    },
+    {
+      "filename": "drivelm_nus_imgs_val.zip",
+      "bytes": 704864335,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/drivelm_nus_imgs_val.zip",
+      "sha256": "ded1b140a2c6f1b551d92555008c39a3c0ec3fd0825095e7aa920a5bbe6592e9"
+    },
+    {
+      "filename": "v1_1_train_nus.json",
+      "bytes": 192961829,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/v1_1_train_nus.json",
+      "sha256": "ecd3c13e9beb27295bcf6182ea35fff7c1d6a9ba58d40e48fb38d713094759fd"
+    },
+    {
+      "filename": "v1_1_val_nus_q_only.json",
+      "bytes": 9860626,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/v1_1_val_nus_q_only.json",
+      "git_blob_sha1": "1d5f1748f1f324d112af4ce691b00f8d5042cdbb",
+      "sha256": "b4d4be9e8cf6e6db691973b2711c0b58a752e08aeb3f505f2f89bcaf40be9cd8"
+    }
+  ],
+  "official_validation_answers_public": false,
+  "full_training_and_heldout_evaluation_completed": false
+}

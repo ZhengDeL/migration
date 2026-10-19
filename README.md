@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | [BEVFormer](PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2 | 2026-10-12 |
 | [Sparse4D](PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2 | 2026-10-12 |
-| [Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | 2026-10-12 |
+| [Qwen3-VL-8B](PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2 | 2026-10-19 |
 | [Apollo-Vision-Net](PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 4 | 2026-10-12 |
 | [LSTM-Argoverse](PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2 | 2026-10-19 |
 | [STGCN-Traffic](PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2 | 2026-10-19 |
