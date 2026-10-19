@@ -166,7 +166,7 @@ python3 tools/container_native_epochs.py \
 
 原 `epoch_N.pth` 和 `epoch_N_ema.pth` 保留。精确恢复使用新增 `exact_epoch_N.pth`：完整模型、原优化器、EMA 状态和更新计数、原 runner epoch/iter、全 rank Python/NumPy/Torch/NPU RNG 及 DataLoader generator 一起保存。仅支持轮次边界；不将其称为任意 batch 的精确续训。
 
-恢复时先调用原 runner 的 `resume`，再恢复原 EMA；所有原 epoch hook 执行后、创建新迭代器前恢复对应 rank 的 RNG 和 loader generator。数据 metadata 摘要、上游来源锁、GeoBEV 权重、卡数、精度、通信、batch、seed 与 worker 数必须相同。固定镜像由宿主入口核对，执行脚本 SHA 另列在实测证据中；修改脚本后的恢复不属于本记录已验证范围。GeoBEV 在启动 NPU 容器前按 `pretrained_sources.lock.json` 核对。该控制使用 `workers=0`；原配置 `workers=8` 的完整训练和精确恢复不因本测试被认定通过。
+恢复时先调用原 runner 的 `resume`，再恢复原 EMA；所有原 epoch hook 执行后、创建新迭代器前恢复对应 rank 的 RNG 和 loader generator。数据 metadata 摘要、上游来源锁、GeoBEV 权重、卡数、精度、通信、batch、seed 与 worker 数必须相同。固定镜像由宿主入口核对，执行脚本 SHA 另列在实测证据中；修改脚本后的恢复不属于本记录已验证范围。GeoBEV 在启动 NPU 容器前按 `pretrained_sources.lock.json` 核对。上述命令展示 `workers=0`；后续原配置 `workers=8` 的轮次恢复已独立复验，见下方记录。正式完整数据训练仍须单独验收。
 
 本入口另外显式设置 `find_unused_parameters=True`，使 DDP 使用固定构造分桶；这是迁移适配，不是作者配置的原值。原值未设置该选项，续训对照出现了重启后漂移。Torch 2.7.1 的[原始 reducer 实现](https://github.com/pytorch/pytorch/blob/v2.7.1/torch/csrc/distributed/c10d/reducer.hpp#L128-L133)说明该选项如何控制重建分桶。同步 mean-allreduce 的公式不变，实际每步分桶大小和参数顺序摘要写入 `rank_*.jsonl`，与输入、loss 一起比较。该设置可能增加图遍历开销，不据此声明性能提升；新旧分桶 profile 不允许混用精确恢复。
 
@@ -174,7 +174,7 @@ python3 tools/container_native_epochs.py \
 
 本入口限制为一至两轮真实 mini，用于验证原 runner 和恢复，不是正式 12 epoch 或驾驶精度验收。原数值门槛与正式 `full` 训练门禁保留。
 
-### 2026-10-19 四卡实际结果
+### 2026-10-19 workers=0 四卡实际结果
 
 | 检查 | 实测 |
 | --- | --- |
@@ -185,9 +185,43 @@ python3 tools/container_native_epochs.py \
 | 第二轮实际轨迹 | 四 rank 共 164 条输入 SHA、loss、lr、EMA 与梯度分桶记录全部相同 |
 | 公开比较入口 | 宿主 `container_native_epochs.py --compare` 再次退出 0；CPU 容器未映射 NPU |
 | 最终检查点 | 两份文件 SHA256 同为 `6efe38550d7a3688fb75168990e5375da0b89ee1dfe69458ac2d5cd704748ac4` |
-| 未覆盖 | 正式 trainval、原 12 epoch、workers=8 的恢复、任意 batch 恢复、最终任务精度 |
+| 该次未覆盖 | 正式 trainval、原 12 epoch、workers=8 的恢复、任意 batch 恢复、最终任务精度 |
 
 [完整命令、时刻、退出码、逐步记录与源码 SHA](validation/native_epoch_resume_20261019.json)。原 `find_unused_parameters=False` 对照的 2,282 项差异与定位依据保留在[失败对照](validation/history/native_epoch_resume_before_fixed_buckets_20261019.json)，没有用近似误差替代逐位判据。
+
+### 原配置 workers=8 的四卡恢复复验
+
+2026-10-19 在相同固定镜像、源代码与 GeoBEV 初始化下，另以原配置 `workers=8/rank` 重做三次独立训练。完整保留前述 workers=0 结果和检查点。容器进程记录实际观测到 32 个 `pt_data_worker`，父进程分组为四组、每组 8 个。
+
+在本模型目录执行以下命令，输出目录须为新的路径：
+
+```bash
+bash test/train_native_mini_4p.sh --devices 0,2,4,6 --workers 8 --epochs 1 \
+  --output_dir "$PWD/test/output/native_first_workers8_new"
+bash test/train_native_mini_4p.sh --devices 0,2,4,6 --workers 8 --epochs 2 \
+  --resume "$PWD/test/output/native_first_workers8_new/exact_epoch_1.pth" \
+  --output_dir "$PWD/test/output/native_resumed_workers8_new"
+bash test/train_native_mini_4p.sh --devices 0,2,4,6 --workers 8 --epochs 2 \
+  --output_dir "$PWD/test/output/native_continuous_workers8_new"
+python3 tools/container_native_epochs.py \
+  --compare "$PWD/test/output/native_resumed_workers8_new/exact_epoch_2.pth" \
+            "$PWD/test/output/native_continuous_workers8_new/exact_epoch_2.pth" \
+  --output_dir "$PWD/test/output/native_compare_workers8_new"
+```
+
+本次实际选择宿主逻辑 4、6、8、10，分属四张物理卡。数据仍为全部 323 条真实 mini 训练标注，原采样器每轮补齐至 328 次呈现；每 rank batch=2、41 次更新/轮。其余原 runner、优化器、EMA、SyncBN、warmup、固定分桶及数值设置与 workers=0 实验相同。不同 worker 配置各自做独立恢复对照，不要求它们之间的增强输入或检查点相同。
+
+| 检查 | workers=8 实测 |
+| --- | --- |
+| 执行 | 一轮 41 更新；新进程续 41 更新；独立连续两轮 82 更新；三次训练均退出 0 |
+| worker 拓扑 | 实际 32 个 DataLoader worker，四组各 8 个；进程表与时刻收录在 JSON |
+| 完整状态 | 模型、原优化器、EMA、所有 rank RNG 与 loader generator 共 2,762 个张量，逐位相同 |
+| 第二轮轨迹 | 四 rank 共 164 条实际输入 SHA、loss、lr、EMA 与梯度分桶记录，逐条相同 |
+| 最终状态 | 累计 82 更新、EMA=10,642；完整状态/输入比较 mismatch=0 |
+| 公开 CPU 比较 | 宿主 `container_native_epochs.py --compare` 退出 0，不映射 NPU |
+| 最终文件 SHA256 | 两份同为 `79cd050c8703998fcff41e3367fc2cca804d1407bd07ab59e2d4b2489786a055` |
+
+[完整命令、时刻、退出码、全部 rank 轨迹、源码摘要及 worker 进程记录](validation/native_epoch_resume_workers8_20261019.json)。本次覆盖 workers=8 的 mini 轮次边界恢复；不是正式 trainval/12 epoch、任意 batch 恢复、跨 worker 配置恢复或最终任务质量的验收。旧离线 ZIP 尚未包含本次新增证据。
 
 ## 11. 正式 trainval 输入准备
 
