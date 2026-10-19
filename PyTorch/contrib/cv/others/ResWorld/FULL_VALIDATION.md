@@ -111,3 +111,31 @@ bash test/validate_planning_1p.sh --devices 0 --checkpoint "$PWD/ckpts/resworld-
 704 state strict load，原ResWorld.compute_planner_metric_stp3；全部65帧预测rtol=atol=.003、逐帧原离散碰撞值一致。每后端独立复制GT并确认原标注未变。作者预训练是否覆盖mini未排除，导航command来自标注，不能据此宣称独立论文复现或驾驶业务精度。
 
 正式trainval/CAN/地图/深度、原12epoch/GeoBEV初始化、EMA10560/.999、SyncBN epoch0、linear warmup500/1⁄3、AdamW1e-4/wd.01、clip35、StepLR[24]与完整评测仍需完成。full入口继续明确拒绝；不能只补全量路径便称完整训练通过。Atlas800I A3为推理系列，实测不改变官方训练支持范围。
+
+## 9. GeoBEV、SyncBN、EMA 与 warmup 的四卡预检
+
+在完整训练之前，单独执行原仓训练组件的真实网络预检：
+
+```bash
+bash test/preflight_official_protocol_4p.sh --devices 0,2,4,6 \
+  --steps 8 --output_dir "$PWD/test/output/original_protocol_preflight_new"
+```
+
+使用本模型固定镜像、已有真实 mini、真实 CAN 和投影深度，以及 `ckpts/geobev-r50-nuimage-cbgs.pth`。选择四张空闲物理卡，每张只选一个逻辑设备。指定全新的输出目录；不修改原功能训练的 `latest_run.json`。GitHub 源码目录本身不包含上述大文件。
+
+| 原仓组件 | 新预检入口实际调用 |
+| --- | --- |
+| GeoBEV 初始化 | 原 MMCV `load_checkpoint(strict=False)`；逐个确认所有名称与形状匹配的张量确实载入，完整保存 missing / unexpected keys |
+| SyncBN | 原 `SyncbnControlHook` 使用的 `torch.nn.SyncBatchNorm.convert_sync_batchnorm`；从 epoch 0 启用，记录真实 NPU 前向次数 |
+| EMA | 直接调用固定作者源码 `ModelEMA`，使用 `MEGVIIEMAHook` 的 decay=0.9990 与 init_updates=10560 |
+| 学习率 | 直接调用 MMCV `StepLrUpdaterHook`；linear warmup=500、ratio=1/3、step=[24]，检查 0 / 499 / 500 次更新及 epoch 24 边界 |
+| 优化器 | 原 AdamW lr=1e-4、weight_decay=0.01；梯度裁剪 max_norm=35 |
+| 批次与卡数 | 每卡 2 帧、四卡合计 8 帧；本入口只执行 2～32 次更新 |
+
+依据：[固定原配置](vendor/ResWorld/projects/configs/resworld/resworld_config.py)、[作者 EMA 实现](vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/ema.py)、[作者 SyncBN 实现](vendor/ResWorld/projects/mmdet3d_plugin/resworld/hooks/syncbncontrol.py)。沿用本模型已经验证的 FP32、MSDA autograd、几何和时序数值适配。
+
+成功必须同时满足：执行退出 0、四个 rank 的全部更新完成、原三项 loss 与训练/EMA/优化器状态有限、真实执行 SyncBN、全 rank 参数摘要一致、模型和 EMA 保存后重读逐位相同。结果为输出目录中的 `protocol_preflight.json`，判定值 `pass_geobev_syncbn_ema_warmup_four_card_mini_preflight`。`command.json`、`console.log`、`execution.json` 和四份 `rank_*.json` 保留命令、退出码与逐步数据。
+
+此项使用现有 mini 功能训练帧，检查点是预检格式，不用于声明完整训练或精确续训。正式数据派生、原 12 epoch runner、完整训练/EMA 恢复、最终规划与碰撞评测仍须单独验收；现有 `full` 数据门禁保留。
+
+2026-10-19 实测：四卡各 8 更新、64 个不同真实训练帧；548 个 GeoBEV 兼容张量核对载入，86 个 SyncBN 模块每 rank 实际调用 1,824 次；EMA updates=10,568，保存后重读逐位相同；全部命令退出 0。四 rank 第一步 / 第八步 loss 均值分别为 10.3489307165 / 12.0367364883，仅记录八步输入和训练行为，不作收敛结论。GeoBEV 的 156 个未匹配模型键和 60 个 checkpoint 额外键完整保留，遵循原 `strict=False` 部分初始化。详见[本次原始逐步数据、边界检查与摘要](validation/original_protocol_preflight_20261019.json)。

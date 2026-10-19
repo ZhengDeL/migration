@@ -1,0 +1,1147 @@
+{
+  "schema_version": 1,
+  "tested_date": "2026-10-19",
+  "host": "7.6.28.252",
+  "hardware": "ARM64 Atlas 800I A3 IT22HMDA_4_S",
+  "source_revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+  "test_scope": "Original training-component preflight on real mini; not complete trainval training or task-quality acceptance",
+  "image": {
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2"
+  },
+  "workflow": {
+    "state": "completed_bounded_protocol_preflight",
+    "started_utc": "2026-10-19T11:08:06.820286+00:00",
+    "output": "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/original_protocol_preflight_20261019",
+    "full_training_completed": false,
+    "full_accuracy_validated": false,
+    "command": [
+      "bash",
+      "test/preflight_official_protocol_4p.sh",
+      "--devices",
+      "4,6,8,10",
+      "--steps",
+      "8",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/original_protocol_preflight_20261019"
+    ],
+    "exit_code": 0,
+    "result": "pass_geobev_syncbn_ema_warmup_four_card_mini_preflight",
+    "updated_utc": "2026-10-19T11:10:30.071707+00:00"
+  },
+  "command": {
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "host",
+      "--memory",
+      "96g",
+      "--cpus",
+      "16",
+      "--shm-size",
+      "8g",
+      "-v",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld:/var/aispace/lzd/migration_full_20261019/ResWorld:rw",
+      "-w",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld",
+      "-v",
+      "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+      "-v",
+      "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+      "-v",
+      "/usr/local/dcmi:/usr/local/dcmi:ro",
+      "--device",
+      "/dev/davinci4",
+      "--device",
+      "/dev/davinci6",
+      "--device",
+      "/dev/davinci8",
+      "--device",
+      "/dev/davinci10",
+      "--device",
+      "/dev/davinci_manager",
+      "--device",
+      "/dev/devmm_svm",
+      "--device",
+      "/dev/hisi_hdc",
+      "-e",
+      "ASCEND_RT_VISIBLE_DEVICES=0,1,2,3",
+      "-e",
+      "OMP_NUM_THREADS=2",
+      "-e",
+      "OPENBLAS_NUM_THREADS=2",
+      "-e",
+      "PYTHONUNBUFFERED=1",
+      "-e",
+      "HCCL_CONNECT_TIMEOUT=300",
+      "-e",
+      "PATH=/opt/conda/envs/bevformer/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "--entrypoint",
+      "/opt/conda/envs/bevformer/bin/python",
+      "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nproc-per-node=4",
+      "tools/preflight_official_protocol.py",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/original_protocol_preflight_20261019",
+      "--steps",
+      "8"
+    ],
+    "host_devices": [
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "docker_host": "unix:///run/migration-full8-20261019/docker.sock",
+    "full_training_completed": false
+  },
+  "execution": {
+    "exit_code": 0,
+    "full_training_completed": false
+  },
+  "result": {
+    "result": "pass_geobev_syncbn_ema_warmup_four_card_mini_preflight",
+    "world_size": 4,
+    "batch_size_per_rank": 2,
+    "optimizer_updates": 8,
+    "syncbn_modules": 86,
+    "checkpoint_sha256": "60bf41e886376111223c297369d23ca55a1dc97af64049a01395327281427aa3",
+    "geobev_checkpoint_sha256": "d7076e95611b2057ee1612e2e7b896c88a5c703374e6c1935d4f54786ffa19cb",
+    "geobev_matched_tensors": 548,
+    "geobev_missing_model_keys": [
+      "img_bev_encoder_backbone.layers.0.0.conv1.weight",
+      "img_bev_encoder_backbone.layers.0.0.downsample.weight",
+      "img_view_transformer.depth_net.depth_head.bias",
+      "img_view_transformer.depth_net.depth_head.weight",
+      "pts_bbox_head.action_mln.beta.bias",
+      "pts_bbox_head.action_mln.beta.weight",
+      "pts_bbox_head.action_mln.gamma.bias",
+      "pts_bbox_head.action_mln.gamma.weight",
+      "pts_bbox_head.action_mln.reduce.0.bias",
+      "pts_bbox_head.action_mln.reduce.0.weight",
+      "pts_bbox_head.bev_fusion_conv.conv.bias",
+      "pts_bbox_head.bev_fusion_conv.conv.weight",
+      "pts_bbox_head.canbus_mlp.fc1.bias",
+      "pts_bbox_head.canbus_mlp.fc1.weight",
+      "pts_bbox_head.canbus_mlp.fc2.bias",
+      "pts_bbox_head.canbus_mlp.fc2.weight",
+      "pts_bbox_head.canbus_se.mlp_expand.bias",
+      "pts_bbox_head.canbus_se.mlp_expand.weight",
+      "pts_bbox_head.canbus_se.mlp_reduce.bias",
+      "pts_bbox_head.canbus_se.mlp_reduce.weight",
+      "pts_bbox_head.col_attn.attention_weights.bias",
+      "pts_bbox_head.col_attn.attention_weights.weight",
+      "pts_bbox_head.col_attn.output_proj.bias",
+      "pts_bbox_head.col_attn.output_proj.weight",
+      "pts_bbox_head.col_attn.sampling_offsets.bias",
+      "pts_bbox_head.col_attn.sampling_offsets.weight",
+      "pts_bbox_head.col_attn.value_proj.bias",
+      "pts_bbox_head.col_attn.value_proj.weight",
+      "pts_bbox_head.ego_fut_decoder.0.bias",
+      "pts_bbox_head.ego_fut_decoder.0.weight",
+      "pts_bbox_head.ego_fut_decoder.2.bias",
+      "pts_bbox_head.ego_fut_decoder.2.weight",
+      "pts_bbox_head.ego_fut_decoder.4.bias",
+      "pts_bbox_head.ego_fut_decoder.4.weight",
+      "pts_bbox_head.init_ego_fut_decoder.0.bias",
+      "pts_bbox_head.init_ego_fut_decoder.0.weight",
+      "pts_bbox_head.init_ego_fut_decoder.2.bias",
+      "pts_bbox_head.init_ego_fut_decoder.2.weight",
+      "pts_bbox_head.init_ego_fut_decoder.4.bias",
+      "pts_bbox_head.init_ego_fut_decoder.4.weight",
+      "pts_bbox_head.latent_decoder.layers.0.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.latent_decoder.layers.0.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.latent_decoder.layers.0.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.latent_decoder.layers.0.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.latent_decoder.layers.0.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.latent_decoder.layers.0.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.latent_decoder.layers.0.ffns.0.layers.1.bias",
+      "pts_bbox_head.latent_decoder.layers.0.ffns.0.layers.1.weight",
+      "pts_bbox_head.latent_decoder.layers.0.norms.0.bias",
+      "pts_bbox_head.latent_decoder.layers.0.norms.0.weight",
+      "pts_bbox_head.latent_decoder.layers.0.norms.1.bias",
+      "pts_bbox_head.latent_decoder.layers.0.norms.1.weight",
+      "pts_bbox_head.latent_decoder.layers.1.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.latent_decoder.layers.1.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.latent_decoder.layers.1.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.latent_decoder.layers.1.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.latent_decoder.layers.1.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.latent_decoder.layers.1.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.latent_decoder.layers.1.ffns.0.layers.1.bias",
+      "pts_bbox_head.latent_decoder.layers.1.ffns.0.layers.1.weight",
+      "pts_bbox_head.latent_decoder.layers.1.norms.0.bias",
+      "pts_bbox_head.latent_decoder.layers.1.norms.0.weight",
+      "pts_bbox_head.latent_decoder.layers.1.norms.1.bias",
+      "pts_bbox_head.latent_decoder.layers.1.norms.1.weight",
+      "pts_bbox_head.latent_decoder.layers.2.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.latent_decoder.layers.2.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.latent_decoder.layers.2.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.latent_decoder.layers.2.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.latent_decoder.layers.2.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.latent_decoder.layers.2.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.latent_decoder.layers.2.ffns.0.layers.1.bias",
+      "pts_bbox_head.latent_decoder.layers.2.ffns.0.layers.1.weight",
+      "pts_bbox_head.latent_decoder.layers.2.norms.0.bias",
+      "pts_bbox_head.latent_decoder.layers.2.norms.0.weight",
+      "pts_bbox_head.latent_decoder.layers.2.norms.1.bias",
+      "pts_bbox_head.latent_decoder.layers.2.norms.1.weight",
+      "pts_bbox_head.navi_embedding.weight",
+      "pts_bbox_head.navi_se.mlp_expand.bias",
+      "pts_bbox_head.navi_se.mlp_expand.weight",
+      "pts_bbox_head.navi_se.mlp_reduce.bias",
+      "pts_bbox_head.navi_se.mlp_reduce.weight",
+      "pts_bbox_head.positional_encoding.col_embed.weight",
+      "pts_bbox_head.positional_encoding.row_embed.weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.ffns.0.layers.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.ffns.0.layers.1.weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.norms.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.norms.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.0.norms.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.0.norms.1.weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.ffns.0.layers.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.ffns.0.layers.1.weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.norms.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.norms.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.1.norms.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.1.norms.1.weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.ffns.0.layers.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.ffns.0.layers.1.weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.norms.0.bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.norms.0.weight",
+      "pts_bbox_head.res_latent_decoder.layers.2.norms.1.bias",
+      "pts_bbox_head.res_latent_decoder.layers.2.norms.1.weight",
+      "pts_bbox_head.res_tokenlearner.layer_norm.bias",
+      "pts_bbox_head.res_tokenlearner.layer_norm.weight",
+      "pts_bbox_head.res_tokenlearner.mlp.fc1.bias",
+      "pts_bbox_head.res_tokenlearner.mlp.fc1.weight",
+      "pts_bbox_head.res_tokenlearner.mlp.fc2.bias",
+      "pts_bbox_head.res_tokenlearner.mlp.fc2.weight",
+      "pts_bbox_head.tokenfuser.dense.bias",
+      "pts_bbox_head.tokenfuser.dense.weight",
+      "pts_bbox_head.tokenfuser.mlp.fc1.bias",
+      "pts_bbox_head.tokenfuser.mlp.fc1.weight",
+      "pts_bbox_head.tokenfuser.mlp.fc2.bias",
+      "pts_bbox_head.tokenfuser.mlp.fc2.weight",
+      "pts_bbox_head.tokenfuser.norm.bias",
+      "pts_bbox_head.tokenfuser.norm.weight",
+      "pts_bbox_head.tokenfuser.norm1.bias",
+      "pts_bbox_head.tokenfuser.norm1.weight",
+      "pts_bbox_head.tokenfuser.norm2.bias",
+      "pts_bbox_head.tokenfuser.norm2.weight",
+      "pts_bbox_head.tokenlearner.layer_norm.bias",
+      "pts_bbox_head.tokenlearner.layer_norm.weight",
+      "pts_bbox_head.tokenlearner.mlp.fc1.bias",
+      "pts_bbox_head.tokenlearner.mlp.fc1.weight",
+      "pts_bbox_head.tokenlearner.mlp.fc2.bias",
+      "pts_bbox_head.tokenlearner.mlp.fc2.weight",
+      "pts_bbox_head.way_decoder.layers.0.attentions.0.attn.in_proj_bias",
+      "pts_bbox_head.way_decoder.layers.0.attentions.0.attn.in_proj_weight",
+      "pts_bbox_head.way_decoder.layers.0.attentions.0.attn.out_proj.bias",
+      "pts_bbox_head.way_decoder.layers.0.attentions.0.attn.out_proj.weight",
+      "pts_bbox_head.way_decoder.layers.0.ffns.0.layers.0.0.bias",
+      "pts_bbox_head.way_decoder.layers.0.ffns.0.layers.0.0.weight",
+      "pts_bbox_head.way_decoder.layers.0.ffns.0.layers.1.bias",
+      "pts_bbox_head.way_decoder.layers.0.ffns.0.layers.1.weight",
+      "pts_bbox_head.way_decoder.layers.0.norms.0.bias",
+      "pts_bbox_head.way_decoder.layers.0.norms.0.weight",
+      "pts_bbox_head.way_decoder.layers.0.norms.1.bias",
+      "pts_bbox_head.way_decoder.layers.0.norms.1.weight",
+      "pts_bbox_head.way_point.weight"
+    ],
+    "geobev_unexpected_checkpoint_keys": [
+      "img_view_transformer.context_convs.0.bias",
+      "img_view_transformer.context_convs.0.weight",
+      "img_view_transformer.depth_convs.0.bias",
+      "img_view_transformer.depth_convs.0.weight",
+      "img_view_transformer.depth_upconvs.0.bias",
+      "img_view_transformer.depth_upconvs.0.weight",
+      "pts_bbox_head.shared_conv.bn.bias",
+      "pts_bbox_head.shared_conv.bn.num_batches_tracked",
+      "pts_bbox_head.shared_conv.bn.running_mean",
+      "pts_bbox_head.shared_conv.bn.running_var",
+      "pts_bbox_head.shared_conv.bn.weight",
+      "pts_bbox_head.shared_conv.conv.weight",
+      "pts_bbox_head.task_heads.0.dim.0.bn.bias",
+      "pts_bbox_head.task_heads.0.dim.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.dim.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.dim.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.dim.0.bn.weight",
+      "pts_bbox_head.task_heads.0.dim.0.conv.weight",
+      "pts_bbox_head.task_heads.0.dim.1.bias",
+      "pts_bbox_head.task_heads.0.dim.1.weight",
+      "pts_bbox_head.task_heads.0.heatmap.0.bn.bias",
+      "pts_bbox_head.task_heads.0.heatmap.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.heatmap.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.heatmap.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.heatmap.0.bn.weight",
+      "pts_bbox_head.task_heads.0.heatmap.0.conv.weight",
+      "pts_bbox_head.task_heads.0.heatmap.1.bias",
+      "pts_bbox_head.task_heads.0.heatmap.1.weight",
+      "pts_bbox_head.task_heads.0.height.0.bn.bias",
+      "pts_bbox_head.task_heads.0.height.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.height.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.height.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.height.0.bn.weight",
+      "pts_bbox_head.task_heads.0.height.0.conv.weight",
+      "pts_bbox_head.task_heads.0.height.1.bias",
+      "pts_bbox_head.task_heads.0.height.1.weight",
+      "pts_bbox_head.task_heads.0.reg.0.bn.bias",
+      "pts_bbox_head.task_heads.0.reg.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.reg.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.reg.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.reg.0.bn.weight",
+      "pts_bbox_head.task_heads.0.reg.0.conv.weight",
+      "pts_bbox_head.task_heads.0.reg.1.bias",
+      "pts_bbox_head.task_heads.0.reg.1.weight",
+      "pts_bbox_head.task_heads.0.rot.0.bn.bias",
+      "pts_bbox_head.task_heads.0.rot.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.rot.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.rot.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.rot.0.bn.weight",
+      "pts_bbox_head.task_heads.0.rot.0.conv.weight",
+      "pts_bbox_head.task_heads.0.rot.1.bias",
+      "pts_bbox_head.task_heads.0.rot.1.weight",
+      "pts_bbox_head.task_heads.0.vel.0.bn.bias",
+      "pts_bbox_head.task_heads.0.vel.0.bn.num_batches_tracked",
+      "pts_bbox_head.task_heads.0.vel.0.bn.running_mean",
+      "pts_bbox_head.task_heads.0.vel.0.bn.running_var",
+      "pts_bbox_head.task_heads.0.vel.0.bn.weight",
+      "pts_bbox_head.task_heads.0.vel.0.conv.weight",
+      "pts_bbox_head.task_heads.0.vel.1.bias",
+      "pts_bbox_head.task_heads.0.vel.1.weight"
+    ],
+    "ema_updates": 10568,
+    "ema_decay": 0.999,
+    "schedule_boundary_checks": [
+      {
+        "epoch": 0,
+        "step": 0,
+        "lr": 3.333333333333333e-05
+      },
+      {
+        "epoch": 0,
+        "step": 499,
+        "lr": 9.986666666666668e-05
+      },
+      {
+        "epoch": 0,
+        "step": 500,
+        "lr": 0.0001
+      },
+      {
+        "epoch": 11,
+        "step": 10000,
+        "lr": 0.0001
+      },
+      {
+        "epoch": 24,
+        "step": 10000,
+        "lr": 1e-05
+      }
+    ],
+    "npu_precision": {
+      "conv_allow_hf32": false,
+      "matmul_allow_hf32": false
+    },
+    "communication": {
+      "hccl_deterministic": true,
+      "gradient_reduction": "synchronous_mean_allreduce",
+      "npu_synchronize_before_and_after": true
+    },
+    "msda_backend": {
+      "autograd": "mmcv_pytorch_npu",
+      "no_grad": "drivingsdk"
+    },
+    "state_dict_and_ema_reload_exact": true,
+    "all_rank_parameters_equal": true,
+    "full_training_completed": false,
+    "full_accuracy_validated": false,
+    "exact_resume_claimed": false,
+    "data_scope": "real_nuscenes_mini_resworld_functional",
+    "dataset": "existing real mini functional training frames; no full trainval claim",
+    "protocol_reference": "vendor/ResWorld/projects/configs/resworld/resworld_config.py",
+    "rows_rank0": [
+      {
+        "step": 1,
+        "loss": 12.936938285827637,
+        "gradient_norm_before_clip": 28.08504867553711,
+        "lr": 3.333333333333333e-05,
+        "ema_updates": 10561,
+        "real_tokens": [
+          "1e0d1b76ea134c7db0592c4510f5e737",
+          "6d5d0e60cbf4429d8b6cfa055924e5ca"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5223428010940552,
+          "loss_plan_reg": 5.960759162902832,
+          "loss_plan_reg_init": 6.453836441040039
+        }
+      },
+      {
+        "step": 2,
+        "loss": 13.034271240234375,
+        "gradient_norm_before_clip": 27.391023635864258,
+        "lr": 3.3466666666666656e-05,
+        "ema_updates": 10562,
+        "real_tokens": [
+          "236f1ecb6ee7459d918cd011831674d6",
+          "5b77f438091b4d00a74d333ef2fe9033"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5222510695457458,
+          "loss_plan_reg": 6.225529193878174,
+          "loss_plan_reg_init": 6.286491394042969
+        }
+      },
+      {
+        "step": 3,
+        "loss": 7.580564975738525,
+        "gradient_norm_before_clip": 32.5956916809082,
+        "lr": 3.36e-05,
+        "ema_updates": 10563,
+        "real_tokens": [
+          "c9304cf98aad4ff0bb5b0cff0aab65d2",
+          "27900b9c3cfb48ed8b49087098d4a15a"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5249316096305847,
+          "loss_plan_reg": 3.487684965133667,
+          "loss_plan_reg_init": 3.567948341369629
+        }
+      },
+      {
+        "step": 4,
+        "loss": 13.41991901397705,
+        "gradient_norm_before_clip": 25.551660537719727,
+        "lr": 3.373333333333333e-05,
+        "ema_updates": 10564,
+        "real_tokens": [
+          "7bf1cef0e253474e847ee4c2eb955901",
+          "a572dd2e95e94e4db66bb5dbfaf870b5"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5245996713638306,
+          "loss_plan_reg": 6.493942737579346,
+          "loss_plan_reg_init": 6.401376724243164
+        }
+      },
+      {
+        "step": 5,
+        "loss": 17.39444351196289,
+        "gradient_norm_before_clip": 44.25042724609375,
+        "lr": 3.386666666666666e-05,
+        "ema_updates": 10565,
+        "real_tokens": [
+          "273c930b3f384bd58b2bbae02fe81d1e",
+          "4786b3c0d0a24c8b86b0676d32dd5919"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5219928622245789,
+          "loss_plan_reg": 8.236303329467773,
+          "loss_plan_reg_init": 8.636148452758789
+        }
+      },
+      {
+        "step": 6,
+        "loss": 11.739086151123047,
+        "gradient_norm_before_clip": 39.61051559448242,
+        "lr": 3.4e-05,
+        "ema_updates": 10566,
+        "real_tokens": [
+          "fe42b85d7f7a4107b650ffa993a4fbff",
+          "919e3c4cec934168a3152077a9adcbea"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5228738188743591,
+          "loss_plan_reg": 5.314400672912598,
+          "loss_plan_reg_init": 5.901811599731445
+        }
+      },
+      {
+        "step": 7,
+        "loss": 5.725298881530762,
+        "gradient_norm_before_clip": 36.3060188293457,
+        "lr": 3.413333333333333e-05,
+        "ema_updates": 10567,
+        "real_tokens": [
+          "a9def8f915cf4bfe9c74b864384ec6c7",
+          "bc3c8a953f6b4dcdb77b521d89f3d9d5"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.5231472849845886,
+          "loss_plan_reg": 2.6053543090820312,
+          "loss_plan_reg_init": 2.596796989440918
+        }
+      },
+      {
+        "step": 8,
+        "loss": 7.6632080078125,
+        "gradient_norm_before_clip": 31.572723388671875,
+        "lr": 3.4266666666666655e-05,
+        "ema_updates": 10568,
+        "real_tokens": [
+          "ac452a60e8b34a7080c938c904b23057",
+          "f5f955d2d7594fb4b18ef615b421c98e"
+        ],
+        "real_can_data": true,
+        "losses": {
+          "loss_depth": 0.52358478307724,
+          "loss_plan_reg": 3.511545419692993,
+          "loss_plan_reg_init": 3.628077745437622
+        }
+      }
+    ]
+  },
+  "ranks": [
+    {
+      "rank": 0,
+      "records": [
+        {
+          "step": 1,
+          "loss": 12.936938285827637,
+          "gradient_norm_before_clip": 28.08504867553711,
+          "lr": 3.333333333333333e-05,
+          "ema_updates": 10561,
+          "real_tokens": [
+            "1e0d1b76ea134c7db0592c4510f5e737",
+            "6d5d0e60cbf4429d8b6cfa055924e5ca"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5223428010940552,
+            "loss_plan_reg": 5.960759162902832,
+            "loss_plan_reg_init": 6.453836441040039
+          }
+        },
+        {
+          "step": 2,
+          "loss": 13.034271240234375,
+          "gradient_norm_before_clip": 27.391023635864258,
+          "lr": 3.3466666666666656e-05,
+          "ema_updates": 10562,
+          "real_tokens": [
+            "236f1ecb6ee7459d918cd011831674d6",
+            "5b77f438091b4d00a74d333ef2fe9033"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5222510695457458,
+            "loss_plan_reg": 6.225529193878174,
+            "loss_plan_reg_init": 6.286491394042969
+          }
+        },
+        {
+          "step": 3,
+          "loss": 7.580564975738525,
+          "gradient_norm_before_clip": 32.5956916809082,
+          "lr": 3.36e-05,
+          "ema_updates": 10563,
+          "real_tokens": [
+            "c9304cf98aad4ff0bb5b0cff0aab65d2",
+            "27900b9c3cfb48ed8b49087098d4a15a"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5249316096305847,
+            "loss_plan_reg": 3.487684965133667,
+            "loss_plan_reg_init": 3.567948341369629
+          }
+        },
+        {
+          "step": 4,
+          "loss": 13.41991901397705,
+          "gradient_norm_before_clip": 25.551660537719727,
+          "lr": 3.373333333333333e-05,
+          "ema_updates": 10564,
+          "real_tokens": [
+            "7bf1cef0e253474e847ee4c2eb955901",
+            "a572dd2e95e94e4db66bb5dbfaf870b5"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5245996713638306,
+            "loss_plan_reg": 6.493942737579346,
+            "loss_plan_reg_init": 6.401376724243164
+          }
+        },
+        {
+          "step": 5,
+          "loss": 17.39444351196289,
+          "gradient_norm_before_clip": 44.25042724609375,
+          "lr": 3.386666666666666e-05,
+          "ema_updates": 10565,
+          "real_tokens": [
+            "273c930b3f384bd58b2bbae02fe81d1e",
+            "4786b3c0d0a24c8b86b0676d32dd5919"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5219928622245789,
+            "loss_plan_reg": 8.236303329467773,
+            "loss_plan_reg_init": 8.636148452758789
+          }
+        },
+        {
+          "step": 6,
+          "loss": 11.739086151123047,
+          "gradient_norm_before_clip": 39.61051559448242,
+          "lr": 3.4e-05,
+          "ema_updates": 10566,
+          "real_tokens": [
+            "fe42b85d7f7a4107b650ffa993a4fbff",
+            "919e3c4cec934168a3152077a9adcbea"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5228738188743591,
+            "loss_plan_reg": 5.314400672912598,
+            "loss_plan_reg_init": 5.901811599731445
+          }
+        },
+        {
+          "step": 7,
+          "loss": 5.725298881530762,
+          "gradient_norm_before_clip": 36.3060188293457,
+          "lr": 3.413333333333333e-05,
+          "ema_updates": 10567,
+          "real_tokens": [
+            "a9def8f915cf4bfe9c74b864384ec6c7",
+            "bc3c8a953f6b4dcdb77b521d89f3d9d5"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5231472849845886,
+            "loss_plan_reg": 2.6053543090820312,
+            "loss_plan_reg_init": 2.596796989440918
+          }
+        },
+        {
+          "step": 8,
+          "loss": 7.6632080078125,
+          "gradient_norm_before_clip": 31.572723388671875,
+          "lr": 3.4266666666666655e-05,
+          "ema_updates": 10568,
+          "real_tokens": [
+            "ac452a60e8b34a7080c938c904b23057",
+            "f5f955d2d7594fb4b18ef615b421c98e"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.52358478307724,
+            "loss_plan_reg": 3.511545419692993,
+            "loss_plan_reg_init": 3.628077745437622
+          }
+        }
+      ],
+      "syncbn_modules": 86,
+      "syncbn_forward": 1824,
+      "communication": {
+        "synchronous_mean_allreduce": 96
+      },
+      "final_parameter_sha256": "23596ceb41254116a658bc90dd541f47d18e56e0a264f2306d63746d4348bdfd",
+      "finite_training_ema_optimizer": true
+    },
+    {
+      "rank": 1,
+      "records": [
+        {
+          "step": 1,
+          "loss": 18.954769134521484,
+          "gradient_norm_before_clip": 28.08504867553711,
+          "lr": 3.333333333333333e-05,
+          "ema_updates": 10561,
+          "real_tokens": [
+            "639a4120779f44bb9cf41be3e8612e36",
+            "a63038dfb41843eb8a14485d90c2fa35"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5218591690063477,
+            "loss_plan_reg": 8.863188743591309,
+            "loss_plan_reg_init": 9.569721221923828
+          }
+        },
+        {
+          "step": 2,
+          "loss": 8.630870819091797,
+          "gradient_norm_before_clip": 27.391023635864258,
+          "lr": 3.3466666666666656e-05,
+          "ema_updates": 10562,
+          "real_tokens": [
+            "a5addc41b07842768a2183abdd01cff8",
+            "a84f43c4ef52461d940a6c7d0768b86f"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5246002078056335,
+            "loss_plan_reg": 4.058651447296143,
+            "loss_plan_reg_init": 4.047618865966797
+          }
+        },
+        {
+          "step": 3,
+          "loss": 6.440347671508789,
+          "gradient_norm_before_clip": 32.5956916809082,
+          "lr": 3.36e-05,
+          "ema_updates": 10563,
+          "real_tokens": [
+            "4f545737bf3347fbbc9af60b0be9a963",
+            "eff61ec3657c4d1c9327e3fe6ca639d3"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5238626599311829,
+            "loss_plan_reg": 3.0078835487365723,
+            "loss_plan_reg_init": 2.908601760864258
+          }
+        },
+        {
+          "step": 4,
+          "loss": 7.8148369789123535,
+          "gradient_norm_before_clip": 25.551660537719727,
+          "lr": 3.373333333333333e-05,
+          "ema_updates": 10564,
+          "real_tokens": [
+            "ba2491f55619445e9d2e472f39f3b01b",
+            "00889f8a9549450aa2f32cf310a3e305"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5243711471557617,
+            "loss_plan_reg": 3.66737961769104,
+            "loss_plan_reg_init": 3.623086452484131
+          }
+        },
+        {
+          "step": 5,
+          "loss": 9.87006950378418,
+          "gradient_norm_before_clip": 44.25042724609375,
+          "lr": 3.386666666666666e-05,
+          "ema_updates": 10565,
+          "real_tokens": [
+            "df7066fa5f0d4b708982747cc3feed14",
+            "4711bcd34644420da8bc77163431888e"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.523246705532074,
+            "loss_plan_reg": 4.4597249031066895,
+            "loss_plan_reg_init": 4.8870978355407715
+          }
+        },
+        {
+          "step": 6,
+          "loss": 10.607982635498047,
+          "gradient_norm_before_clip": 39.61051559448242,
+          "lr": 3.4e-05,
+          "ema_updates": 10566,
+          "real_tokens": [
+            "9c93690fc9e24ebc90906ed922159d75",
+            "3e7ed5cf0b4541e4a0e1b109dfea89cf"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5219799876213074,
+            "loss_plan_reg": 4.987697601318359,
+            "loss_plan_reg_init": 5.098304748535156
+          }
+        },
+        {
+          "step": 7,
+          "loss": 1.6763676404953003,
+          "gradient_norm_before_clip": 36.3060188293457,
+          "lr": 3.413333333333333e-05,
+          "ema_updates": 10567,
+          "real_tokens": [
+            "c143943fd6e246448eab88ce1a0aeda9",
+            "d7bea9a3552b40e29d42324108dff575"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5245859026908875,
+            "loss_plan_reg": 0.8543626070022583,
+            "loss_plan_reg_init": 0.29741916060447693
+          }
+        },
+        {
+          "step": 8,
+          "loss": 11.032955169677734,
+          "gradient_norm_before_clip": 31.572723388671875,
+          "lr": 3.4266666666666655e-05,
+          "ema_updates": 10568,
+          "real_tokens": [
+            "cd21dbfc3bd749c7b10a5c42562e0c42",
+            "2e024439286d469f8f743fe9266c0e56"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5224103331565857,
+            "loss_plan_reg": 4.841103553771973,
+            "loss_plan_reg_init": 5.669441223144531
+          }
+        }
+      ],
+      "syncbn_modules": 86,
+      "syncbn_forward": 1824,
+      "communication": {
+        "synchronous_mean_allreduce": 96
+      },
+      "final_parameter_sha256": "23596ceb41254116a658bc90dd541f47d18e56e0a264f2306d63746d4348bdfd",
+      "finite_training_ema_optimizer": true
+    },
+    {
+      "rank": 2,
+      "records": [
+        {
+          "step": 1,
+          "loss": 4.363845348358154,
+          "gradient_norm_before_clip": 28.08504867553711,
+          "lr": 3.333333333333333e-05,
+          "ema_updates": 10561,
+          "real_tokens": [
+            "d1136fce62f14400a069613e274f46f7",
+            "dd8d85a47000418e849e4cb2f2a3f45f"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5258247256278992,
+            "loss_plan_reg": 1.7973084449768066,
+            "loss_plan_reg_init": 2.0407121181488037
+          }
+        },
+        {
+          "step": 2,
+          "loss": 10.739302635192871,
+          "gradient_norm_before_clip": 27.391023635864258,
+          "lr": 3.3466666666666656e-05,
+          "ema_updates": 10562,
+          "real_tokens": [
+            "c537fef0b4b241df92f44daa976fe5b3",
+            "269ccf1fe399403c914e1f649d2a8ca2"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5235204696655273,
+            "loss_plan_reg": 5.050765037536621,
+            "loss_plan_reg_init": 5.165017127990723
+          }
+        },
+        {
+          "step": 3,
+          "loss": 13.472490310668945,
+          "gradient_norm_before_clip": 32.5956916809082,
+          "lr": 3.36e-05,
+          "ema_updates": 10563,
+          "real_tokens": [
+            "92594549844e4f7da7a0e73e92945b2b",
+            "3d9b4a27209e4624b491f48144be21d6"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5234159827232361,
+            "loss_plan_reg": 6.204185485839844,
+            "loss_plan_reg_init": 6.7448883056640625
+          }
+        },
+        {
+          "step": 4,
+          "loss": 10.658543586730957,
+          "gradient_norm_before_clip": 25.551660537719727,
+          "lr": 3.373333333333333e-05,
+          "ema_updates": 10564,
+          "real_tokens": [
+            "b8766f4291d5449d95bab459ca724ad8",
+            "19f02e3faab4412988f28d419e1727fa"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5235345363616943,
+            "loss_plan_reg": 5.095715045928955,
+            "loss_plan_reg_init": 5.039294242858887
+          }
+        },
+        {
+          "step": 5,
+          "loss": 7.6678619384765625,
+          "gradient_norm_before_clip": 44.25042724609375,
+          "lr": 3.386666666666666e-05,
+          "ema_updates": 10565,
+          "real_tokens": [
+            "f6ef25ab02c0483b9df411ed84873f41",
+            "3d22d2c87c5b483a914c7e8125326013"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5238140225410461,
+            "loss_plan_reg": 3.6028242111206055,
+            "loss_plan_reg_init": 3.5412237644195557
+          }
+        },
+        {
+          "step": 6,
+          "loss": 1.7346720695495605,
+          "gradient_norm_before_clip": 39.61051559448242,
+          "lr": 3.4e-05,
+          "ema_updates": 10566,
+          "real_tokens": [
+            "614c6962e44240b1b0ebb3eb351fe0eb",
+            "8e5512a630dc44c08d3e3f692b34f808"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5224632620811462,
+            "loss_plan_reg": 0.9551990628242493,
+            "loss_plan_reg_init": 0.25700968503952026
+          }
+        },
+        {
+          "step": 7,
+          "loss": 10.682939529418945,
+          "gradient_norm_before_clip": 36.3060188293457,
+          "lr": 3.413333333333333e-05,
+          "ema_updates": 10567,
+          "real_tokens": [
+            "b4c279e61abf49bd871ff2ec4b13e115",
+            "b422bd971acf483592e367c2c5057a60"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.522348940372467,
+            "loss_plan_reg": 5.088408470153809,
+            "loss_plan_reg_init": 5.072181701660156
+          }
+        },
+        {
+          "step": 8,
+          "loss": 10.354549407958984,
+          "gradient_norm_before_clip": 31.572723388671875,
+          "lr": 3.4266666666666655e-05,
+          "ema_updates": 10568,
+          "real_tokens": [
+            "965f6af5a92449348409029a5f048a38",
+            "79937d5eae1d450499677a0dcffa210c"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5225657820701599,
+            "loss_plan_reg": 4.75072717666626,
+            "loss_plan_reg_init": 5.081255912780762
+          }
+        }
+      ],
+      "syncbn_modules": 86,
+      "syncbn_forward": 1824,
+      "communication": {
+        "synchronous_mean_allreduce": 96
+      },
+      "final_parameter_sha256": "23596ceb41254116a658bc90dd541f47d18e56e0a264f2306d63746d4348bdfd",
+      "finite_training_ema_optimizer": true
+    },
+    {
+      "rank": 3,
+      "records": [
+        {
+          "step": 1,
+          "loss": 5.140170097351074,
+          "gradient_norm_before_clip": 28.08504867553711,
+          "lr": 3.333333333333333e-05,
+          "ema_updates": 10561,
+          "real_tokens": [
+            "b26e791522294bec90f86fd72226e35c",
+            "a0462df7186d4ca99ef58f455d53a42c"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5247020125389099,
+            "loss_plan_reg": 2.166165351867676,
+            "loss_plan_reg_init": 2.4493024349212646
+          }
+        },
+        {
+          "step": 2,
+          "loss": 5.974608898162842,
+          "gradient_norm_before_clip": 27.391023635864258,
+          "lr": 3.3466666666666656e-05,
+          "ema_updates": 10562,
+          "real_tokens": [
+            "59bd7a9fae8a45bcb76f1847cf09e000",
+            "be99ffc878b24aca8956bbb4e0f97d0c"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5243287086486816,
+            "loss_plan_reg": 2.607354164123535,
+            "loss_plan_reg_init": 2.842926025390625
+          }
+        },
+        {
+          "step": 3,
+          "loss": 13.603656768798828,
+          "gradient_norm_before_clip": 32.5956916809082,
+          "lr": 3.36e-05,
+          "ema_updates": 10563,
+          "real_tokens": [
+            "134ae8a8f5c340f9894a414fc0966af4",
+            "05e993bd780241aabaa30dd2a0473286"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5223764181137085,
+            "loss_plan_reg": 6.62391471862793,
+            "loss_plan_reg_init": 6.457365989685059
+          }
+        },
+        {
+          "step": 4,
+          "loss": 8.970918655395508,
+          "gradient_norm_before_clip": 25.551660537719727,
+          "lr": 3.373333333333333e-05,
+          "ema_updates": 10564,
+          "real_tokens": [
+            "5f3fc3c1d08b47cabc1bbca600abbfa8",
+            "3b594831ff7f4e27a9889c7b7d0d8e92"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5243003368377686,
+            "loss_plan_reg": 4.0760345458984375,
+            "loss_plan_reg_init": 4.370584011077881
+          }
+        },
+        {
+          "step": 5,
+          "loss": 17.207487106323242,
+          "gradient_norm_before_clip": 44.25042724609375,
+          "lr": 3.386666666666666e-05,
+          "ema_updates": 10565,
+          "real_tokens": [
+            "96d915e8b7e44bacba3c78e76a924e5c",
+            "3be9d2705879419f8f3afc08949dca57"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5210748314857483,
+            "loss_plan_reg": 7.9764509201049805,
+            "loss_plan_reg_init": 8.7099609375
+          }
+        },
+        {
+          "step": 6,
+          "loss": 13.064970016479492,
+          "gradient_norm_before_clip": 39.61051559448242,
+          "lr": 3.4e-05,
+          "ema_updates": 10566,
+          "real_tokens": [
+            "ecd49e3c38624c77b8aac8df445d49ba",
+            "1923316323b44b86b3389178fb026db6"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5226433873176575,
+            "loss_plan_reg": 6.21251106262207,
+            "loss_plan_reg_init": 6.329815864562988
+          }
+        },
+        {
+          "step": 7,
+          "loss": 5.903366565704346,
+          "gradient_norm_before_clip": 36.3060188293457,
+          "lr": 3.413333333333333e-05,
+          "ema_updates": 10567,
+          "real_tokens": [
+            "73ccc9c10a3547849b8ff130d50bac98",
+            "c235638ed66145988d17f9d0601923f2"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.5254850387573242,
+            "loss_plan_reg": 2.70827579498291,
+            "loss_plan_reg_init": 2.6696057319641113
+          }
+        },
+        {
+          "step": 8,
+          "loss": 19.096233367919922,
+          "gradient_norm_before_clip": 31.572723388671875,
+          "lr": 3.4266666666666655e-05,
+          "ema_updates": 10568,
+          "real_tokens": [
+            "c0f7a7d51fbe46f9be8ca098da06b7fb",
+            "be1494c7762c43ca88010f366997a586"
+          ],
+          "real_can_data": true,
+          "losses": {
+            "loss_depth": 0.522286593914032,
+            "loss_plan_reg": 8.932398796081543,
+            "loss_plan_reg_init": 9.641548156738281
+          }
+        }
+      ],
+      "syncbn_modules": 86,
+      "syncbn_forward": 1824,
+      "communication": {
+        "synchronous_mean_allreduce": 96
+      },
+      "final_parameter_sha256": "23596ceb41254116a658bc90dd541f47d18e56e0a264f2306d63746d4348bdfd",
+      "finite_training_ema_optimizer": true
+    }
+  ],
+  "source_sha256": {
+    "tools/preflight_official_protocol.py": "f05db4af4cff788dde85e126a5c9a913f78ccc1e103a6e8afd8d9aba52b343d7",
+    "tools/container_official_protocol.py": "75ee0664d26207cbaae4938ec662f626d6890da42ecdbbcae84ead90d74886f1",
+    "test/preflight_official_protocol_4p.sh": "f8faf28d4f7905f0d8d8e80e2c73e2db0b8eb35b89e5480a4912b0c63f853d87",
+    "sources.lock.json": "c38d0bcf2225bc75fa09029c4a77849460b99e04af511ee980b965131b241ded",
+    "images.lock.json": "808043ac9b24ae1a93b1b6602a0abdc3d67e876aec819119aafc5bbb47db5a23"
+  },
+  "console": {
+    "path": "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/original_protocol_preflight_20261019/console.log",
+    "bytes": 261939,
+    "sha256": "6a5373c329d12d7c8242ed9e5c7cb4d8b2c1f51f7955074244d86f1f87ed0a36"
+  },
+  "measured_summary": {
+    "optimizer_updates_per_rank": 8,
+    "training_sample_presentations": 64,
+    "unique_real_training_tokens": 64,
+    "mean_rank_loss_step1": 10.348930716514587,
+    "mean_rank_loss_step8": 12.036736488342285
+  },
+  "acceptance_limits": {
+    "complete_trainval_training": false,
+    "complete_12_epoch_runner": false,
+    "full_training_exact_resume": false,
+    "independent_reloaded_model_forward": false,
+    "complete_planning_collision_quality": false,
+    "old_offline_zip_updated": false
+  }
+}
