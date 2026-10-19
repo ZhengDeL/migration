@@ -20,6 +20,8 @@ def main():
     if not output.is_relative_to(ROOT):
         raise RuntimeError('结果必须在本模型目录中')
     report = {'model': MODEL, 'result': 'fail', 'official_accuracy_evaluation': False}
+    if (output / 'full_data_verified.json').exists():
+        raise RuntimeError('完整 DriveLM 结果请使用 test/validate_full_1p.sh 做重载评测；不能套用十步功能检查。')
     try:
         import torch
         import torch_npu

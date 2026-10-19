@@ -15,9 +15,11 @@ def main():
     parser.add_argument('--mode', choices=['functional', 'full'], required=True)
     parser.add_argument('--data_path', type=Path, required=True)
     parser.add_argument('--output_dir', type=Path, required=True)
-    parser.add_argument('--dataset_id', default='mllm_demo')
+    parser.add_argument('--dataset_id')
     parser.add_argument('--plan', action='store_true')
     args = parser.parse_args()
+    if args.dataset_id is None:
+        args.dataset_id = 'drivelm_nus_v11_train' if args.mode == 'full' else 'mllm_demo'
     if args.mode == 'full':
         from prepare_full_data import require_full_protocol
         require_full_protocol(args.data_path, args.dataset_id)
@@ -29,6 +31,8 @@ def main():
     devices = ','.join((str(i) for i in range(PROFILE['nproc'])))
     command = [sys.executable, str(ROOT / 'tools/run_train.py'), MODEL, '--source', str(source), '--devices', devices, '--output-dir', str(output)]
     command += ['--model-path', str(ROOT / 'weights/qwen3-vl-8b-instruct'), '--dataset-id', args.dataset_id]
+    if not smoke:
+        command += ['--data-dir', str(args.data_path)]
     if smoke:
         command += ['--smoke']
     if not args.plan:
@@ -41,6 +45,10 @@ def main():
         return result.returncode
     if smoke:
         subprocess.run([sys.executable, str(ROOT / 'tools/validate_model.py'), '--output_dir', str(output), '--saved-only'], check=True, env=env)
+    else:
+        from check_qwen_full_result import check
+        checked = check(output)
+        (output / 'full_training_check.json').write_text(json.dumps(checked, indent=2) + '\n')
     report = {'model': MODEL, 'result': 'pass_functional_training' if smoke else 'training_completed', 'mode': args.mode, 'nproc': PROFILE['nproc'], 'upstream_revision': json.loads((ROOT / 'sources.lock.json').read_text())[MODEL]['revision'], 'entry_command': command, 'functional_accuracy_claimed': False}
     (output / 'train_result.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2), flush=True)

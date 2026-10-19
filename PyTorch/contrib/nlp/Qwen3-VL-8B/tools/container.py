@@ -38,14 +38,17 @@ def latest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate'])
+    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'prepare-full', 'plan', 'functional', 'full', 'preflight-full', 'validate', 'validate-full'])
     parser.add_argument('--device_id', '--devices', dest='devices', help='宿主逻辑 NPU ID；训练选不同物理卡')
     parser.add_argument('--data_path', type=Path, help='本模型目录内的数据目录')
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
-    parser.add_argument('--dataset_id', default='mllm_demo', help='仅图文模型的注册数据集名')
+    parser.add_argument('--dataset_id', help='functional 默认 mllm_demo；full 固定 drivelm_nus_v11_train')
     args = parser.parse_args()
-    if args.action == 'full':
+    if args.dataset_id is None:
+        args.dataset_id = 'drivelm_nus_v11_train' if args.action in ('full', 'preflight-full') else 'mllm_demo'
+    if args.action in ('full', 'preflight-full'):
         from prepare_full_data import require_full_protocol
+        args.data_path = args.data_path or ROOT / 'data/drivelm'
         require_full_protocol(args.data_path, args.dataset_id)
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('在有 Ascend 驱动和 Docker 的 ARM64 Linux 服务器执行本脚本。')
@@ -69,21 +72,21 @@ def main():
             image()
             args.action = 'prepare'
         spec = image()
-        nproc = 1 if args.action == 'validate' else PROFILE['nproc']
+        nproc = 1 if args.action in ('validate', 'validate-full') else PROFILE['nproc']
         host_ids = (args.devices or ('0' if nproc == 1 else PROFILE['host_devices'])).split(',')
-        if args.action in ('prepare', 'plan'):
+        if args.action in ('prepare', 'prepare-full', 'plan'):
             host_ids = []
         else:
             if len(host_ids) != nproc or any((not x.isdigit() for x in host_ids)) or len(set(host_ids)) != nproc:
                 raise RuntimeError('设备数不匹配；训练需 ' + str(nproc) + ' 个 ID，验证需 1 个 ID。')
             if len({int(x) // 2 for x in host_ids}) != nproc:
                 raise RuntimeError('1# 双芯片卡拓扑中，每张物理卡只选一个逻辑 ID。')
-            if args.action in ('functional', 'full', 'validate'):
+            if args.action in ('functional', 'full', 'preflight-full', 'validate', 'validate-full'):
                 command(sys.executable, str(ROOT / 'tools/check_idle_cards.py'), ','.join(host_ids))
         data = (args.data_path or ROOT / PROFILE['data_dir']).resolve()
         if not data.is_relative_to(ROOT):
             raise RuntimeError('--data_path 必须位于本模型目录下；先按 README 放置或迁入数据。')
-        if args.action in ('functional', 'full', 'plan'):
+        if args.action in ('functional', 'full', 'preflight-full', 'plan'):
             if args.action == 'full' and args.dataset_id == 'mllm_demo':
                 raise RuntimeError('正式训练必须使用已注册的业务数据集。')
             output = (args.output_dir or ROOT / 'test/output' / (args.action + '_' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))).resolve()
@@ -92,7 +95,7 @@ def main():
             output.mkdir(parents=True)
             if args.action != 'plan':
                 (ROOT / 'test/output/latest_run.json').write_text(json.dumps({'model': MODEL, 'state': 'running', 'output_dir': output.relative_to(ROOT).as_posix()}, indent=2) + '\n')
-        elif args.action == 'validate':
+        elif args.action in ('validate', 'validate-full'):
             output = args.output_dir.resolve(strict=True) if args.output_dir else latest()
         else:
             output = ROOT / 'test/output'
@@ -116,10 +119,16 @@ def main():
         if PROFILE.get('environment'):
             docker += ['-e', 'PATH=/opt/conda/envs/' + PROFILE['environment'] + '/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin']
         docker += ['--entrypoint', PROFILE['python'], spec['tag']]
-        if args.action == 'prepare':
+        if args.action == 'prepare-full':
+            launch = ['tools/full_data_pipeline.py']
+        elif args.action == 'prepare':
             launch = ['tools/prepare_data.py', '--data_path', str(data)]
         elif args.action == 'check':
             launch = ['tools/check_env.py', '--model', MODEL, '--nproc', str(nproc), '--output', 'test/output/environment.json', '--summary']
+        elif args.action == 'validate-full':
+            launch = ['tools/validate_full_model.py', '--output_dir', str(output)]
+        elif args.action == 'preflight-full':
+            launch = ['tools/drivelm_preflight.py', '--output_dir', str(output)]
         elif args.action == 'validate':
             launch = ['tools/validate_model.py', '--output_dir', str(output)]
         else:
@@ -147,7 +156,7 @@ def main():
                 shutil.copytree(reference, delivered)
                 pointer.write_text(json.dumps({'model': MODEL, 'state': 'completed', 'mode': 'delivered_reference', 'image_id': spec['image_id'], 'exit_code': 0, 'output_dir': delivered.relative_to(ROOT).as_posix()}, indent=2) + '\n')
                 print('Delivered reference copied to the model-local validation working directory.', flush=True)
-        if args.action in ('functional', 'full'):
+        if args.action in ('functional', 'full', 'preflight-full'):
             state = {'model': MODEL, 'state': 'completed' if result_code == 0 else 'failed', 'output_dir': output.relative_to(ROOT).as_posix(), 'exit_code': result_code, 'host_devices': host_ids, 'image_id': spec['image_id'], 'mode': args.action}
             (ROOT / 'test/output/latest_run.json').write_text(json.dumps(state, indent=2) + '\n')
         return result_code

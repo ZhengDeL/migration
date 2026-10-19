@@ -1,0 +1,506 @@
+{
+  "schema_version": 1,
+  "model": "Qwen3-VL-8B-Instruct",
+  "collected_utc": "2026-10-19T09:19:37.489460+00:00",
+  "result": "pass_complete_data_and_real_npu_preflight_full_training_not_finished",
+  "environment": {
+    "architecture": "aarch64",
+    "board": "IT22HMDA_4_S",
+    "physical_cards_for_training": 2,
+    "host_logical_devices": [
+      0,
+      2
+    ],
+    "driver": "26.1.1",
+    "firmware": "9.0.0.9.220",
+    "image_tag": "local/llamafactory:a3-arm64-20261012",
+    "image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5",
+    "docker_endpoint": "unix:///run/migration-full8-20261019/docker.sock",
+    "official_training_hardware_support_claimed": false
+  },
+  "dataset_sources": [
+    {
+      "filename": "drivelm_nus_imgs_train.zip",
+      "bytes": 3483205396,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/drivelm_nus_imgs_train.zip",
+      "sha256": "2cb95fafac00ca058c04735c339a183657d60962afee12d782b410c602eab936"
+    },
+    {
+      "filename": "drivelm_nus_imgs_val.zip",
+      "bytes": 704864335,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/drivelm_nus_imgs_val.zip",
+      "sha256": "ded1b140a2c6f1b551d92555008c39a3c0ec3fd0825095e7aa920a5bbe6592e9"
+    },
+    {
+      "filename": "v1_1_train_nus.json",
+      "bytes": 192961829,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/v1_1_train_nus.json",
+      "sha256": "ecd3c13e9beb27295bcf6182ea35fff7c1d6a9ba58d40e48fb38d713094759fd"
+    },
+    {
+      "filename": "v1_1_val_nus_q_only.json",
+      "bytes": 9860626,
+      "url": "https://huggingface.co/datasets/OpenDriveLab/DriveLM/resolve/ae973fbd4e8d4684af4ab234d504bd6c5e946868/v1_1_val_nus_q_only.json",
+      "git_blob_sha1": "1d5f1748f1f324d112af4ce691b00f8d5042cdbb",
+      "sha256": "b4d4be9e8cf6e6db691973b2711c0b58a752e08aeb3f505f2f89bcaf40be9cd8"
+    }
+  ],
+  "full_run_environment_check": {
+    "model": "qwen3vl8b",
+    "python": "3.12.13",
+    "visible_devices": "0,1",
+    "cann_home": "/usr/local/Ascend/cann-9.1.0",
+    "checks": {
+      "torch_import_error": null,
+      "torch_npu_import_error": null,
+      "torch_version_match": true,
+      "enough_npus": true,
+      "llamafactory_import_error": null,
+      "llamafactory_imported": true,
+      "npu_smi_exit_code": 211,
+      "npu_smi_ok": false
+    },
+    "torch": "2.10.0+cpu",
+    "torch_npu": "2.10.0.post2",
+    "npu_available": true,
+    "npu_count": 2,
+    "devices": [
+      "Ascend910_9362",
+      "Ascend910_9362"
+    ],
+    "npu_smi_output": "npu get board type failed. ret is -9005",
+    "result": "pass_with_warnings",
+    "failures": [],
+    "warnings": [
+      "npu_smi_ok"
+    ]
+  },
+  "preparation": {
+    "dataset": "DriveLM-nuScenes v1.1",
+    "publisher_revision": "ae973fbd4e8d4684af4ab234d504bd6c5e946868",
+    "scenes": 696,
+    "frames": 4072,
+    "raw_qa_pairs": 377956,
+    "usable_qa_pairs": 377955,
+    "excluded_records": {
+      "id": [
+        "f55c8c62235146d895f611176fd0a5dc",
+        "ff0d87987502472982ed3647c81236d9",
+        "planning",
+        18
+      ],
+      "reason": "The sole publisher record with an empty answer; no fabricated label",
+      "raw_qa_pairs": 377956,
+      "usable_qa_pairs": 377955
+    },
+    "split_protocol": "Local deterministic 626/70 scene split of official public training data; not the official hidden val score",
+    "split_seed": "drivelm-nus-v1.1-scene-holdout-ascend-v1",
+    "qa_counts": {
+      "train": 340119,
+      "dev": 37836
+    },
+    "qa_by_task": {
+      "train": {
+        "perception": 146203,
+        "prediction": 111138,
+        "planning": 79110,
+        "behavior": 3668
+      },
+      "dev": {
+        "perception": 16277,
+        "prediction": 12298,
+        "planning": 8857,
+        "behavior": 404
+      }
+    },
+    "camera_order": [
+      "CAM_FRONT",
+      "CAM_FRONT_LEFT",
+      "CAM_FRONT_RIGHT",
+      "CAM_BACK",
+      "CAM_BACK_LEFT",
+      "CAM_BACK_RIGHT"
+    ],
+    "images_verified": 29226,
+    "train_images": 24432,
+    "official_val_images": 4794,
+    "all_images_fully_decoded": true,
+    "prepared_sha256": {
+      "train.jsonl": "3c7372ebbaed141600a4c01432ced8e3f0670fbfbfcc4ba71c9d40b9cf291762",
+      "dev.jsonl": "90719954e934b602c72c88f843a6141d0f1209bf777984db3b1d9e247278fd22",
+      "dataset_info.json": "0a706e8009d884a7d10fa9bb34494dfe5c27e832727b17c47b7f2c786c838a98",
+      "excluded_records.json": "33b58bcd276aa2a0c9df98e6bc44973936593a60343fbf438dd8ee8110f0c0ef"
+    },
+    "media_manifest_sha256": "5e247a1ee8a7d7e9c00087140eb03a35b0d3b9555493d1ec83ac0f7f5c2584ea"
+  },
+  "context_audit": {
+    "result": "pass_all_rows_original_sft_encoder_without_truncation",
+    "dataset": "DriveLM-nuScenes v1.1",
+    "rows_checked": 377955,
+    "qa_counts": {
+      "train": 340119,
+      "dev": 37836
+    },
+    "distinct_frames": 4072,
+    "encoding": "Pinned LLaMA-Factory SupervisedDatasetProcessor._encode_data_example with cutoff=1000000",
+    "multimodal_metadata_cache": "One frame only; calls original _get_mm_token_metadata; first encoded row compared byte-for-byte to uncached original",
+    "template": "qwen3_vl_nothink",
+    "image_max_pixels": 262144,
+    "min_tokens": 1574,
+    "max_tokens": 2629,
+    "longest_record": {
+      "length": 2629,
+      "id": "ab8bf18dfce14db4b8213b88f5dc1429:e2143daf5b154add8ded09798da8d34e:perception:24",
+      "answer_tokens": 967
+    },
+    "minimum_supervised_answer_tokens": 4,
+    "target_cutoff_len": 4096,
+    "length_histogram_bucket_256": {
+      "1536": 369612,
+      "1792": 7548,
+      "2048": 718,
+      "2304": 76,
+      "2560": 1
+    },
+    "source_annotation_sha256": "ecd3c13e9beb27295bcf6182ea35fff7c1d6a9ba58d40e48fb38d713094759fd",
+    "prepared_sha256": {
+      "train.jsonl": "3c7372ebbaed141600a4c01432ced8e3f0670fbfbfcc4ba71c9d40b9cf291762",
+      "dev.jsonl": "90719954e934b602c72c88f843a6141d0f1209bf777984db3b1d9e247278fd22",
+      "dataset_info.json": "0a706e8009d884a7d10fa9bb34494dfe5c27e832727b17c47b7f2c786c838a98",
+      "excluded_records.json": "33b58bcd276aa2a0c9df98e6bc44973936593a60343fbf438dd8ee8110f0c0ef"
+    },
+    "media_manifest_sha256": "5e247a1ee8a7d7e9c00087140eb03a35b0d3b9555493d1ec83ac0f7f5c2584ea",
+    "seconds": 1931.8094711601734,
+    "complete_npu_training_executed": false
+  },
+  "complete_data_positive_guard": {
+    "result": "pass_complete_drivelm_data_and_context",
+    "dataset": "drivelm_nus_v11_train",
+    "eval_dataset": "drivelm_nus_v11_dev",
+    "dataset_dir": "<MODEL_ROOT>/data/drivelm/prepared",
+    "cutoff_len": 4096,
+    "train_examples": 340119,
+    "eval_examples": 37836,
+    "prepared_sha256": {
+      "train.jsonl": "3c7372ebbaed141600a4c01432ced8e3f0670fbfbfcc4ba71c9d40b9cf291762",
+      "dev.jsonl": "90719954e934b602c72c88f843a6141d0f1209bf777984db3b1d9e247278fd22",
+      "dataset_info.json": "0a706e8009d884a7d10fa9bb34494dfe5c27e832727b17c47b7f2c786c838a98",
+      "excluded_records.json": "33b58bcd276aa2a0c9df98e6bc44973936593a60343fbf438dd8ee8110f0c0ef"
+    },
+    "max_tokens": 2629,
+    "official_hidden_validation_score": false,
+    "formal_training_verified": false
+  },
+  "official_question_only_validation": {
+    "result": "pass_official_questions_and_all_six_camera_images",
+    "annotation_bytes": 9860626,
+    "annotation_sha256": "b4d4be9e8cf6e6db691973b2711c0b58a752e08aeb3f505f2f89bcaf40be9cd8",
+    "publisher_git_blob_sha1": "1d5f1748f1f324d112af4ce691b00f8d5042cdbb",
+    "scenes": 149,
+    "frames": 799,
+    "images": 4794,
+    "questions": 15480,
+    "questions_by_task": {
+      "perception": 1543,
+      "prediction": 6539,
+      "planning": 6599,
+      "behavior": 799
+    },
+    "nonempty_questions": 15479,
+    "publisher_empty_question_entries_preserved": [
+      [
+        "e8099a6136804f3bb9b38ff94d98eb64",
+        "d1d38dddb8174acf9cb776ec6c941024",
+        "planning",
+        1
+      ]
+    ],
+    "empty_question_policy": "Preserve the publisher entry and flag it; do not invent a question or a score",
+    "train_scene_overlap": 0,
+    "prepared_sha256": "ba9c23f567db965db2656af95c9140368dd72585c3cfceff3627f268e4c3d0b3",
+    "official_answers_available": false,
+    "official_score_computed": false,
+    "inference_executed": false
+  },
+  "public_entry_preflight": {
+    "state": "pass_bounded_real_data_training_and_independent_reload",
+    "complete_training": false,
+    "output_dir": "<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019",
+    "rows": 16,
+    "scenes": 4,
+    "qa_by_task": {
+      "perception": 4,
+      "prediction": 4,
+      "planning": 4,
+      "behavior": 4
+    },
+    "row_ids": [
+      "f0f120e4d4b0441da90ec53b16ee169d:4a0798f849ca477ab18009c3a20b7df2:perception:0",
+      "f0f120e4d4b0441da90ec53b16ee169d:4a0798f849ca477ab18009c3a20b7df2:prediction:0",
+      "f0f120e4d4b0441da90ec53b16ee169d:4a0798f849ca477ab18009c3a20b7df2:planning:0",
+      "f0f120e4d4b0441da90ec53b16ee169d:4a0798f849ca477ab18009c3a20b7df2:behavior:0",
+      "54cdaaae372d421fa4734d66f51a8c48:542eaf1fc9b34895a9e55fab57cb4cf4:perception:0",
+      "54cdaaae372d421fa4734d66f51a8c48:542eaf1fc9b34895a9e55fab57cb4cf4:prediction:0",
+      "54cdaaae372d421fa4734d66f51a8c48:542eaf1fc9b34895a9e55fab57cb4cf4:planning:0",
+      "54cdaaae372d421fa4734d66f51a8c48:542eaf1fc9b34895a9e55fab57cb4cf4:behavior:0",
+      "1977a1c98a6c4eb79fbc2a6dc0da9b0f:bd8a5e326b804b069d497d29dbf19c2b:perception:0",
+      "1977a1c98a6c4eb79fbc2a6dc0da9b0f:bd8a5e326b804b069d497d29dbf19c2b:prediction:0",
+      "1977a1c98a6c4eb79fbc2a6dc0da9b0f:bd8a5e326b804b069d497d29dbf19c2b:planning:0",
+      "1977a1c98a6c4eb79fbc2a6dc0da9b0f:bd8a5e326b804b069d497d29dbf19c2b:behavior:0",
+      "ba76f4185aa34ed3bff467ac640da902:2fd8f9bd71664143bc0e643a914791be:perception:0",
+      "ba76f4185aa34ed3bff467ac640da902:2fd8f9bd71664143bc0e643a914791be:prediction:0",
+      "ba76f4185aa34ed3bff467ac640da902:2fd8f9bd71664143bc0e643a914791be:planning:0",
+      "ba76f4185aa34ed3bff467ac640da902:2fd8f9bd71664143bc0e643a914791be:behavior:0"
+    ],
+    "source_file_sha256": "e49488c062f0a4b2af228fe4cb09caa70440efa61f756d6725b9dd45c103ee55",
+    "train_command": [
+      "/usr/local/python3.12.13/bin/python",
+      "-m",
+      "torch.distributed.run",
+      "--standalone",
+      "--nnodes=1",
+      "--nproc-per-node=2",
+      "<MODEL_ROOT>/tools/drivelm_npu_entry.py",
+      "<MODEL_ROOT>/qwen3vl8b_drivelm_npu.yaml",
+      "model_name_or_path=<MODEL_ROOT>/weights/qwen3-vl-8b-instruct",
+      "dataset_dir=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019/preflight_data",
+      "dataset=drivelm_preflight_16",
+      "cutoff_len=4096",
+      "do_eval=false",
+      "eval_strategy='no'",
+      "eval_dataset=null",
+      "packing=false",
+      "logging_steps=1",
+      "preprocessing_num_workers=2",
+      "gradient_accumulation_steps=1",
+      "max_steps=8",
+      "num_train_epochs=1",
+      "save_strategy=steps",
+      "save_steps=8",
+      "output_dir=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019"
+    ],
+    "train_exit_code": 0,
+    "eval_command": [
+      "llamafactory-cli",
+      "train",
+      "<MODEL_ROOT>/qwen3vl8b_drivelm_npu.yaml",
+      "model_name_or_path=<MODEL_ROOT>/weights/qwen3-vl-8b-instruct",
+      "adapter_name_or_path=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019",
+      "dataset_dir=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019/preflight_data",
+      "dataset=null",
+      "eval_dataset=drivelm_preflight_16",
+      "do_train=false",
+      "do_eval=true",
+      "cutoff_len=4096",
+      "per_device_eval_batch_size=1",
+      "prediction_loss_only=true",
+      "output_dir=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019/independent_eval"
+    ],
+    "eval_exit_code": 0,
+    "checkpoint": {
+      "result": "pass_functional",
+      "output_dir": "<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019",
+      "global_step": 8,
+      "rank_artifacts": 2,
+      "loss_first": 1.7987700700759888,
+      "loss_last": 2.2506277561187744,
+      "loss_min": 1.5974442958831787,
+      "loss_max": 3.4487838745117188,
+      "adapter_bytes": 87368144,
+      "adapter_sha256": "68da404a097ff580e6676478d912619c8e188ec7e3fc4924ec0ca5113db85874",
+      "adapter_tensors": 504,
+      "lora_b_tensors": 252,
+      "nonzero_lora_b_tensors": 252,
+      "optimizer_states": 504,
+      "optimizer_steps": [
+        8
+      ]
+    },
+    "eval_metrics": {
+      "epoch": 0,
+      "eval_loss": 1.8978482484817505,
+      "eval_model_preparation_time": 0.0156,
+      "eval_runtime": 8.65,
+      "eval_samples_per_second": 1.85,
+      "eval_steps_per_second": 1.85
+    },
+    "official_accuracy_claimed": false,
+    "seconds": 179.88399934768677
+  },
+  "preflight_native_process_counts": {
+    "native_distributed_process_initializations": [
+      "1"
+    ],
+    "training_examples": [
+      "16",
+      "16"
+    ],
+    "training_launcher": "python -m torch.distributed.run --nproc-per-node=2",
+    "training_rng_rank_artifacts": 2
+  },
+  "repeat_run_consistency": {
+    "independent_run_output_directories": [
+      "<MODEL_ROOT>/test/output/drivelm_preflight_16rows_20261019",
+      "<MODEL_ROOT>/test/output/drivelm_public_entry_preflight_20261019",
+      "<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019"
+    ],
+    "preflight_rows": 16,
+    "optimizer_updates_each_run": 8,
+    "sample_file_sha256_equal": true,
+    "adapter_sha256_equal": true,
+    "reloaded_eval_loss_equal": true,
+    "first_reload_eval_processes": 2,
+    "public_entry_reload_eval_processes": 1,
+    "scope": "Bounded real-data preflight only; not proof of completed three-epoch training"
+  },
+  "preflight_evaluation_scope": "Adapter reload on the same sixteen preflight training rows; not held-out quality",
+  "metadata_reuse_change": {
+    "entry": "tools/drivelm_npu_entry.py invokes pinned llamafactory.train.tuner.run_exp",
+    "cache": "One frame per plugin/worker; unmodified native return value; six paths, file sizes, mtimes and processor identity in key",
+    "training_pixels": "The original batch collator still calls native _get_mm_inputs",
+    "uncached_full_attempt": "Stopped only the project container before any optimizer update; its logs and failed-attempt state were preserved",
+    "precision_proof": "The cached-entry eight-update adapter SHA and native uncached reload loss equal both uncached baseline runs",
+    "full_preprocessing_completion_claimed": true,
+    "original_encoder_equivalence": {
+      "result": "pass_cached_vs_original_encoder_exact",
+      "real_qa_examples": 16,
+      "exact_input_ids_and_labels": 16,
+      "observed_same_frame_cache_hits": 12,
+      "distinct_real_frames": 4,
+      "cache_capacity_frames": 1,
+      "full_neural_model_executed": false,
+      "scope": "CPU preprocessing; original upstream encoder is the oracle"
+    }
+  },
+  "negative_regressions": {
+    "windows": {
+      "tests": 7,
+      "exit_code": 0,
+      "command": "python -m unittest discover -s test -p test_full_data_guard.py -v",
+      "stdout": "",
+      "stderr": "test_annotation_check_rejects_demo_content (test_full_data_guard.FullDataGuardTest.test_annotation_check_rejects_demo_content) ... ok\ntest_container_rejects_before_image_device_and_output_changes (test_full_data_guard.FullDataGuardTest.test_container_rejects_before_image_device_and_output_changes) ... ok\ntest_correct_dataset_name_does_not_allow_arbitrary_directory (test_full_data_guard.FullDataGuardTest.test_correct_dataset_name_does_not_allow_arbitrary_directory) ... ok\ntest_direct_model_entry_cannot_bypass_guard (test_full_data_guard.FullDataGuardTest.test_direct_model_entry_cannot_bypass_guard) ... ok\ntest_direct_upstream_launcher_cannot_bypass_guard (test_full_data_guard.FullDataGuardTest.test_direct_upstream_launcher_cannot_bypass_guard) ... ok\ntest_real_data_preflight_also_rejects_renamed_demo (test_full_data_guard.FullDataGuardTest.test_real_data_preflight_also_rejects_renamed_demo) ... ok\ntest_renamed_demo_directory_is_not_full_data (test_full_data_guard.FullDataGuardTest.test_renamed_demo_directory_is_not_full_data) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 2.266s\n\nOK\n"
+    },
+    "arm64_linux": {
+      "tests": 7,
+      "exit_code": 0,
+      "command": "python3 -m unittest discover -s test -p test_full_data_guard.py -v",
+      "stdout": "",
+      "stderr": "test_annotation_check_rejects_demo_content (test_full_data_guard.FullDataGuardTest) ... ok\ntest_container_rejects_before_image_device_and_output_changes (test_full_data_guard.FullDataGuardTest) ... ok\ntest_correct_dataset_name_does_not_allow_arbitrary_directory (test_full_data_guard.FullDataGuardTest) ... ok\ntest_direct_model_entry_cannot_bypass_guard (test_full_data_guard.FullDataGuardTest) ... ok\ntest_direct_upstream_launcher_cannot_bypass_guard (test_full_data_guard.FullDataGuardTest) ... ok\ntest_real_data_preflight_also_rejects_renamed_demo (test_full_data_guard.FullDataGuardTest) ... ok\ntest_renamed_demo_directory_is_not_full_data (test_full_data_guard.FullDataGuardTest) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.383s\n\nOK\n"
+    }
+  },
+  "full_training_runtime": {
+    "state": "running_native_complete_dataset_training",
+    "captured_utc": "2026-10-19T09:18:49.071219+00:00",
+    "output_dir": "test/output/drivelm_full_cached_three_epochs_20261019",
+    "native_train_examples": 340119,
+    "native_num_epochs": 3,
+    "native_total_optimization_steps": 63774,
+    "latest_logged_optimizer_step": 20,
+    "first_callback_records": [
+      {
+        "current_steps": 10,
+        "total_steps": 63774,
+        "loss": 3.2349693298339846,
+        "lr": 1.4111006585136409e-07,
+        "epoch": 0.0004704222039280254,
+        "percentage": 0.02,
+        "elapsed_time": "0:01:49",
+        "remaining_time": "8 days, 2:33:30"
+      },
+      {
+        "current_steps": 20,
+        "total_steps": 63774,
+        "loss": 2.8300830841064455,
+        "lr": 2.9789902790843527e-07,
+        "epoch": 0.0009408444078560508,
+        "percentage": 0.03,
+        "elapsed_time": "0:03:39",
+        "remaining_time": "8 days, 2:07:34"
+      }
+    ],
+    "last_callback_record": {
+      "current_steps": 20,
+      "total_steps": 63774,
+      "loss": 2.8300830841064455,
+      "lr": 2.9789902790843527e-07,
+      "epoch": 0.0009408444078560508,
+      "percentage": 0.03,
+      "elapsed_time": "0:03:39",
+      "remaining_time": "8 days, 2:07:34"
+    },
+    "last_tokenizer_progress": "Running tokenizer on dataset (num_proc=4): 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 37836/37836 [01:09<00:00, 541.72 examples/s]",
+    "training_process_completed": false,
+    "official_accuracy_claimed": false,
+    "source_sha256": {
+      "tools/run_train.py": "de7fa4cf0de33f2c56c42a63abdf70f65b2d7a8ae7c6dd22a321ad41c7c38e51",
+      "tools/prepare_full_data.py": "d94b50aa42e4d537c4c2a9a785fc7084b8fd5029483fff34ec5f2736f165fc82",
+      "tools/drivelm_preflight.py": "cbfcab08668014da92febd3772d775645c2616a57fe92e85cf82c4605b114d8e",
+      "tools/drivelm_metadata_cache.py": "9c8ffeab6ee472c162a0a63237a69dc62caccbad2404e63c32c4ef53de8b2d59",
+      "tools/drivelm_npu_entry.py": "179c4d7f5352934b0bf7320ba5e63463ccd19eb10865dbae8e97405ede4ed491",
+      "qwen3vl8b_drivelm_npu.yaml": "13cf9f3ba6e3891215bb793e988c9c73efce539ce24763d4a079352db81584b8"
+    }
+  },
+  "workflow": {
+    "state": "full_three_epoch_training",
+    "started_utc": "2026-10-19T08:56:19.247333+00:00",
+    "steps": [
+      {
+        "name": "verify_complete_data",
+        "command": [
+          "python3",
+          "tools/prepare_full_data.py"
+        ],
+        "started_utc": "2026-10-19T08:56:19.248127+00:00",
+        "log": "/var/aispace/lzd/migration_full_20261019/evidence/qwen_cached_verify_complete_data.log",
+        "exit_code": 0,
+        "finished_utc": "2026-10-19T08:57:04.782489+00:00"
+      },
+      {
+        "name": "public_entry_preflight",
+        "command": [
+          "bash",
+          "test/train_drivelm_preflight_2p.sh",
+          "--device_id=0,2",
+          "--output_dir=<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019"
+        ],
+        "started_utc": "2026-10-19T08:57:04.783376+00:00",
+        "log": "/var/aispace/lzd/migration_full_20261019/evidence/qwen_cached_public_entry_preflight.log",
+        "exit_code": 0,
+        "finished_utc": "2026-10-19T09:00:52.307681+00:00"
+      },
+      {
+        "name": "full_three_epoch_training",
+        "command": [
+          "bash",
+          "test/train_full_2p.sh",
+          "--device_id=0,2",
+          "--output_dir=<MODEL_ROOT>/test/output/drivelm_full_cached_three_epochs_20261019"
+        ],
+        "started_utc": "2026-10-19T09:00:52.308601+00:00",
+        "log": "/var/aispace/lzd/migration_full_20261019/evidence/qwen_cached_full_three_epoch_training.log"
+      }
+    ],
+    "complete_training_and_final_evaluation_passed": false,
+    "preflight_output_dir": "<MODEL_ROOT>/test/output/drivelm_cached_entry_preflight_20261019",
+    "full_output_dir": "<MODEL_ROOT>/test/output/drivelm_full_cached_three_epochs_20261019"
+  },
+  "acceptance": {
+    "complete_training_finished": false,
+    "full_independent_dev_reload_finished": false,
+    "official_hidden_score_computed": false,
+    "remaining": [
+      "finish all three training epochs",
+      "verify final adapter and optimizer",
+      "reload adapter and evaluate every local-dev example",
+      "official hidden scoring requires the publisher submission process"
+    ]
+  },
+  "entry_source_sha256": {
+    "tools/prepare_full_data.py": "d94b50aa42e4d537c4c2a9a785fc7084b8fd5029483fff34ec5f2736f165fc82",
+    "tools/drivelm_preflight.py": "cbfcab08668014da92febd3772d775645c2616a57fe92e85cf82c4605b114d8e",
+    "tools/run_train.py": "de7fa4cf0de33f2c56c42a63abdf70f65b2d7a8ae7c6dd22a321ad41c7c38e51",
+    "tools/drivelm_metadata_cache.py": "9c8ffeab6ee472c162a0a63237a69dc62caccbad2404e63c32c4ef53de8b2d59",
+    "tools/drivelm_npu_entry.py": "179c4d7f5352934b0bf7320ba5e63463ccd19eb10865dbae8e97405ede4ed491",
+    "qwen3vl8b_drivelm_npu.yaml": "13cf9f3ba6e3891215bb793e988c9c73efce539ce24763d4a079352db81584b8"
+  }
+}

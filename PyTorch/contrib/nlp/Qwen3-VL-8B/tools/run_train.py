@@ -25,13 +25,14 @@ def main() -> int:
     parser.add_argument('--execute', action='store_true', help='run only after environment and data checks')
     parser.add_argument('--model-path', type=Path, help='local Qwen3-VL-8B checkpoint directory')
     parser.add_argument('--dataset-id', help='LLaMA-Factory dataset name from dataset_info.json')
-    parser.add_argument('--data-dir', type=Path, help='Apollo/WorldEngine official asset directory')
+    parser.add_argument('--data-dir', type=Path, help='Verified model-local data/drivelm directory for full training')
     parser.add_argument('--prepared-dir', type=Path, help='verified Apollo/WorldEngine functional subset')
     parser.add_argument('--nuscenes', type=Path, help='raw nuScenes mini directory for Apollo')
     args = parser.parse_args()
+    protocol = None
     if not args.smoke:
         from prepare_full_data import require_full_protocol
-        require_full_protocol(args.data_dir, args.dataset_id)
+        protocol = require_full_protocol(args.data_dir, args.dataset_id)
     if args.dataset_version == 'v1.0-mini':
         parser.error('v1.0-mini is supported only for BEVFormer or Sparse4D --smoke')
     source = args.source.resolve(strict=True)
@@ -63,7 +64,8 @@ def main() -> int:
     if args.model_path is None or args.dataset_id is None:
         parser.error('Qwen3-VL requires --model-path and --dataset-id')
     model_dir = args.model_path.resolve()
-    dataset_registry = source / 'data/dataset_info.json'
+    dataset_base = source / 'data' if args.smoke else Path(protocol['dataset_dir'])
+    dataset_registry = dataset_base / 'dataset_info.json'
     if not model_dir.is_dir():
         missing.append(str(model_dir))
     else:
@@ -98,8 +100,8 @@ def main() -> int:
         else:
             dataset_info = registered[args.dataset_id]
             file_name = dataset_info.get('file_name') if isinstance(dataset_info, dict) else None
-            if file_name and (not (source / 'data' / file_name).is_file()):
-                missing.append(str(source / 'data' / file_name))
+            if file_name and (not (dataset_base / file_name).is_file()):
+                missing.append(str(dataset_base / file_name))
     if args.execute and (not args.model_path.is_dir()):
         raise RuntimeError(f'checkpoint directory missing: {args.model_path}')
     if args.execute and (not (args.model_path / 'config.json').is_file()):
@@ -117,7 +119,13 @@ def main() -> int:
     env['FORCE_TORCHRUN'] = '1'
     env['NPROC_PER_NODE'] = str(NPROC[args.model])
     env['PYTHONPATH'] = os.pathsep.join((part for part in (str(source / 'src'), env.get('PYTHONPATH', '')) if part))
-    command = ['llamafactory-cli', 'train', str(ROOT / 'qwen3vl8b_lora_npu.yaml'), f'model_name_or_path={args.model_path.resolve()}', f'dataset={args.dataset_id}', f'output_dir={output}']
+    config = 'qwen3vl8b_lora_npu.yaml' if args.smoke else 'qwen3vl8b_drivelm_npu.yaml'
+    command = ['llamafactory-cli', 'train', str(ROOT / config), f'model_name_or_path={args.model_path.resolve()}', f'dataset={args.dataset_id}', f'output_dir={output}']
+    if protocol is not None:
+        command = [sys.executable, '-m', 'torch.distributed.run', '--standalone', '--nnodes=1',
+                   '--nproc-per-node=' + str(NPROC[args.model]), str(ROOT / 'tools/drivelm_npu_entry.py')] + command[2:]
+        command += [f'dataset_dir={dataset_base}', f'eval_dataset={protocol["eval_dataset"]}',
+                    f'cutoff_len={protocol["cutoff_len"]}']
     if args.smoke:
         command += ['max_steps=10', 'gradient_accumulation_steps=1', 'logging_steps=1', 'save_steps=10']
     cwd = source
@@ -132,6 +140,8 @@ def main() -> int:
     check = [sys.executable, str(ROOT / 'tools/check_env.py'), '--model', args.model, '--nproc', str(NPROC[args.model]), '--output', str(output / 'environment.json')]
     subprocess.run(check, env=env, check=True)
     output.mkdir(parents=True, exist_ok=True)
+    if protocol is not None:
+        (output / 'full_data_verified.json').write_text(json.dumps(protocol, indent=2) + '\n')
     completed = subprocess.run(command, cwd=cwd, env=env, check=False)
     if completed.returncode == 0 and args.smoke:
         subprocess.run([sys.executable, str(ROOT / 'tools/check_qwen_checkpoint.py'), '--output-dir', str(output)], env=env, check=True)
