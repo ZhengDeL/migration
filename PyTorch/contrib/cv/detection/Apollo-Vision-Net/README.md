@@ -179,7 +179,9 @@ bash test/validate_1p.sh --device_id=8
 
 ## 通过判据
 
-训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
+原功能短训 `train_4p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
+
+新增 `train_mini_4p.sh` 的流程判据是：四 rank 的 `quality_training_rank*.json` 均为 `pass_completed_mini_training`、各 1,464 更新；自动完整 162 帧 OCC 评测退出 0，`mini_evaluation.json` 为 `pass_complete_mini_occupancy_evaluation`，模型、优化器及预测有限。独立复测使用本页 `evaluate_mini_1p.sh --checkpoint=...`。以上是 mini 流程/数值判据，正式 trainval、检测/OCC 任务质量单独验收；训练未结束前不填新 mIoU。
 
 FocalLoss 兼容路径的 8 个有限 CPU/NPU 前后向案例通过 `atol=1e-5, rtol=1e-4`；[算子数值记录](validation/focal_parity_20261011.json)保留实际误差，不能代替整模型检测/占用指标。
 

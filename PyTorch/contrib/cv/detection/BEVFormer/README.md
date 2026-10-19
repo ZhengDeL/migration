@@ -218,7 +218,9 @@ bash test/validate_1p.sh --device_id=0
 
 ## 通过判据
 
-训练必须退出 0，并产生 `pass_functional_training`；独立验证必须退出 0，并产生 `pass_independent_functional_validation`。保存的模型/优化器、实际更新次数及上述推理范围均须检查通过。正式任务精度尚未测量的项目不填入估计值。
+原功能短训 `train_2p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
+
+新增 `train_mini_2p.sh` 的流程判据是：两 rank 的 `quality_training_rank*.json` 均为 `pass_completed_mini_training`、各 3,888 更新；自动完整 81 帧评测退出 0，`mini_evaluation.json` 为 `pass_complete_mini_detection_evaluation`，模型、优化器及预测有限。独立复测使用本页 `evaluate_mini_1p.sh --checkpoint=...`。以上是 mini 流程/数值判据，正式 trainval 训练及任务质量单独验收；未完成的指标不填估计值。
 
 # 版本说明
 
