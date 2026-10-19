@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "official-r101-24ep": {
+    "path": "weights/bevformer_r101_dcn_24ep.pth",
+    "bytes": 276980568,
+    "sha256": "5fda3ed3e0d2d1dc09baca337aa1ed64aece057fed7d8238525c5ed342649177",
+    "source_url": "https://github.com/zhiqi-li/storage/releases/download/v1.0/bevformer_r101_dcn_24ep.pth",
+    "publisher_sha256_available": false,
+    "release_etag_observed": "\"0x8DA4C490709317D\"",
+    "config": "projects/configs/bevformer_fp16/bevformer_base_fp16.py",
+    "scope": "Original author trained BEVFormer-base; mini evaluation only; not local full training acceptance",
+    "checksum_origin": "Observed SHA256 of official author HTTPS release; not a publisher supplied digest"
+  }
+}

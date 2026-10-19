@@ -5,7 +5,7 @@
     "patch": "ascend.patch",
     "patch_sha256": "f42ac6be901b166688f86f686d53b51f1c4c678a91c328e0c59dcb28e4e021d3",
     "compat_patch": "compat.patch",
-    "compat_patch_sha256": "256c272a728fa83967af9522a1ff37c6e2229b9ac44d6791c7fbfbeb43255022",
+    "compat_patch_sha256": "d1db0d2e99113ffae4aa3453fff08f9e82cd158bf78d16c0601e3c1e0613dd77",
     "occ_archive_bytes": 15840721593,
     "occ_archive_sha256_observed": "52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282",
     "occ_archive_members": 103302,

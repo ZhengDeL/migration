@@ -34,7 +34,10 @@ def main():
     parser.add_argument('--output_dir', required=True, type=Path)
     parser.add_argument('--checkpoint-profile', choices=('delivered-mini', 'official-v3-r50'),
         default='official-v3-r50')
+    parser.add_argument('--checkpoint', type=Path, help='A completed, verified model-local mini-training checkpoint')
     args = parser.parse_args()
+    if args.checkpoint:
+        args.checkpoint_profile = 'trained-mini'
     output = args.output_dir.resolve(strict=True)
     if not output.is_relative_to(ROOT) or (output / 'mini_evaluation.json').exists():
         raise RuntimeError('Use a fresh output directory inside this model project')
@@ -85,7 +88,15 @@ def main():
 
         torch.npu.set_device(0)
         reference = ROOT / 'validation/reference_run'
-        if args.checkpoint_profile == 'official-v3-r50':
+        if args.checkpoint_profile == 'trained-mini':
+            checkpoint = args.checkpoint.resolve(strict=True)
+            if not checkpoint.is_relative_to(ROOT):
+                raise RuntimeError('Checkpoint must belong to this independent model directory')
+            training = json.loads((checkpoint.parent / 'quality_training_rank0.json').read_text())
+            if training.get('result') != 'pass_completed_mini_training' or training.get('updates') != 2600:
+                raise RuntimeError('Complete the original 100 iteration-defined mini epochs first')
+            expected = training['checkpoint_sha256']
+        elif args.checkpoint_profile == 'official-v3-r50':
             weight = json.loads((ROOT / 'evaluation.weights.lock.json').read_text())['official-v3-r50']
             checkpoint = (ROOT / weight['path']).resolve(strict=True)
             if not checkpoint.is_relative_to(ROOT):
@@ -111,11 +122,14 @@ def main():
             config_text = saved['meta']['config']
             config = Config.fromstring(config_text, '.py')
             report['checkpoint_profile'] = args.checkpoint_profile
+            if args.checkpoint_profile == 'trained-mini':
+                report.update(initialization='Original ImageNet backbone followed by 2600 real mini training updates',
+                    limitation='Complete diagnostic mini training/evaluation; no local full trainval or GPU parity acceptance')
         report.update(checkpoint_sha256=actual,
             checkpoint=checkpoint.relative_to(ROOT).as_posix(),
             config_sha256=hashlib.sha256(config_text.encode()).hexdigest(),
             config_source=weight['config'] if args.checkpoint_profile == 'official-v3-r50' else 'checkpoint.meta.config',
-            checkpoint_updates=saved.get('meta', {}).get('iter') if args.checkpoint_profile == 'official-v3-r50' else 10,
+            checkpoint_updates=training['updates'] if args.checkpoint_profile == 'trained-mini' else saved.get('meta', {}).get('iter') if args.checkpoint_profile == 'official-v3-r50' else 10,
             checkpoint_reload='strict',
             torch_version=torch.__version__, torch_npu_version=torch_npu.__version__)
         source = ROOT / 'sources' / PROFILE['source']

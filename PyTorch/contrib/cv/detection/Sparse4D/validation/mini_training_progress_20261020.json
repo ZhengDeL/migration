@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "model": "Sparse4D",
+  "collected_utc": "2026-10-19T18:25:31.987165+00:00",
+  "result": "running_mini_training_not_final_accuracy_acceptance",
+  "task_quality_accepted": false,
+  "full_trainval_training_completed": false,
+  "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+  "plan": {
+    "model": "sparse4d",
+    "train_frames": 323,
+    "heldout_frames": 81,
+    "train_val_disjoint": true,
+    "iteration_defined_epochs": 100,
+    "updates": 2600,
+    "nproc": 2,
+    "batch_per_rank": 6,
+    "lr": 0.00015,
+    "initialization": "original ImageNet ResNet50 backbone only",
+    "formal_trainval_training_completed": false,
+    "task_quality_accepted": false
+  },
+  "workflow": {
+    "state": "running_mini_training",
+    "started_utc": "2026-10-19T17:56:50.446660+00:00",
+    "controller_pid": 601697,
+    "full_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "output": "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/mini_training_quality_v2_20261020",
+    "host_logical_devices": [
+      4,
+      14
+    ],
+    "physical_cards": [
+      2,
+      7
+    ],
+    "command": [
+      "bash",
+      "test/train_mini_2p.sh",
+      "--device_id=4,14",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/mini_training_quality_v2_20261020"
+    ],
+    "launcher_pid": 601719
+  },
+  "trace_summaries": [
+    {
+      "file": "quality_training_rank0.jsonl",
+      "updates": 1578,
+      "sha256": "c8d2981aa7355ebd88e6ae11b9076b176834c7ead1b0f3609cb9911ba0c6dba5",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 26626569,
+      "first_loss": 31.26195526123047,
+      "latest": {
+        "update": 1578,
+        "loss": 14.769293785095215,
+        "gradient_tensors": 652,
+        "raw_checks": 20514,
+        "log_vars": {
+          "loss_cls_0": 0.5427554845809937,
+          "loss_box_0": 1.3092883825302124,
+          "loss_cns_0": 0.6495063900947571,
+          "loss_yns_0": 0.041538335382938385,
+          "loss_cls_1": 0.5729086995124817,
+          "loss_box_1": 0.904360294342041,
+          "loss_cns_1": 0.6640997529029846,
+          "loss_yns_1": 0.037301477044820786,
+          "loss_cls_2": 0.5687741041183472,
+          "loss_box_2": 0.8815388083457947,
+          "loss_cns_2": 0.6643314361572266,
+          "loss_yns_2": 0.028732556849718094,
+          "loss_cls_3": 0.5771985054016113,
+          "loss_box_3": 0.8559445142745972,
+          "loss_cns_3": 0.6650927066802979,
+          "loss_yns_3": 0.031766608357429504,
+          "loss_cls_4": 0.5690319538116455,
+          "loss_box_4": 0.8533064723014832,
+          "loss_cns_4": 0.6680399179458618,
+          "loss_yns_4": 0.029632020741701126,
+          "loss_cls_5": 0.5707917213439941,
+          "loss_box_5": 0.8387610912322998,
+          "loss_cns_5": 0.666750431060791,
+          "loss_yns_5": 0.031031079590320587,
+          "loss_cls_dn_0": 0.06650575995445251,
+          "loss_box_dn_0": 0.6997361183166504,
+          "loss_cls_dn_1": 0.05323585867881775,
+          "loss_box_dn_1": 0.5592861771583557,
+          "loss_cls_dn_2": 0.0519159734249115,
+          "loss_box_dn_2": 0.5369818210601807,
+          "loss_cls_dn_3": 0.05050160735845566,
+          "loss_box_dn_3": 0.5245732069015503,
+          "loss_cls_dn_4": 0.05201338976621628,
+          "loss_box_dn_4": 0.5178457498550415,
+          "loss_cls_dn_5": 0.050791773945093155,
+          "loss_box_dn_5": 0.5171468257904053,
+          "loss_dense_depth": 0.5993083715438843,
+          "loss": 17.50232696533203
+        }
+      }
+    },
+    {
+      "file": "quality_training_rank1.jsonl",
+      "updates": 1578,
+      "sha256": "ae0050064a60218d5f2732fa8e3cab80d28ffb115ac0df8e0d7b35c7336c9932",
+      "checksum_scope": "complete-line file prefix at collection",
+      "prefix_bytes": 26626579,
+      "first_loss": 34.91317367553711,
+      "latest": {
+        "update": 1578,
+        "loss": 20.23535919189453,
+        "gradient_tensors": 652,
+        "raw_checks": 20514,
+        "log_vars": {
+          "loss_cls_0": 0.5427554845809937,
+          "loss_box_0": 1.3092883825302124,
+          "loss_cns_0": 0.6495063900947571,
+          "loss_yns_0": 0.041538335382938385,
+          "loss_cls_1": 0.5729086995124817,
+          "loss_box_1": 0.904360294342041,
+          "loss_cns_1": 0.6640997529029846,
+          "loss_yns_1": 0.037301477044820786,
+          "loss_cls_2": 0.5687741041183472,
+          "loss_box_2": 0.8815388083457947,
+          "loss_cns_2": 0.6643314361572266,
+          "loss_yns_2": 0.028732556849718094,
+          "loss_cls_3": 0.5771985054016113,
+          "loss_box_3": 0.8559445142745972,
+          "loss_cns_3": 0.6650927066802979,
+          "loss_yns_3": 0.031766608357429504,
+          "loss_cls_4": 0.5690319538116455,
+          "loss_box_4": 0.8533064723014832,
+          "loss_cns_4": 0.6680399179458618,
+          "loss_yns_4": 0.029632020741701126,
+          "loss_cls_5": 0.5707917213439941,
+          "loss_box_5": 0.8387610912322998,
+          "loss_cns_5": 0.666750431060791,
+          "loss_yns_5": 0.031031079590320587,
+          "loss_cls_dn_0": 0.06650575995445251,
+          "loss_box_dn_0": 0.6997361183166504,
+          "loss_cls_dn_1": 0.05323585867881775,
+          "loss_box_dn_1": 0.5592861771583557,
+          "loss_cls_dn_2": 0.0519159734249115,
+          "loss_box_dn_2": 0.5369818210601807,
+          "loss_cls_dn_3": 0.05050160735845566,
+          "loss_box_dn_3": 0.5245732069015503,
+          "loss_cls_dn_4": 0.05201338976621628,
+          "loss_box_dn_4": 0.5178457498550415,
+          "loss_cls_dn_5": 0.050791773945093155,
+          "loss_box_dn_5": 0.5171468257904053,
+          "loss_dense_depth": 0.5993083715438843,
+          "loss": 17.50232696533203
+        }
+      }
+    }
+  ],
+  "source_checksums": {
+    "tools/train_mini.py": {
+      "observed_runtime_sha256": "00848ab1044af518663b2e0126747366719b9175aa2ed6efa507c77ac2deab00",
+      "normalized_lf_sha256": "00848ab1044af518663b2e0126747366719b9175aa2ed6efa507c77ac2deab00"
+    },
+    "tools/quality_training.py": {
+      "observed_runtime_sha256": "c6d8bc70264ad6b7215e6274df2244a0d68c88d262004891095729c400bab7fc",
+      "normalized_lf_sha256": "c6d8bc70264ad6b7215e6274df2244a0d68c88d262004891095729c400bab7fc"
+    },
+    "tools/container.py": {
+      "observed_runtime_sha256": "4315835fe62f364079aae757a20874fea1a2ae6d5af9ed7d99e47a40165f4f7e",
+      "normalized_lf_sha256": "4315835fe62f364079aae757a20874fea1a2ae6d5af9ed7d99e47a40165f4f7e"
+    },
+    "tools/evaluate_mini.py": {
+      "observed_runtime_sha256": "4052286cf28fe10c1fc1ccf4e2bd31f829c2279b03ccae733024751800e61146",
+      "normalized_lf_sha256": "4052286cf28fe10c1fc1ccf4e2bd31f829c2279b03ccae733024751800e61146"
+    }
+  },
+  "finite_checks_passed_for_recorded_updates": true,
+  "final_heldout_metrics_available": false,
+  "offline_archives_updated": false,
+  "historical_short_training_checkpoint_repaired": false,
+  "preserved_startup_failure": {
+    "error": "Packaged DrivingSDK vendor is not a Git checkout",
+    "resolution": "Removed the extra unsupported Git requirement; retained pinned patch/source/helper byte checks",
+    "optimizer_updates": 0
+  }
+}

@@ -116,6 +116,25 @@ bash test/evaluate_mini_1p.sh --device_id=0
 
 旧十步交付检查点仅供失败复现：`bash test/evaluate_mini_1p.sh --device_id=0 --checkpoint-profile=delivered-mini`。该身份已知在第 36 帧失败，不能用于任务质量验收。当前网盘旧 ZIP 尚不包含新脚本/作者权重；新完整离线包将在本轮完整验收后按模型独立归档。
 
+## 从 ImageNet 骨干重新训练 mini
+
+旧十步权重溢出的进一步训练验证使用全部 323 个 mini 训练帧和独立 81 个 mini_val 帧。从原 ImageNet ResNet50 骨干初始化，不使用作者完整检测权重，也不继续训练已失败的旧十步状态。
+
+```bash
+bash test/train_mini_2p.sh --device_id=0,2
+```
+
+保留原配置的每卡 batch=6，两卡全局 batch=12，学习率从原 batch=48 的 6e-4 线性缩放为 1.5e-4；保留 FP16/loss_scale=32、原网络/增强/时序 sampler、100 个按迭代定义的 mini epoch 和 500 更新 warmup。mini 的每轮按原公式取 `323 // 12 = 26`，共 2,600 更新；这不是完整 trainval 的 100 epoch。
+
+每次创建独立输出目录，检查原始 head/keypoint 输出、损失、梯度及最终模型/优化器，保留各 rank 逐步记录。训练完成后自动 strict 重载 `iter_2600.pth`，运行全部 81 个 mini_val 帧及原检测指标；不裁剪尺寸、不跳帧、不改指标。[带时间的实际训练状态](validation/mini_training_progress_20261020.json)记录已执行部分；结束前不能据启动或有限 loss 判定溢出风险及精度已经解决。
+
+完成后可在新的评测目录单独重载：
+
+```bash
+bash test/evaluate_mini_1p.sh --device_id=0 \
+  --checkpoint="$PWD/test/output/<本次训练目录>/iter_2600.pth"
+```
+
 ## 完整数据训练
 
 完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 按上游 kmeans 工具在完整训练标注上生成 `data/nuscenes_full/nuscenes_kmeans900.npy`；完整入口使用它，不复用 mini anchor。

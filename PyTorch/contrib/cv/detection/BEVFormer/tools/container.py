@@ -43,6 +43,8 @@ def main():
     parser.add_argument('--data_path', type=Path, help='本模型目录内的数据目录')
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
     parser.add_argument('--dataset_id', default='mllm_demo', help='仅图文模型的注册数据集名')
+    parser.add_argument('--checkpoint-profile', choices=('delivered-mini', 'official-r101-24ep'),
+                        default='official-r101-24ep', help='完整 mini 评测使用的固定权重身份')
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('在有 Ascend 驱动和 Docker 的 ARM64 Linux 服务器执行本脚本。')
@@ -116,7 +118,8 @@ def main():
         elif args.action == 'check':
             launch = ['tools/check_env.py', '--model', MODEL, '--nproc', str(nproc), '--output', 'test/output/environment.json', '--summary']
         elif args.action == 'evaluate-mini':
-            launch = ['tools/evaluate_mini.py', '--output_dir', str(output)]
+            launch = ['tools/evaluate_mini.py', '--output_dir', str(output),
+                      '--checkpoint-profile', args.checkpoint_profile]
         elif args.action == 'validate':
             launch = ['tools/validate_model.py', '--output_dir', str(output)]
         else:
