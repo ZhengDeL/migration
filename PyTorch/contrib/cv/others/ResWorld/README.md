@@ -120,7 +120,9 @@ GeoBEV 初始化、SyncBN、原 EMA 和 warmup 可先用本模型的[四卡真�
 
 2026-10-19 在新机器实际完成四卡各 8 更新、64 个不同真实训练帧；548 个兼容 GeoBEV 张量载入核对通过，86 个 SyncBN 模块每 rank 实际调用 1,824 次，原 EMA 从 10,560 更新到 10,568。四 rank 参数摘要一致，模型/EMA/优化器有限，模型和 EMA 保存后重读逐位相同。见[完整命令、逐步 loss、权重 SHA 与退出码](validation/original_protocol_preflight_20261019.json)。八步结果不表示收敛；正式完整数据精度未验收。
 
-随后实际完成[原 runner 的完整 mini 轮次与 EMA 续训](FULL_VALIDATION.md#10-原-runner-的完整-mini-轮次与-ema-续训)：323 条标注、四卡每卡 batch=2、每轮每 rank 41 次更新；一轮后重启续至两轮，对照独立连续两轮，2,762 个完整状态张量和四 rank 第二轮共 164 条轨迹全部逐位一致。最终累计 82 次更新、EMA=10,642，两份检查点 SHA256 同为 `6efe38550d7a3688fb75168990e5375da0b89ee1dfe69458ac2d5cd704748ac4`。命令、时刻、输入/loss/分桶和状态比较见[实测 JSON](validation/native_epoch_resume_20261019.json)。此项使用 workers=0、轮次边界恢复；正式 trainval / 12 epoch / 原 workers=8 和任务精度仍未完成。
+随后实际完成[原 runner 的完整 mini 轮次与 EMA 续训](FULL_VALIDATION.md#10-原-runner-的完整-mini-轮次与-ema-续训)：323 条标注、四卡每卡 batch=2、每轮每 rank 41 次更新；一轮后重启续至两轮，对照独立连续两轮，2,762 个完整状态张量和四 rank 第二轮共 164 条轨迹全部逐位一致。最终累计 82 次更新、EMA=10,642，两份检查点 SHA256 同为 `6efe38550d7a3688fb75168990e5375da0b89ee1dfe69458ac2d5cd704748ac4`。命令、时刻、输入/loss/分桶和状态比较见[实测 JSON](validation/native_epoch_resume_20261019.json)。该次使用 workers=0、轮次边界恢复；原配置 workers=8 的后续实测见下文。正式 trainval / 12 epoch 和任务精度仍未完成。
+
+同日另在新目录完成原配置 **workers=8/rank** 的四卡独立复验，实际观察到四组各 8 个 DataLoader worker。完整 mini 一轮后重启续至两轮，对照独立连续两轮：三次训练与公开 CPU 比较全部退出 0；2,762 个完整状态张量、第二轮 164 条实际输入/loss/lr/EMA/分桶记录全部逐位相同；累计 82 更新、EMA=10,642，两份检查点 SHA256 同为 `79cd050c8703998fcff41e3367fc2cca804d1407bd07ab59e2d4b2489786a055`。训练实现与前次固定版本相同，未为本次控制修改训练代码或放宽门槛。[命令与使用范围](FULL_VALIDATION.md#原配置-workers8-的四卡恢复复验)；[完整原始记录](validation/native_epoch_resume_workers8_20261019.json)。覆盖真实 mini 的轮次边界恢复；完整 trainval、12 epoch、任意 batch 恢复和最终任务精度仍单独验收。
 
 # 训练结果展示
 
