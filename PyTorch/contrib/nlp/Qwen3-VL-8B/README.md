@@ -103,13 +103,11 @@ bash test/validate_1p.sh --device_id=0
 
 ## 完整数据训练
 
-在 `sources/LLaMA-Factory/data/dataset_info.json` 注册业务数据集；每条图片数量必须匹配消息中的 `<image>` 数量。
+2026-10-19 已确定正式任务为 **DriveLM-nuScenes v1.1 全量驾驶问答**，来源为 [DriveLM 官方准备说明](https://github.com/OpenDriveLab/DriveLM/blob/main/challenge/README.md)。官方完整 nuScenes 可复用为六相机图像源。训练问答 `v1_1_train_nus.json` 为 192,961,829 bytes，固定 SHA256 为 `ecd3c13e9beb27295bcf6182ea35fff7c1d6a9ba58d40e48fb38d713094759fd`。
 
-```bash
-bash test/train_full_2p.sh --device_id=0,2 --dataset_id=业务数据集名
-```
+**正式入口暂未开放。** 旧实现只拒绝名为 `mllm_demo` 的数据集，改名或传入已有目录不能证明数据完整。当前宿主、模型及直接训练入口均在更改结果指针和启动容器前拒绝 full 模式；五项负向回归在本地和服务器 ARM64 Linux 通过，见 [门禁修复实测](validation/full_data_guard_20261019.json)。这项修复不代表正式训练已完成。
 
-完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。正式训练须增加 `--dataset_id=已注册的业务数据集名`，按官方ShareGPT图文格式准备图片和注册文件。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+后续需完成真实文件身份与媒体覆盖检查、场景划分、ShareGPT 转换、六相机输入的全部样本上下文长度检查，以及双卡训练和独立评测。原演示配置的 2,048 token 上限不能未经核验用于正式六相机任务。官方 val 只公开问题，隐藏答案的排行榜评分需要官方评测；本地留出集指标须单独标识。当前 `validate_1p.sh` 仅覆盖已实测的功能配置。
 
 # 训练结果展示
 
@@ -139,7 +137,7 @@ bash test/validate_1p.sh --device_id=0
 
 证据：[执行与退出码](validation/entry_acceptance.json)、[训练摘要](validation/reference_run/train_result.json)、[模型/优化器检查](validation/reference_run/saved_state_check.json)、[独立验证数据](validation/reference_run/validation_result.json)。
 
-另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)及[完整数据负向门禁](validation/full_data_guard.json)。功能数据不能作为完整训练数据通过门禁。
+另已完成[单镜像导入](validation/single_image_import.json)、[更换模型目录复验](validation/path_relocation.json)。[2026-10-12 原负向测试](validation/full_data_guard.json)仅证明当时指定演示数据被拒绝；[2026-10-19 回归](validation/full_data_guard_20261019.json)补充了改名和直接入口绕过检查。两者都不是正式数据正向训练验收。
 
 ## 通过判据
 
@@ -149,6 +147,7 @@ bash test/validate_1p.sh --device_id=0
 
 ## 变更
 
+- 2026-10-19：确认 DriveLM 正式任务，修复改名演示数据的 full 入口校验缺口，明确正式训练未开放的范围。
 - 2026-10-19：按固定版本 ModelZoo / DrivingSDK 原指导整理章节，补充原仓依据和本项目入口对应关系；训练代码、镜像、数据、已有数值门槛与实测记录保持。
 - 此前训练与修复日期、实际输入和检查点身份见本模型 `validation/`；详细实验与复验命令保留在本模型指导中。
 

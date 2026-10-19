@@ -29,6 +29,9 @@ def main() -> int:
     parser.add_argument('--prepared-dir', type=Path, help='verified Apollo/WorldEngine functional subset')
     parser.add_argument('--nuscenes', type=Path, help='raw nuScenes mini directory for Apollo')
     args = parser.parse_args()
+    if not args.smoke:
+        from prepare_full_data import require_full_protocol
+        require_full_protocol(args.data_dir, args.dataset_id)
     if args.dataset_version == 'v1.0-mini':
         parser.error('v1.0-mini is supported only for BEVFormer or Sparse4D --smoke')
     source = args.source.resolve(strict=True)

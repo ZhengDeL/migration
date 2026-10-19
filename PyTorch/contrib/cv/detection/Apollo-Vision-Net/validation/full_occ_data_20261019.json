@@ -1,0 +1,49 @@
+{
+  "dataset": "Apollo OCC release v1.0 with full nuScenes v1.0-trainval",
+  "result": "pass_complete_label_membership_and_npy_payload_extent",
+  "archive_bytes": 15840721593,
+  "archive_sha256": "52ae4e3637fc4c1b1aa2d1fb4273676c06606200566f3d436e2a359edd1b1282",
+  "nuscenes_scenes": 850,
+  "nuscenes_samples": 34149,
+  "splits": {
+    "train": {
+      "scenes": 700,
+      "samples": 28130,
+      "label_files": 84390
+    },
+    "val": {
+      "scenes": 150,
+      "samples": 6019,
+      "label_files": 18057
+    }
+  },
+  "all_label_files_checked": 102447,
+  "scene_sample_membership_matches": true,
+  "train_val_sample_overlap": 0,
+  "all_npy_headers_and_payload_sizes_match": true,
+  "seconds": 22.422044300008565,
+  "complete_vision_training_executed": false,
+  "remaining": "All nuScenes camera/lidar blobs, CAN, model-specific PKL annotations and actual full training/evaluation.",
+  "label_array_summary": {
+    "occ_gt_path": {
+      "files": 34149,
+      "dtypes": [
+        "<i4"
+      ]
+    },
+    "flow_gt_path": {
+      "files": 34149,
+      "dtypes": [
+        "<f4"
+      ]
+    },
+    "occ_invalid_path": {
+      "files": 34149,
+      "dtypes": [
+        "<i8"
+      ]
+    }
+  },
+  "date": "2026-10-19",
+  "detailed_array_schemas_recorded_privately": 84215
+}

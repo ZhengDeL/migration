@@ -184,6 +184,10 @@ bash test/validate_imagenet_1p.sh --devices 0 \
 
 恢复测试比较完整模型、优化器及适用的调度器、训练游标和各 rank RNG；单纯能加载模型不等于续训通过。CPU/NPU 使用相同输入与相同权重的数值对照，与数据集任务指标分别报告。
 
+## 2026-10-19 全量复验
+
+2026-10-19 已重新执行全部 50,000 张 ImageNet val 的独立 CPU/NPU 评测：Top-1=71.87%、Top-5=90.294%，50,000,000 个 logits 超差 0、最大绝对误差 6.86645508e-5；本轮 CPU 1,135.300598 s、NPU 76.348262 s。权重为官方 V1，600 epoch 从头训练仍未完成；[新执行时间、权重 SHA 和原始 JSON](validation/full_revalidation_20261019.json)。
+
 # 版本说明
 
 ## 变更

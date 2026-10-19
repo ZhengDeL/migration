@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-19",
+  "scope": "eight active models; WorldEngine AlgEngine is managed separately",
+  "automatic_upgrade_performed": false,
+  "rows": [
+    {
+      "model": "MobileNetV2",
+      "repository": "https://gitcode.com/Ascend/ModelZoo-PyTorch.git",
+      "pinned_revision": "e779117e8cfeba296a7105e26adac0741ab04768",
+      "audited_utc": "2026-10-19T07:20:41.422710+00:00",
+      "default_branch_head": "4f2041b142e599f79acfd0b5f68b2699d65b4f58",
+      "pinned_equals_head": false,
+      "verification_method": "git ls-remote HEAD through the active process proxy",
+      "validated_model_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+      "current_model_subtree": "75fd4c46d94f560f776c57f48a53dc705c682de3",
+      "model_subtree_identical": true,
+      "subtree_evidence": "The live HEAD is exactly the immutable commit whose model subtree was verified on 2026-10-18; no fresh tree download is claimed.",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "Apollo-Vision-Net",
+      "repository": "https://github.com/ApolloAuto/Apollo-Vision-Net.git",
+      "pinned_revision": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+      "audited_utc": "2026-10-19T07:20:41.423706+00:00",
+      "default_branch_head": "4909aa681bc435a74e793e714b8066d9bbf0095d",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "BEVFormer",
+      "repository": "https://github.com/fundamentalvision/BEVFormer.git",
+      "pinned_revision": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+      "audited_utc": "2026-10-19T07:20:41.424701+00:00",
+      "default_branch_head": "66b65f3a1f58caf0507cb2a971b9c0e7f842376c",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "Sparse4D",
+      "repository": "https://github.com/HorizonRobotics/Sparse4D.git",
+      "pinned_revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "audited_utc": "2026-10-19T07:20:41.424701+00:00",
+      "default_branch_head": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "LSTM-Argoverse",
+      "repository": "https://github.com/jagjeet-singh/argoverse-forecasting",
+      "pinned_revision": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+      "audited_utc": "2026-10-19T07:20:42.669204+00:00",
+      "default_branch_head": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "ResWorld",
+      "repository": "https://github.com/mengtan00/ResWorld",
+      "pinned_revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+      "audited_utc": "2026-10-19T07:20:42.708186+00:00",
+      "default_branch_head": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "STGCN-Traffic",
+      "repository": "https://github.com/hazdzz/STGCN.git",
+      "pinned_revision": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+      "audited_utc": "2026-10-19T07:20:42.708186+00:00",
+      "default_branch_head": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    },
+    {
+      "model": "Qwen3-VL-8B",
+      "repository": "https://github.com/hiyouga/LLaMA-Factory.git",
+      "pinned_revision": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+      "audited_utc": "2026-10-19T07:20:42.759980+00:00",
+      "default_branch_head": "1fded918ac4723ac9966363f51ed4500866c5d1d",
+      "pinned_equals_head": true,
+      "verification_method": "authenticated GitHub API",
+      "checked_date": "2026-10-19"
+    }
+  ]
+}

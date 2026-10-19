@@ -1,6 +1,30 @@
-# 九模型验证结果
+# 模型验证结果
 
-文档整理日期：**2026-10-19**。最近一轮实机记录：**2026-10-18**（后四项）；原五项的独立训练/验证记录为 **2026-10-12**。本页按各次实际执行结果汇总，文档更新时间不作为新的测试时间。
+最近一轮实机记录：**2026-10-19**，重新执行 LSTM、STGCN、MobileNetV2 的全部验证数据。完整训练、数值修复、续训和长稳的前轮证据为 2026-10-18；较早功能记录为 2026-10-12。各次执行日期单独记录。
+
+本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
+
+## 2026-10-19 新增全量复验
+
+三项均在 ARM64 Atlas 800I A3 上新建输出目录、实际执行至退出 0；使用固定镜像 `sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2`。本轮重新评测已有检查点，未将前轮训练改写为当天新训练。
+
+| 模型 | 本轮完整输入与输出 | 本轮实测指标 | 新执行记录与原始结果 |
+| --- | --- | --- | --- |
+| LSTM-Argoverse | 全部 39,472 val 轨迹，2,368,320 个坐标；CPU/NPU 超差 0，max=4.25055623e-6 | NPU ADE=1.7011764259 m；FDE=3.8735608773 m；MR=0.6511197811 | [时间、退出码、权重 SHA 与完整 JSON](../PyTorch/contrib/cv/others/LSTM-Argoverse/validation/full_revalidation_20261019.json) |
+| STGCN-Traffic | 全部 val/test 各 1,885 窗口，共 859,560 个输出；CPU/NPU 超差 0，max=4.76837158e-6 | test MAE=2.3743455411；RMSE=4.1293943097；WMAPE=4.0883945979% | [时间、退出码、权重 SHA 与完整 JSON](../PyTorch/contrib/cv/others/STGCN-Traffic/validation/full_revalidation_20261019.json) |
+| MobileNetV2 | CPU 与 NPU 分别处理全部 50,000 张 ImageNet val；逐个比较 50,000,000 logits，超差 0，max=6.86645508e-5 | Top-1=35,935/50,000=71.87%；Top-5=45,147/50,000=90.294% | [时间、退出码、权重 SHA 与完整 JSON](../PyTorch/contrib/cv/classification/MobileNetV2/validation/full_revalidation_20261019.json) |
+
+LSTM 的 val 参与选模，STGCN 使用社区 70/15/15 协议，MobileNetV2 使用官方 V1 预训练权重。以上结果不表示隐藏排行榜、原论文全部协议或 MobileNetV2 从头 600 epoch 已验收。
+
+## 完整数据准备与未完成项
+
+BEVFormer、Sparse4D、Apollo、ResWorld 的正式 nuScenes trainval 尚在下载/准备，当前不填完整 mAP/NDS/mIoU/规划精度结果。官方 [AWS 公开数据登记](https://registry.opendata.aws/motional-nuscenes/)提供匿名下载；本次十个完整传感器 blobs、metadata、CAN、地图归档合计 316,066,113,900 bytes，另需 ResWorld 的 lidarseg 与投影深度。完成传输、原始校验和逐文件覆盖检查后才能开始相应完整数据验收。
+
+Apollo 的完整 OCC 标签已于 2026-10-19 传输、校验及解压：700 train 场景 / 28,130 样本，150 val 场景 / 6,019 样本；全部 102,447 个标签文件的 NPY header 与数据长度检查通过，场景/样本与正式 nuScenes metadata 完全对应，train/val 无重叠。见[完整 OCC 数据检查](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/full_occ_data_20261019.json)。这只完成标签准备，相机/点云、CAN、派生 PKL 及模型完整训练/评测仍未完成。
+
+Qwen3-VL-8B 正式任务已选 DriveLM-nuScenes v1.1；真实训练问答已核验，696 场景、4,072 关键帧、377,956 问答记录，其中 1 条原始答案为空，需在准备报告中明确处理。六相机媒体、转换、上下文长度审计及完整训练尚未完成；[full 入口负向回归](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_data_guard_20261019.json)通过只说明错误输入被拦截。
+
+MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行完。完整数据包、训练完成、任务精度与 CPU/NPU 一致性分别留证。
 
 ## 结果总表
 
@@ -9,12 +33,11 @@
 | [BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2026-10-12 | nuScenes mini；双卡 162 更新、strict 重载及单帧有限性通过 | 全量 mAP/NDS、收敛、性能/续训/长稳未测 |
 | [Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2026-10-12 | nuScenes mini；双卡 10 更新、strict 重载及单帧有限性通过 | 全量检测指标、收敛、性能/续训/长稳未测 |
 | [Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2026-10-12 | 20261012 镜像；双卡 BF16 LoRA 10 更新及独立图文内容检查通过 | 演示图文和一张合成图；业务精度/性能/续训/长稳未测 |
-| [WorldEngine](../PyTorch/contrib/cv/others/WorldEngine/README.md) | 2026-10-12 | AlgEngine VADv2；真实 NAVTEST 子集四卡 10 更新、保存与 4 rank 检查通过 | 验证锚点 0；完整 navtrain/PDM/SimEngine/RL 未验收 |
 | [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 2026-10-12 | 官方 DLA 初始化；242 train/162 val；四卡 10 更新及全部 val 帧有限性通过 | 完整检测 mAP/占用 mIoU、收敛、性能/续训/长稳未测 |
-| [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2026-10-18 | 全 train/val 三阶段 725 epoch / 292,175 更新；全输出、梯度、严格续训通过 | val 参与选模；独立排行榜/驾驶业务目标未验收 |
-| [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2026-10-18 | PeMSD7(M) 全量 52 epoch / 14,404 更新；独立 test、数值、续训、30 分钟通过 | 70/15/15 社区协议；原论文划分/METR-LA/其他 PeMS 未验收 |
+| [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2026-10-18 训练 / 19 复验 | 全 train/val 三阶段 725 epoch / 292,175 更新；全输出、梯度、严格续训通过 | val 参与选模；独立排行榜/驾驶业务目标未验收 |
+| [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2026-10-18 训练 / 19 复验 | PeMSD7(M) 全量 52 epoch / 14,404 更新；独立 test、数值、续训、30 分钟通过 | 70/15/15 社区协议；原论文划分/METR-LA/其他 PeMS 未验收 |
 | [ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 2026-10-18 | 原数值失败已修复；五份权重 446 梯度、严格四卡恢复、30 分钟及原 65 帧对照通过 | 真实 mini；正式 trainval/12 epoch 及驾驶业务精度未完成 |
-| [MobileNetV2](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2026-10-18 | 官方 V1 全部 ImageNet 50,000 val；功能训练、数值、续训及 30 分钟通过 | 官方预训练评测；600 epoch 从头训练及驾驶业务未完成 |
+| [MobileNetV2](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2026-10-18 与 19 | 官方 V1 全部 ImageNet 50,000 val；功能训练、数值、续训及 30 分钟通过 | 官方预训练评测；600 epoch 从头训练及驾驶业务未完成 |
 
 ## 数据与实测数值
 
@@ -55,7 +78,7 @@
 
 [实际结果 JSON](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/reference_run/validation_result.json)；[复现指导](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md)。
 
-### WorldEngine
+### WorldEngine（历史，本轮不验收）
 
 | 检查项目 | 本项目实测数据 |
 | --- | --- |

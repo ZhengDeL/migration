@@ -44,6 +44,9 @@ def main():
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
     parser.add_argument('--dataset_id', default='mllm_demo', help='仅图文模型的注册数据集名')
     args = parser.parse_args()
+    if args.action == 'full':
+        from prepare_full_data import require_full_protocol
+        require_full_protocol(args.data_path, args.dataset_id)
     if platform.system() != 'Linux' or platform.machine() not in ('aarch64', 'arm64'):
         raise RuntimeError('在有 Ascend 驱动和 Docker 的 ARM64 Linux 服务器执行本脚本。')
     import fcntl
