@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "checked_date": "2026-10-19",
+  "collected_utc": "2026-10-19T14:58:03.711927+00:00",
+  "reference_scope": "Author or official published references; not project-executed CUDA tests",
+  "gpu_machine_status": "User confirmed no machine currently available; matched tests deferred until confirmation",
+  "unknown_fields": "null means not disclosed or not established by checked sources; never zero",
+  "sources": [
+    {
+      "id": "lstm_readme",
+      "publisher_repository": "jagjeet-singh/argoverse-forecasting",
+      "revision": "27696a19b3753a4ad8dcae3ad9c6107c5e4e237c",
+      "path": "README.md",
+      "url": "https://github.com/jagjeet-singh/argoverse-forecasting/blob/27696a19b3753a4ad8dcae3ad9c6107c5e4e237c/README.md",
+      "snapshot_bytes": 7866,
+      "snapshot_sha256": "39d93f5ee0b69cd7d73babc97c8b6c7335ec2a5e7dba4befe04737357cced207",
+      "github_blob_sha1": "4c3c4fd073cfd00b821046130880218e5eb5a1b4",
+      "retrieved_utc": "2026-10-19T14:57:07.050745+00:00",
+      "location": "Usage / LSTM / Neither map nor social runtime table"
+    },
+    {
+      "id": "sparse4d_readme",
+      "publisher_repository": "HorizonRobotics/Sparse4D",
+      "revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "path": "README.md",
+      "url": "https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/README.md",
+      "snapshot_bytes": 7372,
+      "snapshot_sha256": "c59ecfd856f822fdba28a0ce372766c0453653e07d85159650ed4eb29188f1e2",
+      "github_blob_sha1": "803878dbee53642815b579741bed6abfe6537e3e",
+      "retrieved_utc": "2026-10-19T14:57:07.059706+00:00",
+      "location": "Results on Validation Split / Sparse4Dv3 Res50 row"
+    },
+    {
+      "id": "sparse4d_config",
+      "publisher_repository": "HorizonRobotics/Sparse4D",
+      "revision": "249ffbb695f4e9db628d953e2bf6d36de04bbb69",
+      "path": "projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py",
+      "url": "https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py",
+      "snapshot_bytes": 13151,
+      "snapshot_sha256": "22ae67545157a43786356b1e7c4f9fc50076ab29062acef71f4163a3609626dc",
+      "github_blob_sha1": "fdf075bf9e739200218d1f70662961d0cddf85dd",
+      "retrieved_utc": "2026-10-19T14:57:07.961754+00:00",
+      "location": "total_batch_size, num_gpus, batch_size, num_epochs"
+    },
+    {
+      "id": "apollo_deployment_readme",
+      "publisher_repository": "ApolloAuto/Apollo-Vision-Net-Deployment",
+      "revision": "a692c23c0d35bb5010163d4bd96a57badc1d4c73",
+      "path": "README.md",
+      "url": "https://github.com/ApolloAuto/Apollo-Vision-Net-Deployment/blob/a692c23c0d35bb5010163d4bd96a57badc1d4c73/README.md",
+      "snapshot_bytes": 4662,
+      "snapshot_sha256": "4036f90d6d9bb03d88bf3ec7d445bec68ce279922b6f6a35b3cc9c566072694b",
+      "github_blob_sha1": "c919521b6a05f55d6c1c832c1dc1cf47b1277cfd",
+      "retrieved_utc": "2026-10-19T14:57:21.131913+00:00",
+      "location": "Benchmarks / Apollo Vision Network row"
+    },
+    {
+      "id": "stgcn_pytorch_readme",
+      "publisher_repository": "hazdzz/STGCN",
+      "revision": "5cfa82c78984fc58fafe4841c35618c6647c4219",
+      "path": "README.md",
+      "url": "https://github.com/hazdzz/STGCN/blob/5cfa82c78984fc58fafe4841c35618c6647c4219/README.md",
+      "snapshot_bytes": 2826,
+      "snapshot_sha256": "a2666a9fb2ea035bcc0eb96063ea123e11c615e4f38a0afdaaf3ec8997526622",
+      "github_blob_sha1": "68d63432915b88fcd384a7008a5216b59abb35a8",
+      "retrieved_utc": "2026-10-19T14:57:11.835139+00:00",
+      "location": "Entire README checked; no adopted GPU speed benchmark"
+    },
+    {
+      "id": "stgcn_author_readme",
+      "publisher_repository": "VeritasYin/STGCN_IJCAI-18",
+      "revision": "4ab75ab69af354d6a0ab86aefa082d389b187127",
+      "path": "README.md",
+      "url": "https://github.com/VeritasYin/STGCN_IJCAI-18/blob/4ab75ab69af354d6a0ab86aefa082d389b187127/README.md",
+      "snapshot_bytes": 10809,
+      "snapshot_sha256": "0931f67019f6d03f83fde6021b6f5e6cc49e98f2798e9288bbfd11ab466205e9",
+      "github_blob_sha1": "ef8a2ae8562c5dc01c85d7513b4bae23f5d70371",
+      "retrieved_utc": "2026-10-19T14:57:12.138182+00:00",
+      "location": "Getting Started / Training / default settings"
+    },
+    {
+      "id": "resworld_readme",
+      "publisher_repository": "mengtan00/ResWorld",
+      "revision": "a5ae973001dd6001d95b3389020a9e263d73a56e",
+      "path": "README.md",
+      "url": "https://github.com/mengtan00/ResWorld/blob/a5ae973001dd6001d95b3389020a9e263d73a56e/README.md",
+      "snapshot_bytes": 3766,
+      "snapshot_sha256": "64c8cd53ee800413b43d5e823f66974ad64b2ce0e0f22ef6f087eb622341768f",
+      "github_blob_sha1": "8ee79981af04e803a1f6239bfb9536917b890f7d",
+      "retrieved_utc": "2026-10-19T14:57:12.889210+00:00",
+      "location": "Entire README checked; quality tables and train command only"
+    },
+    {
+      "id": "qwen_finetune_readme",
+      "publisher_repository": "QwenLM/Qwen3-VL",
+      "revision": "96588727e44c78b25ba03ea03b8e12f7e64fd0da",
+      "path": "qwen-vl-finetune/README.md",
+      "url": "https://github.com/QwenLM/Qwen3-VL/blob/96588727e44c78b25ba03ea03b8e12f7e64fd0da/qwen-vl-finetune/README.md",
+      "snapshot_bytes": 11516,
+      "snapshot_sha256": "cba2c1d8286c348f1d63511d7b82fbecff5ec41c1a6093f7d9398d7cf15e9c41",
+      "github_blob_sha1": "16a4d82a7878d77232a1a1519f44489bdd96c1b5",
+      "retrieved_utc": "2026-10-19T14:57:20.896398+00:00",
+      "location": "Entire training README checked; no matching DriveLM LoRA speed result"
+    },
+    {
+      "id": "bevformer_paper",
+      "url": "https://arxiv.org/html/2203.17270v2",
+      "location": "Table 6",
+      "snapshot_bytes": 295512,
+      "snapshot_sha256": "f9a7bd385b9f121fae31f9796da2624f1622841a1a31c6197e8e6ace1dda6077",
+      "retrieved_utc": "2026-10-19T14:57:44.986310+00:00"
+    },
+    {
+      "id": "stgcn_paper",
+      "url": "https://www.ijcai.org/proceedings/2018/0505.pdf",
+      "location": "Section 4.3 and Table 3",
+      "snapshot_bytes": 497040,
+      "snapshot_sha256": "a1211ecf63eb7a347a8d17478daed82948c60f798240696e7c49b67a898d7ed7",
+      "retrieved_utc": "2026-10-19T14:58:03.415177+00:00"
+    },
+    {
+      "id": "mobilenet_modelzoo_readme",
+      "revision": "e779117e8cfeba296a7105e26adac0741ab04768",
+      "path": "PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/README.md",
+      "url": "https://gitcode.com/Ascend/ModelZoo-PyTorch/blob/e779117e8cfeba296a7105e26adac0741ab04768/PyTorch/built-in/cv/classification/MobileNetV2_for_PyTorch/README.md",
+      "snapshot_bytes": 6649,
+      "snapshot_sha256": "f4c23578632defd9f8add61930a6db0a3c9156518f320fdbdbcc0925191f7ec6",
+      "access_method": "verified local upstream git object",
+      "retrieved_utc": "2026-10-19T14:58:03.711927+00:00",
+      "location": "Training results table; NPU entries, no adopted GPU benchmark"
+    },
+    {
+      "id": "stgcn_author_requirements",
+      "revision": "4ab75ab69af354d6a0ab86aefa082d389b187127",
+      "path": "requirements.txt",
+      "url": "https://github.com/VeritasYin/STGCN_IJCAI-18/blob/4ab75ab69af354d6a0ab86aefa082d389b187127/requirements.txt",
+      "snapshot_bytes": 60,
+      "snapshot_sha256": "9c5825a17ca68f998999a17f1580899d4285143976b1d8a21356d2f0e235e6a3",
+      "access_method": "verified local upstream git object",
+      "retrieved_utc": "2026-10-19T14:59:40.114499+00:00",
+      "location": "tensorflow dependency"
+    }
+  ],
+  "models": [
+    {
+      "model": "BEVFormer",
+      "source_ids": [
+        "bevformer_paper"
+      ],
+      "published_reference": [
+        {
+          "kind": "inference",
+          "value": 1.7,
+          "unit": "FPS",
+          "gpu": "V100",
+          "configuration": "R101-DCN; images 900x1600; BEV 200x200; 6 layers; multiscale",
+          "batch": null,
+          "precision": null,
+          "timing_boundary": null
+        }
+      ],
+      "comparison_limits": [
+        "No matched project NPU inference timing",
+        "Published configuration does not establish precision equivalence with project FP16 training"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "Sparse4D",
+      "source_ids": [
+        "sparse4d_readme",
+        "sparse4d_config"
+      ],
+      "published_reference": [
+        {
+          "kind": "training_total",
+          "value": 22,
+          "unit": "hours",
+          "gpu": "8 x RTX 3090 24GB",
+          "configuration": "Sparse4Dv3 ResNet-50; ImageNet initialization; 256x704; nuScenes; 100 epochs",
+          "linked_config_global_batch": 48,
+          "linked_config_per_gpu_batch": 6,
+          "precision": null,
+          "timing_boundary": null
+        },
+        {
+          "kind": "inference",
+          "value": 19.8,
+          "unit": "FPS",
+          "gpu": "RTX 3090 experiment environment",
+          "inference_device_count": null,
+          "batch": null,
+          "precision": null,
+          "timing_boundary": null
+        }
+      ],
+      "comparison_limits": [
+        "Project completed only mini ten-update training",
+        "README eight-GPU statement does not independently specify FPS device count"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "Qwen3-VL-8B",
+      "source_ids": [
+        "qwen_finetune_readme"
+      ],
+      "published_reference": [],
+      "comparison_limits": [
+        "No adopted benchmark matching DriveLM BF16 LoRA training, context and global batch in checked official training README"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "Apollo VisionNet",
+      "source_ids": [
+        "apollo_deployment_readme"
+      ],
+      "published_reference": [
+        {
+          "kind": "tensorrt_inference",
+          "value": 5.7,
+          "unit": "FPS",
+          "gpu": "Orin",
+          "batch": 1,
+          "dataset": "nuScenes",
+          "precision": null,
+          "orin_sku": null,
+          "power_mode": null,
+          "timing_boundary": null
+        }
+      ],
+      "comparison_limits": [
+        "Deployment inference rather than native PyTorch training",
+        "No matched project NPU inference timing"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "LSTM-Argoverse",
+      "source_ids": [
+        "lstm_readme"
+      ],
+      "published_reference": [
+        {
+          "kind": "training_total",
+          "value": 5.5,
+          "unit": "hours",
+          "variant": "Neither Social nor Map",
+          "host": "EC2 p2.8xlarge; 8 K80 installed; 32 vCPU; 488 GiB RAM",
+          "actual_training_device_count": null,
+          "batch": null,
+          "precision": null,
+          "epochs": null
+        },
+        {
+          "kind": "test_total",
+          "value": 0.1,
+          "unit": "hours",
+          "variant": "Neither Social nor Map"
+        }
+      ],
+      "comparison_limits": [
+        "Host inventory is not proof that all eight GPUs participated",
+        "Feature preparation, training stop conditions, actual GPU usage and project NPU curriculum are not aligned"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "STGCN-Traffic",
+      "source_ids": [
+        "stgcn_paper",
+        "stgcn_author_readme",
+        "stgcn_author_requirements",
+        "stgcn_pytorch_readme"
+      ],
+      "published_reference": [
+        {
+          "kind": "training_total",
+          "value": 272.34,
+          "unit": "seconds",
+          "gpu": "GeForce GTX 1080",
+          "cpu": "Xeon E5-2620 v4 2.10GHz",
+          "configuration": "STGCN(Cheb), PeMSD7(M), RMSprop",
+          "epochs": 50,
+          "batch": 50,
+          "precision": null,
+          "timing_boundary": null
+        }
+      ],
+      "comparison_limits": [
+        "Author released TensorFlow implementation; project uses hazdzz PyTorch implementation",
+        "Data split, batch and training stopping conditions differ"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "ResWorld",
+      "source_ids": [
+        "resworld_readme"
+      ],
+      "published_reference": [],
+      "comparison_limits": [
+        "No speed measurement found in checked original README; planning quality tables are not hardware timing"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    },
+    {
+      "model": "MobileNetV2",
+      "source_ids": [
+        "mobilenet_modelzoo_readme"
+      ],
+      "published_reference": [],
+      "comparison_limits": [
+        "Checked original ModelZoo README reports NPU/O2 results, not an adopted GPU speed baseline"
+      ],
+      "same_condition_comparison_available": false,
+      "project_executed_gpu_tests": false,
+      "npu_to_gpu_speed_ratio": null
+    }
+  ]
+}
