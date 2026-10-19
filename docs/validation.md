@@ -1,6 +1,6 @@
 # 模型验证结果
 
-最近一轮实机记录：**2026-10-19**，重新执行 LSTM、STGCN、MobileNetV2 的全部验证数据，并完成 Qwen 全部 DriveLM 数据检查及真实双卡公开入口预检。完整训练、数值修复、续训和长稳的前轮证据为 2026-10-18；较早功能记录为 2026-10-12。各次执行日期单独记录。
+最近一轮实机记录：**2026-10-19**，重新执行 LSTM、STGCN、MobileNetV2 的全部验证数据，完成 Qwen 全部 DriveLM 数据检查及真实双卡公开入口预检，并完成 ResWorld 原 runner 的完整 mini 轮次、EMA 续训和 CPU 数据转换对照。完整训练、数值修复、续训和长稳的前轮证据为 2026-10-18；较早功能记录为 2026-10-12。各次执行日期单独记录。
 
 本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
 
@@ -30,13 +30,18 @@ LSTM 的 val 参与选模，STGCN 使用社区 70/15/15 协议，MobileNetV2 使
 | 公开双卡入口 | 4 场景 / 16 条真实问答、8 更新；训练及重载评测退出 0；504 个适配器张量、504 组优化器状态有限，252 个 LoRA B 全部非零 |
 | 复现对照 | 三次独立输出目录（两次未复用、一次单帧复用）的适配器 SHA256 相同：`68da404a097ff580e6676478d912619c8e188ec7e3fc4924ec0ca5113db85874`；原双卡与公开单卡重载 loss 均为 1.8978482484817505 |
 | 错误数据拦截 | Windows、ARM64 Linux 各 7 项通过；包括改名演示数据、任意目录、直接启动入口和结果指针不变检查 |
-| 完整训练 | 全部 340,119 train / 37,836 dev 已完成原生预处理；新三轮训练已实际执行第 20 / 63,774 更新，loss@10=3.2349693298、loss@20=2.8300830841；启动阶段记录不作为收敛验收 |
+| 完整训练启动记录 | 全部 340,119 train / 37,836 dev 已完成原生预处理；loss@10=3.2349693298、loss@20=2.8300830841，保留原启动阶段数据 |
+| 完整训练进度快照 | 2026-10-19 21:42 北京时间：1,473 / 63,774 更新（2.31%），第 1,470 步日志训练 loss=0.2752；训练及完整留出评测尚未结束，见[带时间的原生进度](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_training_progress_20261019.json) |
 
 [完整来源、摘要、命令、时间、退出码和当前后台阶段](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/drivelm_complete_data_20261019.json)；[独立模型指导](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md#完整数据训练drivelm-nuscenes-v11)。上述重载 loss 使用同一组 16 条预检训练样本，仅证明保存与重载功能。最终三轮训练和全部本地 dev 重载仍需对应终态结果；官方隐藏评分按 [DriveLM 官方提交流程](https://github.com/OpenDriveLab/DriveLM/blob/main/challenge/README.md#submit-to-test-server)办理。
 
 ## 完整数据准备与未完成项
 
-2026-10-19 新增 ResWorld 原训练组件的四卡实测：GeoBEV 548 个兼容张量核对载入、86 个 SyncBN 模块每 rank 1,824 次调用；四 rank 各 8 更新、64 个不同真实 mini 训练帧；原 EMA 从 10,560 到 10,568，原 warmup / step 边界检查通过；参数摘要一致，模型、EMA、优化器有限，模型与 EMA 保存后重读逐位相同，退出 0。见[完整逐步数据与命令](../PyTorch/contrib/cv/others/ResWorld/validation/original_protocol_preflight_20261019.json)和[独立入口](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md#9-geobevsyncbnema-与-warmup-的四卡预检)。此项是 mini 训练组件预检，完整 12 epoch、EMA 精确恢复及任务精度尚未完成。
+2026-10-19 新增 ResWorld 原训练组件的四卡实测：GeoBEV 548 个兼容张量核对载入、86 个 SyncBN 模块每 rank 1,824 次调用；四 rank 各 8 更新、64 个不同真实 mini 训练帧；原 EMA 从 10,560 到 10,568，原 warmup / step 边界检查通过；参数摘要一致，模型、EMA、优化器有限，模型与 EMA 保存后重读逐位相同，退出 0。见[完整逐步数据与命令](../PyTorch/contrib/cv/others/ResWorld/validation/original_protocol_preflight_20261019.json)和[独立入口](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md#9-geobevsyncbnema-与-warmup-的四卡预检)。此项是 mini 训练组件预检；正式完整数据下 12 epoch 及任务精度尚未完成。
+
+之后完成 **ResWorld 原 runner 完整 mini 轮次与 EMA 精确恢复**：323 条标注，四物理卡每卡 batch=2，41 更新/轮；一轮后重启续到两轮，对照独立连续两轮，2,762 个完整状态张量及四 rank 第二轮 164 条轨迹全部逐位相同。累计 82 更新、EMA=10,642，最终两份检查点 SHA256 同为 `6efe38550d7a3688fb75168990e5375da0b89ee1dfe69458ac2d5cd704748ac4`；公开 CPU 比较入口再次退出 0。实际脚本、时刻、逐步输入/loss/分桶及状态比较见[原始证据](../PyTorch/contrib/cv/others/ResWorld/validation/native_epoch_resume_20261019.json)，命令见[独立指导](../PyTorch/contrib/cv/others/ResWorld/FULL_VALIDATION.md#10-原-runner-的完整-mini-轮次与-ema-续训)。覆盖 workers=0、轮次边界；原 workers=8、正式 trainval/12 epoch 和任务精度继续单独验收。
+
+ResWorld 正式数据准备入口的三个负向用例通过；修复原模型算子导入及转换器 CLI 导入依赖后，**不映射 NPU 的公开 CPU 控制**重新生成全部 mini 标注/深度：14,140 个数组及其他标注字段、2,424 个深度文件与原结果一致。见[命令、来源、失败与回归结果](../PyTorch/contrib/cv/others/ResWorld/validation/full_preparation_guards_20261019.json)。正式 trainval 转换已排队等待全部传感器文件，正向完整转换尚未执行。10 月 18 日离线 ZIP 尚未更新这些新增入口。
 
 BEVFormer、Sparse4D、Apollo、ResWorld 的正式 nuScenes trainval 尚在下载/准备，当前不填完整 mAP/NDS/mIoU/规划精度结果。官方 [AWS 公开数据登记](https://registry.opendata.aws/motional-nuscenes/)提供匿名下载；本次十个完整传感器 blobs、metadata、CAN、地图归档合计 316,066,113,900 bytes，另需 ResWorld 的 lidarseg 与投影深度。完成传输、原始校验和逐文件覆盖检查后才能开始相应完整数据验收。
 
@@ -56,7 +61,7 @@ MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行�
 | [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 2026-10-12 | 官方 DLA 初始化；242 train/162 val；四卡 10 更新及全部 val 帧有限性通过 | 完整检测 mAP/占用 mIoU、收敛、性能/续训/长稳未测 |
 | [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2026-10-18 训练 / 19 复验 | 全 train/val 三阶段 725 epoch / 292,175 更新；全输出、梯度、严格续训通过 | val 参与选模；独立排行榜/驾驶业务目标未验收 |
 | [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2026-10-18 训练 / 19 复验 | PeMSD7(M) 全量 52 epoch / 14,404 更新；独立 test、数值、续训、30 分钟通过 | 70/15/15 社区协议；原论文划分/METR-LA/其他 PeMS 未验收 |
-| [ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 2026-10-18 | 原数值失败已修复；五份权重 446 梯度、严格四卡恢复、30 分钟及原 65 帧对照通过 | 真实 mini；正式 trainval/12 epoch 及驾驶业务精度未完成 |
+| [ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 2026-10-18 / 19 | 原数值修复、五份权重 446 梯度、30 分钟及原 65 帧对照；新增原 runner 两轮/EMA 精确恢复，2,762 状态张量与 164 条轨迹全同，CPU 数据转换对照通过 | 真实 mini、workers=0 的轮次控制；正式 trainval/12 epoch 及驾驶业务精度未完成 |
 | [MobileNetV2](../PyTorch/contrib/cv/classification/MobileNetV2/README.md) | 2026-10-18 与 19 | 官方 V1 全部 ImageNet 50,000 val；功能训练、数值、续训及 30 分钟通过 | 官方预训练评测；600 epoch 从头训练及驾驶业务未完成 |
 
 ## 数据与实测数值

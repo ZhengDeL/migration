@@ -24,6 +24,8 @@ def _mean_allreduce(state, bucket):
     value = bucket.buffer()
     if value.device.type != 'npu':
         raise RuntimeError('ResWorld HCCL gradient buckets must stay on NPU.')
+    if state is not None:
+        state(bucket)
     torch_npu.npu.synchronize()
     value.div_(dist.get_world_size())
     dist.all_reduce(value, op=dist.ReduceOp.SUM, async_op=False)
@@ -34,9 +36,9 @@ def _mean_allreduce(state, bucket):
     return future
 
 
-def attach(model):
+def attach(model, observer=None):
     """Use the public DDP communication-hook API; preserve mean-gradient math."""
     import torch.distributed as dist
     if not dist.is_initialized() or dist.get_world_size() < 2:
         raise RuntimeError('Attach the HCCL hook only to initialized multi-rank DDP.')
-    model.register_comm_hook(None, _mean_allreduce)
+    model.register_comm_hook(observer, _mean_allreduce)

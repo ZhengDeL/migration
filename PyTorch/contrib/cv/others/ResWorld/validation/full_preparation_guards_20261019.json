@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "collected_utc": "2026-10-19T13:43:13.471138+00:00",
+  "environment": {
+    "host": "7.6.28.252",
+    "architecture": "arm64",
+    "board": "IT22HMDA_4_S",
+    "host_logical_devices": [
+      4,
+      6,
+      8,
+      10
+    ]
+  },
+  "image": {
+    "role": "runtime",
+    "tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "source_manifest": "swr.cn-south-1.myhuaweicloud.com/ascendhub/drivingsdk@sha256:52326fada68feb9d26e8c170bb7fdeea0e81aeba24fa1a84a316a19feba3c801",
+    "models": [
+      "resworld"
+    ],
+    "versions": {
+      "cann": "9.1.0",
+      "python": "3.10.21",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post6",
+      "mx_driving": "26.1.0.post2",
+      "mmcv": "1.7.2",
+      "mmdet": "2.24.0",
+      "mmdet3d": "1.0.0rc4"
+    },
+    "archive": {
+      "filename": "drivingsdk_headless.tar.gz",
+      "bytes": 9272909176,
+      "sha256": "5ec0b1496efe124b5ad574a44822db84e7c3260e197e90f6c10ca4b4642a7f12",
+      "saved_image_count": 1
+    }
+  },
+  "scope": "Negative input guards only",
+  "report": {
+    "result": "pass_full_preparation_negative_guards",
+    "cases": [
+      {
+        "case": "authentic_mini",
+        "exit_code": 1,
+        "expected_error_observed": true,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 157, in <module>\n    main()\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 19, in main\n    raw = inspect_raw(data)\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/full_data.py\", line 13, in inspect_raw\n    scenes = json.loads((table / 'scene.json').read_text())\n  File \"/opt/conda/envs/bevformer/lib/python3.10/pathlib.py\", line 1134, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n  File \"/opt/conda/envs/bevformer/lib/python3.10/pathlib.py\", line 1119, in open\n    return self._accessor.open(self, mode, buffering, encoding, errors,\nFileNotFoundError: [Errno 2] No such file or directory: '/var/aispace/lzd/migration_full_20261019/ResWorld/data/nuscenes/v1.0-trainval/scene.json'\n",
+        "executed_command": [
+          "docker",
+          "-H",
+          "unix:///run/migration-full8-20261019/docker.sock",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--memory",
+          "2g",
+          "--cpus",
+          "2",
+          "-e",
+          "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld:/var/aispace/lzd/migration_full_20261019/ResWorld:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld",
+          "--entrypoint",
+          "/opt/conda/envs/bevformer/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/prepare_full_data.py",
+          "--data_path",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld/data/nuscenes"
+        ]
+      },
+      {
+        "case": "renamed_authentic_mini",
+        "exit_code": 1,
+        "expected_error_observed": true,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 157, in <module>\n    main()\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 19, in main\n    raw = inspect_raw(data)\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/full_data.py\", line 16, in inspect_raw\n    raise RuntimeError('Full trainval requires exactly 850 scenes and 34,149 annotated samples.')\nRuntimeError: Full trainval requires exactly 850 scenes and 34,149 annotated samples.\n",
+        "executed_command": [
+          "docker",
+          "-H",
+          "unix:///run/migration-full8-20261019/docker.sock",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--memory",
+          "2g",
+          "--cpus",
+          "2",
+          "-e",
+          "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld:/var/aispace/lzd/migration_full_20261019/ResWorld:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld",
+          "--entrypoint",
+          "/opt/conda/envs/bevformer/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/prepare_full_data.py",
+          "--data_path",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/full_guard_regression_cpu_fixed_20261019/renamed_mini"
+        ]
+      },
+      {
+        "case": "outside_model",
+        "exit_code": 1,
+        "expected_error_observed": true,
+        "stderr_tail": "Traceback (most recent call last):\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 157, in <module>\n    main()\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/prepare_full_data.py\", line 17, in main\n    data = own_path(a.data_path, exists=True)\n  File \"/var/aispace/lzd/migration_full_20261019/ResWorld/tools/common.py\", line 29, in own_path\n    raise RuntimeError('\u8def\u5f84\u5fc5\u987b\u5728\u672c\u6a21\u578b\u76ee\u5f55\u5185\uff1a' + str(resolved))\nRuntimeError: \u8def\u5f84\u5fc5\u987b\u5728\u672c\u6a21\u578b\u76ee\u5f55\u5185\uff1a/tmp\n",
+        "executed_command": [
+          "docker",
+          "-H",
+          "unix:///run/migration-full8-20261019/docker.sock",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--memory",
+          "2g",
+          "--cpus",
+          "2",
+          "-e",
+          "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+          "-v",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld:/var/aispace/lzd/migration_full_20261019/ResWorld:rw",
+          "-w",
+          "/var/aispace/lzd/migration_full_20261019/ResWorld",
+          "--entrypoint",
+          "/opt/conda/envs/bevformer/bin/python",
+          "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+          "tools/prepare_full_data.py",
+          "--data_path",
+          "/tmp"
+        ]
+      }
+    ],
+    "existing_mini_metadata_unchanged": true,
+    "npu_devices_exposed": false,
+    "positive_full_data_preparation_executed": false
+  },
+  "source_sha256": {
+    "tools/full_data.py": "4bcb96586f6aa1c188bde1d06c7701d59e49ad740b22f5e54099a33c53011a46",
+    "tools/prepare_full_data.py": "bb54190974f9525b49d9e777bb9bfbc26ca2a1a72fee317657cf37ac2d882c39",
+    "tools/container_full_data.py": "f5360840a432a9734b9951be832e28d34aa9ca0bd67693b60ff1f246f084beb2",
+    "tools/cpu_data_converter.py": "817fedc53cb7d384de00c67c63aae9e4763e7bd76b64cfbad2a4f7cc870b756f",
+    "tools/validate_cpu_data_converter.py": "3ea84383b1d400aadb1e975781fd30ae6499536156b647d8d89edb79d3b3df3b"
+  },
+  "queue_snapshot": {
+    "state": "waiting_for_complete_official_raw_coverage",
+    "started_utc": "2026-10-19T13:01:24.007513+00:00",
+    "full_training_completed": false,
+    "full_accuracy_validated": false
+  },
+  "positive_complete_data_preparation_executed": false,
+  "full_trainval_training_completed": false,
+  "full_accuracy_validated": false,
+  "executed_command_source": "Preserved negative-case driver request_full_guards_cpu_fixed.json",
+  "cpu_conversion_control": {
+    "result": "pass_cpu_original_mini_conversion",
+    "npu_devices_exposed": false,
+    "baseline_metadata_sha256": "f2a7e7c6a2c8f0170ea6f9123baa5b5f064abe562937d44aa0c4c3b1b016fa22",
+    "train_frames": 323,
+    "val_frames": 81,
+    "annotation_arrays_compared": 14140,
+    "depth_files_compared": 2424,
+    "mismatch_count": 0,
+    "mismatches": [],
+    "path_comparison": "Normalize only model-local sensor root locations before comparison",
+    "annotation_protocol": "Original mini converter; max_sweeps=0; full trainval max_sweeps=10 not tested here",
+    "converter_loading": {
+      "mode": "original_converter_with_metadata_only_imports",
+      "converter_sha256": "258c7a63fde1dba8877910a488037a423c9c6cdba8f99e2ee02cc012a32c1460",
+      "mapping_source": "/workspace/bevformer/mmdetection3d/mmdet3d/datasets/nuscenes_dataset.py",
+      "mapping_source_sha256": "30195c802ba8a468281a5c175823c43bad0dbc1109b6d770243c4687c341f2c1",
+      "mapping_entries": 14,
+      "isolated_imports": {
+        "mmdet3d.datasets": "NuScenesDataset",
+        "mmdet3d.core.bbox.box_np_ops": "points_cam2img"
+      },
+      "optional_2d_export": "refused",
+      "import_time_cli_parser_nodes_omitted": 10,
+      "original_function_ast_unchanged": true,
+      "conversion_algorithm_changed": false
+    },
+    "positive_full_data_preparation_executed": false,
+    "full_training_completed": false,
+    "full_accuracy_validated": false
+  },
+  "cpu_conversion_workflow": {
+    "state": "completed_cpu_original_mini_conversion_control",
+    "started_utc": "2026-10-19T13:39:38.494232+00:00",
+    "command": [
+      "bash",
+      "test/prepare_full_data.sh",
+      "--check-mini-components",
+      "--data_path",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/data/nuscenes",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/cpu_data_converter_control_20261019_v2"
+    ],
+    "execution_started_utc": "2026-10-19T13:39:38.494522+00:00",
+    "exit_code": 0,
+    "finished_utc": "2026-10-19T13:41:18.521450+00:00"
+  },
+  "first_cpu_control_failure": {
+    "state": "failed",
+    "started_utc": "2026-10-19T13:36:43.707372+00:00",
+    "command": [
+      "bash",
+      "test/prepare_full_data.sh",
+      "--check-mini-components",
+      "--data_path",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/data/nuscenes",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/ResWorld/test/output/cpu_data_converter_control_20261019"
+    ],
+    "execution_started_utc": "2026-10-19T13:38:03.784358+00:00",
+    "exit_code": 2,
+    "error": "RuntimeError: CPU author conversion control failed; preserve the complete log.",
+    "finished_utc": "2026-10-19T13:38:34.110740+00:00"
+  },
+  "initial_cpu_import_failure": {
+    "observed_error": "mx_driving import calls torch_npu.npu.get_device_name(0); no exposed device; Invalid device id",
+    "fix": "Do not initialize the neural-network plugin during metadata conversion. Extract actual image NuScenesDataset.NameMapping by AST and isolate the two model-only imports; optional 2D export is refused.",
+    "algorithm_changed": false,
+    "full_trainval_positive_conversion_tested": false
+  },
+  "converter_cli_loading_fix": "Omit the original import-time CLI parser nodes when loading as a module; all original conversion function ASTs are checked unchanged."
+}
