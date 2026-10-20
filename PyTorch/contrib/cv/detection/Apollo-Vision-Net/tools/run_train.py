@@ -46,6 +46,24 @@ def main() -> int:
     if len(devices) != NPROC[args.model] or len(set(devices)) != len(devices) or any((not d.isdigit() for d in devices)):
         parser.error(f'{args.model} requires {NPROC[args.model]} distinct numeric device IDs')
     output = args.output_dir.resolve()
+    if not args.smoke:
+        prepared_full = ROOT / 'prepared/full_nuscenes'
+        receipt_path = prepared_full / 'preparation.json'
+        if not receipt_path.is_file():
+            raise RuntimeError('Complete original full-data preparation before direct full training')
+        receipt = json.loads(receipt_path.read_text())
+        verified = receipt.get('original_full_annotation_audit', {})
+        if receipt.get('dataset') != 'v1.0-trainval' or not verified.get('raw_media_coverage_checked'):
+            raise RuntimeError('Full training requires the complete original annotation and media audit')
+        for name, expected in [('nuscenes', prepared_full), ('can_bus', ROOT / 'data/can_bus'),
+                               ('occ_gt_release_v1_0', ROOT / 'prepared/full_occ')]:
+            if (source / 'data' / name).resolve() != expected.resolve():
+                raise RuntimeError('Full source data link points to another dataset: ' + name)
+        from full_annotation_checks import audit, NAMES
+        audit([prepared_full / name for name in NAMES], ROOT / 'data/nuscenes_full',
+              ROOT / 'data/apollo/occ_gt_release_v1_0', check_media=True)
+        from verify_apollo_weight import verify
+        verify(source)
     env = os.environ.copy()
     env['ASCEND_RT_VISIBLE_DEVICES'] = args.devices
     env['OMP_NUM_THREADS'] = env.get('OMP_NUM_THREADS', '8')
@@ -83,7 +101,7 @@ def main() -> int:
         command = ['torchrun', '--standalone', f'--nproc_per_node={NPROC[args.model]}', entry, config, '--launcher', 'pytorch', '--work-dir', str(output)]
         if args.smoke:
             command.append('--no-validate')
-        command += ['--cfg-options', 'dist_params.backend=hccl', f'optimizer.lr={lr}', 'data.samples_per_gpu=1', f'runner.max_epochs={epoch_count}', f'total_epochs={epoch_count}']
+        command += ['--cfg-options', 'dist_params.backend=hccl', f'optimizer.lr={lr}', 'optimizer.foreach=False', 'data.samples_per_gpu=1', f'runner.max_epochs={epoch_count}', f'total_epochs={epoch_count}']
     env['PYTHONPATH'] = os.pathsep.join((part for part in (str(cwd), str(ROOT / 'tools'), env.get('PYTHONPATH', '')) if part))
     report = {'model': args.model, 'revision': LOCK[args.model]['revision'], 'patch_sha256': hashlib.sha256(patch_bytes(patch)).hexdigest() if patch else None, 'compat_patch_sha256': hashlib.sha256(patch_bytes(compat)).hexdigest() if compat else None, 'cwd': str(cwd), 'devices': args.devices, 'command': command, 'dataset_version': None, 'missing_data': missing, 'execute': args.execute}
     if legacy_smoke:

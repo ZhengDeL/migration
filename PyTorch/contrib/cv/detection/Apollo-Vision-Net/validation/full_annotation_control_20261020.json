@@ -1,0 +1,198 @@
+{
+  "model": "Apollo-Vision-Net",
+  "collected_utc": "2026-10-20T06:53:52.883626+00:00",
+  "scope": "CPU preparation and negative controls; full training and formal accuracy remain unaccepted",
+  "control": {
+    "collected_utc": "2026-10-20T06:51:46.052964+00:00",
+    "result": "pass_original_full_annotations_and_renamed_subset_guard",
+    "raw_media_coverage_checked": false,
+    "full_trainval_preparation_completed": false,
+    "full_training_completed": false,
+    "formal_accuracy_accepted": false,
+    "npu_devices_exposed": false,
+    "original_full_annotation_audit": {
+      "result": "pass_complete_original_full_annotation_membership_and_label_paths",
+      "splits": [
+        {
+          "split": "train",
+          "frames": 28130,
+          "original_sha256": "8ac6738146470365807260e5533d1bb31ba5ceb6c01d7257302230269a491e2a",
+          "label_references_checked": {
+            "occ_gt_path": 28130,
+            "flow_gt_path": 28130,
+            "occ_invalid_path": 28130
+          },
+          "nonzero_can_frames": 27533,
+          "original_zero_can_frames": 597,
+          "media_references_checked": 0
+        },
+        {
+          "split": "val",
+          "frames": 6019,
+          "original_sha256": "f231b25802bde99d59be63d0a9980f525bf740db9932bf41d679e81cbbf180df",
+          "label_references_checked": {
+            "occ_gt_path": 6019,
+            "flow_gt_path": 6019,
+            "occ_invalid_path": 6019
+          },
+          "nonzero_can_frames": 6019,
+          "original_zero_can_frames": 0,
+          "media_references_checked": 0
+        }
+      ],
+      "total_samples": 34149,
+      "train_val_disjoint": true,
+      "labels_and_masks_checked": 102447,
+      "raw_media_coverage_checked": false,
+      "referenced_media_present": false,
+      "training_preparation_completed": false,
+      "formal_accuracy_accepted": false
+    },
+    "renamed_subset_rejection": {
+      "result": "pass_rejected",
+      "error": "Original full split sample/token membership mismatch: train"
+    },
+    "direct_full_entry_rejection": {
+      "exit_code": 1,
+      "stderr": "run failed: Complete original full-data preparation before direct full training\n",
+      "no_training_config_or_environment_check_started": true,
+      "existing_result_pointer_unchanged": true
+    },
+    "original_annotation_sha256_before": {
+      "nuscenes_infos_temporal_train_occ_gt.pkl": "8ac6738146470365807260e5533d1bb31ba5ceb6c01d7257302230269a491e2a",
+      "nuscenes_infos_temporal_val_occ_gt.pkl": "f231b25802bde99d59be63d0a9980f525bf740db9932bf41d679e81cbbf180df"
+    },
+    "original_annotation_sha256_after": {
+      "nuscenes_infos_temporal_train_occ_gt.pkl": "8ac6738146470365807260e5533d1bb31ba5ceb6c01d7257302230269a491e2a",
+      "nuscenes_infos_temporal_val_occ_gt.pkl": "f231b25802bde99d59be63d0a9980f525bf740db9932bf41d679e81cbbf180df"
+    },
+    "original_labels_and_annotation_payloads_not_modified": true,
+    "finished_utc": "2026-10-20T06:52:15.084075+00:00"
+  },
+  "execution": {
+    "model": "apollo_visionnet",
+    "action": "check-full-annotations",
+    "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "host_logical_devices": [],
+    "physical_cards": [],
+    "container_logical_devices": [],
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--memory",
+      "96g",
+      "--cpus",
+      "8",
+      "--pids-limit",
+      "1024",
+      "--shm-size",
+      "8g",
+      "-v",
+      "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net:/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net:rw",
+      "-w",
+      "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net",
+      "-v",
+      "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+      "-v",
+      "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+      "-v",
+      "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+      "-v",
+      "/usr/local/dcmi:/usr/local/dcmi:ro",
+      "-v",
+      "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+      "-e",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+      "-e",
+      "OMP_NUM_THREADS=2",
+      "-e",
+      "OPENBLAS_NUM_THREADS=2",
+      "-e",
+      "PYTHONUNBUFFERED=1",
+      "-e",
+      "HCCL_CONNECT_TIMEOUT=120",
+      "-e",
+      "HF_HUB_OFFLINE=1",
+      "-e",
+      "TRANSFORMERS_OFFLINE=1",
+      "-e",
+      "TOKENIZERS_PARALLELISM=false",
+      "-e",
+      "PATH=/opt/conda/envs/bevformer/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "--entrypoint",
+      "/opt/conda/envs/bevformer/bin/python",
+      "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "test/check_full_annotations.py",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/public_cpu_full_annotations_20261020_v2",
+      "--raw_metadata",
+      "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/data/nuscenes_trainval_metadata"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-10-20T06:52:15.472188+00:00"
+  },
+  "runtime_and_normalized_lf_source_sha256": {
+    "tools/prepare_data.py": {
+      "runtime_sha256": "0bb7731d816ed6d29801cde3fd8a4fe63cd6a21eb638c8adc3c9f925ec73e679",
+      "normalized_lf_sha256": "0bb7731d816ed6d29801cde3fd8a4fe63cd6a21eb638c8adc3c9f925ec73e679"
+    },
+    "tools/prepare_full_data.py": {
+      "runtime_sha256": "1f2746fca0236f895f10a051cdf8bb753fd1109bb3de1e5fbd20e00d48c92101",
+      "normalized_lf_sha256": "1f2746fca0236f895f10a051cdf8bb753fd1109bb3de1e5fbd20e00d48c92101"
+    },
+    "tools/prepare.py": {
+      "runtime_sha256": "a2f2c0d80fab57e6bb35b7ce1da04abcc90515e5f356d12b86a6eac28dc0e086",
+      "normalized_lf_sha256": "a2f2c0d80fab57e6bb35b7ce1da04abcc90515e5f356d12b86a6eac28dc0e086"
+    },
+    "tools/train_model.py": {
+      "runtime_sha256": "69f836604d04cc1f968055a9c602a1b9136d0cb773a6b553d222de7b271ecc5b",
+      "normalized_lf_sha256": "69f836604d04cc1f968055a9c602a1b9136d0cb773a6b553d222de7b271ecc5b"
+    },
+    "tools/world_mini_data.py": {
+      "runtime_sha256": "56725afc4d4a3964d08b6232ea6a3140cd504581906667354f114e23925d133b",
+      "normalized_lf_sha256": "56725afc4d4a3964d08b6232ea6a3140cd504581906667354f114e23925d133b"
+    },
+    "tools/container.py": {
+      "runtime_sha256": "d6ed55232f75a097db436bb705f98eb7c3eaac45130b422e76d20da5266ebe12",
+      "normalized_lf_sha256": "d6ed55232f75a097db436bb705f98eb7c3eaac45130b422e76d20da5266ebe12"
+    },
+    "tools/full_annotation_checks.py": {
+      "runtime_sha256": "409995c51ca8475a47f9b569b34878affbcc8221e53d6b3c7a923a8d899e7b44",
+      "normalized_lf_sha256": "409995c51ca8475a47f9b569b34878affbcc8221e53d6b3c7a923a8d899e7b44"
+    },
+    "tools/run_train.py": {
+      "runtime_sha256": "1656bb6c0336c6ea9d70936764b32544ceb1e59c5d909e01691c5fd624e6a227",
+      "normalized_lf_sha256": "1656bb6c0336c6ea9d70936764b32544ceb1e59c5d909e01691c5fd624e6a227"
+    },
+    "test/check_full_annotations_cpu.sh": {
+      "runtime_sha256": "832256f29b63cfbe9b2767695c9b07593fccfb71e8650c62a264e15e7f0bfc78",
+      "normalized_lf_sha256": "832256f29b63cfbe9b2767695c9b07593fccfb71e8650c62a264e15e7f0bfc78"
+    },
+    "test/check_full_annotations.py": {
+      "runtime_sha256": "13ad537509bd1cfec2c41dc367ea1f85f4f49bbf24bc69baf52ff4550fba38c5",
+      "normalized_lf_sha256": "13ad537509bd1cfec2c41dc367ea1f85f4f49bbf24bc69baf52ff4550fba38c5"
+    }
+  },
+  "queued_full_preparation_snapshot": {
+    "state": "waiting_for_complete_raw_coverage",
+    "model": "Apollo-Vision-Net",
+    "controller_pid": 1533092,
+    "started_utc": "2026-10-20T06:52:35.794187+00:00",
+    "full_trainval_preparation_completed": false,
+    "full_training_started": false,
+    "full_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "controller_sha256": "e9a056eaec07f66be73d8efadc19394e3b0f42a5b3c7698a13f8f5749478ddf7",
+    "updated_utc": "2026-10-20T06:53:35.851148+00:00",
+    "dependency_state": "waiting_for_all_official_archives",
+    "queued_source_lock_sha256": "19a01b2c68cd873a2e43c18247f44385fa85f93e73ecf2d48d3bfa1cf0b5e515"
+  },
+  "queue_controller_observed_alive": true,
+  "full_trainval_preparation_completed": false,
+  "full_training_completed": false,
+  "formal_accuracy_accepted": false
+}

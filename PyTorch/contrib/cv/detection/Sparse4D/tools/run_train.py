@@ -16,7 +16,13 @@ DATA_FILES = {'sparse4d': ['data/nuscenes_anno_pkls/nuscenes_infos_train.pkl', '
 def sparse_config(source: Path, output: Path, smoke: bool, dataset_version: str='v1.0-trainval') -> Path:
     original = source / 'projects/configs/sparse4dv3_temporal_r50_1x8_bs6_256x704.py'
     content = original.read_text(encoding='utf-8')
-    substitutions = {'dist_params = dict(backend="nccl")': 'dist_params = dict(backend="hccl")', 'total_batch_size = 48': 'total_batch_size = 2', 'num_gpus = 8': 'num_gpus = 2', 'lr=6e-4,': 'lr=2.5e-5,', 'pretrained="ckpt/resnet50-19c8e357.pth"': 'pretrained="ckpt/resnet50-19c8e357-modern.pth"'}
+    # Full training keeps the author's batch=6 per card, as verified by the new mini training.
+    # The historical ten-step smoke contract remains batch=1 per card.
+    total_batch, learning_rate = (2, '2.5e-5') if smoke else (12, '1.5e-4')
+    substitutions = {'dist_params = dict(backend="nccl")': 'dist_params = dict(backend="hccl")',
+        'total_batch_size = 48': f'total_batch_size = {total_batch}', 'num_gpus = 8': 'num_gpus = 2',
+        'lr=6e-4,': f'lr={learning_rate},',
+        'pretrained="ckpt/resnet50-19c8e357.pth"': 'pretrained="ckpt/resnet50-19c8e357-modern.pth"'}
     for (old, new) in substitutions.items():
         if content.count(old) != 1:
             raise RuntimeError(f'Sparse4D config changed: expected one {old!r}')
@@ -31,6 +37,8 @@ def sparse_config(source: Path, output: Path, smoke: bool, dataset_version: str=
         content += "runner = dict(type='IterBasedRunner', max_iters=10)\n"
         content += 'checkpoint_config = dict(interval=100000)\n'
         content += 'evaluation = dict(interval=100000, pipeline=vis_pipeline)\n'
+    else:
+        content += '\n# Match the verified mini training optimizer path on TorchNPU.\noptimizer["foreach"] = False\n'
     output.mkdir(parents=True, exist_ok=True)
     suffix = 'mini_smoke' if dataset_version == 'v1.0-mini' else 'smoke' if smoke else 'full'
     path = output / f'sparse4d_2p_{suffix}.py'
@@ -73,13 +81,34 @@ def main() -> int:
     if len(devices) != NPROC[args.model] or len(set(devices)) != len(devices) or any((not d.isdigit() for d in devices)):
         parser.error(f'{args.model} requires {NPROC[args.model]} distinct numeric device IDs')
     output = args.output_dir.resolve()
+    if not args.smoke:
+        # Direct entry must enforce the same full-data contract as train_model.py.
+        from prepare_full_data import verify_annotations
+        from world_mini_data import digest
+        prepared = ROOT / 'prepared/full_nuscenes'
+        receipt_path = prepared / 'preparation.json'
+        if not receipt_path.is_file() or args.anchor_file is None:
+            raise RuntimeError('Complete original full-data preparation and provide its full train-only anchor first')
+        receipt = json.loads(receipt_path.read_text())
+        if receipt.get('dataset') != 'v1.0-trainval' or [x['frames'] for x in receipt.get('verified_splits', [])] != [28130, 6019]:
+            raise RuntimeError('Full preparation receipt does not match the complete original splits')
+        for name in ('nuscenes', 'nuscenes_anno_pkls'):
+            if (source / 'data' / name).resolve() != prepared.resolve():
+                raise RuntimeError('Full source data link points to another dataset')
+        verify_annotations([prepared / 'nuscenes_infos_train.pkl', prepared / 'nuscenes_infos_val.pkl'], prepared)
+        if digest(args.anchor_file) != receipt['anchor_provenance']['anchor_sha256']:
+            raise RuntimeError('Full training anchor differs from its original train-only generation receipt')
     env = os.environ.copy()
     env['ASCEND_RT_VISIBLE_DEVICES'] = args.devices
     env['OMP_NUM_THREADS'] = env.get('OMP_NUM_THREADS', '8')
     legacy_smoke = False
     data_dir = None
     prepared = None
-    missing = [str(source / item) for item in DATA_FILES.get(args.model, ()) if not (source / item).exists()]
+    required = [source / item for item in DATA_FILES.get(args.model, ())
+                if not (args.anchor_file and item == 'nuscenes_kmeans900.npy')]
+    if args.anchor_file:
+        required.append(args.anchor_file)
+    missing = [str(path) for path in required if not path.exists()]
     if args.dataset_version == 'v1.0-mini':
         mini_scene = source / 'data/nuscenes/v1.0-mini/scene.json'
         if not mini_scene.is_file():
