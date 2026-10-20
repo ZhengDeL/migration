@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "collected_utc": "2026-10-20T05:09:12.405463+00:00",
+  "report": {
+    "model": "apollo_visionnet",
+    "result": "pass_original_cpu_vs_adapted_npu_focal_loss_and_gradients",
+    "collected_utc": "2026-10-20T05:08:45.322895+00:00",
+    "scope": "Actual detection/occupancy loss inputs from one original mini training batch",
+    "full_model_accuracy_accepted": false,
+    "optimizer_created": false,
+    "parameter_updates": 0,
+    "seed": 42,
+    "cases": [
+      {
+        "name": "detection",
+        "pred_shape": [
+          900,
+          10
+        ],
+        "target_shape": [
+          900
+        ],
+        "pred_dtype": "torch.float32",
+        "background_target_count": 850,
+        "foreground_target_count": 50,
+        "original_loss_weight": 2.0,
+        "original_gamma": 2.0,
+        "original_alpha": 0.25,
+        "reduction": "mean",
+        "avg_factor": 50.0,
+        "input_sha256": "23724b592956cc0e1ca7762342761d4a9587e8623b6f9f3fb5b783c995b6cd07",
+        "target_sha256": "ee39a13d61e55e76a42d594ba394542cbd711df1e7e3bf978c3241d16ef2910b",
+        "cpu_loss": 0.5470049977302551,
+        "npu_loss": 0.5470049381256104,
+        "loss_abs_difference": 5.960464477539063e-08,
+        "gradient_elements": 9000,
+        "gradient_max_abs_difference": 2.7939677238464355e-09,
+        "gradient_reference_l2": 0.05776375699374297,
+        "gradient_relative_l2": 7.037939598223962e-08,
+        "gradient_cosine": 0.9999999999999977,
+        "loss_allclose": true,
+        "gradient_allclose": true,
+        "passed": true
+      },
+      {
+        "name": "occupancy",
+        "pred_shape": [
+          640000,
+          16
+        ],
+        "target_shape": [
+          640000
+        ],
+        "pred_dtype": "torch.float32",
+        "background_target_count": 606410,
+        "foreground_target_count": 33590,
+        "original_loss_weight": 10.0,
+        "original_gamma": 2.0,
+        "original_alpha": 0.25,
+        "reduction": "mean",
+        "avg_factor": 33590.0,
+        "input_sha256": "b91f501089bb64cb26864d746d5efae69dc83d1fc892540aa471243b2aeb21e8",
+        "target_sha256": "1e144a3ccbc48f1f12fe16f116ef55a1800e05ec8558a70f32baad9b93032a60",
+        "cpu_loss": 3.737834930419922,
+        "npu_loss": 3.7378346920013428,
+        "loss_abs_difference": 2.384185791015625e-07,
+        "gradient_elements": 10240000,
+        "gradient_max_abs_difference": 2.9103830456733704e-11,
+        "gradient_reference_l2": 0.01297093408814043,
+        "gradient_relative_l2": 6.980494382262511e-08,
+        "gradient_cosine": 1.00000000000048,
+        "loss_allclose": true,
+        "gradient_allclose": true,
+        "passed": true
+      }
+    ],
+    "tolerances": {
+      "loss_atol": 1e-05,
+      "loss_rtol": 0.0001,
+      "gradient_atol": 1e-07,
+      "gradient_rtol": 0.001,
+      "gradient_relative_l2": 0.0001,
+      "gradient_cosine_minimum": 0.999999
+    },
+    "checkpoint_sha256": "7123892391f2a4575dc10044112055bebe33353ee95c64bfb1b4009c518d19b7",
+    "model_tensors_loaded": 600,
+    "config_sha256": "7e9b640e094c196087ecc665929d809c3c5d72f20e530126284b281533175e0b",
+    "torch_version": "2.7.1+cpu",
+    "torch_npu_version": "2.7.1.post6",
+    "training_frames": 242,
+    "requested_dataset_index": 0,
+    "annotation_token_at_requested_index": "ca9a282c9e77460f8360f564131a8af5",
+    "actual_batch_sample_tokens": [
+      "ca9a282c9e77460f8360f564131a8af5",
+      "ca9a282c9e77460f8360f564131a8af5",
+      "ca9a282c9e77460f8360f564131a8af5"
+    ],
+    "original_cpu_focal_source_sha256": "7022de2881542f0846463bc7b8012215e747939b8e496497a18519fb3daaaeb1",
+    "adapted_focal_source_sha256": "b3550c8e156986f137dceed4dc5c53d1e00baa8443bd03c964df68ce52b0a81e",
+    "stopped_after_two_real_loss_inputs": true,
+    "finished_utc": "2026-10-20T05:09:00.578929+00:00"
+  },
+  "report_sha256": "fc8a71e1237239380c793ce4e7eacccfb481c7e0548b514203cfc96d3dc2a77e",
+  "execution": {
+    "document": {
+      "model": "apollo_visionnet",
+      "action": "check-focal",
+      "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+      "host_logical_devices": [
+        "8"
+      ],
+      "physical_cards": [
+        4
+      ],
+      "container_logical_devices": [
+        0
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "host",
+        "--memory",
+        "96g",
+        "--cpus",
+        "8",
+        "--pids-limit",
+        "1024",
+        "--shm-size",
+        "8g",
+        "-v",
+        "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net:/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net:rw",
+        "-w",
+        "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net",
+        "-v",
+        "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+        "-v",
+        "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+        "-v",
+        "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+        "-v",
+        "/usr/local/dcmi:/usr/local/dcmi:ro",
+        "-v",
+        "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+        "--device",
+        "/dev/davinci8",
+        "--device",
+        "/dev/davinci_manager",
+        "--device",
+        "/dev/devmm_svm",
+        "--device",
+        "/dev/hisi_hdc",
+        "-e",
+        "ASCEND_RT_VISIBLE_DEVICES=0",
+        "-e",
+        "OMP_NUM_THREADS=2",
+        "-e",
+        "OPENBLAS_NUM_THREADS=2",
+        "-e",
+        "PYTHONUNBUFFERED=1",
+        "-e",
+        "HCCL_CONNECT_TIMEOUT=120",
+        "-e",
+        "HF_HUB_OFFLINE=1",
+        "-e",
+        "TRANSFORMERS_OFFLINE=1",
+        "-e",
+        "TOKENIZERS_PARALLELISM=false",
+        "-e",
+        "PATH=/opt/conda/envs/bevformer/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "--entrypoint",
+        "/opt/conda/envs/bevformer/bin/python",
+        "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+        "tools/check_focal_loss.py",
+        "--output_dir",
+        "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/focal_real_inputs_v2_20261020",
+        "--checkpoint",
+        "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/mini_training_quality_workers4_20261020/epoch_24.pth"
+      ],
+      "exit_code": 0,
+      "finished_utc": "2026-10-20T05:09:05.381922+00:00"
+    },
+    "sha256": "e8bfd27ad8075f44e92e044ad3d35b8ec7bcb3da29574ba4b77fd6c067b317a9"
+  },
+  "source_checksums": {
+    "tools/check_focal_loss.py": {
+      "observed_runtime_sha256": "05407fda574ce47af79c0e101b8d776616809b63228f70a4df987319d3b88404",
+      "normalized_lf_sha256": "05407fda574ce47af79c0e101b8d776616809b63228f70a4df987319d3b88404"
+    },
+    "tools/container.py": {
+      "observed_runtime_sha256": "bc520c88263d3ad0da12e7ac5bfd8967514dca91b68c3ca2876f61f3f57e777d",
+      "normalized_lf_sha256": "bc520c88263d3ad0da12e7ac5bfd8967514dca91b68c3ca2876f61f3f57e777d"
+    },
+    "test/check_focal_loss_1p.sh": {
+      "observed_runtime_sha256": "7e8972cef46b4d0b12f732e7ef55da45f9a76d07d1a374b8022a91b26efb6179",
+      "normalized_lf_sha256": "7e8972cef46b4d0b12f732e7ef55da45f9a76d07d1a374b8022a91b26efb6179"
+    }
+  },
+  "original_formula_reference": "https://github.com/open-mmlab/mmdetection/blob/v2.28.2/mmdet/models/losses/focal_loss.py",
+  "scope": "One real original training batch, two focal-loss inputs; no whole-model CPU/CUDA training parity claim",
+  "full_trainval_accuracy_accepted": false,
+  "task_quality_accepted": false,
+  "offline_archives_updated": false
+}

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "model": "Apollo-Vision-Net",
   "collected_utc": "2026-10-20T04:13:14.346367+00:00",
-  "result": "pass_complete_mini_training_and_automatic_evaluation",
+  "result": "pass_complete_mini_training_and_public_re_evaluation",
   "task_quality_accepted": false,
   "full_trainval_training_completed": false,
   "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
@@ -376,5 +376,34 @@
     "workflow_exit_code": 0,
     "automatic_evaluation": "pass_complete_mini_occupancy_evaluation"
   },
-  "observed_worker_processes_are_historical": true
+  "observed_worker_processes_are_historical": true,
+  "latest_additional_verification_utc": "2026-10-20T05:09:12.405463+00:00",
+  "public_independent_repeat_performed": true,
+  "public_repeat_workflow": {
+    "state": "completed_public_repeat",
+    "model": "Apollo-Vision-Net",
+    "started_utc": "2026-10-20T05:05:02.842317+00:00",
+    "controller_pid": 920435,
+    "output": "/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/trained_public_repeat_20261020",
+    "formal_trainval_accuracy_accepted": false,
+    "command": [
+      "bash",
+      "test/evaluate_mini_1p.sh",
+      "--device_id=8",
+      "--checkpoint=/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/mini_training_quality_workers4_20261020/epoch_24.pth",
+      "--output_dir=/var/aispace/lzd/migration_full_20261019/Apollo-Vision-Net/test/output/trained_public_repeat_20261020"
+    ],
+    "launcher_pid": 920499,
+    "exit_code": 0,
+    "primary_metrics": {
+      "iou": 18.646626309232783,
+      "precision": 0.34638508436347376,
+      "recall": 0.28769195590976615,
+      "miou": 4.720559644391065
+    },
+    "primary_metrics_identical": true,
+    "frames_checked": 162,
+    "checkpoint_sha256": "7123892391f2a4575dc10044112055bebe33353ee95c64bfb1b4009c518d19b7",
+    "finished_utc": "2026-10-20T05:06:02.348580+00:00"
+  }
 }

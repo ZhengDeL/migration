@@ -222,6 +222,8 @@ bash test/validate_1p.sh --device_id=0
 
 这是新 mini 训练检查点，不能与作者完整 trainval 权重混用；旧 162 更新权重及其低指标保持原记录。本轮低指标仍不足以验收正式任务质量，完整 trainval 数据、训练、收敛及 GPU 对齐待完成。[实际命令、各 rank 完成记录、逐帧检查/全部指标、训练日志校验摘要与检查点 SHA](validation/mini_training_evaluation_20261020.json)。
 
+2026-10-20 新检查点另通过公开 `test/evaluate_mini_1p.sh --checkpoint=...` 在新输出目录、另一张物理卡复测全部 81 帧，mAP/NDS 与末尾自动评测完全相同；[两次指标及公开入口退出码](validation/mini_training_evaluation_20261020.json)。
+
 ## 通过判据
 
 原功能短训 `train_2p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
