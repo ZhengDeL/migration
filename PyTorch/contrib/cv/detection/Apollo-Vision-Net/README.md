@@ -134,13 +134,30 @@ bash test/evaluate_mini_1p.sh --device_id=0 \
 
 ## 完整数据训练
 
-完整原始 nuScenes 放在 `data/nuscenes_full/`，完整 OCC 展开在 `data/apollo/occ_gt_release_v1_0/`；官方两份 OCC train/val PKL 放在 `data/apollo/`。 官方 CAN bus 放在 `data/can_bus/`，至少需相应 scene-*_pose.json，空目录会被拒绝。
+按[固定原仓数据准备说明](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/prepare_dataset.md)放置以下资产，均属于本模型目录：
+
+| 目录 | 必要内容 |
+| --- | --- |
+| `data/nuscenes_full/` | 完整 nuScenes 的 samples、sweeps、maps、v1.0-trainval |
+| `data/can_bus/` | 官方 CAN bus，包含场景 pose 文件；拒绝空目录 |
+| `data/apollo/` | 官方 `nuscenes_infos_temporal_train_occ_gt.pkl`、`nuscenes_infos_temporal_val_occ_gt.pkl` |
+| `data/apollo/occ_gt_release_v1_0/` | 解压后的 train、val、occ_gt_train.json、occ_gt_val.json；原 GT、flow、可见性 mask 全部保留 |
 
 ```bash
 bash test/train_full_4p.sh --device_id=0,2,4,6 --data_path="$PWD/data/apollo"
 ```
 
-完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+入口逐个核对官方 28,130 train / 6,019 val 样本、scene 关系、六相机、18 维 CAN，以及全部 102,447 个 GT / flow / mask 引用；正式训练准备还检查全部引用的原始媒体文件。核验后重定位相机、点云、sweep 及三类标签路径，保存 `prepared/full_nuscenes/preparation.json`。原 CAN 中的零向量保持，不填造信号。直接训练入口必须核验完整准备收据、数据链接及原 DLA 权重身份。
+
+按[原仓训练说明](https://github.com/ApolloAuto/Apollo-Vision-Net/blob/4909aa681bc435a74e793e714b8066d9bbf0095d/docs/run.md)保留原模型和 24 轮配置；本项目四卡每卡 batch=1，lr=1e-4，AdamW `foreach=False` 与已验证的 mini 训练一致。未改动 OCC loss 权重、标签或 0.25 评测阈值。
+
+原始传感器下载期间，可先审计完整标注和已准备的完整 OCC。下面的 CPU 入口不映射 NPU；`--data_path` 内至少需官方 `v1.0-trainval/scene.json` 和 `sample.json`：
+
+```bash
+bash test/check_full_annotations_cpu.sh --data_path="$PWD/data/nuscenes_full"
+```
+
+每次输出到新目录，`full_annotation_control.json` 保存全部样本/标签检查、改名 mini 拒绝及直接训练入口拦截；`annotation_execution.json` 保存镜像、实际命令与退出码。[2026-10-20 实跑证据](validation/full_annotation_control_20261020.json)使用仅含上述两个官方元数据文件的独立目录，完整 34,149 样本、102,447 标签引用通过；原两份完整 PKL 字节保持。**该 CPU 控制没有检查原始媒体覆盖，也没有执行正式训练。完整数据训练、收敛与精度仍未验收。** `validate_1p.sh` 只对应历史功能配置；正式精度按原仓完整验证协议验收。
 
 # 训练结果展示
 

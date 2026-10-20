@@ -38,7 +38,7 @@ def latest():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate', 'evaluate-mini', 'train-mini', 'check-focal'])
+    parser.add_argument('action', choices=['setup', 'check', 'prepare', 'plan', 'functional', 'full', 'validate', 'evaluate-mini', 'train-mini', 'check-focal', 'check-full-annotations'])
     parser.add_argument('--device_id', '--devices', dest='devices', help='宿主逻辑 NPU ID；训练选不同物理卡')
     parser.add_argument('--data_path', type=Path, help='本模型目录内的数据目录')
     parser.add_argument('--output_dir', type=Path, help='本模型内独立的训练输出目录；须尚不存在')
@@ -69,7 +69,7 @@ def main():
         spec = image()
         nproc = 1 if args.action in ('validate', 'evaluate-mini', 'check-focal') else PROFILE['nproc']
         host_ids = (args.devices or ('0' if nproc == 1 else PROFILE['host_devices'])).split(',')
-        if args.action in ('prepare', 'plan'):
+        if args.action in ('prepare', 'plan', 'check-full-annotations'):
             host_ids = []
         else:
             if len(host_ids) != nproc or any((not x.isdigit() for x in host_ids)) or len(set(host_ids)) != nproc:
@@ -81,19 +81,19 @@ def main():
         data = (args.data_path or ROOT / PROFILE['data_dir']).resolve()
         if not data.is_relative_to(ROOT):
             raise RuntimeError('--data_path 必须位于本模型目录下；先按 README 放置或迁入数据。')
-        if args.action in ('functional', 'full', 'plan', 'evaluate-mini', 'train-mini', 'check-focal'):
+        if args.action in ('functional', 'full', 'plan', 'evaluate-mini', 'train-mini', 'check-focal', 'check-full-annotations'):
             output = (args.output_dir or ROOT / 'test/output' / (args.action + '_' + datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))).resolve()
             if not output.is_relative_to(ROOT) or output.exists():
                 raise RuntimeError('输出目录须在本模型目录内且尚不存在。')
             output.mkdir(parents=True)
-            if args.action not in ('plan', 'evaluate-mini', 'check-focal'):
+            if args.action not in ('plan', 'evaluate-mini', 'check-focal', 'check-full-annotations'):
                 (ROOT / 'test/output/latest_run.json').write_text(json.dumps({'model': MODEL, 'state': 'running', 'output_dir': output.relative_to(ROOT).as_posix()}, indent=2) + '\n')
         elif args.action == 'validate':
             output = args.output_dir.resolve(strict=True) if args.output_dir else latest()
         else:
             output = ROOT / 'test/output'
             output.mkdir(parents=True, exist_ok=True)
-        docker = ['docker', 'run', '--rm', '--network', 'none' if args.action in ('prepare', 'plan') else 'host', '--memory', PROFILE['memory'], '--cpus', '8', '--pids-limit', '1024', '--shm-size', '8g', '-v', str(ROOT) + ':' + str(ROOT) + ':rw', '-w', str(ROOT)]
+        docker = ['docker', 'run', '--rm', '--network', 'none' if args.action in ('prepare', 'plan', 'check-full-annotations') else 'host', '--memory', PROFILE['memory'], '--cpus', '8', '--pids-limit', '1024', '--shm-size', '8g', '-v', str(ROOT) + ':' + str(ROOT) + ':rw', '-w', str(ROOT)]
         for item in ('/usr/local/Ascend/driver', '/usr/local/Ascend/firmware'):
             if Path(item).exists():
                 docker += ['-v', item + ':' + item + ':ro']
@@ -122,6 +122,9 @@ def main():
                 launch += ['--checkpoint', str(args.checkpoint.resolve(strict=True))]
         elif args.action == 'train-mini':
             launch = ['tools/train_mini.py', '--output_dir', str(output)]
+        elif args.action == 'check-full-annotations':
+            launch = ['test/check_full_annotations.py', '--output_dir', str(output),
+                      '--raw_metadata', str(args.data_path or ROOT / 'data/nuscenes_full')]
         elif args.action == 'check-focal':
             if args.checkpoint is None:
                 raise RuntimeError('Provide --checkpoint from the completed four-card mini training')
@@ -144,14 +147,15 @@ def main():
                 sys.stdout.buffer.write(block)
                 sys.stdout.buffer.flush()
             result_code = child.wait()
-        if args.action in ('evaluate-mini', 'check-focal'):
+        if args.action in ('evaluate-mini', 'check-focal', 'check-full-annotations'):
             receipt = {'model': MODEL, 'action': args.action, 'image_tag': spec['tag'],
                 'image_id': spec['image_id'], 'host_logical_devices': host_ids,
                 'physical_cards': [int(value) // 2 for value in host_ids],
-                'container_logical_devices': list(range(nproc)),
+                'container_logical_devices': list(range(nproc)) if host_ids else [],
                 'command': docker + launch, 'exit_code': result_code,
                 'finished_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
-            receipt_name = 'evaluation_execution.json' if args.action == 'evaluate-mini' else 'focal_loss_execution.json'
+            receipt_name = {'evaluate-mini': 'evaluation_execution.json', 'check-focal': 'focal_loss_execution.json',
+                            'check-full-annotations': 'annotation_execution.json'}[args.action]
             (output / receipt_name).write_text(json.dumps(receipt, indent=2) + '\n')
         if args.action == 'prepare' and result_code == 0:
             reference = ROOT / 'validation/reference_run'

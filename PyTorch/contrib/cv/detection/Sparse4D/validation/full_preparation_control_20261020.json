@@ -1,0 +1,236 @@
+{
+  "model": "Sparse4D",
+  "collected_utc": "2026-10-20T06:53:52.883626+00:00",
+  "scope": "CPU preparation and negative controls; full training and formal accuracy remain unaccepted",
+  "control": {
+    "collected_utc": "2026-10-20T06:51:44.894896+00:00",
+    "model": "Sparse4D",
+    "result": "pass_original_cpu_preparation_full_config_and_negative_guard",
+    "full_trainval_preparation_completed": false,
+    "full_training_completed": false,
+    "formal_accuracy_accepted": false,
+    "npu_devices_exposed": false,
+    "original_mini_control": {
+      "collected_utc": "2026-10-20T06:52:48.242964+00:00",
+      "model": "Sparse4D",
+      "result": "pass_original_mini_conversion_and_train_only_anchor_generation",
+      "counts": {
+        "sequences": 27478,
+        "scalars": 121422,
+        "arrays": 17980
+      },
+      "difference_count": 0,
+      "first_differences": [],
+      "files": [
+        {
+          "split": "train",
+          "frames": 323,
+          "reference_sha256": "431d1da237dbf6547afc53fa786cdf24f6b116010009cf552ff01291d781f42e",
+          "generated_sha256": "dfe4710bb19b48f4b255485e480afcb2a00ed77c81522e6e08791b89e0e5727e"
+        },
+        {
+          "split": "val",
+          "frames": 81,
+          "reference_sha256": "612408e47ae34bbc9601cea28f322239f0e6bd047f936226907ff425642e760d",
+          "generated_sha256": "739961ae3e68552ffcb4d8dad3be3a3bc17ec6c0fa0809e957c88150c7153eff"
+        }
+      ],
+      "converter_loading": {
+        "converter_sha256": "4556df3c8b3bce9c971ea383a537648eeb20ec79bec1100102449674a7ffcda8",
+        "conversion_functions_unchanged": true
+      },
+      "npu_devices_exposed": false,
+      "full_trainval_conversion_completed": false,
+      "formal_accuracy_accepted": false,
+      "anchor_generation": {
+        "loading": {
+          "anchor_generator_sha256": "8263abe83ef6266065da250a8ebf462af7a07387430e5102e8799166abe82616",
+          "box_constants_sha256": "5a8402668258f3b9b58164af0da96ebf73db3a950da08cb94fa31ca876029465",
+          "removed_model_only_import": "projects.mmdet3d_plugin.core.box3d",
+          "anchor_functions_unchanged": true
+        },
+        "seed": 42,
+        "num_anchor": 900,
+        "detection_range": 55,
+        "input_split": "mini_train_only",
+        "input_frames": 323,
+        "shape": [
+          900,
+          11
+        ],
+        "sha256": "35199b09378843ae7c38bae2a377ea78038c0abc4a7fe199aad5e2d4e0ca8a33"
+      }
+    },
+    "full_config_projection": {
+      "result": "pass_original_model_schedule_and_batch_contract",
+      "world_size": 2,
+      "batch_per_rank": 6,
+      "total_batch": 12,
+      "learning_rate": 0.00015,
+      "epochs": 100,
+      "updates_per_epoch": 2344,
+      "planned_updates": 234400,
+      "original_model_unchanged": true,
+      "original_lr_schedule_unchanged": true,
+      "fp16": {
+        "loss_scale": 32.0
+      },
+      "historical_smoke_batch_and_steps_preserved": true,
+      "full_training_actually_executed": false
+    },
+    "mini_as_full_rejection": {
+      "exit_code": 1,
+      "stderr": "Traceback (most recent call last):\n  File \"/var/aispace/lzd/migration_full_20261019/Sparse4D/tools/prepare_full_data.py\", line 150, in <module>\n    main()\n  File \"/var/aispace/lzd/migration_full_20261019/Sparse4D/tools/prepare_full_data.py\", line 86, in main\n    require(raw / name)\n  File \"/var/aispace/lzd/migration_full_20261019/Sparse4D/tools/prepare_full_data.py\", line 18, in require\n    raise RuntimeError('完整训练资产缺失：' + str(path))\nRuntimeError: 完整训练资产缺失：/var/aispace/lzd/migration_full_20261019/Sparse4D/data/nuscenes/v1.0-trainval/scene.json\n",
+      "protected_before": {
+        "prepared/nuscenes/nuscenes_infos_train.pkl": "431d1da237dbf6547afc53fa786cdf24f6b116010009cf552ff01291d781f42e",
+        "prepared/nuscenes/nuscenes_infos_val.pkl": "612408e47ae34bbc9601cea28f322239f0e6bd047f936226907ff425642e760d",
+        "test/output/latest_run.json": "9a8d5a7ab020d6cd48816f178ad4e9d29dc3024337775a1613b5fe7de0f8b006",
+        "source_link_nuscenes": "/var/aispace/lzd/migration_full_20261019/Sparse4D/prepared/nuscenes",
+        "source_link_nuscenes_anno_pkls": "/var/aispace/lzd/migration_full_20261019/Sparse4D/prepared/nuscenes"
+      },
+      "protected_after": {
+        "prepared/nuscenes/nuscenes_infos_train.pkl": "431d1da237dbf6547afc53fa786cdf24f6b116010009cf552ff01291d781f42e",
+        "prepared/nuscenes/nuscenes_infos_val.pkl": "612408e47ae34bbc9601cea28f322239f0e6bd047f936226907ff425642e760d",
+        "test/output/latest_run.json": "9a8d5a7ab020d6cd48816f178ad4e9d29dc3024337775a1613b5fe7de0f8b006",
+        "source_link_nuscenes": "/var/aispace/lzd/migration_full_20261019/Sparse4D/prepared/nuscenes",
+        "source_link_nuscenes_anno_pkls": "/var/aispace/lzd/migration_full_20261019/Sparse4D/prepared/nuscenes"
+      },
+      "prepared_annotations_source_links_and_result_pointer_unchanged": true
+    },
+    "direct_full_entry_rejection": {
+      "exit_code": 1,
+      "stderr": "run failed: Complete original full-data preparation and provide its full train-only anchor first\n",
+      "no_training_config_or_environment_check_started": true,
+      "protected_state_unchanged": true
+    },
+    "finished_utc": "2026-10-20T06:53:17.767717+00:00"
+  },
+  "execution": {
+    "model": "sparse4d",
+    "action": "check-preparation",
+    "image_tag": "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+    "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
+    "host_logical_devices": [],
+    "physical_cards": [],
+    "container_logical_devices": [],
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--network",
+      "none",
+      "--memory",
+      "48g",
+      "--cpus",
+      "8",
+      "--pids-limit",
+      "1024",
+      "--shm-size",
+      "8g",
+      "-v",
+      "/var/aispace/lzd/migration_full_20261019/Sparse4D:/var/aispace/lzd/migration_full_20261019/Sparse4D:rw",
+      "-w",
+      "/var/aispace/lzd/migration_full_20261019/Sparse4D",
+      "-v",
+      "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro",
+      "-v",
+      "/usr/local/Ascend/firmware:/usr/local/Ascend/firmware:ro",
+      "-v",
+      "/usr/local/bin/npu-smi:/usr/local/bin/npu-smi:ro",
+      "-v",
+      "/usr/local/dcmi:/usr/local/dcmi:ro",
+      "-v",
+      "/usr/bin/hccn_tool:/usr/bin/hccn_tool:ro",
+      "-e",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD=0",
+      "-e",
+      "OMP_NUM_THREADS=2",
+      "-e",
+      "OPENBLAS_NUM_THREADS=2",
+      "-e",
+      "PYTHONUNBUFFERED=1",
+      "-e",
+      "HCCL_CONNECT_TIMEOUT=120",
+      "-e",
+      "HF_HUB_OFFLINE=1",
+      "-e",
+      "TRANSFORMERS_OFFLINE=1",
+      "-e",
+      "TOKENIZERS_PARALLELISM=false",
+      "-e",
+      "PATH=/opt/conda/envs/sparse4d/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "--entrypoint",
+      "/opt/conda/envs/sparse4d/bin/python",
+      "local/migration-drivingsdk:26.1.0-a3-headless-20261010",
+      "test/check_full_preparation.py",
+      "--output_dir",
+      "/var/aispace/lzd/migration_full_20261019/Sparse4D/test/output/public_cpu_fullprep_control_20261020_v2"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-10-20T06:53:18.946391+00:00"
+  },
+  "runtime_and_normalized_lf_source_sha256": {
+    "tools/prepare_data.py": {
+      "runtime_sha256": "15d08e95364c1fb015dbe82e1d2a91d5d7fe597db0498543d98f478595788da9",
+      "normalized_lf_sha256": "15d08e95364c1fb015dbe82e1d2a91d5d7fe597db0498543d98f478595788da9"
+    },
+    "tools/prepare_full_data.py": {
+      "runtime_sha256": "98dbf4d6ca02d4862cde8038cd4dde0b3758f03a70f2effa2079c7ce647de177",
+      "normalized_lf_sha256": "98dbf4d6ca02d4862cde8038cd4dde0b3758f03a70f2effa2079c7ce647de177"
+    },
+    "tools/prepare.py": {
+      "runtime_sha256": "0d61eb2bc8ac59f4e6a8abf06dc10255467f2ece45ca5845c44c4e5f14be0823",
+      "normalized_lf_sha256": "0d61eb2bc8ac59f4e6a8abf06dc10255467f2ece45ca5845c44c4e5f14be0823"
+    },
+    "tools/train_model.py": {
+      "runtime_sha256": "c7d6dfa228199be74bd7b431224be728b3f5ebcbce81b4c83ca8f103df77b182",
+      "normalized_lf_sha256": "c7d6dfa228199be74bd7b431224be728b3f5ebcbce81b4c83ca8f103df77b182"
+    },
+    "tools/world_mini_data.py": {
+      "runtime_sha256": "56725afc4d4a3964d08b6232ea6a3140cd504581906667354f114e23925d133b",
+      "normalized_lf_sha256": "56725afc4d4a3964d08b6232ea6a3140cd504581906667354f114e23925d133b"
+    },
+    "tools/container.py": {
+      "runtime_sha256": "538cd43cfb67cad74a209b53f4b4ee5f4a9202a81c0a016a6faaba9ff4f78b48",
+      "normalized_lf_sha256": "538cd43cfb67cad74a209b53f4b4ee5f4a9202a81c0a016a6faaba9ff4f78b48"
+    },
+    "tools/cpu_data_converter.py": {
+      "runtime_sha256": "d7b0d931ac6107d85ba85494d29b2eb2d840d28bb5f52ae50fa3fc7427a3807e",
+      "normalized_lf_sha256": "d7b0d931ac6107d85ba85494d29b2eb2d840d28bb5f52ae50fa3fc7427a3807e"
+    },
+    "tools/run_train.py": {
+      "runtime_sha256": "fd908cf2566c406701fabc516ebe4a38d4e35f053e36ef771a3462583e1bee41",
+      "normalized_lf_sha256": "fd908cf2566c406701fabc516ebe4a38d4e35f053e36ef771a3462583e1bee41"
+    },
+    "test/check_preparation_cpu.sh": {
+      "runtime_sha256": "cbe858667d240041d0f7608c551b0cba27205e31ec5c8fc43452909d66dbda47",
+      "normalized_lf_sha256": "cbe858667d240041d0f7608c551b0cba27205e31ec5c8fc43452909d66dbda47"
+    },
+    "test/check_full_preparation.py": {
+      "runtime_sha256": "bc7f21d86a2760c083686152fe27e407e64865ba78ad83bfd9c4ad8b44115c60",
+      "normalized_lf_sha256": "bc7f21d86a2760c083686152fe27e407e64865ba78ad83bfd9c4ad8b44115c60"
+    },
+    "test/check_cpu_data_converter.py": {
+      "runtime_sha256": "0143e07d42b78782dda3d6939d8decee1f34731640f870ab5645288103b3712d",
+      "normalized_lf_sha256": "0143e07d42b78782dda3d6939d8decee1f34731640f870ab5645288103b3712d"
+    }
+  },
+  "queued_full_preparation_snapshot": {
+    "state": "waiting_for_complete_raw_coverage",
+    "model": "Sparse4D",
+    "controller_pid": 1533091,
+    "started_utc": "2026-10-20T06:52:35.792594+00:00",
+    "full_trainval_preparation_completed": false,
+    "full_training_started": false,
+    "full_trainval_training_completed": false,
+    "task_quality_accepted": false,
+    "controller_sha256": "e9a056eaec07f66be73d8efadc19394e3b0f42a5b3c7698a13f8f5749478ddf7",
+    "updated_utc": "2026-10-20T06:53:35.856280+00:00",
+    "dependency_state": "waiting_for_all_official_archives",
+    "queued_source_lock_sha256": "f0f76c5bdfee553972787cb4fb112ccfb1d8582e6a08e4d5fe24a3cf629e88fb"
+  },
+  "queue_controller_observed_alive": true,
+  "full_trainval_preparation_completed": false,
+  "full_training_completed": false,
+  "formal_accuracy_accepted": false
+}

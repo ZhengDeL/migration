@@ -137,13 +137,27 @@ bash test/evaluate_mini_1p.sh --device_id=0 \
 
 ## 完整数据训练
 
-完整 nuScenes 放在 `data/nuscenes_full/`（samples、sweeps、maps、v1.0-trainval），官方生成的两份 trainval PKL 放在这个目录；其 metadata.version 必须是 v1.0-trainval。 按上游 kmeans 工具在完整训练标注上生成 `data/nuscenes_full/nuscenes_kmeans900.npy`；完整入口使用它，不复用 mini anchor。
+先按[固定版本上游的数据准备说明](https://github.com/HorizonRobotics/Sparse4D/blob/249ffbb695f4e9db628d953e2bf6d36de04bbb69/docs/quick_start.md)准备完整 nuScenes，将 `samples/`、`sweeps/`、`maps/`、`v1.0-trainval/` 放在本模型的 `data/nuscenes_full/`。完整入口自动执行固定原仓 `tools/nuscenes_converter.py`，再以**完整训练集**执行原仓 `tools/anchor_generator.py`；不需要先启动模型，不复用 mini 的 PKL 或 anchors。
 
 ```bash
 bash test/train_full_2p.sh --device_id=0,2 --data_path="$PWD/data/nuscenes_full"
 ```
 
-完整入口检查数据版本并重新建立完整数据路径，缺少正式资产会退出。完整nuScenes需放入本模型数据目录，并按官方说明生成完整标注和CAN bus；mini标注不能复用为完整数据验收。 **本次没有执行完整数据训练，未验证完整训练收敛或精度。** `validate_1p.sh` 的当前判据对应本次功能配置，不能直接当成完整训练评估脚本；完整训练按上游官方评估说明验收。
+入口按以下顺序准备与核验：
+
+1. 核对原始元数据的 850 场景、34,149 样本；转换后逐个核对官方 train / val token 归属，必须为 28,130 / 6,019 帧且不重叠。
+2. 仅用训练标注生成 900×11 anchors，记录训练 PKL、原工具和 anchors 的 SHA256、种子与参数到 `data/nuscenes_full/full_anchor_provenance.json`。已有但缺少来源收据的 anchors、仅一份 PKL、改名 mini 均拒绝继续，保留现场供核查。
+3. 将核验后的标注与路径准备到 `prepared/full_nuscenes/`。两卡各 batch=6，全局 batch=12，lr=1.5e-4；保留原 100 轮、FP16/loss_scale=32 和余弦日程，计划 234,400 次更新。直接调用 `tools/run_train.py` 也必须通过完整准备收据及 anchors 身份检查。
+
+可先在无 NPU 的 CPU 容器复核原转换器、原 anchors 生成、完整配置与 mini 冒充完整数据的拦截；该控制需要本模型已准备好的 mini 和原源码：
+
+```bash
+bash test/check_preparation_cpu.sh
+```
+
+独立输出目录中的 `full_preparation_control.json` 保存逐字段对照和负向检查，`preparation_execution.json` 保存实际命令、镜像与退出码。原 K-means 的并行浮点运算可能影响 anchors 字节摘要；以本次生成收据核验身份，不承诺跨环境逐位相同。
+
+[2026-10-20 实跑证据](validation/full_preparation_control_20261020.json)：原转换器的全部 404 mini 帧，17,980 个数组、121,422 个标量对照零差异；原训练集 K-means、完整配置及两类错误入口拦截通过。**这不是全量正向转换或完整训练结果；正式 raw 数据尚未到齐，完整训练、收敛与精度未验收。** `validate_1p.sh` 对应历史功能配置；完整精度须使用完整 val 和上游原指标评测。
 
 # 训练结果展示
 
