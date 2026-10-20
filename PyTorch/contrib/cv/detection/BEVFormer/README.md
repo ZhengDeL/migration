@@ -216,6 +216,12 @@ bash test/validate_1p.sh --device_id=0
 
 [逐帧 token、原始指标、检查点 SHA、镜像、实际命令及退出码](validation/complete_mini_evaluation_20261020.json)。实测来自同一固定镜像的新目录，单卡与 Qwen 双卡训练并行；计时属于并行功能验证，不作为隔离性能基线。当前完整 nuScenes trainval 训练、收敛和正式任务精度仍未完成。
 
+## 2026-10-20 新 mini 训练最终结果
+
+从原 FCOS3D R101-DCN 初始化，保留作者视频 runner，双卡各完成 **3,888 更新 / 24 epoch**。两 rank 各核验 676 个初始化张量；保存的 1,089 个模型张量、557 个优化器状态有限。末尾 strict 重载 `epoch_24.pth`，全部 **81/81** 留出帧完成原 nuScenes 检测评测，退出 0：**mAP=0.0554680385、NDS=0.0994282077**。
+
+这是新 mini 训练检查点，不能与作者完整 trainval 权重混用；旧 162 更新权重及其低指标保持原记录。本轮低指标仍不足以验收正式任务质量，完整 trainval 数据、训练、收敛及 GPU 对齐待完成。[实际命令、各 rank 完成记录、逐帧检查/全部指标、训练日志校验摘要与检查点 SHA](validation/mini_training_evaluation_20261020.json)。
+
 ## 通过判据
 
 原功能短训 `train_2p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
