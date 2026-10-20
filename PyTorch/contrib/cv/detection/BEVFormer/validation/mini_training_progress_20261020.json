@@ -2,7 +2,7 @@
   "schema_version": 1,
   "model": "BEVFormer",
   "collected_utc": "2026-10-20T04:13:14.346367+00:00",
-  "result": "pass_complete_mini_training_and_automatic_evaluation",
+  "result": "pass_complete_mini_training_and_public_re_evaluation",
   "image_id": "sha256:34a01a4e2e46d6e2837af958ed91227411ea6eb4e1af29211c1494a3f0db89a2",
   "plan": {
     "model": "bevformer",
@@ -436,5 +436,32 @@
     676,
     676
   ],
-  "worker_observation_collected_utc": "2026-10-19T19:10:24.738642+00:00"
+  "worker_observation_collected_utc": "2026-10-19T19:10:24.738642+00:00",
+  "latest_additional_verification_utc": "2026-10-20T05:09:12.405463+00:00",
+  "public_independent_repeat_performed": true,
+  "public_repeat_workflow": {
+    "state": "completed_public_repeat",
+    "model": "BEVFormer",
+    "started_utc": "2026-10-20T05:05:02.841509+00:00",
+    "controller_pid": 920435,
+    "output": "/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/trained_public_repeat_20261020",
+    "formal_trainval_accuracy_accepted": false,
+    "command": [
+      "bash",
+      "test/evaluate_mini_1p.sh",
+      "--device_id=6",
+      "--checkpoint=/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/mini_training_quality_v2_20261020/epoch_24.pth",
+      "--output_dir=/var/aispace/lzd/migration_full_20261019/BEVFormer/test/output/trained_public_repeat_20261020"
+    ],
+    "launcher_pid": 920498,
+    "exit_code": 0,
+    "primary_metrics": {
+      "pts_bbox_NuScenes/NDS": 0.09942820774803399,
+      "pts_bbox_NuScenes/mAP": 0.05546803853862201
+    },
+    "primary_metrics_identical": true,
+    "frames_checked": 81,
+    "checkpoint_sha256": "c15457ebe69ed58fa446a1d6d7fb428834f8bc2324be6f76b8e9f42b7fd8bf39",
+    "finished_utc": "2026-10-20T05:06:16.512949+00:00"
+  }
 }

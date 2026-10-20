@@ -183,6 +183,22 @@ bash test/validate_1p.sh --device_id=8
 
 新权重已产生非零 OCC 指标；原标签、可见性 mask、0.25 阈值和评测公式未为提高分数而更改。旧十步权重 mIoU=0 的记录仍保留。此 mini 结果仍不足以验收正式质量；完整 trainval 训练、检测/OCC 指标及 GPU 对齐待完成。[实际命令、四 rank 完成记录、完整混淆矩阵/逐帧检查和检查点 SHA](validation/mini_training_evaluation_20261020.json)。
 
+## 精度排查：真实输入的 focal loss 与梯度对照
+
+在本模型目录执行，使用刚完成四卡 mini 训练的检查点，输出目录须尚不存在：
+
+```bash
+bash test/check_focal_loss_1p.sh --device_id=8 \
+  --checkpoint="$PWD/test/output/mini_training_quality_workers4_20261020/epoch_24.pth" \
+  --output_dir="$PWD/test/output/focal_precision_check"
+```
+
+脚本通过固定镜像加载全部 600 个模型状态张量，以原训练管线的一条真实样本生成检测和 OCC loss 输入；将同一份 logits、标签、权重和平均因子送入原 MMDetection CPU `FocalLoss` 与适配 NPU 实现，比较 loss 和对 logits 的梯度。它不创建优化器、不更新模型参数；捕获两种输入后即停止，不代表完整网络 CPU/GPU 对齐或正式精度通过。
+
+2026-10-20 两次实跑均退出 0。检测输入 900×10，OCC 输入 640,000×16，共比较 10,249,000 个梯度元素；初次实跑 OCC loss 绝对差 2.3842e-7、梯度最大绝对差 2.9104e-11，最终结果和预设容差见[完整记录](validation/focal_loss_precision_20261020.json)。在这组真实输入上未发现 focal loss 适配偏差，不能据此认定其他模块或正式任务精度已通过。
+
+新 24 轮检查点另经公开 `evaluate_mini_1p.sh --checkpoint=...` 在新输出目录复测全部 162 帧，mIoU/IoU 与末尾自动评测相同，见[两次完整指标与退出码](validation/mini_training_evaluation_20261020.json)。
+
 ## 通过判据
 
 原功能短训 `train_4p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
