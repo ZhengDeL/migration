@@ -1,6 +1,6 @@
 # 模型验证结果
 
-最近一轮实机记录：**2026-10-20**：BEVFormer 作者权重及默认入口各完成 81 帧；Apollo 修复多进程数据加载错误，四卡重新训练；Sparse4D 双卡重新训练。早期短训检查点的低指标、失败及 CPU 控制保留；Qwen 全量训练继续。2026-10-19 的三项全量复验、ResWorld 原 runner/EMA/CPU 数据对照和更早结果保留实际执行日期。
+最近一轮实机记录：**2026-10-20**：BEVFormer、Apollo 和 Sparse4D 的新 mini 训练及全部 mini 留出集评测已完成；BEVFormer/Sparse4D 作者权重对照保留。早期短训检查点的低指标、失败及 CPU 控制保留；Qwen 全量训练继续。2026-10-19 的三项全量复验、ResWorld 原 runner/EMA/CPU 数据对照和更早结果保留实际执行日期。
 
 本轮完整数据验收范围为八项；[WorldEngine AlgEngine](https://github.com/ZhengDeL/WorldEngine/tree/ascend-910c-algengine)由独立仓负责，本轮不测试。下文 WorldEngine 仅保留历史来源。
 
@@ -8,17 +8,20 @@
 
 ## 2026-10-20 后续修复与重新训练
 
-截至 **03:10 北京时间**的后续实机快照如下。新训练均保留原网络、标签与指标，不继续使用已失败的旧十步权重；Sparse4D 新训练检查点已完成末尾评测及公开入口复测；BEVFormer、Apollo 新训练仍未结束，没有对应最终指标。
+截至 **12:13 北京时间**核对，三项新 mini 训练与末尾全部留出帧评测均退出 0。BEVFormer 和 Apollo 另对最终检查点摘要及全部逐 rank JSONL 连续更新、有限值完成只读复核；原失败/低指标保留。以下是 mini 流程与数值结果，**三项正式 trainval 任务质量均未验收**。
 
-| 模型 | 已执行的新操作 / 实测 | 验收边界与证据 |
+| 模型 | 新训练与全部 mini 留出评测 | 验收边界与证据 |
 | --- | --- | --- |
-| BEVFormer | 作者 R101-DCN 24 epoch 权重；显式 profile 和默认公开入口各 81/81 帧、退出 0；两次 mAP=0.3623209477、NDS=0.4103581189 相同 | [权重 SHA、两次命令、完整逐帧与原始指标](../PyTorch/contrib/cv/detection/BEVFormer/validation/official_checkpoint_mini_evaluation_20261020.json)；不代表本项目完整 trainval 训练或 GPU 对齐通过；新增原 FCOS3D 初始化、保留原时序 runner 的 24 轮 mini 训练，两 rank 各 259 / 3,888 更新、557 梯度/步及原始 head 有限，[新训练进度与首轮配置失败](../PyTorch/contrib/cv/detection/BEVFormer/validation/mini_training_progress_20261020.json) |
-| Apollo VisionNet | 修复 `dataset.eval_detection_configs.class_names` 的 `dict_keys` 无法 spawn/pickle；实测四组各 4 个 worker，四 rank 各完成 828 更新，465 个有效梯度/步与原始输出有限；24 epoch / 1,464 更新继续 | [失败、修复 SHA、实际 worker PID、逐 rank 数据与时间](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/mini_training_progress_20261020.json)；当前不填写新 mIoU |
-| Sparse4D | 从 ImageNet 骨干重新训练；两 rank 各完成 2,600 更新；自动评测及公开单卡入口各 81/81 帧有限、退出 0；两次 mAP=0.0604165495、NDS=0.1097741302 相同 | [训练/检查点 SHA、逐 rank 数据与两次完整指标](../PyTorch/contrib/cv/detection/Sparse4D/validation/mini_training_evaluation_20261020.json)；新检查点整套推理有限，旧十步权重失败仍保留；正式 trainval 训练与精度未验收 |
+| BEVFormer | 原 FCOS3D 初始化、原视频 runner；双卡各 3,888 更新 / 24 epoch；81/81 帧，mAP=0.0554680385、NDS=0.0994282077 | [新训练命令、逐 rank/逐帧、全部指标及检查点 SHA](../PyTorch/contrib/cv/detection/BEVFormer/validation/mini_training_evaluation_20261020.json)；作者全量权重控制为 mAP=0.3623209477、NDS=0.4103581189，[控制证据](../PyTorch/contrib/cv/detection/BEVFormer/validation/official_checkpoint_mini_evaluation_20261020.json)；两种权重不能混作同一结果 |
+| Apollo VisionNet | 官方 DLA 骨干初始化；四卡各 1,464 更新 / 24 epoch；162/162 OCC 帧，IoU=18.6466263092%、mIoU=4.7205596444% | [四 rank、逐帧、原混淆矩阵与检查点 SHA](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/mini_training_evaluation_20261020.json)；修复 spawn 后完成全日程，新权重 OCC 指标非零，仍未完成正式 trainval 精度验收 |
+| Sparse4D | ImageNet 骨干初始化；双卡各 2,600 更新；自动评测及另一次公开单卡复测各 81/81 帧，mAP=0.0604165495、NDS=0.1097741302 相同 | [训练、检查点 SHA 与两次完整指标](../PyTorch/contrib/cv/detection/Sparse4D/validation/mini_training_evaluation_20261020.json)；新检查点未复现整套推理溢出，旧十步权重失败保留，正式 trainval 精度未验收 |
 
 BEVFormer 的原转换器 CPU 入口另已实跑：全部 404 帧、17,980 个数组、123,038 个标量对照无差异，mini 冒充完整数据被拒绝且准备目录/结果指针不变。[实际命令、字段比较、源文件摘要与正式训练等待状态](../PyTorch/contrib/cv/detection/BEVFormer/validation/original_converter_control_20261020.json)。正式 trainval 转换/训练队列已等待原始数据全覆盖核验；尚未执行完整转换或完整训练。
 
-新入口为 Apollo 自己的 `test/train_mini_4p.sh`，以及 BEVFormer、Sparse4D 各自的 `test/train_mini_2p.sh`；结束后自动重载、完整 mini 留出评测并保存模型级结果；Sparse4D 已完成并另做公开单卡入口复测。mini 训练用于进一步定位和修复当前质量问题，正式 trainval 训练仍需完整数据；三项均未标为正式质量验收通过。10 月 18 日旧网盘 ZIP 尚未更新。
+新入口为 Apollo 自己的 `test/train_mini_4p.sh`，以及 BEVFormer、Sparse4D 各自的 `test/train_mini_2p.sh`；三项均已自动重载、完整 mini 留出评测并保存模型级结果；Sparse4D 另完成公开单卡入口复测。mini 训练用于进一步定位和修复当前质量问题，正式 trainval 训练仍需完整数据；三项均未标为正式质量验收通过。10 月 18 日旧网盘 ZIP 尚未更新。
+
+
+**同轮完整任务进度（12:14 北京时间）**：Qwen3-VL-8B 为 6,281 / 63,774 更新，训练继续，尚无最终 dev 指标，[原始进度](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_training_progress_20261020.json)。正式 nuScenes 14 个归档中 8 个已完成当前官方对象完整性核验，正在下载第 05 个 blobs 分包；完整原始文件全覆盖、BEVFormer/ResWorld 正式数据队列仍等待，不能用 mini 代替。
 
 ## 2026-10-20 早期短训检查点评测与剩余验收
 
@@ -30,7 +33,6 @@ BEVFormer 的原转换器 CPU 入口另已实跑：全部 404 帧、17,980 个�
 | Apollo VisionNet，既有 10 更新检查点 | 162/162 原 OCC heldout 帧；IoU=0%、mIoU=0%，precision/recall=0；404 GT + 404 原始可见性 mask 校验 | 原仓 OCC 评测流程完成、退出 0；质量未验收；[混淆矩阵/逐帧/原始指标与 mask 修复复验](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/validation/complete_mini_evaluation_20261020.json) |
 | Sparse4D，既有 10 更新检查点 | 在第 36 帧失败；FP16/FP32 均复现。log 尺寸 89.4342651367 超过 FP32 exp 上限 88.7228393555，CPU 同输入同样溢出 | 完整 mini 未通过、退出 1；未填写 mAP/NDS、未裁剪/跳帧；[失败帧、模块诊断、FP16/FP32/CPU 控制](../PyTorch/contrib/cv/detection/Sparse4D/validation/complete_mini_failure_20261020.json) |
 | Sparse4D，作者已训练 v3 R50 权重 | 81/81 标准 mini_val 帧有限；mAP=0.4635453126、NDS=0.5071118864（0～1）；显式 profile 与默认公开入口指标相同 | 两次独立输出均退出 0；[原始结果、两次命令和权重/代码 SHA](../PyTorch/contrib/cv/detection/Sparse4D/validation/official_checkpoint_mini_evaluation_20261020.json)；本项目完整 trainval 训练仍未完成 |
-| Qwen3-VL-8B | 2026-10-20 01:06 北京时间快照：2,603 / 63,774 更新，训练日志 loss=0.2327 | 双卡完整训练继续；[新进度原始 JSON](../PyTorch/contrib/nlp/Qwen3-VL-8B/validation/full_training_progress_20261020.json)，历史 10/19 快照保留 |
 
 Apollo 修复了本项目准备脚本遗漏的 `occ_invalid_path`，原 mask 字节、可见性规则、0.25 阈值和评测公式保持；原 split 仍是 242 train / 162 val。原 nuScenes detection 入口要求标准 mini_val 81 帧，因此本次仅计算匹配原 OCC split 的占用指标。BEVFormer 的五项按 nuScenes 定义不适用的 cone/barrier 误差字段编码为 null，所有网络预测和 mAP/NDS 仍严格要求有限。
 
@@ -38,10 +40,10 @@ Apollo 修复了本项目准备脚本遗漏的 `occ_invalid_path`，原 mask 字
 
 | 模型 | 后续必需验证 | 当前条件 |
 | --- | --- | --- |
-| BEVFormer | 正式 trainval 训练、收敛、完整 mAP/NDS；完整训练的续训/稳定性 | 作者权重及默认入口完成 81 帧；新 24 轮 mini 双卡训练继续；官方完整 nuScenes 分包继续下载 |
-| Sparse4D | 正式 trainval 训练/完整检测指标；新训练检查点需验证整套推理不再溢出 | 作者权重及新 2,600 更新检查点均完成 81 帧；旧十步权重失败保留；正式 nuScenes 继续下载 |
+| BEVFormer | 正式 trainval 训练、收敛、完整 mAP/NDS；完整训练的续训/稳定性 | 作者权重控制及新 24 轮 mini 训练均完成 81 帧；正式 nuScenes 分包继续下载 |
+| Sparse4D | 正式 trainval 训练、收敛与完整检测指标；完整训练检查点数值/续训/稳定性 | 作者权重及新 2,600 更新检查点均完成 81 帧；旧十步权重失败保留；正式 nuScenes 继续下载 |
 | Qwen3-VL-8B | 三 epoch 完整训练、37,836 条本地 dev 重载评测、完整训练检查点/续训/稳定性 | 340,119 条 train / 37,836 dev 已齐备，双卡训练运行中；官方隐藏答案仍未公开 |
-| Apollo VisionNet | 正式 trainval 完整训练、检测/OCC 指标与完整训练恢复/稳定性 | 修复 spawn 数据加载后新四卡 mini 训练继续；完整图像/点云下载中；旧十步权重 mIoU=0 不能验收 |
+| Apollo VisionNet | 正式 trainval 完整训练、检测/OCC 指标与完整训练恢复/稳定性 | 新四卡 24 轮 mini 训练与 162 帧评测已完成，mIoU=4.72056%；正式图像/点云下载中，正式质量未验收 |
 | LSTM-Argoverse | 所选协议已完成；业务/隐藏排行榜另行验收 | 全部数据、数值、续训和持续训练证据已完成 |
 | STGCN-Traffic | 所选 PeMSD7(M) 70/15/15 协议已完成；其他数据/原论文协议另行验收 | 全量 test、数值、续训和持续训练证据已完成 |
 | ResWorld | 正式 trainval / 原 12 epoch、完整驾驶任务指标及完整数据恢复/稳定性 | mini 数值/原 runner 恢复已完成；正式数据准备队列等待原始数据全部到齐 |
@@ -102,10 +104,10 @@ MobileNetV2 的完整 ImageNet train 仍在续传，从头 600 epoch 未执行�
 
 | 模型与独立指导 | 实测日期 | 已取得的结果 | 范围与未完成项 |
 | --- | --- | --- | --- |
-| [BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2026-10-12 / 20 | 作者权重与公开默认入口完整 81 帧，mAP=0.362321 / NDS=0.410358；新增原 FCOS3D 初始化双卡 24 轮 mini 训练继续，见页首带时间进度 | 旧 162 更新检查点低指标保留；新 mini 终态与正式 trainval 收敛/精度未验收 |
+| [BEVFormer](../PyTorch/contrib/cv/detection/BEVFormer/README.md) | 2026-10-12 / 20 | 原 FCOS3D 初始化双卡 24 轮 / 3,888 更新完成，81 帧 mAP=0.055468 / NDS=0.099428；作者权重控制为 mAP=0.362321 / NDS=0.410358，见页首两份证据 | 新 mini 训练/数值流程完成，低指标仍不足以验收正式质量；完整 trainval 训练未完成 |
 | [Sparse4D](../PyTorch/contrib/cv/detection/Sparse4D/README.md) | 2026-10-12 / 20 | 新原 ImageNet 骨干双卡 2,600 更新完成，自动和公开单卡各 81 帧不溢出，mAP=0.060417 / NDS=0.109774 相同；作者权重对照另有独立结果 | 旧十步失败保留；新 mini 指标较低，正式 trainval 完整训练/任务质量及 GPU 对齐未验收 |
 | [Qwen3-VL-8B](../PyTorch/contrib/nlp/Qwen3-VL-8B/README.md) | 2026-10-12 / 19 | 完整 DriveLM 数据和 377,955 条编码检查通过；两次真实数据双卡八步预检及重载通过；新三轮流程已提交后台 | 完整训练、完整本地 dev 重载与官方隐藏评分未完成 |
-| [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 2026-10-12 / 20 | 原可见性 mask 路径修复、旧十步权重完整 162 帧 mIoU=0；spawn 修复后新原 DLA 初始化四卡 24 轮 mini 训练继续，见页首带时间进度 | 新 mini mIoU 尚未产生；正式 trainval 检测/OCC、收敛、恢复/稳定性未验收 |
+| [Apollo-Vision-Net](../PyTorch/contrib/cv/detection/Apollo-Vision-Net/README.md) | 2026-10-12 / 20 | mask/spawn 修复后，从原 DLA 骨干四卡完成 24 轮 / 1,464 更新，162 帧 IoU=18.646626% / mIoU=4.720560%；旧十步权重零指标保留 | 新 mini 训练/数值流程完成；正式 trainval 检测/OCC、收敛、恢复/稳定性未验收 |
 | [LSTM-Argoverse](../PyTorch/contrib/cv/others/LSTM-Argoverse/README.md) | 2026-10-18 训练 / 19 复验 | 全 train/val 三阶段 725 epoch / 292,175 更新；全输出、梯度、严格续训通过 | val 参与选模；独立排行榜/驾驶业务目标未验收 |
 | [STGCN-Traffic](../PyTorch/contrib/cv/others/STGCN-Traffic/README.md) | 2026-10-18 训练 / 19 复验 | PeMSD7(M) 全量 52 epoch / 14,404 更新；独立 test、数值、续训、30 分钟通过 | 70/15/15 社区协议；原论文划分/METR-LA/其他 PeMS 未验收 |
 | [ResWorld](../PyTorch/contrib/cv/others/ResWorld/README.md) | 2026-10-18 / 19 | 原数值修复、五份权重 446 梯度、30 分钟及原 65 帧对照；新增原 runner 两轮/EMA 精确恢复，2,762 状态张量与 164 条轨迹全同，CPU 数据转换对照通过 | 真实 mini、workers=0 和 8 各自的轮次控制；正式 trainval/12 epoch 及驾驶业务精度未完成 |

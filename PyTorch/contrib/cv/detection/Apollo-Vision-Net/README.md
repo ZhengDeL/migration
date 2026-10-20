@@ -123,7 +123,7 @@ bash test/train_mini_4p.sh --device_id=0,2,4,6
 
 入口创建新的 `test/output/train-mini_<时间>/`；每一步检查原始 head、损失和梯度有限性，并写入各 rank 的 `quality_training_rank*.jsonl`。完成训练后检查最终模型/优化器，自动重载 `epoch_24.pth`，计算全部原 OCC 162 个独立留出帧指标。结果分别保存在 `quality_training_rank*.json`、`mini_evaluation.json`，不覆盖旧十步检查点。
 
-新发现并修复原数据对象的多进程兼容问题：nuScenes 配置的 `class_names` 为不可 pickle 的 `dict_keys`，在本模型构造时转为保持原顺序的列表；保留每 rank 4 个 DataLoader worker。当前训练进度和失败尝试见 [实机记录](validation/mini_training_progress_20261020.json)。训练结束前不填写新 mIoU；本流程仍为 mini 训练诊断，正式 trainval 训练独立执行。
+新发现并修复原数据对象的多进程兼容问题：nuScenes 配置的 `class_names` 为不可 pickle 的 `dict_keys`，在本模型构造时转为保持原顺序的列表；保留每 rank 4 个 DataLoader worker。完整训练、自动重载评测与失败尝试见 [实机记录](validation/mini_training_evaluation_20261020.json)。本流程仍为 mini 训练诊断，正式 trainval 训练独立执行。
 
 训练完成后如需重新评测，在新输出目录执行：
 
@@ -177,11 +177,17 @@ bash test/validate_1p.sh --device_id=8
 
 [逐帧 token、原始指标、检查点 SHA、镜像、实际命令及退出码](validation/complete_mini_evaluation_20261020.json)。实测来自同一固定镜像的新目录，单卡与 Qwen 双卡训练并行；计时属于并行功能验证，不作为隔离性能基线。当前完整 nuScenes trainval 训练、收敛和正式任务精度仍未完成。
 
+## 2026-10-20 新 mini 训练最终结果
+
+仅从官方 DLA 深度骨干初始化，四卡各完成 **1,464 更新 / 24 epoch**；每 rank 的 222 个初始化张量通过核验，原始输出、损失、465 个有效梯度/步及保存状态有限。末尾 strict 重载 `epoch_24.pth`，全部 **162/162** 原 OCC 留出帧完成原 `SSCMetrics` 评测，退出 0：**IoU=18.6466263092%、mIoU=4.7205596444%**。
+
+新权重已产生非零 OCC 指标；原标签、可见性 mask、0.25 阈值和评测公式未为提高分数而更改。旧十步权重 mIoU=0 的记录仍保留。此 mini 结果仍不足以验收正式质量；完整 trainval 训练、检测/OCC 指标及 GPU 对齐待完成。[实际命令、四 rank 完成记录、完整混淆矩阵/逐帧检查和检查点 SHA](validation/mini_training_evaluation_20261020.json)。
+
 ## 通过判据
 
 原功能短训 `train_4p.sh` / `validate_1p.sh` 分别对应退出 0、`pass_functional_training` / `pass_independent_functional_validation`。
 
-新增 `train_mini_4p.sh` 的流程判据是：四 rank 的 `quality_training_rank*.json` 均为 `pass_completed_mini_training`、各 1,464 更新；自动完整 162 帧 OCC 评测退出 0，`mini_evaluation.json` 为 `pass_complete_mini_occupancy_evaluation`，模型、优化器及预测有限。独立复测使用本页 `evaluate_mini_1p.sh --checkpoint=...`。以上是 mini 流程/数值判据，正式 trainval、检测/OCC 任务质量单独验收；训练未结束前不填新 mIoU。
+新增 `train_mini_4p.sh` 的流程判据是：四 rank 的 `quality_training_rank*.json` 均为 `pass_completed_mini_training`、各 1,464 更新；自动完整 162 帧 OCC 评测退出 0，`mini_evaluation.json` 为 `pass_complete_mini_occupancy_evaluation`，模型、优化器及预测有限。独立复测使用本页 `evaluate_mini_1p.sh --checkpoint=...`。以上是 mini 流程/数值判据，正式 trainval、检测/OCC 任务质量单独验收。
 
 FocalLoss 兼容路径的 8 个有限 CPU/NPU 前后向案例通过 `atol=1e-5, rtol=1e-4`；[算子数值记录](validation/focal_parity_20261011.json)保留实际误差，不能代替整模型检测/占用指标。
 

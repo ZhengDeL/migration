@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "collected_utc": "2026-10-19T17:06:59.437502+00:00",
+  "collected_utc": "2026-10-20T04:14:59.061291+00:00",
   "result": "running_full_training_not_final_acceptance",
   "complete_training_and_final_evaluation_passed": false,
   "workflow": {
@@ -48,18 +48,18 @@
     "full_output_dir": "/var/aispace/lzd/migration_full_20261019/Qwen3-VL-8B/test/output/drivelm_full_cached_three_epochs_20261019"
   },
   "training_controller_pid_alive": true,
-  "latest_observed_optimizer_step": 2603,
+  "latest_observed_optimizer_step": 6281,
   "planned_optimizer_steps": 63774,
-  "progress_fraction": 0.040816006523034465,
+  "progress_fraction": 0.09848841220560103,
   "latest_logged_training_metrics": {
-    "loss": "0.2327",
-    "grad_norm": "0.9491",
-    "learning_rate": "4.075e-05",
-    "epoch": "0.1223"
+    "loss": "0.2025",
+    "grad_norm": "0.8103",
+    "learning_rate": "9.845e-05",
+    "epoch": "0.2954"
   },
-  "metrics_optimizer_step": 2600,
+  "metrics_optimizer_step": 6280,
   "progress_log": "/var/aispace/lzd/migration_full_20261019/evidence/qwen_cached_full_three_epoch_training.log",
-  "log_tail_progress_line": "2603/63774 [7:52:21<184:52:14, 10.88s/it]",
+  "log_tail_progress_line": "6281/63774 [19:00:19<173:50:56, 10.89s/it]",
   "data": {
     "train_qa": 340119,
     "local_dev_qa": 37836,
@@ -73,6 +73,5 @@
     2
   ],
   "image_id": "sha256:99d33965ae4502b07bffe2c3248887795ae0672a0e79dd0aaa567d09cce811b5",
-  "offline_archives_updated": false,
-  "previous_snapshot_path": "full_training_progress_20261019.json"
+  "offline_archives_updated": false
 }
